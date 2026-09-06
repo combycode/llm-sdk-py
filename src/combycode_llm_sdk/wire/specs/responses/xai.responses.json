@@ -1,0 +1,5 @@
+{
+  "id": "xai/responses.response",
+  "extends": "openai/responses.response",
+  "_note": "xAI's Responses API is OpenAI's. XAIResponsesAdapter extends OpenAIResponsesAdapter and does not override parseResponse at all, so this spec adds nothing and inherits everything. It exists so the target has a spec of its own rather than a special case in the lookup."
+}

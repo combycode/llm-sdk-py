@@ -1,0 +1,23 @@
+{
+  "id": "xai/retrieval.management",
+  "extends": "xai/retrieval.base",
+  "envelope": {
+    "headers": [
+      {
+        "name": "authorization",
+        "value": {
+          "$join": [
+            "Bearer ",
+            {
+              "$config": "managementApiKey"
+            }
+          ]
+        }
+      },
+      {
+        "name": "content-type",
+        "value": "application/json"
+      }
+    ]
+  }
+}

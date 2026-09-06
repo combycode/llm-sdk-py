@@ -1,0 +1,48 @@
+{
+  "id": "mcp/http.request",
+  "extends": "mcp/http.base",
+  "envelope": {
+    "method": "POST",
+    "headers": [
+      {
+        "name": "mcp-method",
+        "value": {
+          "$": "method"
+        },
+        "_note": "A modern server rejects a request whose Mcp-Method disagrees with its body, including a missing one.",
+        "when": {
+          "pred": "mcpModern"
+        }
+      },
+      {
+        "name": "mcp-name",
+        "value": {
+          "$call": "mcpNameHeader"
+        },
+        "_note": "The method's subject, so a gateway can route and authorize without parsing the body. Only tools/call, prompts/get and resources/read carry one.",
+        "when": {
+          "pred": "mcpModern"
+        }
+      }
+    ]
+  },
+  "fields": [
+    {
+      "from": "jsonrpc",
+      "to": "jsonrpc",
+      "default": "2.0"
+    },
+    {
+      "from": "method",
+      "to": "method"
+    },
+    {
+      "from": "params",
+      "to": "params"
+    },
+    {
+      "from": "id",
+      "to": "id"
+    }
+  ]
+}

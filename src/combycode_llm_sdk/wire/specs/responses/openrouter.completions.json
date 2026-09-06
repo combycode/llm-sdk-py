@@ -1,0 +1,17 @@
+{
+  "id": "openrouter/completions.response",
+  "extends": "openai/completions.response",
+  "_note": "OpenRouter is Chat Completions with one extension, and the adapter says so too: OpenRouterAdapter extends OpenAIAdapter and its parseResponse calls super first. Everything inherited is inherited here rather than copied.",
+
+  "accumulators": {
+    "builtinToolCalls": { "kind": "array", "omitEmpty": true }
+  },
+
+  "seed": [
+    {
+      "_note": "OpenRouter's `:online` web search has no discrete tool-call item. `url_citation` annotations on the message are the only signal that it ran, so their presence IS the builtin call.",
+      "emit": "builtinToolCalls",
+      "as": { "$call": "openrouterWebSearchCall" }
+    }
+  ]
+}

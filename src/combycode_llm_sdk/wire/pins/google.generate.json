@@ -1,0 +1,14 @@
+{
+  "id": "google/generate.pins",
+  "spec": "google/generate",
+  "_note": "Which generateContent node a Gemini model uses without a catalog pin. Only one question decides it: 2.5 takes a token `thinkingBudget` and 400s on `thinkingLevel`; 3.x takes the level.",
+  "rules": [
+    {
+      "match": "gemini-2[.]5",
+      "spec": "google/generate@2.5",
+      "why": "the 2.5 line specifically - it is the only one that takes thinkingBudget. 2.0 and earlier have no thinking control at all, so they fall to the default like everything else and simply never emit one"
+    }
+  ],
+  "default": "google/generate@3",
+  "_default": "3.x and anything newer take thinkingLevel. An unknown id is treated as newer, which is also the shape the current generation uses."
+}

@@ -1,0 +1,19 @@
+{
+  "id": "xai/retrieval.deleteCorpus",
+  "extends": "xai/retrieval.management",
+  "envelope": {
+    "method": "DELETE",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "managementBaseURL"
+        },
+        "/collections/",
+        {
+          "$": "corpusId"
+        }
+      ]
+    }
+  }
+}

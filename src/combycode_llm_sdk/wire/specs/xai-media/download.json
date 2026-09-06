@@ -1,0 +1,14 @@
+{
+  "id": "xai/media.download",
+  "_note": "Fetch bytes from a URL xAI put in its own response - a generated image or a finished video. The URL is presigned, so it carries NO auth header: the credential is in the URL and adding a bearer on top is at best ignored.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$": "downloadUrl"
+    },
+    "headers": []
+  },
+  "provider": "xai",
+  "api": "media"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "xai/files.getInfo",
+  "extends": "openai/files.base",
+  "_note": "Same shape as OpenAI's, per xai.upload's note that the surface differs only in the upload purpose. baseURL is supplied by the adapter, so the path is all that is declared here.",
+  "envelope": {
+    "method": "GET", "bodyKind": "none",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/files/", { "$": "remoteId" }] }
+  }
+}

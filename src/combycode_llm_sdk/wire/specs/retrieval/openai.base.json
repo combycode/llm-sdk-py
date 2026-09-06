@@ -1,0 +1,21 @@
+{
+  "id": "openai/retrieval.base",
+  "provider": "openai",
+  "api": "retrieval",
+  "_note": "Bearer only. The multipart upload inherits from HERE: setting content-type on a FormData body overrides the boundary the runtime chose and the server cannot parse it.",
+  "envelope": {
+    "headers": [
+      {
+        "name": "authorization",
+        "value": {
+          "$join": [
+            "Bearer ",
+            {
+              "$config": "apiKey"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

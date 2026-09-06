@@ -1,0 +1,130 @@
+{
+  "_doc": "What the MCP OAuth flow sent, captured through an injected fetch. Regenerate ONLY with --force and only when the wire genuinely changed.",
+  "frozenAtCommit": "0ff3ed67656c744810535605ad6b7e6c2169afdc",
+  "counts": {
+    "cases": 10,
+    "requests": 11
+  },
+  "index": {
+    "mcp-oauth/discover.discover.oauthFirst": {
+      "headers": {
+        "accept": "application/json"
+      },
+      "method": "GET",
+      "model": "oauth",
+      "provider": "mcp",
+      "responseType": "json",
+      "url": "https://mcp.example.com/.well-known/oauth-authorization-server"
+    },
+    "mcp-oauth/discover.discover.oidcFallback": {
+      "headers": {
+        "accept": "application/json"
+      },
+      "method": "GET",
+      "model": "oauth",
+      "provider": "mcp",
+      "responseType": "json",
+      "url": "https://mcp.example.com/.well-known/oauth-authorization-server"
+    },
+    "mcp-oauth/discover.discover.oidcFallback.1": {
+      "headers": {
+        "accept": "application/json"
+      },
+      "method": "GET",
+      "model": "oauth",
+      "provider": "mcp",
+      "responseType": "json",
+      "url": "https://mcp.example.com/.well-known/openid-configuration"
+    },
+    "mcp-oauth/register.register.default": {
+      "body": {
+        "application_type": "native",
+        "client_name": "test",
+        "redirect_uris": [
+          "http://127.0.0.1:8976/callback"
+        ]
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "oauth",
+      "provider": "mcp",
+      "responseType": "json",
+      "url": "https://mcp.example.com/oauth/register"
+    },
+    "mcp-oauth/register.register.explicitType": {
+      "body": {
+        "application_type": "web",
+        "client_name": "test",
+        "redirect_uris": [
+          "https://app.example.com/cb"
+        ]
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "oauth",
+      "provider": "mcp",
+      "responseType": "json",
+      "url": "https://mcp.example.com/oauth/register"
+    },
+    "mcp-oauth/exchange.exchange.public": {
+      "body": "grant_type=authorization_code&code=auth-code-1&code_verifier=ver-1&client_id=client-1&redirect_uri=http%3A%2F%2F127.0.0.1%3A8976%2Fcallback",
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/x-www-form-urlencoded"
+      },
+      "method": "POST",
+      "model": "oauth",
+      "provider": "mcp",
+      "responseType": "json",
+      "url": "https://auth.example.com/oauth/token"
+    },
+    "mcp-oauth/exchange.exchange.confidentialWithResource": {
+      "body": "grant_type=authorization_code&code=auth+code%2F2%2B3&code_verifier=ver-2&client_id=client-2&redirect_uri=http%3A%2F%2F127.0.0.1%3A8976%2Fcallback&client_secret=shh+secret&resource=https%3A%2F%2Fmcp.example.com%2Fmcp",
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/x-www-form-urlencoded"
+      },
+      "method": "POST",
+      "model": "oauth",
+      "provider": "mcp",
+      "responseType": "json",
+      "url": "https://auth.example.com/oauth/token"
+    },
+    "mcp-oauth/refresh.refresh.public": {
+      "body": "grant_type=refresh_token&refresh_token=rt-1&client_id=client-1",
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/x-www-form-urlencoded"
+      },
+      "method": "POST",
+      "model": "oauth",
+      "provider": "mcp",
+      "responseType": "json",
+      "url": "https://auth.example.com/oauth/token"
+    },
+    "mcp-oauth/refresh.refresh.confidential": {
+      "body": "grant_type=refresh_token&refresh_token=rt-2&client_id=client-2&client_secret=shh+secret",
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/x-www-form-urlencoded"
+      },
+      "method": "POST",
+      "model": "oauth",
+      "provider": "mcp",
+      "responseType": "json",
+      "url": "https://auth.example.com/oauth/token"
+    },
+    "mcp-oauth/authorizeUrl.authorize.minimal": {
+      "__url": "https://auth.example.com/oauth/authorize?response_type=code&client_id=client-1&redirect_uri=http%3A%2F%2F127.0.0.1%3A8976%2Fcallback&code_challenge=chal-1&code_challenge_method=S256"
+    },
+    "mcp-oauth/authorizeUrl.authorize.full": {
+      "__url": "https://auth.example.com/oauth/authorize?response_type=code&client_id=client-1&redirect_uri=http%3A%2F%2F127.0.0.1%3A8976%2Fcallback&code_challenge=chal-1&code_challenge_method=S256&scope=mcp%3Aread+mcp%3Awrite&state=st-1&resource=https%3A%2F%2Fmcp.example.com%2Fmcp"
+    }
+  }
+}

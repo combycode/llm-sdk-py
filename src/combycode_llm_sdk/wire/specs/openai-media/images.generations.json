@@ -1,0 +1,7 @@
+{
+  "id": "openai/images.generations",
+  "extends": "openai/media.images",
+  "_note": "Text-to-image. `style` is accepted here but not on /edits.",
+  "envelope": { "url": { "$join": [{ "$config": "baseURL" }, "/v1/images/generations"] } },
+  "fields": [{ "from": "params.style", "to": "style", "presence": "truthy" }]
+}

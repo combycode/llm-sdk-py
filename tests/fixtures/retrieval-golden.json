@@ -1,0 +1,692 @@
+{
+  "_doc": "What the hosted retrieval backends sent, captured through an injected fetch. Regenerate ONLY with --force and only when the wire genuinely changed.",
+  "frozenAtCommit": "3576a1be2a9cc1b08cb32e23fa1b65dc018ba254",
+  "counts": {
+    "cases": 32,
+    "requests": 41
+  },
+  "index": {
+    "retrieval/openai/createCorpus.create.minimal": {
+      "body": {
+        "name": "docs"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "vector_stores",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/vector_stores"
+    },
+    "retrieval/openai/createCorpus.create.chunking": {
+      "body": {
+        "chunking_strategy": {
+          "static": {
+            "chunk_overlap_tokens": 100,
+            "max_chunk_size_tokens": 400
+          },
+          "type": "static"
+        },
+        "name": "docs"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "vector_stores",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/vector_stores"
+    },
+    "retrieval/openai/createCorpus.create.chunkingDefaults": {
+      "body": {
+        "chunking_strategy": {
+          "static": {
+            "chunk_overlap_tokens": 400,
+            "max_chunk_size_tokens": 800
+          },
+          "type": "static"
+        },
+        "name": "docs"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "vector_stores",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/vector_stores"
+    },
+    "retrieval/openai/createCorpus.create.expiry": {
+      "body": {
+        "expires_after": {
+          "anchor": "last_active_at",
+          "days": 7
+        },
+        "name": "docs"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "vector_stores",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/vector_stores"
+    },
+    "retrieval/openai/addDocument.add.labelled": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "refunds.txt",
+            "name": "file",
+            "size": 29,
+            "type": "text/plain;charset=utf-8"
+          },
+          {
+            "name": "purpose",
+            "value": "assistants"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "vector_stores",
+      "provider": "openai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/files"
+    },
+    "retrieval/openai/addDocument.add.labelled.1": {
+      "body": {
+        "file_id": "file-doc123"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "vector_stores",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/vector_stores/vs_abc123/files"
+    },
+    "retrieval/openai/addDocument.add.unlabelled": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "doc-8c9fcb76.txt",
+            "name": "file",
+            "size": 29,
+            "type": "text/plain;charset=utf-8"
+          },
+          {
+            "name": "purpose",
+            "value": "assistants"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "vector_stores",
+      "provider": "openai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/files"
+    },
+    "retrieval/openai/addDocument.add.unlabelled.1": {
+      "body": {
+        "file_id": "file-doc123"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "vector_stores",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/vector_stores/vs_abc123/files"
+    },
+    "retrieval/openai/addDocument.add.metadata": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "refunds.txt",
+            "name": "file",
+            "size": 29,
+            "type": "text/plain;charset=utf-8"
+          },
+          {
+            "name": "purpose",
+            "value": "assistants"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "vector_stores",
+      "provider": "openai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/files"
+    },
+    "retrieval/openai/addDocument.add.metadata.1": {
+      "body": {
+        "attributes": {
+          "category": "policy",
+          "version": 2
+        },
+        "file_id": "file-doc123"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "vector_stores",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/vector_stores/vs_abc123/files"
+    },
+    "retrieval/openai/indexStatus.status": {
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "GET",
+      "model": "vector_stores",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/vector_stores/vs_abc123"
+    },
+    "retrieval/openai/removeDocument.remove": {
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "DELETE",
+      "model": "vector_stores",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/vector_stores/vs_abc123/files/file-doc123"
+    },
+    "retrieval/openai/deleteCorpus.delete": {
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "DELETE",
+      "model": "vector_stores",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/vector_stores/vs_abc123"
+    },
+    "retrieval/openai/listCorpora.list": {
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "GET",
+      "model": "vector_stores",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/vector_stores"
+    },
+    "retrieval/google/createCorpus.create.minimal": {
+      "body": {
+        "displayName": "docs",
+        "embeddingModel": "models/gemini-embedding-2"
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/fileSearchStores"
+    },
+    "retrieval/google/createCorpus.create.embeddingModel": {
+      "body": {
+        "displayName": "docs",
+        "embeddingModel": "models/text-embedding-004"
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/fileSearchStores"
+    },
+    "retrieval/google/addDocument.add.labelled": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "refunds.txt",
+            "name": "file",
+            "size": 29,
+            "type": "text/plain;charset=utf-8"
+          }
+        ]
+      },
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/upload/v1beta/files"
+    },
+    "retrieval/google/addDocument.add.labelled.1": {
+      "body": {
+        "chunkingConfig": {
+          "whiteSpaceConfig": {
+            "maxOverlapTokens": 64,
+            "maxTokensPerChunk": 512
+          }
+        },
+        "fileName": "files/doc123"
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/fileSearchStores/store-abc123:importFile"
+    },
+    "retrieval/google/addDocument.add.unlabelled": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "doc-8c9fcb76.txt",
+            "name": "file",
+            "size": 29,
+            "type": "text/plain;charset=utf-8"
+          }
+        ]
+      },
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/upload/v1beta/files"
+    },
+    "retrieval/google/addDocument.add.unlabelled.1": {
+      "body": {
+        "chunkingConfig": {
+          "whiteSpaceConfig": {
+            "maxOverlapTokens": 64,
+            "maxTokensPerChunk": 512
+          }
+        },
+        "fileName": "files/doc123"
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/fileSearchStores/store-abc123:importFile"
+    },
+    "retrieval/google/addDocument.add.metadata": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "refunds.txt",
+            "name": "file",
+            "size": 29,
+            "type": "text/plain;charset=utf-8"
+          }
+        ]
+      },
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/upload/v1beta/files"
+    },
+    "retrieval/google/addDocument.add.metadata.1": {
+      "body": {
+        "chunkingConfig": {
+          "whiteSpaceConfig": {
+            "maxOverlapTokens": 64,
+            "maxTokensPerChunk": 512
+          }
+        },
+        "customMetadata": [
+          {
+            "key": "category",
+            "value": "policy"
+          },
+          {
+            "key": "version",
+            "value": "2"
+          }
+        ],
+        "fileName": "files/doc123"
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/fileSearchStores/store-abc123:importFile"
+    },
+    "retrieval/google/pollOperation.poll": {
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/fileSearchStores/store-abc123/operations/op-789"
+    },
+    "retrieval/google/indexStatus.status": {
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/fileSearchStores/store-abc123"
+    },
+    "retrieval/google/removeDocument.remove": {
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "DELETE",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/files/doc123"
+    },
+    "retrieval/google/deleteCorpus.delete": {
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "DELETE",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/fileSearchStores/store-abc123?force=true"
+    },
+    "retrieval/google/listCorpora.list": {
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/fileSearchStores?pageSize=20"
+    },
+    "retrieval/google/listCorpora.list.paged": {
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/fileSearchStores?pageSize=20"
+    },
+    "retrieval/google/listCorpora.list.paged.1": {
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "fileSearchStores",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/fileSearchStores?pageSize=20&pageToken=tok%2Fen%2Bwith%20spaces%26more%3D1"
+    },
+    "retrieval/xai/createCorpus.create": {
+      "body": {
+        "collection_name": "docs"
+      },
+      "headers": {
+        "authorization": "Bearer mk",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "collections",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://management-api.x.ai/v1/collections"
+    },
+    "retrieval/xai/addDocument.add.labelled": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "refunds.txt",
+            "name": "file",
+            "size": 29,
+            "type": "text/plain;charset=utf-8"
+          },
+          {
+            "name": "purpose",
+            "value": "assistants"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "collections",
+      "provider": "xai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/files"
+    },
+    "retrieval/xai/addDocument.add.labelled.1": {
+      "body": {
+        "fields": {
+          "category": "policy"
+        },
+        "name": "refunds.txt"
+      },
+      "headers": {
+        "authorization": "Bearer mk",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "collections",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://management-api.x.ai/v1/collections/col_abc123/documents/file_doc123"
+    },
+    "retrieval/xai/addDocument.add.bare": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "doc-8c9fcb76.txt",
+            "name": "file",
+            "size": 29,
+            "type": "text/plain;charset=utf-8"
+          },
+          {
+            "name": "purpose",
+            "value": "assistants"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "collections",
+      "provider": "xai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/files"
+    },
+    "retrieval/xai/addDocument.add.bare.1": {
+      "body": {},
+      "headers": {
+        "authorization": "Bearer mk",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "collections",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://management-api.x.ai/v1/collections/col_abc123/documents/file_doc123"
+    },
+    "retrieval/xai/indexStatus.status": {
+      "headers": {
+        "authorization": "Bearer mk",
+        "content-type": "application/json"
+      },
+      "method": "GET",
+      "model": "collections",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://management-api.x.ai/v1/collections/col_abc123/documents"
+    },
+    "retrieval/xai/removeDocument.remove": {
+      "headers": {
+        "authorization": "Bearer mk",
+        "content-type": "application/json"
+      },
+      "method": "DELETE",
+      "model": "collections",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://management-api.x.ai/v1/collections/col_abc123/documents/file_doc123"
+    },
+    "retrieval/xai/deleteCorpus.delete": {
+      "headers": {
+        "authorization": "Bearer mk",
+        "content-type": "application/json"
+      },
+      "method": "DELETE",
+      "model": "collections",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://management-api.x.ai/v1/collections/col_abc123"
+    },
+    "retrieval/xai/listCorpora.list": {
+      "headers": {
+        "authorization": "Bearer mk",
+        "content-type": "application/json"
+      },
+      "method": "GET",
+      "model": "collections",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://management-api.x.ai/v1/collections"
+    },
+    "retrieval/xai/search.search.default": {
+      "body": {
+        "query": "refund window",
+        "retrieval_mode": {
+          "type": "hybrid"
+        },
+        "source": {
+          "collection_ids": [
+            "col_abc123"
+          ]
+        }
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "collections",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/documents/search"
+    },
+    "retrieval/xai/search.search.keyword": {
+      "body": {
+        "query": "refund window",
+        "retrieval_mode": {
+          "type": "keyword"
+        },
+        "source": {
+          "collection_ids": [
+            "col_abc123"
+          ]
+        }
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "collections",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/documents/search"
+    },
+    "retrieval/xai/search.search.unknownMode": {
+      "body": {
+        "query": "refund window",
+        "retrieval_mode": {
+          "type": "hybrid"
+        },
+        "source": {
+          "collection_ids": [
+            "col_abc123"
+          ]
+        }
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "collections",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/documents/search"
+    }
+  }
+}

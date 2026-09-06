@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: lint + typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -e ".[dev]"
+
+      - run: python -m ruff check src tests examples
+
+      # Type-checked for every platform, not just the runner's. Windows-only
+      # stdlib names (`subprocess.STARTUPINFO`) exist on one and not the others,
+      # so a single-platform check passes while the other platform is broken --
+      # which is exactly how a release failed on 2026-09-06, green on a Windows
+      # desktop and red on this Linux runner. Checking only here would hide the
+      # same bug in the opposite direction.
+      - run: python -m mypy --platform linux src tests
+      - run: python -m mypy --platform win32 src tests
+      - run: python -m mypy --platform darwin src tests
+
+  test:
+    name: test (${{ matrix.os }})
+    needs: check
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          # The floor the package declares, so the suite runs against the
+          # oldest interpreter a consumer might install it on.
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -e ".[dev]"
+      # The suite runs the example corpus too (`tests/test_examples.py`), so
+      # there is no separate sweep to keep in step with it.
+      - run: python -m pytest -q
+        env:
+          PYTHONPATH: src
+
+  versions:
+    name: test (python ${{ matrix.python }})
+    needs: check
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.13", "3.14"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest -q
+        env:
+          PYTHONPATH: src

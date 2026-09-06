@@ -1,0 +1,49 @@
+{
+  "id": "google/count.tokens",
+  "provider": "google",
+  "api": "count",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1beta/",
+        {
+          "$call": "googleModelPath"
+        },
+        ":countTokens"
+      ]
+    },
+    "headers": [
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      },
+      {
+        "name": "content-type",
+        "value": "application/json"
+      }
+    ]
+  },
+  "blocks": [
+    {
+      "name": "contents",
+      "to": "contents",
+      "template": [
+        {
+          "parts": [
+            {
+              "text": {
+                "$": "text"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

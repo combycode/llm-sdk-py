@@ -1,0 +1,23 @@
+{
+  "id": "openai/files.content.container",
+  "extends": "openai/files.content",
+  "_note": "A code-execution output file lives inside a CONTAINER, which is a different path — not a query parameter on the same one.",
+  "envelope": {
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1/containers/",
+        {
+          "$": "containerId"
+        },
+        "/files/",
+        {
+          "$": "id"
+        },
+        "/content"
+      ]
+    }
+  }
+}

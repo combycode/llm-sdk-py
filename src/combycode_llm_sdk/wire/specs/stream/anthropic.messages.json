@@ -1,0 +1,64 @@
+{
+  "id": "anthropic/messages.stream",
+  "_note": "Transposed from AnthropicAdapter.streamEvents. The mapping cases live here; the three effects are the parts that span EVENTS rather than describe one -- a hosted tool call is announced, its input arrives in fragments, the block closes, and only then can it be filed against the id its result block will later claim.",
+
+  "state": {
+    "current": {
+      "kind": "scalar",
+      "default": null,
+      "_note": "The open server_tool_use whose input JSON is still arriving."
+    },
+    "pending": {
+      "kind": "scalar",
+      "default": {},
+      "_note": "Finished inputs by id, waiting for the *_tool_result that claims them."
+    }
+  },
+
+  "on": [
+    {
+      "_note": "Keep-alives mean nothing and must not reach the type switch.",
+      "when": { "eq": ["event.name", "ping"] },
+      "stop": true
+    },
+    {
+      "match": "type",
+      "cases": {
+        "content_block_delta": [
+          {
+            "when": { "eq": ["raw.delta.type", "text_delta"] },
+            "emit": "events",
+            "as": { "type": "text", "text": { "$": "raw.delta.text" } }
+          },
+          {
+            "when": { "eq": ["raw.delta.type", "thinking_delta"] },
+            "emit": "events",
+            "as": { "type": "thinking", "text": { "$": "raw.delta.thinking" } }
+          },
+          {
+            "when": { "eq": ["raw.delta.type", "citations_delta"] },
+            "emit": "events",
+            "as": { "$call": "anthropicStreamCitation" }
+          },
+          {
+            "_note": "Feeds the open block, or IS a function call's arguments when none is open.",
+            "when": { "eq": ["raw.delta.type", "input_json_delta"] },
+            "effect": "anthropicStreamJsonDelta"
+          }
+        ],
+        "content_block_start": { "effect": "anthropicStreamBlockStart" },
+        "content_block_stop": { "effect": "anthropicStreamBlockStop" },
+        "message_delta": {
+          "emit": "events",
+          "mode": "concat",
+          "as": { "$call": "anthropicStreamMessageDelta" }
+        },
+        "message_start": {
+          "emit": "events",
+          "mode": "concat",
+          "as": { "$call": "anthropicStreamMessageStart" }
+        }
+      }
+    }
+  ]
+}

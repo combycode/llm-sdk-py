@@ -1,0 +1,16 @@
+{
+  "id": "mcp-oauth/discover.oidc",
+  "extends": "mcp-oauth/base",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "origin"
+        },
+        "/.well-known/openid-configuration"
+      ]
+    }
+  }
+}

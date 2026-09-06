@@ -1,0 +1,12 @@
+{
+  "id": "anthropic/files.base",
+  "provider": "anthropic", "api": "files",
+  "_note": "The files API is still behind a beta header.",
+  "envelope": {
+    "headers": [
+      { "name": "x-api-key", "value": { "$config": "apiKey" } },
+      { "name": "anthropic-version", "value": { "$config": "apiVersion" } },
+      { "name": "anthropic-beta", "value": "files-api-2025-04-14" }
+    ]
+  }
+}

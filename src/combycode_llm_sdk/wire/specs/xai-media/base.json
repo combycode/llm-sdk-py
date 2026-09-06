@@ -1,0 +1,5 @@
+{ "id": "xai/media.base", "provider": "xai", "api": "media",
+  "_note": "xAI gives each media type its own endpoint, unlike OpenRouter which funnels everything through chat/completions.",
+  "envelope": { "method": "POST", "headers": [
+    { "name": "authorization", "value": { "$join": ["Bearer ", { "$config": "apiKey" }] } },
+    { "name": "content-type", "value": "application/json" } ] } }

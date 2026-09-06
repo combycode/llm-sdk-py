@@ -1,0 +1,21 @@
+{
+  "id": "xai/retrieval.listDocuments",
+  "extends": "xai/retrieval.management",
+  "_note": "Per-document indexing status. The collection record only carries documents_count, which goes to 1 the moment a document is ATTACHED and says nothing about whether it can be searched yet — measured at ~5s apart.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "managementBaseURL"
+        },
+        "/collections/",
+        {
+          "$": "corpusId"
+        },
+        "/documents"
+      ]
+    }
+  }
+}

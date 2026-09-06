@@ -1,0 +1,480 @@
+{
+  "_doc": "What the hand-written media adapters sent, frozen before the spec-driven migration. Regenerate ONLY with scripts/freeze-media-golden.ts --force, and only when the wire genuinely changed \u2014 say why in the commit. REFROZEN 2026-08-23 for one deliberate change: the Google API key moved out of the URL and into the x-goog-api-key header. 21 artifacts across the two corpora changed and every one differs ONLY in that way, checked pairwise against the previous fixture; the key set is identical. Verified live first \u2014 google files, image, tts and batch all pass with header auth.",
+  "frozenAtCommit": "959608fe5e89d2df73d70e5176a493fc3e874114",
+  "counts": {
+    "cases": 21
+  },
+  "index": {
+    "openai/image.gpt-image-1.minimal": {
+      "body": {
+        "model": "gpt-image-1",
+        "n": 1,
+        "prompt": "a cat"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "gpt-image-1",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/images/generations"
+    },
+    "openai/image.gpt-image-1.params": {
+      "body": {
+        "background": "transparent",
+        "model": "gpt-image-1",
+        "n": 2,
+        "output_format": "png",
+        "prompt": "a cat",
+        "quality": "high",
+        "size": "1024x1024"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "gpt-image-1",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/images/generations"
+    },
+    "openai/image.dall-e-3": {
+      "body": {
+        "model": "dall-e-3",
+        "n": 1,
+        "prompt": "a cat",
+        "response_format": "b64_json",
+        "style": "vivid"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "dall-e-3",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/images/generations"
+    },
+    "openai/image.dall-e-2": {
+      "body": {
+        "model": "dall-e-2",
+        "n": 3,
+        "prompt": "a cat",
+        "response_format": "b64_json",
+        "size": "512x512"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "dall-e-2",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/images/generations"
+    },
+    "openai/imageEdit.minimal": {
+      "body": {
+        "images": [
+          {
+            "image_url": "data:image/png;base64,aGk="
+          }
+        ],
+        "model": "gpt-image-1",
+        "n": 1,
+        "prompt": "add a hat"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "gpt-image-1",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/images/edits"
+    },
+    "openai/imageEdit.masked": {
+      "body": {
+        "images": [
+          {
+            "image_url": "data:image/png;base64,aGk="
+          }
+        ],
+        "mask": {
+          "image_url": "data:image/png;base64,aGk="
+        },
+        "model": "gpt-image-1",
+        "n": 1,
+        "prompt": "add a hat",
+        "size": "1024x1024"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "gpt-image-1",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/images/edits"
+    },
+    "openai/audio.speech": {
+      "body": {
+        "input": "hello there",
+        "instructions": "cheerful",
+        "model": "gpt-4o-mini-tts",
+        "response_format": "wav",
+        "speed": 1.1,
+        "voice": "alloy"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "gpt-4o-mini-tts",
+      "provider": "openai",
+      "responseType": "arraybuffer",
+      "url": "https://api.openai.com/v1/audio/speech"
+    },
+    "openai/audio.speech.defaults": {
+      "body": {
+        "input": "hello there",
+        "model": "gpt-4o-mini-tts",
+        "voice": "alloy"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "gpt-4o-mini-tts",
+      "provider": "openai",
+      "responseType": "arraybuffer",
+      "url": "https://api.openai.com/v1/audio/speech"
+    },
+    "openai/video.minimal": {
+      "body": {
+        "model": "sora-2",
+        "prompt": "a wave"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "sora-2",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/videos"
+    },
+    "openai/video.params": {
+      "body": {
+        "model": "sora-2",
+        "prompt": "a wave",
+        "seconds": "8",
+        "size": "720x1280"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "sora-2",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/videos"
+    },
+    "openai/video.fromImage": {
+      "body": {
+        "input_reference": {
+          "image_url": "data:image/png;base64,aGk="
+        },
+        "model": "sora-2",
+        "prompt": "animate"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "sora-2",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/videos"
+    },
+    "google/image.imagen.minimal": {
+      "body": {
+        "instances": [
+          {
+            "prompt": "a cat"
+          }
+        ],
+        "parameters": {
+          "sampleCount": 1
+        }
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "imagen-4.0-generate-001",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict"
+    },
+    "google/image.imagen.params": {
+      "body": {
+        "instances": [
+          {
+            "prompt": "a cat"
+          }
+        ],
+        "parameters": {
+          "aspectRatio": "16:9",
+          "sampleCount": 4,
+          "sampleImageSize": "2K"
+        }
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "imagen-4.0-generate-001",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict"
+    },
+    "google/image.gemini.minimal": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "a cat"
+              }
+            ]
+          }
+        ],
+        "generationConfig": {
+          "responseModalities": [
+            "IMAGE"
+          ]
+        }
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "gemini-2.5-flash-image",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent"
+    },
+    "google/image.gemini.params": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "a cat"
+              }
+            ]
+          }
+        ],
+        "generationConfig": {
+          "imageConfig": {
+            "aspectRatio": "1:1",
+            "imageSize": "1K"
+          },
+          "responseModalities": [
+            "IMAGE"
+          ]
+        }
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "gemini-2.5-flash-image",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent"
+    },
+    "google/imageEdit.gemini": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "add a hat"
+              },
+              {
+                "inline_data": {
+                  "data": "aGk=",
+                  "mime_type": "image/png"
+                }
+              }
+            ]
+          }
+        ],
+        "generationConfig": {
+          "responseModalities": [
+            "IMAGE"
+          ]
+        }
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "gemini-2.5-flash-image",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent"
+    },
+    "google/audio.tts": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hello there"
+              }
+            ]
+          }
+        ],
+        "generationConfig": {
+          "responseModalities": [
+            "AUDIO"
+          ],
+          "speechConfig": {
+            "voiceConfig": {
+              "prebuiltVoiceConfig": {
+                "voiceName": "Kore"
+              }
+            }
+          }
+        }
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "gemini-2.5-flash-preview-tts",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent"
+    },
+    "google/audio.tts.defaultVoice": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hello there"
+              }
+            ]
+          }
+        ],
+        "generationConfig": {
+          "responseModalities": [
+            "AUDIO"
+          ],
+          "speechConfig": {
+            "voiceConfig": {
+              "prebuiltVoiceConfig": {
+                "voiceName": "Kore"
+              }
+            }
+          }
+        }
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "gemini-2.5-flash-preview-tts",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent"
+    },
+    "google/video.veo.minimal": {
+      "body": {
+        "instances": [
+          {
+            "prompt": "a wave"
+          }
+        ],
+        "parameters": {}
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "veo-3.1-generate-preview",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-generate-preview:predictLongRunning"
+    },
+    "google/video.veo.params": {
+      "body": {
+        "instances": [
+          {
+            "prompt": "a wave"
+          }
+        ],
+        "parameters": {
+          "aspectRatio": "16:9",
+          "durationSeconds": 6,
+          "resolution": "1080p"
+        }
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "veo-3.1-generate-preview",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-generate-preview:predictLongRunning"
+    },
+    "google/video.veo.fromImage": {
+      "body": {
+        "instances": [
+          {
+            "image": {
+              "bytesBase64Encoded": "aGk=",
+              "mimeType": "image/png"
+            },
+            "prompt": "animate"
+          }
+        ],
+        "parameters": {}
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "veo-3.1-generate-preview",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-generate-preview:predictLongRunning"
+    }
+  }
+}

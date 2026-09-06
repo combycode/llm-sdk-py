@@ -1,0 +1,26 @@
+{
+  "id": "google/retrieval.createCorpus",
+  "extends": "google/retrieval.json",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1beta/fileSearchStores"
+      ]
+    }
+  },
+  "fields": [
+    {
+      "from": "name",
+      "to": "displayName"
+    },
+    {
+      "from": "embeddingModel",
+      "to": "embeddingModel",
+      "default": "models/gemini-embedding-2"
+    }
+  ]
+}

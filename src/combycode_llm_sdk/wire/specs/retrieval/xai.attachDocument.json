@@ -1,0 +1,34 @@
+{
+  "id": "xai/retrieval.attachDocument",
+  "extends": "xai/retrieval.management",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "managementBaseURL"
+        },
+        "/collections/",
+        {
+          "$": "corpusId"
+        },
+        "/documents/",
+        {
+          "$": "fileId"
+        }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "from": "label",
+      "to": "name",
+      "presence": "truthy"
+    },
+    {
+      "from": "metadata",
+      "to": "fields",
+      "presence": "truthy"
+    }
+  ]
+}

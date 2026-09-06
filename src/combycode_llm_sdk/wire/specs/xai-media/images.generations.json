@@ -1,0 +1,3 @@
+{ "id": "xai/images.generations", "extends": "xai/images.base",
+  "envelope": { "url": { "$join": [{ "$config": "baseURL" }, "/v1/images/generations"] } },
+  "fields": [{ "from": "params.n", "to": "n", "default": 1 }] }

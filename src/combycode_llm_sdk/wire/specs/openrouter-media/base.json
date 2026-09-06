@@ -1,0 +1,8 @@
+{ "id": "openrouter/media.base", "provider": "openrouter", "api": "media",
+  "_note": "OpenRouter has no media endpoints: images and audio are chat/completions calls steered by `modalities`. One URL for every media operation.",
+  "envelope": { "method": "POST",
+    "url": { "$join": [{ "$config": "baseURL" }, "/api/v1/chat/completions"] },
+    "headers": [
+      { "name": "authorization", "value": { "$join": ["Bearer ", { "$config": "apiKey" }] } },
+      { "name": "content-type", "value": "application/json" } ] },
+  "fields": [{ "from": "model", "to": "model", "default": "" }] }

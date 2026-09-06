@@ -1,0 +1,10 @@
+{
+  "id": "anthropic/files.upload",
+  "extends": "anthropic/files.base",
+  "_note": "No `purpose` field, unlike OpenAI and xAI.",
+  "envelope": {
+    "method": "POST", "bodyKind": "multipart",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/files"] }
+  },
+  "multipart": [{ "name": "file", "file": true }]
+}

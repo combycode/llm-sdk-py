@@ -1,0 +1,411 @@
+{
+  "_doc": "What the MCP Streamable-HTTP transport sent, captured through an injected fetch. Regenerate ONLY with --force and only when the wire genuinely changed.",
+  "frozenAtCommit": "0ff3ed67656c744810535605ad6b7e6c2169afdc",
+  "counts": {
+    "cases": 19,
+    "requests": 23
+  },
+  "index": {
+    "mcp/request.request.bare": {
+      "body": {
+        "id": 0,
+        "jsonrpc": "2.0",
+        "method": "tools/list"
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.versioned": {
+      "body": {
+        "id": 0,
+        "jsonrpc": "2.0",
+        "method": "tools/list"
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-protocol-version": "2025-11-25"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.session": {
+      "body": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "tools/call",
+        "params": {
+          "arguments": {
+            "q": "hi"
+          },
+          "name": "search"
+        }
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-protocol-version": "2025-11-25",
+        "mcp-session-id": "sess-abc123"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.session.1": {
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-protocol-version": "2025-11-25",
+        "mcp-session-id": "sess-abc123"
+      },
+      "method": "DELETE",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.configuredHeaders": {
+      "body": {
+        "id": 0,
+        "jsonrpc": "2.0",
+        "method": "tools/list"
+      },
+      "headers": {
+        "accept": "application/json",
+        "authorization": "Bearer tok-1",
+        "content-type": "application/json",
+        "x-tenant": "acme"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/notify.notify.noParams": {
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "notifications/initialized"
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/notify.notify.params": {
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "notifications/cancelled",
+        "params": {
+          "requestId": 7
+        }
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/close.close.session": {
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-protocol-version": "2025-11-25",
+        "mcp-session-id": "sess-abc123"
+      },
+      "method": "DELETE",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/listen.listen.events": {
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      },
+      "method": "GET",
+      "model": "example",
+      "provider": "mcp",
+      "signal": "__signal",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/listen.listen.resume": {
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      },
+      "method": "GET",
+      "model": "example",
+      "provider": "mcp",
+      "signal": "__signal",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/listen.listen.resume.1": {
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json",
+        "last-event-id": "ev-42"
+      },
+      "method": "GET",
+      "model": "example",
+      "provider": "mcp",
+      "signal": "__signal",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.modern": {
+      "body": {
+        "id": 0,
+        "jsonrpc": "2.0",
+        "method": "tools/list"
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-method": "tools/list",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.modern.toolName": {
+      "body": {
+        "id": 0,
+        "jsonrpc": "2.0",
+        "method": "tools/call",
+        "params": {
+          "arguments": {
+            "q": "hi"
+          },
+          "name": "search"
+        }
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-method": "tools/call",
+        "mcp-name": "search",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.modern.promptName": {
+      "body": {
+        "id": 0,
+        "jsonrpc": "2.0",
+        "method": "prompts/get",
+        "params": {
+          "name": "summarise"
+        }
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-method": "prompts/get",
+        "mcp-name": "summarise",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.modern.resourceUri": {
+      "body": {
+        "id": 0,
+        "jsonrpc": "2.0",
+        "method": "resources/read",
+        "params": {
+          "uri": "file:///readme.md"
+        }
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-method": "resources/read",
+        "mcp-name": "file:///readme.md",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.modern.nonAsciiName": {
+      "body": {
+        "id": 0,
+        "jsonrpc": "2.0",
+        "method": "tools/call",
+        "params": {
+          "arguments": {},
+          "name": "поиск"
+        }
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-method": "tools/call",
+        "mcp-name": "%D0%BF%D0%BE%D0%B8%D1%81%D0%BA",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.modernByVersionOnly": {
+      "body": {
+        "id": 0,
+        "jsonrpc": "2.0",
+        "method": "server/discover"
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-method": "server/discover",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.modern.noSessionEcho": {
+      "body": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "tools/list"
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-method": "tools/list",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/request.request.modern.noSessionEcho.1": {
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "DELETE",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/notify.notify.modern": {
+      "body": {
+        "jsonrpc": "2.0",
+        "method": "notifications/initialized"
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "responseType": "text",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/longLived.longLived.subscribe": {
+      "body": {
+        "id": 0,
+        "jsonrpc": "2.0",
+        "method": "subscriptions/listen",
+        "params": {
+          "filter": {
+            "toolsListChanged": true
+          }
+        }
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-method": "subscriptions/listen",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "signal": "__signal",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/longLived.longLived.resume": {
+      "body": {
+        "id": 0,
+        "jsonrpc": "2.0",
+        "method": "subscriptions/listen",
+        "params": {
+          "filter": {
+            "toolsListChanged": true
+          }
+        }
+      },
+      "headers": {
+        "accept": "application/json, text/event-stream",
+        "content-type": "application/json",
+        "mcp-method": "subscriptions/listen",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "POST",
+      "model": "example",
+      "provider": "mcp",
+      "signal": "__signal",
+      "url": "https://mcp.example.com/mcp"
+    },
+    "mcp/longLived.longLived.resume.1": {
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json",
+        "last-event-id": "ev-7",
+        "mcp-protocol-version": "2026-07-28"
+      },
+      "method": "GET",
+      "model": "example",
+      "provider": "mcp",
+      "signal": "__signal",
+      "url": "https://mcp.example.com/mcp"
+    }
+  }
+}

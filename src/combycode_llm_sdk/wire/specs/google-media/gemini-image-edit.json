@@ -1,0 +1,14 @@
+{
+  "id": "google/gemini-image-edit@generateContent",
+  "extends": "google/gemini-image@generateContent",
+  "_note": "Image-to-image edit: identical to generation plus the source image as a second part. A leaf under a leaf — depth 3.",
+  "blocks": [
+    {
+      "name": "contents",
+      "to": "contents",
+      "template": [
+        { "parts": [{ "text": { "$": "prompt" } }, { "$call": "googleSourceImagePart" }] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "openai/responses.stream",
+  "_note": "Transposed from OpenAIResponsesAdapter.parseStreamEvent. A clean discriminated union, so nearly all of it is cases. The one thing that spans events is `phase`: announced once when an item is added, but belonging on every text delta of that item, which carry only item_id.",
+
+  "state": {
+    "phaseByItem": {
+      "kind": "scalar",
+      "default": {},
+      "_note": "item id -> phase, so codex-family narration can be told from the answer."
+    }
+  },
+
+  "on": [
+    {
+      "match": "type",
+      "cases": {
+        "response.output_text.annotation.added": {
+          "emit": "events",
+          "as": { "$call": "oaiRespStreamCitation" }
+        },
+        "response.output_text.delta": {
+          "emit": "events",
+          "as": { "$call": "oaiRespStreamTextDelta" }
+        },
+        "response.function_call_arguments.delta": {
+          "emit": "events",
+          "as": {
+            "type": "tool_call_delta",
+            "id": { "$": "raw.call_id", "$default": "" },
+            "arguments": { "$": "raw.delta" }
+          }
+        },
+        "response.output_item.added": { "effect": "oaiRespStreamItemAdded" },
+        "response.image_generation_call.partial_image": {
+          "emit": "events",
+          "as": {
+            "type": "media_chunk",
+            "data": { "$": "raw.partial_image", "$default": "" },
+            "progress": { "$": "raw.partial_image_index" }
+          }
+        },
+        "response.output_item.done": [
+          {
+            "_note": "Files first, and as a rule of its own: xAI overrides this transform, and on the buffered side calling the module function directly is how that override got silently dropped.",
+            "emit": "events",
+            "mode": "concat",
+            "as": { "$call": "oaiRespStreamFiles" }
+          },
+          { "effect": "oaiRespStreamItemDone" }
+        ],
+        "response.completed": {
+          "emit": "events",
+          "mode": "concat",
+          "as": { "$call": "oaiRespStreamCompleted" }
+        }
+      }
+    }
+  ]
+}

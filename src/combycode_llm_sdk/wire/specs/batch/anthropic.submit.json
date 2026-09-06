@@ -1,0 +1,19 @@
+{
+  "id": "anthropic/batch.submit",
+  "extends": "anthropic/batch.base",
+  "_note": "One request carries the whole batch inline: each entry is {custom_id, params:<messages body>}.",
+  "envelope": {
+    "method": "POST",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/messages/batches"] }
+  },
+  "blocks": [
+    {
+      "name": "requests",
+      "to": "requests",
+      "template": {
+        "$map": "requests",
+        "$case": [{ "value": { "custom_id": { "$": "@customId" }, "params": { "$": "@body" } } }]
+      }
+    }
+  ]
+}

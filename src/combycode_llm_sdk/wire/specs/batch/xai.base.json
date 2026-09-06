@@ -1,0 +1,10 @@
+{
+  "id": "xai/batch.base",
+  "provider": "xai", "api": "batch",
+  "_note": "Bearer only. content-type is added by the POST operations; the GETs send no body and no content-type.",
+  "envelope": {
+    "headers": [
+      { "name": "authorization", "value": { "$join": ["Bearer ", { "$config": "apiKey" }] } }
+    ]
+  }
+}

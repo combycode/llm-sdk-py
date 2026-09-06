@@ -1,0 +1,12 @@
+{
+  "id": "anthropic/messages@4.1",
+  "extends": "anthropic/messages@4.0",
+  "_note": "top_k accepted from 4.1.",
+  "fields": [
+    {
+      "from": "topK",
+      "to": "top_k"
+    }
+  ],
+  "placeBlocks": {}
+}

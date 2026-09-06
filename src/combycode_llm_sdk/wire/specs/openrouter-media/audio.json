@@ -1,0 +1,9 @@
+{ "id": "openrouter/media.audio", "extends": "openrouter/media.base",
+  "_note": "Content is a bare string here, not a parts array.",
+  "blocks": [
+    { "name": "modalities", "to": "modalities", "template": ["audio", "text"] },
+    { "name": "audio", "to": "audio", "template": {
+        "voice": { "$": "params.voice", "$default": "alloy" },
+        "format": { "$": "params.format", "$default": "mp3" } } },
+    { "name": "messages", "to": "messages",
+      "template": [{ "role": "user", "content": { "$": "input" } }] } ] }

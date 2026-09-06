@@ -1,0 +1,316 @@
+{
+  "id": "openai/responses",
+  "provider": "openai",
+  "api": "responses",
+  "flavors": [
+    "openai",
+    "xai",
+    "openrouter"
+  ],
+  "tables": {
+    "summaryByVisibility": {
+      "full": "auto",
+      "summary": "concise"
+    }
+  },
+  "fields": [
+    {
+      "from": "model",
+      "to": "model"
+    },
+    {
+      "from": "system",
+      "to": "instructions",
+      "presence": "truthy"
+    },
+    {
+      "from": "previousResponseId",
+      "to": "previous_response_id",
+      "presence": "truthy"
+    },
+    {
+      "from": "maxTokens",
+      "to": "max_output_tokens",
+      "presence": "truthy"
+    },
+    {
+      "from": "temperature",
+      "to": "temperature"
+    },
+    {
+      "from": "topP",
+      "to": "top_p"
+    },
+    {
+      "from": "seed",
+      "to": "seed",
+      "when": {
+        "flavor": "xai"
+      },
+      "note": "only the xAI backend accepts seed on this API"
+    },
+    {
+      "from": "serviceTier",
+      "to": "service_tier",
+      "presence": "truthy",
+      "call": "openaiTier"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "input",
+      "call": "openaiResponsesInput",
+      "to": "input"
+    },
+    {
+      "name": "moderation",
+      "when": {
+        "pred": "wantsNativeModeration"
+      },
+      "to": "moderation",
+      "template": {
+        "$call": "nativeModeration"
+      }
+    },
+    {
+      "name": "promptCacheOptions",
+      "when": {
+        "all": [
+          {
+            "flavor": "openai"
+          },
+          {
+            "truthy": "providerOptions.promptCacheOptions"
+          }
+        ]
+      },
+      "to": "prompt_cache_options",
+      "template": {
+        "$": "providerOptions.promptCacheOptions"
+      }
+    },
+    {
+      "name": "tools",
+      "when": {
+        "truthy": "tools"
+      },
+      "to": "tools",
+      "template": {
+        "$map": "tools",
+        "$dropUnmatched": true,
+        "$case": [
+          {
+            "when": {
+              "isFunctionTool": true
+            },
+            "value": {
+              "type": "function",
+              "name": {
+                "$": "@name"
+              },
+              "description": {
+                "$": "@description"
+              },
+              "parameters": {
+                "$call": "ensureAdditionalProperties",
+                "$arg": {
+                  "$": "@parameters"
+                }
+              },
+              "strict": {
+                "$call": "openaiResponsesToolStrict",
+                "$arg": {
+                  "$": "@"
+                }
+              },
+              "allowed_callers": {
+                "$when": {
+                  "itemTruthy": "allowedCallers"
+                },
+                "$value": {
+                  "$": "@allowedCallers"
+                }
+              },
+              "output_schema": {
+                "$when": {
+                  "itemTruthy": "outputSchema"
+                },
+                "$value": {
+                  "$": "@outputSchema"
+                }
+              }
+            }
+          },
+          {
+            "value": {
+              "type": {
+                "$": "@type"
+              },
+              "container": {
+                "$when": {
+                  "builtin": "code_interpreter"
+                },
+                "$value": {
+                  "type": "auto"
+                }
+              },
+              "$spread": {
+                "$": "@params"
+              },
+              "$note": "container is declared BEFORE $spread so caller params win, matching today"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "toolChoice.keyword",
+      "when": {
+        "all": [
+          {
+            "truthy": "toolChoice"
+          },
+          {
+            "pred": "toolChoiceIsString"
+          }
+        ]
+      },
+      "to": "tool_choice",
+      "template": {
+        "$": "toolChoice"
+      }
+    },
+    {
+      "name": "toolChoice.named",
+      "when": {
+        "all": [
+          {
+            "truthy": "toolChoice"
+          },
+          {
+            "not": {
+              "pred": "toolChoiceIsString"
+            }
+          }
+        ]
+      },
+      "to": "tool_choice",
+      "template": {
+        "type": "function",
+        "name": {
+          "$": "toolChoice.name"
+        }
+      }
+    },
+    {
+      "name": "structured",
+      "when": {
+        "truthy": "structured"
+      },
+      "to": "text",
+      "template": {
+        "format": {
+          "type": "json_schema",
+          "name": {
+            "$": "structured.name",
+            "$default": "response"
+          },
+          "schema": {
+            "$call": "openaiResponsesStructuredSchema"
+          },
+          "strict": {
+            "$call": "openaiStructuredStrict"
+          }
+        }
+      }
+    },
+    {
+      "name": "reasoning",
+      "when": {
+        "all": [
+          {
+            "truthy": "thinking"
+          },
+          {
+            "ne": [
+              "thinking.mode",
+              "off"
+            ]
+          }
+        ]
+      },
+      "to": "reasoning",
+      "template": {
+        "effort": {
+          "$": "thinking.effort",
+          "$default": "medium"
+        },
+        "summary": {
+          "$when": {
+            "ne": [
+              "thinking.visibility",
+              "hidden"
+            ]
+          },
+          "$value": {
+            "$table": "summaryByVisibility",
+            "$key": "thinking.visibility",
+            "$default": "auto"
+          }
+        },
+        "mode": {
+          "$when": {
+            "truthy": "providerOptions.reasoningMode"
+          },
+          "$value": {
+            "$": "providerOptions.reasoningMode"
+          }
+        },
+        "context": {
+          "$when": {
+            "truthy": "thinking.context"
+          },
+          "$value": {
+            "$": "thinking.context"
+          }
+        }
+      }
+    }
+  ],
+  "overlays": {
+    "xai": {
+      "ops": [
+        {
+          "op": "call",
+          "call": "xaiSystemIntoInput"
+        },
+        {
+          "op": "delete",
+          "from": "reasoning",
+          "when": {
+            "not": {
+              "pred": "xaiMultiAgent"
+            }
+          }
+        },
+        {
+          "op": "call",
+          "call": "xaiServiceTier"
+        },
+        {
+          "op": "call",
+          "call": "xaiCodeExecInclude"
+        }
+      ]
+    },
+    "openrouter": {
+      "ops": [
+        {
+          "op": "mergeFrom",
+          "from": "providerOptions.openrouter"
+        }
+      ]
+    }
+  },
+  "_note": "Unversioned: no OpenAI chat model varies the wire shape, so there is no chain to pin. Flavor differences (xai, openrouter) are overlays, not versions."
+}

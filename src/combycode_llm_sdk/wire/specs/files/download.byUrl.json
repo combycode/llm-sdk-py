@@ -1,0 +1,122 @@
+{
+  "id": "files/download.byUrl",
+  "provider": "files",
+  "api": "download",
+  "_note": "A file the provider handed back as an ABSOLUTE url, which is often a signed CDN link on a third-party host. The credential goes out only when the url is on the provider's own base — `sameHost` is decided in code, deliberately, because sending a key to whatever host a response named is the whole risk here.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$": "url"
+    },
+    "headers": [
+      {
+        "name": "x-api-key",
+        "value": {
+          "$config": "apiKey"
+        },
+        "when": {
+          "all": [
+            {
+              "truthy": "sameHost"
+            },
+            {
+              "eq": [
+                "provider",
+                "anthropic"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "anthropic-version",
+        "value": {
+          "$config": "apiVersion"
+        },
+        "when": {
+          "all": [
+            {
+              "truthy": "sameHost"
+            },
+            {
+              "eq": [
+                "provider",
+                "anthropic"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "anthropic-dangerous-direct-browser-access",
+        "value": "true",
+        "when": {
+          "all": [
+            {
+              "truthy": "sameHost"
+            },
+            {
+              "eq": [
+                "provider",
+                "anthropic"
+              ]
+            },
+            {
+              "truthy": "browser"
+            }
+          ]
+        }
+      },
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        },
+        "when": {
+          "all": [
+            {
+              "truthy": "sameHost"
+            },
+            {
+              "eq": [
+                "provider",
+                "google"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "authorization",
+        "value": {
+          "$join": [
+            "Bearer ",
+            {
+              "$config": "apiKey"
+            }
+          ]
+        },
+        "when": {
+          "all": [
+            {
+              "truthy": "sameHost"
+            },
+            {
+              "ne": [
+                "provider",
+                "anthropic"
+              ]
+            },
+            {
+              "ne": [
+                "provider",
+                "google"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{ "id": "xai/tts", "extends": "xai/media.base",
+  "_note": "Field names differ from every other TTS surface: text/codec/sample_rate, and the body carries no model.",
+  "envelope": { "url": { "$join": [{ "$config": "baseURL" }, "/v1/tts"] } },
+  "fields": [
+    { "from": "input", "to": "text" },
+    { "from": "params.voice", "to": "voice", "default": "eve" },
+    { "from": "params.language", "to": "language", "default": "en" },
+    { "from": "params.format", "to": "codec", "presence": "truthy" },
+    { "from": "params.sampleRate", "to": "sample_rate", "presence": "truthy" } ] }

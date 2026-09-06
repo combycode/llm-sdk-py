@@ -1,0 +1,35 @@
+{
+  "id": "openai/videos.content",
+  "_note": "Download the finished video. Deliberately NOT extending openai/media.base: that base sets content-type for JSON posts, and this GET has no body. Inherited headers merge by name rather than replace, so the only way to send fewer is to declare them here.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1/videos/",
+        {
+          "$": "videoId"
+        },
+        "/content"
+      ]
+    },
+    "headers": [
+      {
+        "name": "authorization",
+        "value": {
+          "$join": [
+            "Bearer ",
+            {
+              "$config": "apiKey"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "provider": "openai",
+  "api": "media"
+}

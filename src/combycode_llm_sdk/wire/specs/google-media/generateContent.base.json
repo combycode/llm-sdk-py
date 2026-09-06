@@ -1,0 +1,56 @@
+{
+  "id": "google/media.generateContent",
+  "provider": "google",
+  "api": "generateContent",
+  "_note": "Inline-media path: the same :generateContent endpoint the chat spec uses, but driven by responseModalities. Shared by gemini image and gemini tts. Auth is the x-goog-api-key HEADER, never ?key= in the URL: a key in a query string is copied into every access log and telemetry span the request passes through.",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1beta/models/",
+        {
+          "$": "model"
+        },
+        ":generateContent"
+      ]
+    },
+    "headers": [
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      },
+      {
+        "name": "content-type",
+        "value": "application/json"
+      }
+    ]
+  },
+  "blocks": [
+    {
+      "name": "contents",
+      "to": "contents",
+      "template": [
+        {
+          "parts": [
+            {
+              "text": {
+                "$": "prompt"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "generationConfig.root",
+      "to": "generationConfig",
+      "merge": true,
+      "template": {}
+    }
+  ]
+}

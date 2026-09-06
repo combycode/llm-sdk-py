@@ -1,0 +1,4354 @@
+{
+  "anthropic/messages": {
+    "response": {
+      "known": [
+        "container",
+        "container.expires_at",
+        "container.id",
+        "content",
+        "content[]",
+        "content[].caller",
+        "content[].caller.type",
+        "content[].citations",
+        "content[].citations[]",
+        "content[].citations[].cited_text",
+        "content[].citations[].encrypted_index",
+        "content[].citations[].title",
+        "content[].citations[].type",
+        "content[].citations[].url",
+        "content[].content",
+        "content[].content.content",
+        "content[].content.content[]",
+        "content[].content.content[].file_id",
+        "content[].content.content[].type",
+        "content[].content.is_file_update",
+        "content[].content.return_code",
+        "content[].content.stderr",
+        "content[].content.stdout",
+        "content[].content.type",
+        "content[].content[]",
+        "content[].content[].encrypted_content",
+        "content[].content[].page_age",
+        "content[].content[].title",
+        "content[].content[].type",
+        "content[].content[].url",
+        "content[].id",
+        "content[].input",
+        "content[].input.city",
+        "content[].input.command",
+        "content[].input.file_text",
+        "content[].input.path",
+        "content[].input.query",
+        "content[].name",
+        "content[].signature",
+        "content[].text",
+        "content[].thinking",
+        "content[].tool_use_id",
+        "content[].type",
+        "id",
+        "model",
+        "role",
+        "stop_details",
+        "stop_reason",
+        "stop_sequence",
+        "type",
+        "usage",
+        "usage.cache_creation",
+        "usage.cache_creation.ephemeral_1h_input_tokens",
+        "usage.cache_creation.ephemeral_5m_input_tokens",
+        "usage.cache_creation_input_tokens",
+        "usage.cache_read_input_tokens",
+        "usage.inference_geo",
+        "usage.input_tokens",
+        "usage.output_tokens",
+        "usage.output_tokens_details",
+        "usage.output_tokens_details.thinking_tokens",
+        "usage.server_tool_use",
+        "usage.server_tool_use.web_fetch_requests",
+        "usage.server_tool_use.web_search_requests",
+        "usage.service_tier"
+      ],
+      "expected": [
+        "content",
+        "content[]",
+        "content[].type",
+        "id",
+        "model",
+        "role",
+        "stop_details",
+        "stop_reason",
+        "stop_sequence",
+        "type",
+        "usage",
+        "usage.cache_creation",
+        "usage.cache_creation.ephemeral_1h_input_tokens",
+        "usage.cache_creation.ephemeral_5m_input_tokens",
+        "usage.cache_creation_input_tokens",
+        "usage.cache_read_input_tokens",
+        "usage.inference_geo",
+        "usage.input_tokens",
+        "usage.output_tokens",
+        "usage.service_tier"
+      ],
+      "values": {
+        "content[].caller.type": [
+          "direct"
+        ],
+        "content[].citations[].type": [
+          "web_search_result_location"
+        ],
+        "content[].content.content[].type": [
+          "bash_code_execution_output"
+        ],
+        "content[].content.type": [
+          "bash_code_execution_result",
+          "text_editor_code_execution_create_result"
+        ],
+        "content[].content[].type": [
+          "web_search_result"
+        ],
+        "content[].type": [
+          "bash_code_execution_tool_result",
+          "server_tool_use",
+          "text",
+          "text_editor_code_execution_tool_result",
+          "thinking",
+          "tool_use",
+          "web_search_tool_result"
+        ],
+        "role": [
+          "assistant"
+        ],
+        "stop_reason": [
+          "end_turn",
+          "tool_use"
+        ],
+        "type": [
+          "message"
+        ]
+      }
+    },
+    "stream": {
+      "content_block_delta": {
+        "known": [
+          "delta",
+          "delta.citation",
+          "delta.citation.cited_text",
+          "delta.citation.encrypted_index",
+          "delta.citation.title",
+          "delta.citation.type",
+          "delta.citation.url",
+          "delta.partial_json",
+          "delta.signature",
+          "delta.text",
+          "delta.thinking",
+          "delta.type",
+          "index",
+          "type"
+        ],
+        "expected": [
+          "delta",
+          "delta.type",
+          "index",
+          "type"
+        ],
+        "values": {
+          "delta.citation.type": [
+            "web_search_result_location"
+          ],
+          "delta.type": [
+            "citations_delta",
+            "input_json_delta",
+            "signature_delta",
+            "text_delta",
+            "thinking_delta"
+          ],
+          "type": [
+            "content_block_delta"
+          ]
+        }
+      },
+      "content_block_start": {
+        "known": [
+          "content_block",
+          "content_block.caller",
+          "content_block.caller.type",
+          "content_block.citations",
+          "content_block.citations[]",
+          "content_block.content",
+          "content_block.content.content",
+          "content_block.content.content[]",
+          "content_block.content.content[].file_id",
+          "content_block.content.content[].type",
+          "content_block.content.is_file_update",
+          "content_block.content.return_code",
+          "content_block.content.stderr",
+          "content_block.content.stdout",
+          "content_block.content.type",
+          "content_block.content[]",
+          "content_block.content[].encrypted_content",
+          "content_block.content[].page_age",
+          "content_block.content[].title",
+          "content_block.content[].type",
+          "content_block.content[].url",
+          "content_block.id",
+          "content_block.input",
+          "content_block.name",
+          "content_block.signature",
+          "content_block.text",
+          "content_block.thinking",
+          "content_block.tool_use_id",
+          "content_block.type",
+          "index",
+          "type"
+        ],
+        "expected": [
+          "content_block",
+          "content_block.type",
+          "index",
+          "type"
+        ],
+        "values": {
+          "content_block.caller.type": [
+            "direct"
+          ],
+          "content_block.content.content[].type": [
+            "bash_code_execution_output"
+          ],
+          "content_block.content.type": [
+            "bash_code_execution_result",
+            "text_editor_code_execution_create_result"
+          ],
+          "content_block.content[].type": [
+            "web_search_result"
+          ],
+          "content_block.type": [
+            "bash_code_execution_tool_result",
+            "server_tool_use",
+            "text",
+            "text_editor_code_execution_tool_result",
+            "thinking",
+            "tool_use",
+            "web_search_tool_result"
+          ],
+          "type": [
+            "content_block_start"
+          ]
+        }
+      },
+      "content_block_stop": {
+        "known": [
+          "index",
+          "type"
+        ],
+        "expected": [
+          "index",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "content_block_stop"
+          ]
+        }
+      },
+      "message_delta": {
+        "known": [
+          "delta",
+          "delta.container",
+          "delta.container.expires_at",
+          "delta.container.id",
+          "delta.stop_details",
+          "delta.stop_reason",
+          "delta.stop_sequence",
+          "type",
+          "usage",
+          "usage.cache_creation_input_tokens",
+          "usage.cache_read_input_tokens",
+          "usage.input_tokens",
+          "usage.output_tokens",
+          "usage.output_tokens_details",
+          "usage.output_tokens_details.thinking_tokens",
+          "usage.server_tool_use",
+          "usage.server_tool_use.web_fetch_requests",
+          "usage.server_tool_use.web_search_requests"
+        ],
+        "expected": [
+          "delta",
+          "delta.stop_details",
+          "delta.stop_reason",
+          "delta.stop_sequence",
+          "type",
+          "usage",
+          "usage.cache_creation_input_tokens",
+          "usage.cache_read_input_tokens",
+          "usage.input_tokens",
+          "usage.output_tokens"
+        ],
+        "values": {
+          "delta.stop_reason": [
+            "end_turn",
+            "tool_use"
+          ],
+          "type": [
+            "message_delta"
+          ]
+        }
+      },
+      "message_start": {
+        "known": [
+          "message",
+          "message.content",
+          "message.content[]",
+          "message.id",
+          "message.model",
+          "message.role",
+          "message.stop_details",
+          "message.stop_reason",
+          "message.stop_sequence",
+          "message.type",
+          "message.usage",
+          "message.usage.cache_creation",
+          "message.usage.cache_creation.ephemeral_1h_input_tokens",
+          "message.usage.cache_creation.ephemeral_5m_input_tokens",
+          "message.usage.cache_creation_input_tokens",
+          "message.usage.cache_read_input_tokens",
+          "message.usage.inference_geo",
+          "message.usage.input_tokens",
+          "message.usage.output_tokens",
+          "message.usage.service_tier",
+          "type"
+        ],
+        "expected": [
+          "message",
+          "message.content",
+          "message.content[]",
+          "message.id",
+          "message.model",
+          "message.role",
+          "message.stop_details",
+          "message.stop_reason",
+          "message.stop_sequence",
+          "message.type",
+          "message.usage",
+          "message.usage.cache_creation",
+          "message.usage.cache_creation.ephemeral_1h_input_tokens",
+          "message.usage.cache_creation.ephemeral_5m_input_tokens",
+          "message.usage.cache_creation_input_tokens",
+          "message.usage.cache_read_input_tokens",
+          "message.usage.inference_geo",
+          "message.usage.input_tokens",
+          "message.usage.output_tokens",
+          "message.usage.service_tier",
+          "type"
+        ],
+        "values": {
+          "message.role": [
+            "assistant"
+          ],
+          "message.type": [
+            "message"
+          ],
+          "type": [
+            "message_start"
+          ]
+        }
+      },
+      "message_stop": {
+        "known": [
+          "type"
+        ],
+        "expected": [
+          "type"
+        ],
+        "values": {
+          "type": [
+            "message_stop"
+          ]
+        }
+      },
+      "ping": {
+        "known": [
+          "type"
+        ],
+        "expected": [
+          "type"
+        ],
+        "values": {
+          "type": [
+            "ping"
+          ]
+        }
+      }
+    }
+  },
+  "google/generate": {
+    "response": {
+      "known": [
+        "candidates",
+        "candidates[]",
+        "candidates[].content",
+        "candidates[].content.parts",
+        "candidates[].content.parts[]",
+        "candidates[].content.parts[].codeExecutionResult",
+        "candidates[].content.parts[].codeExecutionResult.id",
+        "candidates[].content.parts[].codeExecutionResult.outcome",
+        "candidates[].content.parts[].codeExecutionResult.output",
+        "candidates[].content.parts[].executableCode",
+        "candidates[].content.parts[].executableCode.code",
+        "candidates[].content.parts[].executableCode.id",
+        "candidates[].content.parts[].executableCode.language",
+        "candidates[].content.parts[].functionCall",
+        "candidates[].content.parts[].functionCall.args",
+        "candidates[].content.parts[].functionCall.args.city",
+        "candidates[].content.parts[].functionCall.id",
+        "candidates[].content.parts[].functionCall.name",
+        "candidates[].content.parts[].inlineData",
+        "candidates[].content.parts[].inlineData.data",
+        "candidates[].content.parts[].inlineData.mimeType",
+        "candidates[].content.parts[].text",
+        "candidates[].content.parts[].thought",
+        "candidates[].content.parts[].thoughtSignature",
+        "candidates[].content.role",
+        "candidates[].finishMessage",
+        "candidates[].finishReason",
+        "candidates[].groundingMetadata",
+        "candidates[].groundingMetadata.groundingChunks",
+        "candidates[].groundingMetadata.groundingChunks[]",
+        "candidates[].groundingMetadata.groundingChunks[].web",
+        "candidates[].groundingMetadata.groundingChunks[].web.title",
+        "candidates[].groundingMetadata.groundingChunks[].web.uri",
+        "candidates[].groundingMetadata.groundingSupports",
+        "candidates[].groundingMetadata.groundingSupports[]",
+        "candidates[].groundingMetadata.groundingSupports[].groundingChunkIndices",
+        "candidates[].groundingMetadata.groundingSupports[].groundingChunkIndices[]",
+        "candidates[].groundingMetadata.groundingSupports[].segment",
+        "candidates[].groundingMetadata.groundingSupports[].segment.endIndex",
+        "candidates[].groundingMetadata.groundingSupports[].segment.startIndex",
+        "candidates[].groundingMetadata.groundingSupports[].segment.text",
+        "candidates[].groundingMetadata.searchEntryPoint",
+        "candidates[].groundingMetadata.searchEntryPoint.renderedContent",
+        "candidates[].groundingMetadata.webSearchQueries",
+        "candidates[].groundingMetadata.webSearchQueries[]",
+        "candidates[].index",
+        "modelVersion",
+        "responseId",
+        "usageMetadata",
+        "usageMetadata.candidatesTokenCount",
+        "usageMetadata.promptTokenCount",
+        "usageMetadata.promptTokensDetails",
+        "usageMetadata.promptTokensDetails[]",
+        "usageMetadata.promptTokensDetails[].modality",
+        "usageMetadata.promptTokensDetails[].tokenCount",
+        "usageMetadata.serviceTier",
+        "usageMetadata.thoughtsTokenCount",
+        "usageMetadata.toolUsePromptTokenCount",
+        "usageMetadata.toolUsePromptTokensDetails",
+        "usageMetadata.toolUsePromptTokensDetails[]",
+        "usageMetadata.toolUsePromptTokensDetails[].modality",
+        "usageMetadata.toolUsePromptTokensDetails[].tokenCount",
+        "usageMetadata.totalTokenCount"
+      ],
+      "expected": [
+        "candidates",
+        "candidates[]",
+        "candidates[].content",
+        "candidates[].content.parts",
+        "candidates[].content.parts[]",
+        "candidates[].content.parts[].thoughtSignature",
+        "candidates[].content.role",
+        "candidates[].finishReason",
+        "candidates[].index",
+        "modelVersion",
+        "responseId",
+        "usageMetadata",
+        "usageMetadata.candidatesTokenCount",
+        "usageMetadata.promptTokenCount",
+        "usageMetadata.promptTokensDetails",
+        "usageMetadata.promptTokensDetails[]",
+        "usageMetadata.promptTokensDetails[].modality",
+        "usageMetadata.promptTokensDetails[].tokenCount",
+        "usageMetadata.serviceTier",
+        "usageMetadata.totalTokenCount"
+      ],
+      "values": {
+        "candidates[].content.role": [
+          "model"
+        ],
+        "candidates[].finishReason": [
+          "STOP"
+        ]
+      }
+    },
+    "stream": {
+      "*": {
+        "known": [
+          "candidates",
+          "candidates[]",
+          "candidates[].content",
+          "candidates[].content.parts",
+          "candidates[].content.parts[]",
+          "candidates[].content.parts[].codeExecutionResult",
+          "candidates[].content.parts[].codeExecutionResult.id",
+          "candidates[].content.parts[].codeExecutionResult.outcome",
+          "candidates[].content.parts[].codeExecutionResult.output",
+          "candidates[].content.parts[].executableCode",
+          "candidates[].content.parts[].executableCode.code",
+          "candidates[].content.parts[].executableCode.id",
+          "candidates[].content.parts[].executableCode.language",
+          "candidates[].content.parts[].functionCall",
+          "candidates[].content.parts[].functionCall.args",
+          "candidates[].content.parts[].functionCall.args.city",
+          "candidates[].content.parts[].functionCall.id",
+          "candidates[].content.parts[].functionCall.name",
+          "candidates[].content.parts[].inlineData",
+          "candidates[].content.parts[].inlineData.data",
+          "candidates[].content.parts[].inlineData.mimeType",
+          "candidates[].content.parts[].text",
+          "candidates[].content.parts[].thoughtSignature",
+          "candidates[].content.role",
+          "candidates[].finishReason",
+          "candidates[].groundingMetadata",
+          "candidates[].groundingMetadata.groundingChunks",
+          "candidates[].groundingMetadata.groundingChunks[]",
+          "candidates[].groundingMetadata.groundingChunks[].web",
+          "candidates[].groundingMetadata.groundingChunks[].web.title",
+          "candidates[].groundingMetadata.groundingChunks[].web.uri",
+          "candidates[].groundingMetadata.groundingSupports",
+          "candidates[].groundingMetadata.groundingSupports[]",
+          "candidates[].groundingMetadata.groundingSupports[].groundingChunkIndices",
+          "candidates[].groundingMetadata.groundingSupports[].groundingChunkIndices[]",
+          "candidates[].groundingMetadata.groundingSupports[].segment",
+          "candidates[].groundingMetadata.groundingSupports[].segment.endIndex",
+          "candidates[].groundingMetadata.groundingSupports[].segment.startIndex",
+          "candidates[].groundingMetadata.groundingSupports[].segment.text",
+          "candidates[].groundingMetadata.searchEntryPoint",
+          "candidates[].groundingMetadata.searchEntryPoint.renderedContent",
+          "candidates[].groundingMetadata.webSearchQueries",
+          "candidates[].groundingMetadata.webSearchQueries[]",
+          "candidates[].index",
+          "modelVersion",
+          "responseId",
+          "usageMetadata",
+          "usageMetadata.candidatesTokenCount",
+          "usageMetadata.promptTokenCount",
+          "usageMetadata.promptTokensDetails",
+          "usageMetadata.promptTokensDetails[]",
+          "usageMetadata.promptTokensDetails[].modality",
+          "usageMetadata.promptTokensDetails[].tokenCount",
+          "usageMetadata.serviceTier",
+          "usageMetadata.thoughtsTokenCount",
+          "usageMetadata.toolUsePromptTokenCount",
+          "usageMetadata.toolUsePromptTokensDetails",
+          "usageMetadata.toolUsePromptTokensDetails[]",
+          "usageMetadata.toolUsePromptTokensDetails[].modality",
+          "usageMetadata.toolUsePromptTokensDetails[].tokenCount",
+          "usageMetadata.totalTokenCount"
+        ],
+        "expected": [
+          "candidates",
+          "candidates[]",
+          "candidates[].content",
+          "candidates[].content.parts",
+          "candidates[].content.parts[]",
+          "candidates[].content.role",
+          "modelVersion",
+          "responseId",
+          "usageMetadata",
+          "usageMetadata.promptTokenCount",
+          "usageMetadata.promptTokensDetails",
+          "usageMetadata.promptTokensDetails[]",
+          "usageMetadata.promptTokensDetails[].modality",
+          "usageMetadata.promptTokensDetails[].tokenCount",
+          "usageMetadata.serviceTier",
+          "usageMetadata.totalTokenCount"
+        ],
+        "values": {
+          "candidates[].content.role": [
+            "model"
+          ],
+          "candidates[].finishReason": [
+            "STOP"
+          ]
+        }
+      }
+    }
+  },
+  "google/interactions": {
+    "response": {
+      "known": [
+        "created",
+        "id",
+        "model",
+        "object",
+        "service_tier",
+        "status",
+        "steps",
+        "steps[]",
+        "steps[].arguments",
+        "steps[].arguments.city",
+        "steps[].content",
+        "steps[].content[]",
+        "steps[].content[].text",
+        "steps[].content[].type",
+        "steps[].id",
+        "steps[].name",
+        "steps[].signature",
+        "steps[].type",
+        "updated",
+        "usage",
+        "usage.input_tokens_by_modality",
+        "usage.input_tokens_by_modality[]",
+        "usage.input_tokens_by_modality[].modality",
+        "usage.input_tokens_by_modality[].tokens",
+        "usage.raw_prompt_token",
+        "usage.total_cached_tokens",
+        "usage.total_input_tokens",
+        "usage.total_output_tokens",
+        "usage.total_thought_tokens",
+        "usage.total_tokens",
+        "usage.total_tool_use_tokens"
+      ],
+      "expected": [
+        "created",
+        "id",
+        "model",
+        "object",
+        "service_tier",
+        "status",
+        "steps",
+        "steps[]",
+        "steps[].signature",
+        "steps[].type",
+        "updated",
+        "usage",
+        "usage.input_tokens_by_modality",
+        "usage.input_tokens_by_modality[]",
+        "usage.input_tokens_by_modality[].modality",
+        "usage.input_tokens_by_modality[].tokens",
+        "usage.raw_prompt_token",
+        "usage.total_cached_tokens",
+        "usage.total_input_tokens",
+        "usage.total_output_tokens",
+        "usage.total_thought_tokens",
+        "usage.total_tokens",
+        "usage.total_tool_use_tokens"
+      ],
+      "values": {
+        "object": [
+          "interaction"
+        ],
+        "status": [
+          "completed",
+          "failed",
+          "requires_action"
+        ],
+        "steps[].content[].type": [
+          "text"
+        ],
+        "steps[].type": [
+          "function_call",
+          "model_output",
+          "thought"
+        ]
+      }
+    },
+    "stream": {
+      "interaction.completed": {
+        "known": [
+          "event_type",
+          "interaction",
+          "interaction.created",
+          "interaction.id",
+          "interaction.model",
+          "interaction.object",
+          "interaction.service_tier",
+          "interaction.status",
+          "interaction.updated",
+          "interaction.usage",
+          "interaction.usage.input_tokens_by_modality",
+          "interaction.usage.input_tokens_by_modality[]",
+          "interaction.usage.input_tokens_by_modality[].modality",
+          "interaction.usage.input_tokens_by_modality[].tokens",
+          "interaction.usage.raw_prompt_token",
+          "interaction.usage.total_cached_tokens",
+          "interaction.usage.total_input_tokens",
+          "interaction.usage.total_output_tokens",
+          "interaction.usage.total_thought_tokens",
+          "interaction.usage.total_tokens",
+          "interaction.usage.total_tool_use_tokens"
+        ],
+        "expected": [
+          "event_type",
+          "interaction",
+          "interaction.created",
+          "interaction.id",
+          "interaction.model",
+          "interaction.object",
+          "interaction.service_tier",
+          "interaction.status",
+          "interaction.updated",
+          "interaction.usage",
+          "interaction.usage.input_tokens_by_modality",
+          "interaction.usage.input_tokens_by_modality[]",
+          "interaction.usage.input_tokens_by_modality[].modality",
+          "interaction.usage.input_tokens_by_modality[].tokens",
+          "interaction.usage.raw_prompt_token",
+          "interaction.usage.total_cached_tokens",
+          "interaction.usage.total_input_tokens",
+          "interaction.usage.total_output_tokens",
+          "interaction.usage.total_thought_tokens",
+          "interaction.usage.total_tokens",
+          "interaction.usage.total_tool_use_tokens"
+        ],
+        "values": {
+          "interaction.object": [
+            "interaction"
+          ],
+          "interaction.status": [
+            "completed",
+            "requires_action"
+          ]
+        }
+      },
+      "interaction.created": {
+        "known": [
+          "event_type",
+          "interaction",
+          "interaction.id",
+          "interaction.model",
+          "interaction.object",
+          "interaction.status"
+        ],
+        "expected": [
+          "event_type",
+          "interaction",
+          "interaction.id",
+          "interaction.model",
+          "interaction.object",
+          "interaction.status"
+        ],
+        "values": {
+          "interaction.object": [
+            "interaction"
+          ],
+          "interaction.status": [
+            "in_progress"
+          ]
+        }
+      },
+      "interaction.status_update": {
+        "known": [
+          "event_type",
+          "interaction_id",
+          "status"
+        ],
+        "expected": [
+          "event_type",
+          "interaction_id",
+          "status"
+        ],
+        "values": {
+          "status": [
+            "in_progress"
+          ]
+        }
+      },
+      "step.delta": {
+        "known": [
+          "delta",
+          "delta.arguments",
+          "delta.signature",
+          "delta.text",
+          "delta.type",
+          "event_type",
+          "index"
+        ],
+        "expected": [
+          "delta",
+          "delta.type",
+          "event_type",
+          "index"
+        ],
+        "values": {
+          "delta.type": [
+            "arguments_delta",
+            "text",
+            "thought_signature"
+          ]
+        }
+      },
+      "step.start": {
+        "known": [
+          "event_type",
+          "index",
+          "step",
+          "step.arguments",
+          "step.id",
+          "step.name",
+          "step.type"
+        ],
+        "expected": [
+          "event_type",
+          "index",
+          "step",
+          "step.type"
+        ],
+        "values": {
+          "step.type": [
+            "function_call",
+            "model_output",
+            "thought"
+          ]
+        }
+      },
+      "step.stop": {
+        "known": [
+          "event_type",
+          "index"
+        ],
+        "expected": [
+          "event_type",
+          "index"
+        ]
+      }
+    }
+  },
+  "openai/completions": {
+    "response": {
+      "known": [
+        "choices",
+        "choices[]",
+        "choices[].finish_reason",
+        "choices[].index",
+        "choices[].message",
+        "choices[].message.annotations",
+        "choices[].message.annotations[]",
+        "choices[].message.audio",
+        "choices[].message.audio.data",
+        "choices[].message.audio.expires_at",
+        "choices[].message.audio.id",
+        "choices[].message.audio.transcript",
+        "choices[].message.content",
+        "choices[].message.refusal",
+        "choices[].message.role",
+        "choices[].message.tool_calls",
+        "choices[].message.tool_calls[]",
+        "choices[].message.tool_calls[].function",
+        "choices[].message.tool_calls[].function.arguments",
+        "choices[].message.tool_calls[].function.name",
+        "choices[].message.tool_calls[].id",
+        "choices[].message.tool_calls[].type",
+        "created",
+        "id",
+        "model",
+        "moderation",
+        "moderation.input",
+        "moderation.input.model",
+        "moderation.input.results",
+        "moderation.input.results[]",
+        "moderation.input.results[].categories",
+        "moderation.input.results[].categories.harassment",
+        "moderation.input.results[].categories.harassment/threatening",
+        "moderation.input.results[].categories.hate",
+        "moderation.input.results[].categories.hate/threatening",
+        "moderation.input.results[].categories.illicit",
+        "moderation.input.results[].categories.illicit/violent",
+        "moderation.input.results[].categories.self-harm",
+        "moderation.input.results[].categories.self-harm/instructions",
+        "moderation.input.results[].categories.self-harm/intent",
+        "moderation.input.results[].categories.sexual",
+        "moderation.input.results[].categories.sexual/minors",
+        "moderation.input.results[].categories.violence",
+        "moderation.input.results[].categories.violence/graphic",
+        "moderation.input.results[].category_applied_input_types",
+        "moderation.input.results[].category_applied_input_types.harassment",
+        "moderation.input.results[].category_applied_input_types.harassment/threatening",
+        "moderation.input.results[].category_applied_input_types.harassment/threatening[]",
+        "moderation.input.results[].category_applied_input_types.harassment[]",
+        "moderation.input.results[].category_applied_input_types.hate",
+        "moderation.input.results[].category_applied_input_types.hate/threatening",
+        "moderation.input.results[].category_applied_input_types.hate/threatening[]",
+        "moderation.input.results[].category_applied_input_types.hate[]",
+        "moderation.input.results[].category_applied_input_types.illicit",
+        "moderation.input.results[].category_applied_input_types.illicit/violent",
+        "moderation.input.results[].category_applied_input_types.illicit/violent[]",
+        "moderation.input.results[].category_applied_input_types.illicit[]",
+        "moderation.input.results[].category_applied_input_types.self-harm",
+        "moderation.input.results[].category_applied_input_types.self-harm/instructions",
+        "moderation.input.results[].category_applied_input_types.self-harm/instructions[]",
+        "moderation.input.results[].category_applied_input_types.self-harm/intent",
+        "moderation.input.results[].category_applied_input_types.self-harm/intent[]",
+        "moderation.input.results[].category_applied_input_types.self-harm[]",
+        "moderation.input.results[].category_applied_input_types.sexual",
+        "moderation.input.results[].category_applied_input_types.sexual/minors",
+        "moderation.input.results[].category_applied_input_types.sexual/minors[]",
+        "moderation.input.results[].category_applied_input_types.sexual[]",
+        "moderation.input.results[].category_applied_input_types.violence",
+        "moderation.input.results[].category_applied_input_types.violence/graphic",
+        "moderation.input.results[].category_applied_input_types.violence/graphic[]",
+        "moderation.input.results[].category_applied_input_types.violence[]",
+        "moderation.input.results[].category_scores",
+        "moderation.input.results[].category_scores.harassment",
+        "moderation.input.results[].category_scores.harassment/threatening",
+        "moderation.input.results[].category_scores.hate",
+        "moderation.input.results[].category_scores.hate/threatening",
+        "moderation.input.results[].category_scores.illicit",
+        "moderation.input.results[].category_scores.illicit/violent",
+        "moderation.input.results[].category_scores.self-harm",
+        "moderation.input.results[].category_scores.self-harm/instructions",
+        "moderation.input.results[].category_scores.self-harm/intent",
+        "moderation.input.results[].category_scores.sexual",
+        "moderation.input.results[].category_scores.sexual/minors",
+        "moderation.input.results[].category_scores.violence",
+        "moderation.input.results[].category_scores.violence/graphic",
+        "moderation.input.results[].flagged",
+        "moderation.input.results[].model",
+        "moderation.input.results[].type",
+        "moderation.input.type",
+        "moderation.output",
+        "moderation.output.model",
+        "moderation.output.results",
+        "moderation.output.results[]",
+        "moderation.output.results[].categories",
+        "moderation.output.results[].categories.harassment",
+        "moderation.output.results[].categories.harassment/threatening",
+        "moderation.output.results[].categories.hate",
+        "moderation.output.results[].categories.hate/threatening",
+        "moderation.output.results[].categories.illicit",
+        "moderation.output.results[].categories.illicit/violent",
+        "moderation.output.results[].categories.self-harm",
+        "moderation.output.results[].categories.self-harm/instructions",
+        "moderation.output.results[].categories.self-harm/intent",
+        "moderation.output.results[].categories.sexual",
+        "moderation.output.results[].categories.sexual/minors",
+        "moderation.output.results[].categories.violence",
+        "moderation.output.results[].categories.violence/graphic",
+        "moderation.output.results[].category_applied_input_types",
+        "moderation.output.results[].category_applied_input_types.harassment",
+        "moderation.output.results[].category_applied_input_types.harassment/threatening",
+        "moderation.output.results[].category_applied_input_types.harassment/threatening[]",
+        "moderation.output.results[].category_applied_input_types.harassment[]",
+        "moderation.output.results[].category_applied_input_types.hate",
+        "moderation.output.results[].category_applied_input_types.hate/threatening",
+        "moderation.output.results[].category_applied_input_types.hate/threatening[]",
+        "moderation.output.results[].category_applied_input_types.hate[]",
+        "moderation.output.results[].category_applied_input_types.illicit",
+        "moderation.output.results[].category_applied_input_types.illicit/violent",
+        "moderation.output.results[].category_applied_input_types.illicit/violent[]",
+        "moderation.output.results[].category_applied_input_types.illicit[]",
+        "moderation.output.results[].category_applied_input_types.self-harm",
+        "moderation.output.results[].category_applied_input_types.self-harm/instructions",
+        "moderation.output.results[].category_applied_input_types.self-harm/instructions[]",
+        "moderation.output.results[].category_applied_input_types.self-harm/intent",
+        "moderation.output.results[].category_applied_input_types.self-harm/intent[]",
+        "moderation.output.results[].category_applied_input_types.self-harm[]",
+        "moderation.output.results[].category_applied_input_types.sexual",
+        "moderation.output.results[].category_applied_input_types.sexual/minors",
+        "moderation.output.results[].category_applied_input_types.sexual/minors[]",
+        "moderation.output.results[].category_applied_input_types.sexual[]",
+        "moderation.output.results[].category_applied_input_types.violence",
+        "moderation.output.results[].category_applied_input_types.violence/graphic",
+        "moderation.output.results[].category_applied_input_types.violence/graphic[]",
+        "moderation.output.results[].category_applied_input_types.violence[]",
+        "moderation.output.results[].category_scores",
+        "moderation.output.results[].category_scores.harassment",
+        "moderation.output.results[].category_scores.harassment/threatening",
+        "moderation.output.results[].category_scores.hate",
+        "moderation.output.results[].category_scores.hate/threatening",
+        "moderation.output.results[].category_scores.illicit",
+        "moderation.output.results[].category_scores.illicit/violent",
+        "moderation.output.results[].category_scores.self-harm",
+        "moderation.output.results[].category_scores.self-harm/instructions",
+        "moderation.output.results[].category_scores.self-harm/intent",
+        "moderation.output.results[].category_scores.sexual",
+        "moderation.output.results[].category_scores.sexual/minors",
+        "moderation.output.results[].category_scores.violence",
+        "moderation.output.results[].category_scores.violence/graphic",
+        "moderation.output.results[].flagged",
+        "moderation.output.results[].model",
+        "moderation.output.results[].type",
+        "moderation.output.type",
+        "object",
+        "service_tier",
+        "system_fingerprint",
+        "usage",
+        "usage.completion_tokens",
+        "usage.completion_tokens_details",
+        "usage.completion_tokens_details.accepted_prediction_tokens",
+        "usage.completion_tokens_details.audio_tokens",
+        "usage.completion_tokens_details.reasoning_tokens",
+        "usage.completion_tokens_details.rejected_prediction_tokens",
+        "usage.completion_tokens_details.text_tokens",
+        "usage.prompt_tokens",
+        "usage.prompt_tokens_details",
+        "usage.prompt_tokens_details.audio_tokens",
+        "usage.prompt_tokens_details.cached_tokens",
+        "usage.prompt_tokens_details.image_tokens",
+        "usage.prompt_tokens_details.text_tokens",
+        "usage.total_tokens"
+      ],
+      "expected": [
+        "choices",
+        "choices[]",
+        "choices[].finish_reason",
+        "choices[].index",
+        "choices[].message",
+        "choices[].message.annotations",
+        "choices[].message.annotations[]",
+        "choices[].message.content",
+        "choices[].message.refusal",
+        "choices[].message.role",
+        "created",
+        "id",
+        "model",
+        "object",
+        "service_tier",
+        "system_fingerprint",
+        "usage",
+        "usage.completion_tokens",
+        "usage.completion_tokens_details",
+        "usage.completion_tokens_details.accepted_prediction_tokens",
+        "usage.completion_tokens_details.audio_tokens",
+        "usage.completion_tokens_details.reasoning_tokens",
+        "usage.completion_tokens_details.rejected_prediction_tokens",
+        "usage.prompt_tokens",
+        "usage.prompt_tokens_details",
+        "usage.prompt_tokens_details.audio_tokens",
+        "usage.prompt_tokens_details.cached_tokens",
+        "usage.total_tokens"
+      ],
+      "values": {
+        "choices[].finish_reason": [
+          "stop",
+          "tool_calls"
+        ],
+        "choices[].message.role": [
+          "assistant"
+        ],
+        "choices[].message.tool_calls[].type": [
+          "function"
+        ],
+        "moderation.input.results[].type": [
+          "moderation_result"
+        ],
+        "moderation.input.type": [
+          "moderation_results"
+        ],
+        "moderation.output.results[].type": [
+          "moderation_result"
+        ],
+        "moderation.output.type": [
+          "moderation_results"
+        ],
+        "object": [
+          "chat.completion"
+        ]
+      }
+    },
+    "stream": {
+      "*": {
+        "known": [
+          "choices",
+          "choices[]",
+          "choices[].delta",
+          "choices[].delta.audio",
+          "choices[].delta.audio.data",
+          "choices[].delta.audio.expires_at",
+          "choices[].delta.audio.id",
+          "choices[].delta.audio.transcript",
+          "choices[].delta.content",
+          "choices[].delta.refusal",
+          "choices[].delta.role",
+          "choices[].delta.tool_calls",
+          "choices[].delta.tool_calls[]",
+          "choices[].delta.tool_calls[].function",
+          "choices[].delta.tool_calls[].function.arguments",
+          "choices[].delta.tool_calls[].function.name",
+          "choices[].delta.tool_calls[].id",
+          "choices[].delta.tool_calls[].index",
+          "choices[].delta.tool_calls[].type",
+          "choices[].finish_reason",
+          "choices[].index",
+          "created",
+          "id",
+          "model",
+          "moderation",
+          "moderation.input",
+          "moderation.input.model",
+          "moderation.input.results",
+          "moderation.input.results[]",
+          "moderation.input.results[].categories",
+          "moderation.input.results[].categories.harassment",
+          "moderation.input.results[].categories.harassment/threatening",
+          "moderation.input.results[].categories.hate",
+          "moderation.input.results[].categories.hate/threatening",
+          "moderation.input.results[].categories.illicit",
+          "moderation.input.results[].categories.illicit/violent",
+          "moderation.input.results[].categories.self-harm",
+          "moderation.input.results[].categories.self-harm/instructions",
+          "moderation.input.results[].categories.self-harm/intent",
+          "moderation.input.results[].categories.sexual",
+          "moderation.input.results[].categories.sexual/minors",
+          "moderation.input.results[].categories.violence",
+          "moderation.input.results[].categories.violence/graphic",
+          "moderation.input.results[].category_applied_input_types",
+          "moderation.input.results[].category_applied_input_types.harassment",
+          "moderation.input.results[].category_applied_input_types.harassment/threatening",
+          "moderation.input.results[].category_applied_input_types.harassment/threatening[]",
+          "moderation.input.results[].category_applied_input_types.harassment[]",
+          "moderation.input.results[].category_applied_input_types.hate",
+          "moderation.input.results[].category_applied_input_types.hate/threatening",
+          "moderation.input.results[].category_applied_input_types.hate/threatening[]",
+          "moderation.input.results[].category_applied_input_types.hate[]",
+          "moderation.input.results[].category_applied_input_types.illicit",
+          "moderation.input.results[].category_applied_input_types.illicit/violent",
+          "moderation.input.results[].category_applied_input_types.illicit/violent[]",
+          "moderation.input.results[].category_applied_input_types.illicit[]",
+          "moderation.input.results[].category_applied_input_types.self-harm",
+          "moderation.input.results[].category_applied_input_types.self-harm/instructions",
+          "moderation.input.results[].category_applied_input_types.self-harm/instructions[]",
+          "moderation.input.results[].category_applied_input_types.self-harm/intent",
+          "moderation.input.results[].category_applied_input_types.self-harm/intent[]",
+          "moderation.input.results[].category_applied_input_types.self-harm[]",
+          "moderation.input.results[].category_applied_input_types.sexual",
+          "moderation.input.results[].category_applied_input_types.sexual/minors",
+          "moderation.input.results[].category_applied_input_types.sexual/minors[]",
+          "moderation.input.results[].category_applied_input_types.sexual[]",
+          "moderation.input.results[].category_applied_input_types.violence",
+          "moderation.input.results[].category_applied_input_types.violence/graphic",
+          "moderation.input.results[].category_applied_input_types.violence/graphic[]",
+          "moderation.input.results[].category_applied_input_types.violence[]",
+          "moderation.input.results[].category_scores",
+          "moderation.input.results[].category_scores.harassment",
+          "moderation.input.results[].category_scores.harassment/threatening",
+          "moderation.input.results[].category_scores.hate",
+          "moderation.input.results[].category_scores.hate/threatening",
+          "moderation.input.results[].category_scores.illicit",
+          "moderation.input.results[].category_scores.illicit/violent",
+          "moderation.input.results[].category_scores.self-harm",
+          "moderation.input.results[].category_scores.self-harm/instructions",
+          "moderation.input.results[].category_scores.self-harm/intent",
+          "moderation.input.results[].category_scores.sexual",
+          "moderation.input.results[].category_scores.sexual/minors",
+          "moderation.input.results[].category_scores.violence",
+          "moderation.input.results[].category_scores.violence/graphic",
+          "moderation.input.results[].flagged",
+          "moderation.input.results[].model",
+          "moderation.input.results[].type",
+          "moderation.input.type",
+          "moderation.output",
+          "moderation.output.model",
+          "moderation.output.results",
+          "moderation.output.results[]",
+          "moderation.output.results[].categories",
+          "moderation.output.results[].categories.harassment",
+          "moderation.output.results[].categories.harassment/threatening",
+          "moderation.output.results[].categories.hate",
+          "moderation.output.results[].categories.hate/threatening",
+          "moderation.output.results[].categories.illicit",
+          "moderation.output.results[].categories.illicit/violent",
+          "moderation.output.results[].categories.self-harm",
+          "moderation.output.results[].categories.self-harm/instructions",
+          "moderation.output.results[].categories.self-harm/intent",
+          "moderation.output.results[].categories.sexual",
+          "moderation.output.results[].categories.sexual/minors",
+          "moderation.output.results[].categories.violence",
+          "moderation.output.results[].categories.violence/graphic",
+          "moderation.output.results[].category_applied_input_types",
+          "moderation.output.results[].category_applied_input_types.harassment",
+          "moderation.output.results[].category_applied_input_types.harassment/threatening",
+          "moderation.output.results[].category_applied_input_types.harassment/threatening[]",
+          "moderation.output.results[].category_applied_input_types.harassment[]",
+          "moderation.output.results[].category_applied_input_types.hate",
+          "moderation.output.results[].category_applied_input_types.hate/threatening",
+          "moderation.output.results[].category_applied_input_types.hate/threatening[]",
+          "moderation.output.results[].category_applied_input_types.hate[]",
+          "moderation.output.results[].category_applied_input_types.illicit",
+          "moderation.output.results[].category_applied_input_types.illicit/violent",
+          "moderation.output.results[].category_applied_input_types.illicit/violent[]",
+          "moderation.output.results[].category_applied_input_types.illicit[]",
+          "moderation.output.results[].category_applied_input_types.self-harm",
+          "moderation.output.results[].category_applied_input_types.self-harm/instructions",
+          "moderation.output.results[].category_applied_input_types.self-harm/instructions[]",
+          "moderation.output.results[].category_applied_input_types.self-harm/intent",
+          "moderation.output.results[].category_applied_input_types.self-harm/intent[]",
+          "moderation.output.results[].category_applied_input_types.self-harm[]",
+          "moderation.output.results[].category_applied_input_types.sexual",
+          "moderation.output.results[].category_applied_input_types.sexual/minors",
+          "moderation.output.results[].category_applied_input_types.sexual/minors[]",
+          "moderation.output.results[].category_applied_input_types.sexual[]",
+          "moderation.output.results[].category_applied_input_types.violence",
+          "moderation.output.results[].category_applied_input_types.violence/graphic",
+          "moderation.output.results[].category_applied_input_types.violence/graphic[]",
+          "moderation.output.results[].category_applied_input_types.violence[]",
+          "moderation.output.results[].category_scores",
+          "moderation.output.results[].category_scores.harassment",
+          "moderation.output.results[].category_scores.harassment/threatening",
+          "moderation.output.results[].category_scores.hate",
+          "moderation.output.results[].category_scores.hate/threatening",
+          "moderation.output.results[].category_scores.illicit",
+          "moderation.output.results[].category_scores.illicit/violent",
+          "moderation.output.results[].category_scores.self-harm",
+          "moderation.output.results[].category_scores.self-harm/instructions",
+          "moderation.output.results[].category_scores.self-harm/intent",
+          "moderation.output.results[].category_scores.sexual",
+          "moderation.output.results[].category_scores.sexual/minors",
+          "moderation.output.results[].category_scores.violence",
+          "moderation.output.results[].category_scores.violence/graphic",
+          "moderation.output.results[].flagged",
+          "moderation.output.results[].model",
+          "moderation.output.results[].type",
+          "moderation.output.type",
+          "obfuscation",
+          "object",
+          "service_tier",
+          "system_fingerprint",
+          "usage",
+          "usage.completion_tokens",
+          "usage.completion_tokens_details",
+          "usage.completion_tokens_details.accepted_prediction_tokens",
+          "usage.completion_tokens_details.audio_tokens",
+          "usage.completion_tokens_details.reasoning_tokens",
+          "usage.completion_tokens_details.rejected_prediction_tokens",
+          "usage.completion_tokens_details.text_tokens",
+          "usage.prompt_tokens",
+          "usage.prompt_tokens_details",
+          "usage.prompt_tokens_details.audio_tokens",
+          "usage.prompt_tokens_details.cached_tokens",
+          "usage.prompt_tokens_details.image_tokens",
+          "usage.prompt_tokens_details.text_tokens",
+          "usage.total_tokens"
+        ],
+        "expected": [
+          "created",
+          "id",
+          "model",
+          "obfuscation",
+          "object",
+          "service_tier",
+          "system_fingerprint",
+          "usage"
+        ],
+        "values": {
+          "choices[].delta.role": [
+            "assistant"
+          ],
+          "choices[].delta.tool_calls[].type": [
+            "function"
+          ],
+          "choices[].finish_reason": [
+            "stop",
+            "tool_calls"
+          ],
+          "moderation.input.results[].type": [
+            "moderation_result"
+          ],
+          "moderation.input.type": [
+            "moderation_results"
+          ],
+          "moderation.output.results[].type": [
+            "moderation_result"
+          ],
+          "moderation.output.type": [
+            "moderation_results"
+          ],
+          "object": [
+            "chat.completion.chunk"
+          ]
+        }
+      }
+    }
+  },
+  "openai/responses": {
+    "response": {
+      "known": [
+        "background",
+        "billing",
+        "billing.payer",
+        "completed_at",
+        "created_at",
+        "error",
+        "error.code",
+        "error.message",
+        "frequency_penalty",
+        "id",
+        "incomplete_details",
+        "incomplete_details.reason",
+        "instructions",
+        "max_output_tokens",
+        "max_tool_calls",
+        "metadata",
+        "model",
+        "moderation",
+        "moderation.input",
+        "moderation.input.categories",
+        "moderation.input.categories.harassment",
+        "moderation.input.categories.harassment/threatening",
+        "moderation.input.categories.hate",
+        "moderation.input.categories.hate/threatening",
+        "moderation.input.categories.illicit",
+        "moderation.input.categories.illicit/violent",
+        "moderation.input.categories.self-harm",
+        "moderation.input.categories.self-harm/instructions",
+        "moderation.input.categories.self-harm/intent",
+        "moderation.input.categories.sexual",
+        "moderation.input.categories.sexual/minors",
+        "moderation.input.categories.violence",
+        "moderation.input.categories.violence/graphic",
+        "moderation.input.category_applied_input_types",
+        "moderation.input.category_applied_input_types.harassment",
+        "moderation.input.category_applied_input_types.harassment/threatening",
+        "moderation.input.category_applied_input_types.harassment/threatening[]",
+        "moderation.input.category_applied_input_types.harassment[]",
+        "moderation.input.category_applied_input_types.hate",
+        "moderation.input.category_applied_input_types.hate/threatening",
+        "moderation.input.category_applied_input_types.hate/threatening[]",
+        "moderation.input.category_applied_input_types.hate[]",
+        "moderation.input.category_applied_input_types.illicit",
+        "moderation.input.category_applied_input_types.illicit/violent",
+        "moderation.input.category_applied_input_types.illicit/violent[]",
+        "moderation.input.category_applied_input_types.illicit[]",
+        "moderation.input.category_applied_input_types.self-harm",
+        "moderation.input.category_applied_input_types.self-harm/instructions",
+        "moderation.input.category_applied_input_types.self-harm/instructions[]",
+        "moderation.input.category_applied_input_types.self-harm/intent",
+        "moderation.input.category_applied_input_types.self-harm/intent[]",
+        "moderation.input.category_applied_input_types.self-harm[]",
+        "moderation.input.category_applied_input_types.sexual",
+        "moderation.input.category_applied_input_types.sexual/minors",
+        "moderation.input.category_applied_input_types.sexual/minors[]",
+        "moderation.input.category_applied_input_types.sexual[]",
+        "moderation.input.category_applied_input_types.violence",
+        "moderation.input.category_applied_input_types.violence/graphic",
+        "moderation.input.category_applied_input_types.violence/graphic[]",
+        "moderation.input.category_applied_input_types.violence[]",
+        "moderation.input.category_scores",
+        "moderation.input.category_scores.harassment",
+        "moderation.input.category_scores.harassment/threatening",
+        "moderation.input.category_scores.hate",
+        "moderation.input.category_scores.hate/threatening",
+        "moderation.input.category_scores.illicit",
+        "moderation.input.category_scores.illicit/violent",
+        "moderation.input.category_scores.self-harm",
+        "moderation.input.category_scores.self-harm/instructions",
+        "moderation.input.category_scores.self-harm/intent",
+        "moderation.input.category_scores.sexual",
+        "moderation.input.category_scores.sexual/minors",
+        "moderation.input.category_scores.violence",
+        "moderation.input.category_scores.violence/graphic",
+        "moderation.input.flagged",
+        "moderation.input.model",
+        "moderation.input.type",
+        "moderation.output",
+        "moderation.output.categories",
+        "moderation.output.categories.harassment",
+        "moderation.output.categories.harassment/threatening",
+        "moderation.output.categories.hate",
+        "moderation.output.categories.hate/threatening",
+        "moderation.output.categories.illicit",
+        "moderation.output.categories.illicit/violent",
+        "moderation.output.categories.self-harm",
+        "moderation.output.categories.self-harm/instructions",
+        "moderation.output.categories.self-harm/intent",
+        "moderation.output.categories.sexual",
+        "moderation.output.categories.sexual/minors",
+        "moderation.output.categories.violence",
+        "moderation.output.categories.violence/graphic",
+        "moderation.output.category_applied_input_types",
+        "moderation.output.category_applied_input_types.harassment",
+        "moderation.output.category_applied_input_types.harassment/threatening",
+        "moderation.output.category_applied_input_types.harassment/threatening[]",
+        "moderation.output.category_applied_input_types.harassment[]",
+        "moderation.output.category_applied_input_types.hate",
+        "moderation.output.category_applied_input_types.hate/threatening",
+        "moderation.output.category_applied_input_types.hate/threatening[]",
+        "moderation.output.category_applied_input_types.hate[]",
+        "moderation.output.category_applied_input_types.illicit",
+        "moderation.output.category_applied_input_types.illicit/violent",
+        "moderation.output.category_applied_input_types.illicit/violent[]",
+        "moderation.output.category_applied_input_types.illicit[]",
+        "moderation.output.category_applied_input_types.self-harm",
+        "moderation.output.category_applied_input_types.self-harm/instructions",
+        "moderation.output.category_applied_input_types.self-harm/instructions[]",
+        "moderation.output.category_applied_input_types.self-harm/intent",
+        "moderation.output.category_applied_input_types.self-harm/intent[]",
+        "moderation.output.category_applied_input_types.self-harm[]",
+        "moderation.output.category_applied_input_types.sexual",
+        "moderation.output.category_applied_input_types.sexual/minors",
+        "moderation.output.category_applied_input_types.sexual/minors[]",
+        "moderation.output.category_applied_input_types.sexual[]",
+        "moderation.output.category_applied_input_types.violence",
+        "moderation.output.category_applied_input_types.violence/graphic",
+        "moderation.output.category_applied_input_types.violence/graphic[]",
+        "moderation.output.category_applied_input_types.violence[]",
+        "moderation.output.category_scores",
+        "moderation.output.category_scores.harassment",
+        "moderation.output.category_scores.harassment/threatening",
+        "moderation.output.category_scores.hate",
+        "moderation.output.category_scores.hate/threatening",
+        "moderation.output.category_scores.illicit",
+        "moderation.output.category_scores.illicit/violent",
+        "moderation.output.category_scores.self-harm",
+        "moderation.output.category_scores.self-harm/instructions",
+        "moderation.output.category_scores.self-harm/intent",
+        "moderation.output.category_scores.sexual",
+        "moderation.output.category_scores.sexual/minors",
+        "moderation.output.category_scores.violence",
+        "moderation.output.category_scores.violence/graphic",
+        "moderation.output.flagged",
+        "moderation.output.model",
+        "moderation.output.type",
+        "object",
+        "output",
+        "output[]",
+        "output[].action",
+        "output[].action.queries",
+        "output[].action.queries[]",
+        "output[].action.query",
+        "output[].action.type",
+        "output[].arguments",
+        "output[].call_id",
+        "output[].code",
+        "output[].container_id",
+        "output[].content",
+        "output[].content[]",
+        "output[].content[].annotations",
+        "output[].content[].annotations[]",
+        "output[].content[].annotations[].container_id",
+        "output[].content[].annotations[].end_index",
+        "output[].content[].annotations[].file_id",
+        "output[].content[].annotations[].filename",
+        "output[].content[].annotations[].start_index",
+        "output[].content[].annotations[].title",
+        "output[].content[].annotations[].type",
+        "output[].content[].annotations[].url",
+        "output[].content[].logprobs",
+        "output[].content[].logprobs[]",
+        "output[].content[].text",
+        "output[].content[].type",
+        "output[].id",
+        "output[].name",
+        "output[].outputs",
+        "output[].phase",
+        "output[].role",
+        "output[].status",
+        "output[].type",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "previous_response_id",
+        "prompt_cache_key",
+        "prompt_cache_retention",
+        "reasoning",
+        "reasoning.context",
+        "reasoning.effort",
+        "reasoning.mode",
+        "reasoning.summary",
+        "safety_identifier",
+        "service_tier",
+        "status",
+        "store",
+        "temperature",
+        "text",
+        "text.format",
+        "text.format.description",
+        "text.format.name",
+        "text.format.schema",
+        "text.format.schema.additionalProperties",
+        "text.format.schema.properties",
+        "text.format.schema.properties.city",
+        "text.format.schema.properties.city.type",
+        "text.format.schema.properties.country",
+        "text.format.schema.properties.country.type",
+        "text.format.schema.required",
+        "text.format.schema.required[]",
+        "text.format.schema.type",
+        "text.format.strict",
+        "text.format.type",
+        "text.verbosity",
+        "tool_choice",
+        "tool_usage",
+        "tool_usage.image_gen",
+        "tool_usage.image_gen.input_tokens",
+        "tool_usage.image_gen.input_tokens_details",
+        "tool_usage.image_gen.input_tokens_details.image_tokens",
+        "tool_usage.image_gen.input_tokens_details.text_tokens",
+        "tool_usage.image_gen.output_tokens",
+        "tool_usage.image_gen.output_tokens_details",
+        "tool_usage.image_gen.output_tokens_details.image_tokens",
+        "tool_usage.image_gen.output_tokens_details.text_tokens",
+        "tool_usage.image_gen.total_tokens",
+        "tool_usage.web_search",
+        "tool_usage.web_search.num_requests",
+        "tools",
+        "tools[]",
+        "tools[].container",
+        "tools[].container.type",
+        "tools[].description",
+        "tools[].name",
+        "tools[].output_schema",
+        "tools[].parameters",
+        "tools[].parameters.additionalProperties",
+        "tools[].parameters.properties",
+        "tools[].parameters.properties.city",
+        "tools[].parameters.properties.city.type",
+        "tools[].parameters.required",
+        "tools[].parameters.required[]",
+        "tools[].parameters.type",
+        "tools[].return_token_budget",
+        "tools[].search_content_types",
+        "tools[].search_content_types[]",
+        "tools[].search_context_size",
+        "tools[].strict",
+        "tools[].type",
+        "tools[].user_location",
+        "tools[].user_location.city",
+        "tools[].user_location.country",
+        "tools[].user_location.region",
+        "tools[].user_location.timezone",
+        "tools[].user_location.type",
+        "top_logprobs",
+        "top_p",
+        "truncation",
+        "usage",
+        "usage.input_tokens",
+        "usage.input_tokens_details",
+        "usage.input_tokens_details.cache_write_tokens",
+        "usage.input_tokens_details.cached_tokens",
+        "usage.output_tokens",
+        "usage.output_tokens_details",
+        "usage.output_tokens_details.reasoning_tokens",
+        "usage.total_tokens",
+        "user"
+      ],
+      "expected": [
+        "background",
+        "billing",
+        "billing.payer",
+        "completed_at",
+        "created_at",
+        "error",
+        "frequency_penalty",
+        "id",
+        "incomplete_details",
+        "instructions",
+        "max_output_tokens",
+        "max_tool_calls",
+        "metadata",
+        "model",
+        "moderation",
+        "object",
+        "output",
+        "output[]",
+        "output[].id",
+        "output[].status",
+        "output[].type",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "previous_response_id",
+        "prompt_cache_key",
+        "prompt_cache_retention",
+        "reasoning",
+        "reasoning.context",
+        "reasoning.effort",
+        "reasoning.mode",
+        "reasoning.summary",
+        "safety_identifier",
+        "service_tier",
+        "status",
+        "store",
+        "temperature",
+        "text",
+        "text.format",
+        "text.format.type",
+        "text.verbosity",
+        "tool_choice",
+        "tool_usage",
+        "tool_usage.image_gen",
+        "tool_usage.image_gen.input_tokens",
+        "tool_usage.image_gen.input_tokens_details",
+        "tool_usage.image_gen.input_tokens_details.image_tokens",
+        "tool_usage.image_gen.input_tokens_details.text_tokens",
+        "tool_usage.image_gen.output_tokens",
+        "tool_usage.image_gen.output_tokens_details",
+        "tool_usage.image_gen.output_tokens_details.image_tokens",
+        "tool_usage.image_gen.output_tokens_details.text_tokens",
+        "tool_usage.image_gen.total_tokens",
+        "tool_usage.web_search",
+        "tool_usage.web_search.num_requests",
+        "tools",
+        "tools[]",
+        "top_logprobs",
+        "top_p",
+        "truncation",
+        "usage",
+        "usage.input_tokens",
+        "usage.input_tokens_details",
+        "usage.input_tokens_details.cache_write_tokens",
+        "usage.input_tokens_details.cached_tokens",
+        "usage.output_tokens",
+        "usage.output_tokens_details",
+        "usage.output_tokens_details.reasoning_tokens",
+        "usage.total_tokens",
+        "user"
+      ],
+      "values": {
+        "moderation.input.type": [
+          "moderation_result"
+        ],
+        "moderation.output.type": [
+          "moderation_result"
+        ],
+        "object": [
+          "response"
+        ],
+        "output[].action.type": [
+          "search"
+        ],
+        "output[].content[].annotations[].type": [
+          "container_file_citation",
+          "url_citation"
+        ],
+        "output[].content[].type": [
+          "output_text"
+        ],
+        "output[].role": [
+          "assistant"
+        ],
+        "output[].status": [
+          "completed"
+        ],
+        "output[].type": [
+          "code_interpreter_call",
+          "function_call",
+          "message",
+          "web_search_call"
+        ],
+        "status": [
+          "completed",
+          "failed",
+          "incomplete"
+        ],
+        "text.format.schema.properties.city.type": [
+          "string"
+        ],
+        "text.format.schema.properties.country.type": [
+          "string"
+        ],
+        "text.format.schema.type": [
+          "object"
+        ],
+        "text.format.type": [
+          "json_schema",
+          "text"
+        ],
+        "tools[].container.type": [
+          "auto"
+        ],
+        "tools[].parameters.properties.city.type": [
+          "string"
+        ],
+        "tools[].parameters.type": [
+          "object"
+        ],
+        "tools[].type": [
+          "code_interpreter",
+          "function",
+          "web_search"
+        ],
+        "tools[].user_location.type": [
+          "approximate"
+        ]
+      }
+    },
+    "stream": {
+      "response.code_interpreter_call_code.delta": {
+        "known": [
+          "delta",
+          "item_id",
+          "obfuscation",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "delta",
+          "item_id",
+          "obfuscation",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.code_interpreter_call_code.delta"
+          ]
+        }
+      },
+      "response.code_interpreter_call_code.done": {
+        "known": [
+          "code",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "code",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.code_interpreter_call_code.done"
+          ]
+        }
+      },
+      "response.code_interpreter_call.completed": {
+        "known": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.code_interpreter_call.completed"
+          ]
+        }
+      },
+      "response.code_interpreter_call.in_progress": {
+        "known": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.code_interpreter_call.in_progress"
+          ]
+        }
+      },
+      "response.code_interpreter_call.interpreting": {
+        "known": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.code_interpreter_call.interpreting"
+          ]
+        }
+      },
+      "response.completed": {
+        "known": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.model",
+          "response.moderation",
+          "response.moderation.input",
+          "response.moderation.input.categories",
+          "response.moderation.input.categories.harassment",
+          "response.moderation.input.categories.harassment/threatening",
+          "response.moderation.input.categories.hate",
+          "response.moderation.input.categories.hate/threatening",
+          "response.moderation.input.categories.illicit",
+          "response.moderation.input.categories.illicit/violent",
+          "response.moderation.input.categories.self-harm",
+          "response.moderation.input.categories.self-harm/instructions",
+          "response.moderation.input.categories.self-harm/intent",
+          "response.moderation.input.categories.sexual",
+          "response.moderation.input.categories.sexual/minors",
+          "response.moderation.input.categories.violence",
+          "response.moderation.input.categories.violence/graphic",
+          "response.moderation.input.category_applied_input_types",
+          "response.moderation.input.category_applied_input_types.harassment",
+          "response.moderation.input.category_applied_input_types.harassment/threatening",
+          "response.moderation.input.category_applied_input_types.harassment/threatening[]",
+          "response.moderation.input.category_applied_input_types.harassment[]",
+          "response.moderation.input.category_applied_input_types.hate",
+          "response.moderation.input.category_applied_input_types.hate/threatening",
+          "response.moderation.input.category_applied_input_types.hate/threatening[]",
+          "response.moderation.input.category_applied_input_types.hate[]",
+          "response.moderation.input.category_applied_input_types.illicit",
+          "response.moderation.input.category_applied_input_types.illicit/violent",
+          "response.moderation.input.category_applied_input_types.illicit/violent[]",
+          "response.moderation.input.category_applied_input_types.illicit[]",
+          "response.moderation.input.category_applied_input_types.self-harm",
+          "response.moderation.input.category_applied_input_types.self-harm/instructions",
+          "response.moderation.input.category_applied_input_types.self-harm/instructions[]",
+          "response.moderation.input.category_applied_input_types.self-harm/intent",
+          "response.moderation.input.category_applied_input_types.self-harm/intent[]",
+          "response.moderation.input.category_applied_input_types.self-harm[]",
+          "response.moderation.input.category_applied_input_types.sexual",
+          "response.moderation.input.category_applied_input_types.sexual/minors",
+          "response.moderation.input.category_applied_input_types.sexual/minors[]",
+          "response.moderation.input.category_applied_input_types.sexual[]",
+          "response.moderation.input.category_applied_input_types.violence",
+          "response.moderation.input.category_applied_input_types.violence/graphic",
+          "response.moderation.input.category_applied_input_types.violence/graphic[]",
+          "response.moderation.input.category_applied_input_types.violence[]",
+          "response.moderation.input.category_scores",
+          "response.moderation.input.category_scores.harassment",
+          "response.moderation.input.category_scores.harassment/threatening",
+          "response.moderation.input.category_scores.hate",
+          "response.moderation.input.category_scores.hate/threatening",
+          "response.moderation.input.category_scores.illicit",
+          "response.moderation.input.category_scores.illicit/violent",
+          "response.moderation.input.category_scores.self-harm",
+          "response.moderation.input.category_scores.self-harm/instructions",
+          "response.moderation.input.category_scores.self-harm/intent",
+          "response.moderation.input.category_scores.sexual",
+          "response.moderation.input.category_scores.sexual/minors",
+          "response.moderation.input.category_scores.violence",
+          "response.moderation.input.category_scores.violence/graphic",
+          "response.moderation.input.flagged",
+          "response.moderation.input.model",
+          "response.moderation.input.type",
+          "response.moderation.output",
+          "response.moderation.output.categories",
+          "response.moderation.output.categories.harassment",
+          "response.moderation.output.categories.harassment/threatening",
+          "response.moderation.output.categories.hate",
+          "response.moderation.output.categories.hate/threatening",
+          "response.moderation.output.categories.illicit",
+          "response.moderation.output.categories.illicit/violent",
+          "response.moderation.output.categories.self-harm",
+          "response.moderation.output.categories.self-harm/instructions",
+          "response.moderation.output.categories.self-harm/intent",
+          "response.moderation.output.categories.sexual",
+          "response.moderation.output.categories.sexual/minors",
+          "response.moderation.output.categories.violence",
+          "response.moderation.output.categories.violence/graphic",
+          "response.moderation.output.category_applied_input_types",
+          "response.moderation.output.category_applied_input_types.harassment",
+          "response.moderation.output.category_applied_input_types.harassment/threatening",
+          "response.moderation.output.category_applied_input_types.harassment/threatening[]",
+          "response.moderation.output.category_applied_input_types.harassment[]",
+          "response.moderation.output.category_applied_input_types.hate",
+          "response.moderation.output.category_applied_input_types.hate/threatening",
+          "response.moderation.output.category_applied_input_types.hate/threatening[]",
+          "response.moderation.output.category_applied_input_types.hate[]",
+          "response.moderation.output.category_applied_input_types.illicit",
+          "response.moderation.output.category_applied_input_types.illicit/violent",
+          "response.moderation.output.category_applied_input_types.illicit/violent[]",
+          "response.moderation.output.category_applied_input_types.illicit[]",
+          "response.moderation.output.category_applied_input_types.self-harm",
+          "response.moderation.output.category_applied_input_types.self-harm/instructions",
+          "response.moderation.output.category_applied_input_types.self-harm/instructions[]",
+          "response.moderation.output.category_applied_input_types.self-harm/intent",
+          "response.moderation.output.category_applied_input_types.self-harm/intent[]",
+          "response.moderation.output.category_applied_input_types.self-harm[]",
+          "response.moderation.output.category_applied_input_types.sexual",
+          "response.moderation.output.category_applied_input_types.sexual/minors",
+          "response.moderation.output.category_applied_input_types.sexual/minors[]",
+          "response.moderation.output.category_applied_input_types.sexual[]",
+          "response.moderation.output.category_applied_input_types.violence",
+          "response.moderation.output.category_applied_input_types.violence/graphic",
+          "response.moderation.output.category_applied_input_types.violence/graphic[]",
+          "response.moderation.output.category_applied_input_types.violence[]",
+          "response.moderation.output.category_scores",
+          "response.moderation.output.category_scores.harassment",
+          "response.moderation.output.category_scores.harassment/threatening",
+          "response.moderation.output.category_scores.hate",
+          "response.moderation.output.category_scores.hate/threatening",
+          "response.moderation.output.category_scores.illicit",
+          "response.moderation.output.category_scores.illicit/violent",
+          "response.moderation.output.category_scores.self-harm",
+          "response.moderation.output.category_scores.self-harm/instructions",
+          "response.moderation.output.category_scores.self-harm/intent",
+          "response.moderation.output.category_scores.sexual",
+          "response.moderation.output.category_scores.sexual/minors",
+          "response.moderation.output.category_scores.violence",
+          "response.moderation.output.category_scores.violence/graphic",
+          "response.moderation.output.flagged",
+          "response.moderation.output.model",
+          "response.moderation.output.type",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.output[].action",
+          "response.output[].action.queries",
+          "response.output[].action.queries[]",
+          "response.output[].action.query",
+          "response.output[].action.type",
+          "response.output[].arguments",
+          "response.output[].call_id",
+          "response.output[].code",
+          "response.output[].container_id",
+          "response.output[].content",
+          "response.output[].content[]",
+          "response.output[].content[].annotations",
+          "response.output[].content[].annotations[]",
+          "response.output[].content[].annotations[].container_id",
+          "response.output[].content[].annotations[].end_index",
+          "response.output[].content[].annotations[].file_id",
+          "response.output[].content[].annotations[].filename",
+          "response.output[].content[].annotations[].start_index",
+          "response.output[].content[].annotations[].title",
+          "response.output[].content[].annotations[].type",
+          "response.output[].content[].annotations[].url",
+          "response.output[].content[].logprobs",
+          "response.output[].content[].logprobs[]",
+          "response.output[].content[].text",
+          "response.output[].content[].type",
+          "response.output[].id",
+          "response.output[].name",
+          "response.output[].outputs",
+          "response.output[].phase",
+          "response.output[].role",
+          "response.output[].status",
+          "response.output[].type",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.prompt_cache_retention",
+          "response.reasoning",
+          "response.reasoning.context",
+          "response.reasoning.effort",
+          "response.reasoning.mode",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.text.verbosity",
+          "response.tool_choice",
+          "response.tool_usage",
+          "response.tool_usage.image_gen",
+          "response.tool_usage.image_gen.input_tokens",
+          "response.tool_usage.image_gen.input_tokens_details",
+          "response.tool_usage.image_gen.input_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.input_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.output_tokens",
+          "response.tool_usage.image_gen.output_tokens_details",
+          "response.tool_usage.image_gen.output_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.output_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.total_tokens",
+          "response.tool_usage.web_search",
+          "response.tool_usage.web_search.num_requests",
+          "response.tools",
+          "response.tools[]",
+          "response.tools[].container",
+          "response.tools[].container.type",
+          "response.tools[].description",
+          "response.tools[].name",
+          "response.tools[].output_schema",
+          "response.tools[].parameters",
+          "response.tools[].parameters.additionalProperties",
+          "response.tools[].parameters.properties",
+          "response.tools[].parameters.properties.city",
+          "response.tools[].parameters.properties.city.type",
+          "response.tools[].parameters.required",
+          "response.tools[].parameters.required[]",
+          "response.tools[].parameters.type",
+          "response.tools[].return_token_budget",
+          "response.tools[].search_content_types",
+          "response.tools[].search_content_types[]",
+          "response.tools[].search_context_size",
+          "response.tools[].strict",
+          "response.tools[].type",
+          "response.tools[].user_location",
+          "response.tools[].user_location.city",
+          "response.tools[].user_location.country",
+          "response.tools[].user_location.region",
+          "response.tools[].user_location.timezone",
+          "response.tools[].user_location.type",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.usage.input_tokens",
+          "response.usage.input_tokens_details",
+          "response.usage.input_tokens_details.cache_write_tokens",
+          "response.usage.input_tokens_details.cached_tokens",
+          "response.usage.output_tokens",
+          "response.usage.output_tokens_details",
+          "response.usage.output_tokens_details.reasoning_tokens",
+          "response.usage.total_tokens",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.model",
+          "response.moderation",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.output[].id",
+          "response.output[].status",
+          "response.output[].type",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.prompt_cache_retention",
+          "response.reasoning",
+          "response.reasoning.context",
+          "response.reasoning.effort",
+          "response.reasoning.mode",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.text.verbosity",
+          "response.tool_choice",
+          "response.tool_usage",
+          "response.tool_usage.image_gen",
+          "response.tool_usage.image_gen.input_tokens",
+          "response.tool_usage.image_gen.input_tokens_details",
+          "response.tool_usage.image_gen.input_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.input_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.output_tokens",
+          "response.tool_usage.image_gen.output_tokens_details",
+          "response.tool_usage.image_gen.output_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.output_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.total_tokens",
+          "response.tool_usage.web_search",
+          "response.tool_usage.web_search.num_requests",
+          "response.tools",
+          "response.tools[]",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.usage.input_tokens",
+          "response.usage.input_tokens_details",
+          "response.usage.input_tokens_details.cache_write_tokens",
+          "response.usage.input_tokens_details.cached_tokens",
+          "response.usage.output_tokens",
+          "response.usage.output_tokens_details",
+          "response.usage.output_tokens_details.reasoning_tokens",
+          "response.usage.total_tokens",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "response.moderation.input.type": [
+            "moderation_result"
+          ],
+          "response.moderation.output.type": [
+            "moderation_result"
+          ],
+          "response.object": [
+            "response"
+          ],
+          "response.output[].action.type": [
+            "search"
+          ],
+          "response.output[].content[].annotations[].type": [
+            "container_file_citation",
+            "url_citation"
+          ],
+          "response.output[].content[].type": [
+            "output_text"
+          ],
+          "response.output[].role": [
+            "assistant"
+          ],
+          "response.output[].status": [
+            "completed"
+          ],
+          "response.output[].type": [
+            "code_interpreter_call",
+            "function_call",
+            "message",
+            "web_search_call"
+          ],
+          "response.status": [
+            "completed"
+          ],
+          "response.text.format.type": [
+            "text"
+          ],
+          "response.tools[].container.type": [
+            "auto"
+          ],
+          "response.tools[].parameters.properties.city.type": [
+            "string"
+          ],
+          "response.tools[].parameters.type": [
+            "object"
+          ],
+          "response.tools[].type": [
+            "code_interpreter",
+            "function",
+            "web_search"
+          ],
+          "response.tools[].user_location.type": [
+            "approximate"
+          ],
+          "type": [
+            "response.completed"
+          ]
+        }
+      },
+      "response.content_part.added": {
+        "known": [
+          "content_index",
+          "item_id",
+          "output_index",
+          "part",
+          "part.annotations",
+          "part.annotations[]",
+          "part.logprobs",
+          "part.logprobs[]",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "content_index",
+          "item_id",
+          "output_index",
+          "part",
+          "part.annotations",
+          "part.annotations[]",
+          "part.logprobs",
+          "part.logprobs[]",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "part.type": [
+            "output_text"
+          ],
+          "type": [
+            "response.content_part.added"
+          ]
+        }
+      },
+      "response.content_part.done": {
+        "known": [
+          "content_index",
+          "item_id",
+          "output_index",
+          "part",
+          "part.annotations",
+          "part.annotations[]",
+          "part.annotations[].container_id",
+          "part.annotations[].end_index",
+          "part.annotations[].file_id",
+          "part.annotations[].filename",
+          "part.annotations[].start_index",
+          "part.annotations[].title",
+          "part.annotations[].type",
+          "part.annotations[].url",
+          "part.logprobs",
+          "part.logprobs[]",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "content_index",
+          "item_id",
+          "output_index",
+          "part",
+          "part.annotations",
+          "part.annotations[]",
+          "part.logprobs",
+          "part.logprobs[]",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "part.annotations[].type": [
+            "container_file_citation",
+            "url_citation"
+          ],
+          "part.type": [
+            "output_text"
+          ],
+          "type": [
+            "response.content_part.done"
+          ]
+        }
+      },
+      "response.created": {
+        "known": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.model",
+          "response.moderation",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.prompt_cache_retention",
+          "response.reasoning",
+          "response.reasoning.context",
+          "response.reasoning.effort",
+          "response.reasoning.mode",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.text.verbosity",
+          "response.tool_choice",
+          "response.tool_usage",
+          "response.tool_usage.image_gen",
+          "response.tool_usage.image_gen.input_tokens",
+          "response.tool_usage.image_gen.input_tokens_details",
+          "response.tool_usage.image_gen.input_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.input_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.output_tokens",
+          "response.tool_usage.image_gen.output_tokens_details",
+          "response.tool_usage.image_gen.output_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.output_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.total_tokens",
+          "response.tool_usage.web_search",
+          "response.tool_usage.web_search.num_requests",
+          "response.tools",
+          "response.tools[]",
+          "response.tools[].container",
+          "response.tools[].container.type",
+          "response.tools[].description",
+          "response.tools[].name",
+          "response.tools[].output_schema",
+          "response.tools[].parameters",
+          "response.tools[].parameters.additionalProperties",
+          "response.tools[].parameters.properties",
+          "response.tools[].parameters.properties.city",
+          "response.tools[].parameters.properties.city.type",
+          "response.tools[].parameters.required",
+          "response.tools[].parameters.required[]",
+          "response.tools[].parameters.type",
+          "response.tools[].return_token_budget",
+          "response.tools[].search_content_types",
+          "response.tools[].search_content_types[]",
+          "response.tools[].search_context_size",
+          "response.tools[].strict",
+          "response.tools[].type",
+          "response.tools[].user_location",
+          "response.tools[].user_location.city",
+          "response.tools[].user_location.country",
+          "response.tools[].user_location.region",
+          "response.tools[].user_location.timezone",
+          "response.tools[].user_location.type",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.model",
+          "response.moderation",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.prompt_cache_retention",
+          "response.reasoning",
+          "response.reasoning.context",
+          "response.reasoning.effort",
+          "response.reasoning.mode",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.text.verbosity",
+          "response.tool_choice",
+          "response.tool_usage",
+          "response.tool_usage.image_gen",
+          "response.tool_usage.image_gen.input_tokens",
+          "response.tool_usage.image_gen.input_tokens_details",
+          "response.tool_usage.image_gen.input_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.input_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.output_tokens",
+          "response.tool_usage.image_gen.output_tokens_details",
+          "response.tool_usage.image_gen.output_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.output_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.total_tokens",
+          "response.tool_usage.web_search",
+          "response.tool_usage.web_search.num_requests",
+          "response.tools",
+          "response.tools[]",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "response.object": [
+            "response"
+          ],
+          "response.status": [
+            "in_progress"
+          ],
+          "response.text.format.type": [
+            "text"
+          ],
+          "response.tools[].container.type": [
+            "auto"
+          ],
+          "response.tools[].parameters.properties.city.type": [
+            "string"
+          ],
+          "response.tools[].parameters.type": [
+            "object"
+          ],
+          "response.tools[].type": [
+            "code_interpreter",
+            "function",
+            "web_search"
+          ],
+          "response.tools[].user_location.type": [
+            "approximate"
+          ],
+          "type": [
+            "response.created"
+          ]
+        }
+      },
+      "response.function_call_arguments.delta": {
+        "known": [
+          "delta",
+          "item_id",
+          "obfuscation",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "delta",
+          "item_id",
+          "obfuscation",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.function_call_arguments.delta"
+          ]
+        }
+      },
+      "response.function_call_arguments.done": {
+        "known": [
+          "arguments",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "arguments",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.function_call_arguments.done"
+          ]
+        }
+      },
+      "response.in_progress": {
+        "known": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.model",
+          "response.moderation",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.prompt_cache_retention",
+          "response.reasoning",
+          "response.reasoning.context",
+          "response.reasoning.effort",
+          "response.reasoning.mode",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.text.verbosity",
+          "response.tool_choice",
+          "response.tool_usage",
+          "response.tool_usage.image_gen",
+          "response.tool_usage.image_gen.input_tokens",
+          "response.tool_usage.image_gen.input_tokens_details",
+          "response.tool_usage.image_gen.input_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.input_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.output_tokens",
+          "response.tool_usage.image_gen.output_tokens_details",
+          "response.tool_usage.image_gen.output_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.output_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.total_tokens",
+          "response.tool_usage.web_search",
+          "response.tool_usage.web_search.num_requests",
+          "response.tools",
+          "response.tools[]",
+          "response.tools[].container",
+          "response.tools[].container.type",
+          "response.tools[].description",
+          "response.tools[].name",
+          "response.tools[].output_schema",
+          "response.tools[].parameters",
+          "response.tools[].parameters.additionalProperties",
+          "response.tools[].parameters.properties",
+          "response.tools[].parameters.properties.city",
+          "response.tools[].parameters.properties.city.type",
+          "response.tools[].parameters.required",
+          "response.tools[].parameters.required[]",
+          "response.tools[].parameters.type",
+          "response.tools[].return_token_budget",
+          "response.tools[].search_content_types",
+          "response.tools[].search_content_types[]",
+          "response.tools[].search_context_size",
+          "response.tools[].strict",
+          "response.tools[].type",
+          "response.tools[].user_location",
+          "response.tools[].user_location.city",
+          "response.tools[].user_location.country",
+          "response.tools[].user_location.region",
+          "response.tools[].user_location.timezone",
+          "response.tools[].user_location.type",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.model",
+          "response.moderation",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.prompt_cache_retention",
+          "response.reasoning",
+          "response.reasoning.context",
+          "response.reasoning.effort",
+          "response.reasoning.mode",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.text.verbosity",
+          "response.tool_choice",
+          "response.tool_usage",
+          "response.tool_usage.image_gen",
+          "response.tool_usage.image_gen.input_tokens",
+          "response.tool_usage.image_gen.input_tokens_details",
+          "response.tool_usage.image_gen.input_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.input_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.output_tokens",
+          "response.tool_usage.image_gen.output_tokens_details",
+          "response.tool_usage.image_gen.output_tokens_details.image_tokens",
+          "response.tool_usage.image_gen.output_tokens_details.text_tokens",
+          "response.tool_usage.image_gen.total_tokens",
+          "response.tool_usage.web_search",
+          "response.tool_usage.web_search.num_requests",
+          "response.tools",
+          "response.tools[]",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "response.object": [
+            "response"
+          ],
+          "response.status": [
+            "in_progress"
+          ],
+          "response.text.format.type": [
+            "text"
+          ],
+          "response.tools[].container.type": [
+            "auto"
+          ],
+          "response.tools[].parameters.properties.city.type": [
+            "string"
+          ],
+          "response.tools[].parameters.type": [
+            "object"
+          ],
+          "response.tools[].type": [
+            "code_interpreter",
+            "function",
+            "web_search"
+          ],
+          "response.tools[].user_location.type": [
+            "approximate"
+          ],
+          "type": [
+            "response.in_progress"
+          ]
+        }
+      },
+      "response.output_item.added": {
+        "known": [
+          "item",
+          "item.arguments",
+          "item.call_id",
+          "item.code",
+          "item.container_id",
+          "item.content",
+          "item.content[]",
+          "item.id",
+          "item.name",
+          "item.outputs",
+          "item.phase",
+          "item.role",
+          "item.status",
+          "item.type",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item",
+          "item.id",
+          "item.status",
+          "item.type",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "item.role": [
+            "assistant"
+          ],
+          "item.status": [
+            "in_progress"
+          ],
+          "item.type": [
+            "code_interpreter_call",
+            "function_call",
+            "message",
+            "web_search_call"
+          ],
+          "type": [
+            "response.output_item.added"
+          ]
+        }
+      },
+      "response.output_item.done": {
+        "known": [
+          "item",
+          "item.action",
+          "item.action.queries",
+          "item.action.queries[]",
+          "item.action.query",
+          "item.action.type",
+          "item.arguments",
+          "item.call_id",
+          "item.code",
+          "item.container_id",
+          "item.content",
+          "item.content[]",
+          "item.content[].annotations",
+          "item.content[].annotations[]",
+          "item.content[].annotations[].container_id",
+          "item.content[].annotations[].end_index",
+          "item.content[].annotations[].file_id",
+          "item.content[].annotations[].filename",
+          "item.content[].annotations[].start_index",
+          "item.content[].annotations[].title",
+          "item.content[].annotations[].type",
+          "item.content[].annotations[].url",
+          "item.content[].logprobs",
+          "item.content[].logprobs[]",
+          "item.content[].text",
+          "item.content[].type",
+          "item.id",
+          "item.name",
+          "item.outputs",
+          "item.phase",
+          "item.role",
+          "item.status",
+          "item.type",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item",
+          "item.id",
+          "item.status",
+          "item.type",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "item.action.type": [
+            "search"
+          ],
+          "item.content[].annotations[].type": [
+            "container_file_citation",
+            "url_citation"
+          ],
+          "item.content[].type": [
+            "output_text"
+          ],
+          "item.role": [
+            "assistant"
+          ],
+          "item.status": [
+            "completed"
+          ],
+          "item.type": [
+            "code_interpreter_call",
+            "function_call",
+            "message",
+            "web_search_call"
+          ],
+          "type": [
+            "response.output_item.done"
+          ]
+        }
+      },
+      "response.output_text.annotation.added": {
+        "known": [
+          "annotation",
+          "annotation.container_id",
+          "annotation.end_index",
+          "annotation.file_id",
+          "annotation.filename",
+          "annotation.start_index",
+          "annotation.title",
+          "annotation.type",
+          "annotation.url",
+          "annotation_index",
+          "content_index",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "annotation",
+          "annotation.end_index",
+          "annotation.start_index",
+          "annotation.type",
+          "annotation_index",
+          "content_index",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "annotation.type": [
+            "container_file_citation",
+            "url_citation"
+          ],
+          "type": [
+            "response.output_text.annotation.added"
+          ]
+        }
+      },
+      "response.output_text.delta": {
+        "known": [
+          "content_index",
+          "delta",
+          "item_id",
+          "logprobs",
+          "logprobs[]",
+          "obfuscation",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "content_index",
+          "delta",
+          "item_id",
+          "logprobs",
+          "logprobs[]",
+          "obfuscation",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.output_text.delta"
+          ]
+        }
+      },
+      "response.output_text.done": {
+        "known": [
+          "content_index",
+          "item_id",
+          "logprobs",
+          "logprobs[]",
+          "output_index",
+          "sequence_number",
+          "text",
+          "type"
+        ],
+        "expected": [
+          "content_index",
+          "item_id",
+          "logprobs",
+          "logprobs[]",
+          "output_index",
+          "sequence_number",
+          "text",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.output_text.done"
+          ]
+        }
+      },
+      "response.web_search_call.completed": {
+        "known": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.web_search_call.completed"
+          ]
+        }
+      },
+      "response.web_search_call.in_progress": {
+        "known": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.web_search_call.in_progress"
+          ]
+        }
+      },
+      "response.web_search_call.searching": {
+        "known": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.web_search_call.searching"
+          ]
+        }
+      }
+    }
+  },
+  "openrouter/completions": {
+    "response": {
+      "known": [
+        "choices",
+        "choices[]",
+        "choices[].finish_reason",
+        "choices[].index",
+        "choices[].logprobs",
+        "choices[].message",
+        "choices[].message.annotations",
+        "choices[].message.annotations[]",
+        "choices[].message.annotations[].type",
+        "choices[].message.annotations[].url_citation",
+        "choices[].message.annotations[].url_citation.end_index",
+        "choices[].message.annotations[].url_citation.start_index",
+        "choices[].message.annotations[].url_citation.title",
+        "choices[].message.annotations[].url_citation.url",
+        "choices[].message.content",
+        "choices[].message.reasoning",
+        "choices[].message.refusal",
+        "choices[].message.role",
+        "choices[].message.tool_calls",
+        "choices[].message.tool_calls[]",
+        "choices[].message.tool_calls[].function",
+        "choices[].message.tool_calls[].function.arguments",
+        "choices[].message.tool_calls[].function.name",
+        "choices[].message.tool_calls[].id",
+        "choices[].message.tool_calls[].index",
+        "choices[].message.tool_calls[].type",
+        "choices[].native_finish_reason",
+        "created",
+        "id",
+        "model",
+        "object",
+        "provider",
+        "service_tier",
+        "system_fingerprint",
+        "usage",
+        "usage.completion_tokens",
+        "usage.completion_tokens_details",
+        "usage.completion_tokens_details.audio_tokens",
+        "usage.completion_tokens_details.image_tokens",
+        "usage.completion_tokens_details.reasoning_tokens",
+        "usage.cost",
+        "usage.cost_details",
+        "usage.cost_details.upstream_inference_completions_cost",
+        "usage.cost_details.upstream_inference_cost",
+        "usage.cost_details.upstream_inference_prompt_cost",
+        "usage.is_byok",
+        "usage.prompt_tokens",
+        "usage.prompt_tokens_details",
+        "usage.prompt_tokens_details.audio_tokens",
+        "usage.prompt_tokens_details.cache_write_tokens",
+        "usage.prompt_tokens_details.cached_tokens",
+        "usage.prompt_tokens_details.video_tokens",
+        "usage.server_tool_use_details",
+        "usage.server_tool_use_details.web_search_requests",
+        "usage.total_tokens"
+      ],
+      "expected": [
+        "choices",
+        "choices[]",
+        "choices[].finish_reason",
+        "choices[].index",
+        "choices[].logprobs",
+        "choices[].message",
+        "choices[].message.content",
+        "choices[].message.reasoning",
+        "choices[].message.refusal",
+        "choices[].message.role",
+        "choices[].native_finish_reason",
+        "created",
+        "id",
+        "model",
+        "object",
+        "provider",
+        "service_tier",
+        "system_fingerprint",
+        "usage",
+        "usage.completion_tokens",
+        "usage.completion_tokens_details",
+        "usage.completion_tokens_details.audio_tokens",
+        "usage.completion_tokens_details.image_tokens",
+        "usage.completion_tokens_details.reasoning_tokens",
+        "usage.cost",
+        "usage.cost_details",
+        "usage.cost_details.upstream_inference_completions_cost",
+        "usage.cost_details.upstream_inference_cost",
+        "usage.cost_details.upstream_inference_prompt_cost",
+        "usage.is_byok",
+        "usage.prompt_tokens",
+        "usage.prompt_tokens_details",
+        "usage.prompt_tokens_details.audio_tokens",
+        "usage.prompt_tokens_details.cache_write_tokens",
+        "usage.prompt_tokens_details.cached_tokens",
+        "usage.prompt_tokens_details.video_tokens",
+        "usage.total_tokens"
+      ],
+      "values": {
+        "choices[].finish_reason": [
+          "stop",
+          "tool_calls"
+        ],
+        "choices[].message.annotations[].type": [
+          "url_citation"
+        ],
+        "choices[].message.role": [
+          "assistant"
+        ],
+        "choices[].message.tool_calls[].type": [
+          "function"
+        ],
+        "object": [
+          "chat.completion"
+        ]
+      }
+    },
+    "stream": {
+      "*": {
+        "known": [
+          "choices",
+          "choices[]",
+          "choices[].delta",
+          "choices[].delta.annotations",
+          "choices[].delta.annotations[]",
+          "choices[].delta.annotations[].type",
+          "choices[].delta.annotations[].url_citation",
+          "choices[].delta.annotations[].url_citation.end_index",
+          "choices[].delta.annotations[].url_citation.start_index",
+          "choices[].delta.annotations[].url_citation.title",
+          "choices[].delta.annotations[].url_citation.url",
+          "choices[].delta.content",
+          "choices[].delta.role",
+          "choices[].delta.tool_calls",
+          "choices[].delta.tool_calls[]",
+          "choices[].delta.tool_calls[].function",
+          "choices[].delta.tool_calls[].function.arguments",
+          "choices[].delta.tool_calls[].function.name",
+          "choices[].delta.tool_calls[].id",
+          "choices[].delta.tool_calls[].index",
+          "choices[].delta.tool_calls[].type",
+          "choices[].finish_reason",
+          "choices[].index",
+          "choices[].native_finish_reason",
+          "created",
+          "id",
+          "model",
+          "object",
+          "provider",
+          "service_tier",
+          "usage",
+          "usage.completion_tokens",
+          "usage.completion_tokens_details",
+          "usage.completion_tokens_details.audio_tokens",
+          "usage.completion_tokens_details.image_tokens",
+          "usage.completion_tokens_details.reasoning_tokens",
+          "usage.cost",
+          "usage.cost_details",
+          "usage.cost_details.upstream_inference_completions_cost",
+          "usage.cost_details.upstream_inference_cost",
+          "usage.cost_details.upstream_inference_prompt_cost",
+          "usage.is_byok",
+          "usage.prompt_tokens",
+          "usage.prompt_tokens_details",
+          "usage.prompt_tokens_details.audio_tokens",
+          "usage.prompt_tokens_details.cache_write_tokens",
+          "usage.prompt_tokens_details.cached_tokens",
+          "usage.prompt_tokens_details.video_tokens",
+          "usage.server_tool_use_details",
+          "usage.server_tool_use_details.web_search_requests",
+          "usage.total_tokens"
+        ],
+        "expected": [
+          "choices",
+          "choices[]",
+          "choices[].delta",
+          "choices[].delta.content",
+          "choices[].delta.role",
+          "choices[].finish_reason",
+          "choices[].index",
+          "choices[].native_finish_reason",
+          "created",
+          "id",
+          "model",
+          "object",
+          "provider"
+        ],
+        "values": {
+          "choices[].delta.annotations[].type": [
+            "url_citation"
+          ],
+          "choices[].delta.role": [
+            "assistant"
+          ],
+          "choices[].delta.tool_calls[].type": [
+            "function"
+          ],
+          "choices[].finish_reason": [
+            "stop",
+            "tool_calls"
+          ],
+          "object": [
+            "chat.completion.chunk"
+          ]
+        }
+      }
+    }
+  },
+  "xai/responses": {
+    "response": {
+      "known": [
+        "background",
+        "completed_at",
+        "created_at",
+        "error",
+        "frequency_penalty",
+        "id",
+        "incomplete_details",
+        "instructions",
+        "max_output_tokens",
+        "max_tool_calls",
+        "metadata",
+        "metadata.system_fingerprint",
+        "model",
+        "object",
+        "output",
+        "output[]",
+        "output[].action",
+        "output[].action.query",
+        "output[].action.sources",
+        "output[].action.sources[]",
+        "output[].action.sources[].type",
+        "output[].action.sources[].url",
+        "output[].action.type",
+        "output[].arguments",
+        "output[].call_id",
+        "output[].content",
+        "output[].content[]",
+        "output[].content[].annotations",
+        "output[].content[].annotations[]",
+        "output[].content[].annotations[].end_index",
+        "output[].content[].annotations[].start_index",
+        "output[].content[].annotations[].title",
+        "output[].content[].annotations[].type",
+        "output[].content[].annotations[].url",
+        "output[].content[].logprobs",
+        "output[].content[].logprobs[]",
+        "output[].content[].text",
+        "output[].content[].type",
+        "output[].id",
+        "output[].name",
+        "output[].role",
+        "output[].status",
+        "output[].summary",
+        "output[].summary[]",
+        "output[].summary[].text",
+        "output[].summary[].type",
+        "output[].type",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "previous_response_id",
+        "prompt_cache_key",
+        "reasoning",
+        "reasoning.effort",
+        "reasoning.summary",
+        "safety_identifier",
+        "service_tier",
+        "status",
+        "store",
+        "temperature",
+        "text",
+        "text.format",
+        "text.format.schema",
+        "text.format.schema.additionalProperties",
+        "text.format.schema.properties",
+        "text.format.schema.properties.city",
+        "text.format.schema.properties.city.type",
+        "text.format.schema.properties.country",
+        "text.format.schema.properties.country.type",
+        "text.format.schema.required",
+        "text.format.schema.required[]",
+        "text.format.schema.type",
+        "text.format.type",
+        "tool_choice",
+        "tools",
+        "tools[]",
+        "tools[].description",
+        "tools[].name",
+        "tools[].parameters",
+        "tools[].parameters.additionalProperties",
+        "tools[].parameters.properties",
+        "tools[].parameters.properties.city",
+        "tools[].parameters.properties.city.type",
+        "tools[].parameters.required",
+        "tools[].parameters.required[]",
+        "tools[].parameters.type",
+        "tools[].search_context_size",
+        "tools[].strict",
+        "tools[].type",
+        "top_logprobs",
+        "top_p",
+        "truncation",
+        "usage",
+        "usage.context_details",
+        "usage.context_details.input_tokens",
+        "usage.context_details.output_tokens",
+        "usage.cost_in_usd_ticks",
+        "usage.input_tokens",
+        "usage.input_tokens_details",
+        "usage.input_tokens_details.cached_tokens",
+        "usage.num_server_side_tools_used",
+        "usage.num_sources_used",
+        "usage.output_tokens",
+        "usage.output_tokens_details",
+        "usage.output_tokens_details.reasoning_tokens",
+        "usage.server_side_tool_usage_details",
+        "usage.server_side_tool_usage_details.code_interpreter_calls",
+        "usage.server_side_tool_usage_details.document_search_calls",
+        "usage.server_side_tool_usage_details.file_search_calls",
+        "usage.server_side_tool_usage_details.image_generation_calls",
+        "usage.server_side_tool_usage_details.mcp_calls",
+        "usage.server_side_tool_usage_details.web_search_calls",
+        "usage.server_side_tool_usage_details.x_search_calls",
+        "usage.total_tokens",
+        "user"
+      ],
+      "expected": [
+        "background",
+        "completed_at",
+        "created_at",
+        "error",
+        "frequency_penalty",
+        "id",
+        "incomplete_details",
+        "instructions",
+        "max_output_tokens",
+        "max_tool_calls",
+        "metadata",
+        "metadata.system_fingerprint",
+        "model",
+        "object",
+        "output",
+        "output[]",
+        "output[].id",
+        "output[].status",
+        "output[].summary",
+        "output[].summary[]",
+        "output[].summary[].text",
+        "output[].summary[].type",
+        "output[].type",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "previous_response_id",
+        "prompt_cache_key",
+        "reasoning",
+        "reasoning.effort",
+        "reasoning.summary",
+        "safety_identifier",
+        "service_tier",
+        "status",
+        "store",
+        "temperature",
+        "text",
+        "text.format",
+        "text.format.type",
+        "tool_choice",
+        "tools",
+        "tools[]",
+        "top_logprobs",
+        "top_p",
+        "truncation",
+        "usage",
+        "usage.context_details",
+        "usage.context_details.input_tokens",
+        "usage.context_details.output_tokens",
+        "usage.cost_in_usd_ticks",
+        "usage.input_tokens",
+        "usage.input_tokens_details",
+        "usage.input_tokens_details.cached_tokens",
+        "usage.num_server_side_tools_used",
+        "usage.num_sources_used",
+        "usage.output_tokens",
+        "usage.output_tokens_details",
+        "usage.output_tokens_details.reasoning_tokens",
+        "usage.total_tokens",
+        "user"
+      ],
+      "values": {
+        "object": [
+          "response"
+        ],
+        "output[].action.sources[].type": [
+          "url"
+        ],
+        "output[].action.type": [
+          "search"
+        ],
+        "output[].content[].annotations[].type": [
+          "url_citation"
+        ],
+        "output[].content[].type": [
+          "output_text"
+        ],
+        "output[].role": [
+          "assistant"
+        ],
+        "output[].status": [
+          "completed"
+        ],
+        "output[].summary[].type": [
+          "summary_text"
+        ],
+        "output[].type": [
+          "function_call",
+          "message",
+          "reasoning",
+          "web_search_call"
+        ],
+        "status": [
+          "completed"
+        ],
+        "text.format.schema.properties.city.type": [
+          "string"
+        ],
+        "text.format.schema.properties.country.type": [
+          "string"
+        ],
+        "text.format.schema.type": [
+          "object"
+        ],
+        "text.format.type": [
+          "json_schema",
+          "text"
+        ],
+        "tools[].parameters.properties.city.type": [
+          "string"
+        ],
+        "tools[].parameters.type": [
+          "object"
+        ],
+        "tools[].type": [
+          "function",
+          "web_search"
+        ]
+      }
+    },
+    "stream": {
+      "response.completed": {
+        "known": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.metadata.system_fingerprint",
+          "response.model",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.output[].action",
+          "response.output[].action.query",
+          "response.output[].action.sources",
+          "response.output[].action.sources[]",
+          "response.output[].action.sources[].type",
+          "response.output[].action.sources[].url",
+          "response.output[].action.type",
+          "response.output[].arguments",
+          "response.output[].call_id",
+          "response.output[].content",
+          "response.output[].content[]",
+          "response.output[].content[].annotations",
+          "response.output[].content[].annotations[]",
+          "response.output[].content[].annotations[].end_index",
+          "response.output[].content[].annotations[].start_index",
+          "response.output[].content[].annotations[].title",
+          "response.output[].content[].annotations[].type",
+          "response.output[].content[].annotations[].url",
+          "response.output[].content[].logprobs",
+          "response.output[].content[].logprobs[]",
+          "response.output[].content[].text",
+          "response.output[].content[].type",
+          "response.output[].id",
+          "response.output[].name",
+          "response.output[].role",
+          "response.output[].status",
+          "response.output[].summary",
+          "response.output[].summary[]",
+          "response.output[].summary[].text",
+          "response.output[].summary[].type",
+          "response.output[].type",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.reasoning",
+          "response.reasoning.effort",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.tool_choice",
+          "response.tools",
+          "response.tools[]",
+          "response.tools[].description",
+          "response.tools[].name",
+          "response.tools[].parameters",
+          "response.tools[].parameters.additionalProperties",
+          "response.tools[].parameters.properties",
+          "response.tools[].parameters.properties.city",
+          "response.tools[].parameters.properties.city.type",
+          "response.tools[].parameters.required",
+          "response.tools[].parameters.required[]",
+          "response.tools[].parameters.type",
+          "response.tools[].strict",
+          "response.tools[].type",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.usage.context_details",
+          "response.usage.context_details.input_tokens",
+          "response.usage.context_details.output_tokens",
+          "response.usage.cost_in_usd_ticks",
+          "response.usage.input_tokens",
+          "response.usage.input_tokens_details",
+          "response.usage.input_tokens_details.cached_tokens",
+          "response.usage.num_server_side_tools_used",
+          "response.usage.num_sources_used",
+          "response.usage.output_tokens",
+          "response.usage.output_tokens_details",
+          "response.usage.output_tokens_details.reasoning_tokens",
+          "response.usage.server_side_tool_usage_details",
+          "response.usage.server_side_tool_usage_details.code_interpreter_calls",
+          "response.usage.server_side_tool_usage_details.document_search_calls",
+          "response.usage.server_side_tool_usage_details.file_search_calls",
+          "response.usage.server_side_tool_usage_details.image_generation_calls",
+          "response.usage.server_side_tool_usage_details.mcp_calls",
+          "response.usage.server_side_tool_usage_details.web_search_calls",
+          "response.usage.server_side_tool_usage_details.x_search_calls",
+          "response.usage.total_tokens",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.metadata.system_fingerprint",
+          "response.model",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.output[].id",
+          "response.output[].status",
+          "response.output[].summary",
+          "response.output[].summary[]",
+          "response.output[].summary[].text",
+          "response.output[].summary[].type",
+          "response.output[].type",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.reasoning",
+          "response.reasoning.effort",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.tool_choice",
+          "response.tools",
+          "response.tools[]",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.usage.context_details",
+          "response.usage.context_details.input_tokens",
+          "response.usage.context_details.output_tokens",
+          "response.usage.cost_in_usd_ticks",
+          "response.usage.input_tokens",
+          "response.usage.input_tokens_details",
+          "response.usage.input_tokens_details.cached_tokens",
+          "response.usage.num_server_side_tools_used",
+          "response.usage.num_sources_used",
+          "response.usage.output_tokens",
+          "response.usage.output_tokens_details",
+          "response.usage.output_tokens_details.reasoning_tokens",
+          "response.usage.total_tokens",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "response.object": [
+            "response"
+          ],
+          "response.output[].action.sources[].type": [
+            "url"
+          ],
+          "response.output[].action.type": [
+            "search"
+          ],
+          "response.output[].content[].annotations[].type": [
+            "url_citation"
+          ],
+          "response.output[].content[].type": [
+            "output_text"
+          ],
+          "response.output[].role": [
+            "assistant"
+          ],
+          "response.output[].status": [
+            "completed"
+          ],
+          "response.output[].summary[].type": [
+            "summary_text"
+          ],
+          "response.output[].type": [
+            "function_call",
+            "message",
+            "reasoning",
+            "web_search_call"
+          ],
+          "response.status": [
+            "completed"
+          ],
+          "response.text.format.type": [
+            "text"
+          ],
+          "response.tools[].parameters.properties.city.type": [
+            "string"
+          ],
+          "response.tools[].parameters.type": [
+            "object"
+          ],
+          "response.tools[].type": [
+            "function",
+            "web_search"
+          ],
+          "type": [
+            "response.completed"
+          ]
+        }
+      },
+      "response.content_part.added": {
+        "known": [
+          "content_index",
+          "item_id",
+          "output_index",
+          "part",
+          "part.annotations",
+          "part.annotations[]",
+          "part.logprobs",
+          "part.logprobs[]",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "content_index",
+          "item_id",
+          "output_index",
+          "part",
+          "part.annotations",
+          "part.annotations[]",
+          "part.logprobs",
+          "part.logprobs[]",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "part.type": [
+            "output_text"
+          ],
+          "type": [
+            "response.content_part.added"
+          ]
+        }
+      },
+      "response.content_part.done": {
+        "known": [
+          "content_index",
+          "item_id",
+          "output_index",
+          "part",
+          "part.annotations",
+          "part.annotations[]",
+          "part.annotations[].end_index",
+          "part.annotations[].start_index",
+          "part.annotations[].title",
+          "part.annotations[].type",
+          "part.annotations[].url",
+          "part.logprobs",
+          "part.logprobs[]",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "content_index",
+          "item_id",
+          "output_index",
+          "part",
+          "part.annotations",
+          "part.annotations[]",
+          "part.logprobs",
+          "part.logprobs[]",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "part.annotations[].type": [
+            "url_citation"
+          ],
+          "part.type": [
+            "output_text"
+          ],
+          "type": [
+            "response.content_part.done"
+          ]
+        }
+      },
+      "response.created": {
+        "known": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.metadata.system_fingerprint",
+          "response.model",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.reasoning",
+          "response.reasoning.effort",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.tool_choice",
+          "response.tools",
+          "response.tools[]",
+          "response.tools[].description",
+          "response.tools[].name",
+          "response.tools[].parameters",
+          "response.tools[].parameters.additionalProperties",
+          "response.tools[].parameters.properties",
+          "response.tools[].parameters.properties.city",
+          "response.tools[].parameters.properties.city.type",
+          "response.tools[].parameters.required",
+          "response.tools[].parameters.required[]",
+          "response.tools[].parameters.type",
+          "response.tools[].strict",
+          "response.tools[].type",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.metadata.system_fingerprint",
+          "response.model",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.reasoning",
+          "response.reasoning.effort",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.tool_choice",
+          "response.tools",
+          "response.tools[]",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "response.object": [
+            "response"
+          ],
+          "response.status": [
+            "in_progress"
+          ],
+          "response.text.format.type": [
+            "text"
+          ],
+          "response.tools[].parameters.properties.city.type": [
+            "string"
+          ],
+          "response.tools[].parameters.type": [
+            "object"
+          ],
+          "response.tools[].type": [
+            "function",
+            "web_search"
+          ],
+          "type": [
+            "response.created"
+          ]
+        }
+      },
+      "response.function_call_arguments.delta": {
+        "known": [
+          "delta",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "delta",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.function_call_arguments.delta"
+          ]
+        }
+      },
+      "response.function_call_arguments.done": {
+        "known": [
+          "arguments",
+          "item_id",
+          "name",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "arguments",
+          "item_id",
+          "name",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.function_call_arguments.done"
+          ]
+        }
+      },
+      "response.in_progress": {
+        "known": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.metadata.system_fingerprint",
+          "response.model",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.reasoning",
+          "response.reasoning.effort",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.tool_choice",
+          "response.tools",
+          "response.tools[]",
+          "response.tools[].description",
+          "response.tools[].name",
+          "response.tools[].parameters",
+          "response.tools[].parameters.additionalProperties",
+          "response.tools[].parameters.properties",
+          "response.tools[].parameters.properties.city",
+          "response.tools[].parameters.properties.city.type",
+          "response.tools[].parameters.required",
+          "response.tools[].parameters.required[]",
+          "response.tools[].parameters.type",
+          "response.tools[].strict",
+          "response.tools[].type",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "response",
+          "response.background",
+          "response.completed_at",
+          "response.created_at",
+          "response.error",
+          "response.frequency_penalty",
+          "response.id",
+          "response.incomplete_details",
+          "response.instructions",
+          "response.max_output_tokens",
+          "response.max_tool_calls",
+          "response.metadata",
+          "response.metadata.system_fingerprint",
+          "response.model",
+          "response.object",
+          "response.output",
+          "response.output[]",
+          "response.parallel_tool_calls",
+          "response.presence_penalty",
+          "response.previous_response_id",
+          "response.prompt_cache_key",
+          "response.reasoning",
+          "response.reasoning.effort",
+          "response.reasoning.summary",
+          "response.safety_identifier",
+          "response.service_tier",
+          "response.status",
+          "response.store",
+          "response.temperature",
+          "response.text",
+          "response.text.format",
+          "response.text.format.type",
+          "response.tool_choice",
+          "response.tools",
+          "response.tools[]",
+          "response.top_logprobs",
+          "response.top_p",
+          "response.truncation",
+          "response.usage",
+          "response.user",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "response.object": [
+            "response"
+          ],
+          "response.status": [
+            "in_progress"
+          ],
+          "response.text.format.type": [
+            "text"
+          ],
+          "response.tools[].parameters.properties.city.type": [
+            "string"
+          ],
+          "response.tools[].parameters.type": [
+            "object"
+          ],
+          "response.tools[].type": [
+            "function",
+            "web_search"
+          ],
+          "type": [
+            "response.in_progress"
+          ]
+        }
+      },
+      "response.output_item.added": {
+        "known": [
+          "item",
+          "item.action",
+          "item.action.query",
+          "item.action.sources",
+          "item.action.sources[]",
+          "item.action.type",
+          "item.arguments",
+          "item.call_id",
+          "item.content",
+          "item.content[]",
+          "item.id",
+          "item.name",
+          "item.role",
+          "item.status",
+          "item.summary",
+          "item.summary[]",
+          "item.type",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item",
+          "item.id",
+          "item.status",
+          "item.type",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "item.action.type": [
+            "search"
+          ],
+          "item.role": [
+            "assistant"
+          ],
+          "item.status": [
+            "in_progress"
+          ],
+          "item.type": [
+            "function_call",
+            "message",
+            "reasoning",
+            "web_search_call"
+          ],
+          "type": [
+            "response.output_item.added"
+          ]
+        }
+      },
+      "response.output_item.done": {
+        "known": [
+          "item",
+          "item.action",
+          "item.action.query",
+          "item.action.sources",
+          "item.action.sources[]",
+          "item.action.sources[].type",
+          "item.action.sources[].url",
+          "item.action.type",
+          "item.arguments",
+          "item.call_id",
+          "item.content",
+          "item.content[]",
+          "item.content[].annotations",
+          "item.content[].annotations[]",
+          "item.content[].annotations[].end_index",
+          "item.content[].annotations[].start_index",
+          "item.content[].annotations[].title",
+          "item.content[].annotations[].type",
+          "item.content[].annotations[].url",
+          "item.content[].logprobs",
+          "item.content[].logprobs[]",
+          "item.content[].text",
+          "item.content[].type",
+          "item.id",
+          "item.name",
+          "item.role",
+          "item.status",
+          "item.summary",
+          "item.summary[]",
+          "item.summary[].text",
+          "item.summary[].type",
+          "item.type",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item",
+          "item.id",
+          "item.status",
+          "item.type",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "item.action.sources[].type": [
+            "url"
+          ],
+          "item.action.type": [
+            "search"
+          ],
+          "item.content[].annotations[].type": [
+            "url_citation"
+          ],
+          "item.content[].type": [
+            "output_text"
+          ],
+          "item.role": [
+            "assistant"
+          ],
+          "item.status": [
+            "completed"
+          ],
+          "item.summary[].type": [
+            "summary_text"
+          ],
+          "item.type": [
+            "function_call",
+            "message",
+            "reasoning",
+            "web_search_call"
+          ],
+          "type": [
+            "response.output_item.done"
+          ]
+        }
+      },
+      "response.output_text.annotation.added": {
+        "known": [
+          "annotation",
+          "annotation.end_index",
+          "annotation.start_index",
+          "annotation.title",
+          "annotation.type",
+          "annotation.url",
+          "annotation_index",
+          "content_index",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "annotation",
+          "annotation.end_index",
+          "annotation.start_index",
+          "annotation.title",
+          "annotation.type",
+          "annotation.url",
+          "annotation_index",
+          "content_index",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "annotation.type": [
+            "url_citation"
+          ],
+          "type": [
+            "response.output_text.annotation.added"
+          ]
+        }
+      },
+      "response.output_text.delta": {
+        "known": [
+          "content_index",
+          "delta",
+          "item_id",
+          "logprobs",
+          "logprobs[]",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "content_index",
+          "delta",
+          "item_id",
+          "logprobs",
+          "logprobs[]",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.output_text.delta"
+          ]
+        }
+      },
+      "response.output_text.done": {
+        "known": [
+          "content_index",
+          "item_id",
+          "logprobs",
+          "logprobs[]",
+          "output_index",
+          "sequence_number",
+          "text",
+          "type"
+        ],
+        "expected": [
+          "content_index",
+          "item_id",
+          "logprobs",
+          "logprobs[]",
+          "output_index",
+          "sequence_number",
+          "text",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.output_text.done"
+          ]
+        }
+      },
+      "response.reasoning_summary_part.added": {
+        "known": [
+          "item_id",
+          "output_index",
+          "part",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "summary_index",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "part",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "summary_index",
+          "type"
+        ],
+        "values": {
+          "part.type": [
+            "summary_text"
+          ],
+          "type": [
+            "response.reasoning_summary_part.added"
+          ]
+        }
+      },
+      "response.reasoning_summary_part.done": {
+        "known": [
+          "item_id",
+          "output_index",
+          "part",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "summary_index",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "part",
+          "part.text",
+          "part.type",
+          "sequence_number",
+          "summary_index",
+          "type"
+        ],
+        "values": {
+          "part.type": [
+            "summary_text"
+          ],
+          "type": [
+            "response.reasoning_summary_part.done"
+          ]
+        }
+      },
+      "response.reasoning_summary_text.delta": {
+        "known": [
+          "delta",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "summary_index",
+          "type"
+        ],
+        "expected": [
+          "delta",
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "summary_index",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.reasoning_summary_text.delta"
+          ]
+        }
+      },
+      "response.reasoning_summary_text.done": {
+        "known": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "summary_index",
+          "text",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "summary_index",
+          "text",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.reasoning_summary_text.done"
+          ]
+        }
+      },
+      "response.web_search_call.completed": {
+        "known": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.web_search_call.completed"
+          ]
+        }
+      },
+      "response.web_search_call.in_progress": {
+        "known": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.web_search_call.in_progress"
+          ]
+        }
+      },
+      "response.web_search_call.searching": {
+        "known": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "expected": [
+          "item_id",
+          "output_index",
+          "sequence_number",
+          "type"
+        ],
+        "values": {
+          "type": [
+            "response.web_search_call.searching"
+          ]
+        }
+      }
+    }
+  }
+}

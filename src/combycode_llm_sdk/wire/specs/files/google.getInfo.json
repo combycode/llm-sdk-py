@@ -1,0 +1,5 @@
+{
+  "id": "google/files.getInfo",
+  "extends": "google/files.delete",
+  "envelope": { "method": "GET" }
+}

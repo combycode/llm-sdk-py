@@ -1,0 +1,33 @@
+{
+  "id": "anthropic/models.list",
+  "provider": "anthropic",
+  "api": "models",
+  "_note": "Reading the catalog from the provider itself. The SHAPE of the answer differs per provider and is parsed in code; only the request is described here.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": "https://api.anthropic.com/v1/models",
+    "headers": [
+      {
+        "name": "x-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      },
+      {
+        "name": "anthropic-version",
+        "value": {
+          "$config": "apiVersion"
+        }
+      },
+      {
+        "name": "anthropic-dangerous-direct-browser-access",
+        "value": "true",
+        "_note": "Only in a browser, where the request is otherwise blocked by CORS. The chat path sends it (messages.ts) and so do the files specs; models.list lost it when this request moved to a spec, because the header lived in the helper's own table.",
+        "when": {
+          "truthy": "browser"
+        }
+      }
+    ]
+  }
+}

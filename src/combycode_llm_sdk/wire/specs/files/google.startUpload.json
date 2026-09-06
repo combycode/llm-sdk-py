@@ -1,0 +1,63 @@
+{
+  "id": "google/files.startUpload",
+  "provider": "google",
+  "api": "files",
+  "_note": "Step 1 of a RESUMABLE upload. Step 2 posts the bytes to a URL the SERVER returns in x-goog-upload-url, so it is not spec data and is deliberately not modelled. Auth is the x-goog-api-key HEADER, never ?key= in the URL: a key in a query string is copied into every access log and telemetry span the request passes through.",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/upload/v1beta/files"
+      ]
+    },
+    "headers": [
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      },
+      {
+        "name": "X-Goog-Upload-Protocol",
+        "value": "resumable"
+      },
+      {
+        "name": "X-Goog-Upload-Command",
+        "value": "start"
+      },
+      {
+        "name": "X-Goog-Upload-Header-Content-Length",
+        "value": {
+          "$call": "stringify",
+          "$arg": {
+            "$": "byteLength"
+          }
+        }
+      },
+      {
+        "name": "X-Goog-Upload-Header-Content-Type",
+        "value": {
+          "$": "mimeType"
+        }
+      },
+      {
+        "name": "Content-Type",
+        "value": "application/json"
+      }
+    ]
+  },
+  "blocks": [
+    {
+      "name": "file",
+      "to": "file",
+      "template": {
+        "display_name": {
+          "$": "filename"
+        }
+      }
+    }
+  ]
+}

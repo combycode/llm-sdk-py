@@ -1,0 +1,56 @@
+{
+  "id": "google/generate.stream",
+  "_note": "Transposed from GoogleAdapter.streamEvents. `each` walks candidates[0].content.parts, which is the same per-part loop the buffered spec expresses with `collect`. The code-exec flag is latched in a rule BEFORE that walk, because a marker may share a chunk with its output file or precede it and it decides whether inlineData is an artifact or media.",
+
+  "state": {
+    "codeExec": { "kind": "scalar", "default": false },
+    "pendingCode": {
+      "kind": "scalar",
+      "default": null,
+      "_note": "Code from an executableCode part, carried onto the builtin_tool_end of a later one."
+    },
+    "webSearchEmitted": { "kind": "scalar", "default": false },
+    "urlFetchEmitted": { "kind": "scalar", "default": false }
+  },
+
+  "on": [
+    {
+      "_note": "No candidate: a usage-only chunk. Emits usage if present and returns either way.",
+      "when": { "not": { "defined": "raw.candidates.0" } },
+      "stop": true,
+      "default": {
+        "emit": "events",
+        "mode": "concat",
+        "as": { "$call": "googleStreamUsage" }
+      }
+    },
+    { "default": { "effect": "googleStreamLatchCodeExec" } },
+    {
+      "each": "raw.candidates.0.content.parts",
+      "default": [
+        { "emit": "events", "as": { "$call": "googleStreamText" } },
+        { "emit": "events", "as": { "$call": "googleStreamThinking" } },
+        { "effect": "googleStreamCodeExec" },
+        { "effect": "googleStreamInline" },
+        { "effect": "googleStreamToolCall" }
+      ]
+    },
+    {
+      "default": {
+        "emit": "events",
+        "mode": "concat",
+        "as": { "$call": "googleStreamCitations" }
+      }
+    },
+    { "default": { "effect": "googleStreamWebSearch" } },
+    { "default": { "effect": "googleStreamUrlFetch" } },
+    { "default": { "emit": "events", "as": { "$call": "googleStreamDone" } } },
+    {
+      "default": {
+        "emit": "events",
+        "mode": "concat",
+        "as": { "$call": "googleStreamUsage" }
+      }
+    }
+  ]
+}

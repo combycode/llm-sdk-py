@@ -1,0 +1,23 @@
+{
+  "id": "xai/retrieval.removeDocument",
+  "extends": "xai/retrieval.management",
+  "envelope": {
+    "method": "DELETE",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "managementBaseURL"
+        },
+        "/collections/",
+        {
+          "$": "corpusId"
+        },
+        "/documents/",
+        {
+          "$": "docId"
+        }
+      ]
+    }
+  }
+}

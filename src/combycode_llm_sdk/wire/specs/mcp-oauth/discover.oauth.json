@@ -1,0 +1,17 @@
+{
+  "id": "mcp-oauth/discover.oauth",
+  "extends": "mcp-oauth/base",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "origin"
+        },
+        "/.well-known/oauth-authorization-server"
+      ]
+    }
+  },
+  "_note": "Probed first; the OIDC document is the fallback when this one 404s. Both are read from the MCP server's ORIGIN, never from a URL the server supplied — that ordering is what keeps the SSRF guard meaningful."
+}

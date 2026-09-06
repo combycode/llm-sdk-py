@@ -1,0 +1,35 @@
+{
+  "id": "google/files.content",
+  "provider": "google",
+  "api": "files",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1beta/files/",
+        {
+          "$": "id"
+        },
+        ":download"
+      ]
+    },
+    "query": [
+      {
+        "name": "alt",
+        "value": "media"
+      }
+    ],
+    "headers": [
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      }
+    ]
+  }
+}

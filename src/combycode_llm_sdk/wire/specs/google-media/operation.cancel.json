@@ -1,0 +1,33 @@
+{
+  "id": "google/media.operation.cancel",
+  "provider": "google",
+  "api": "media",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1beta/",
+        {
+          "$": "operationId"
+        },
+        ":cancel"
+      ]
+    },
+    "headers": [
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      },
+      {
+        "name": "content-type",
+        "value": "application/json"
+      }
+    ]
+  },
+  "_note": "Cancel a long-running operation. The key rides on the query string, so the only header is the POST's content-type - unlike the status poll, which sends the x-goog-api-key header as well. Auth is the x-goog-api-key HEADER, never ?key= in the URL: a key in a query string is copied into every access log and telemetry span the request passes through."
+}

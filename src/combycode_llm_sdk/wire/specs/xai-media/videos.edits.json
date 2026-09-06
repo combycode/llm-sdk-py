@@ -1,0 +1,7 @@
+{ "id": "xai/videos.edits", "extends": "xai/media.base",
+  "_note": "videoMode 'edit'. Drops duration entirely — a sibling of extensions, not a child.",
+  "envelope": { "url": { "$join": [{ "$config": "baseURL" }, "/v1/videos/edits"] } },
+  "fields": [
+    { "from": "model", "to": "model", "default": "grok-imagine-video" },
+    { "from": "prompt", "to": "prompt" } ],
+  "blocks": [{ "name": "video", "to": "video", "template": { "$call": "xaiSourceVideoRef" } }] }

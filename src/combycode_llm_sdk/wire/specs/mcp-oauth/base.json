@@ -1,0 +1,14 @@
+{
+  "id": "mcp-oauth/base",
+  "provider": "mcp",
+  "api": "oauth",
+  "_note": "Every OAuth call asks for JSON back. Nothing here carries a credential in a header: the client secret goes in the form body, where RFC 6749 puts it for this client type.",
+  "envelope": {
+    "headers": [
+      {
+        "name": "accept",
+        "value": "application/json"
+      }
+    ]
+  }
+}

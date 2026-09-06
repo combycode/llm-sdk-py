@@ -1,0 +1,37 @@
+{
+  "id": "mcp-oauth/token.refresh",
+  "extends": "mcp-oauth/base",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$": "tokenEndpoint"
+    },
+    "bodyKind": "form",
+    "headers": [
+      {
+        "name": "content-type",
+        "value": "application/x-www-form-urlencoded"
+      }
+    ]
+  },
+  "fields": [
+    {
+      "from": "grant_type",
+      "to": "grant_type",
+      "default": "refresh_token"
+    },
+    {
+      "from": "refresh_token",
+      "to": "refresh_token"
+    },
+    {
+      "from": "client_id",
+      "to": "client_id"
+    },
+    {
+      "from": "client_secret",
+      "to": "client_secret",
+      "presence": "truthy"
+    }
+  ]
+}

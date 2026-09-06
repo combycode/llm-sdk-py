@@ -1,0 +1,846 @@
+{
+  "xai/grok-4.20": {
+    "providerModelName": "grok-4.20-0309-reasoning",
+    "aliases": [
+      "grok-4.20-0309-reasoning"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 2.5,
+      "cacheReadPerMTok": 0.2,
+      "tiers": {
+        "long-context": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 5,
+          "cacheReadPerMTok": 0.4
+        },
+        "batch": {
+          "inputPerMTok": 1,
+          "outputPerMTok": 2,
+          "cacheReadPerMTok": 0.16
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 2000000,
+    "maxOutput": 2000000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "grok",
+    "version": "4.20",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": true
+    }
+  },
+  "xai/grok-4.20-non-reasoning": {
+    "providerModelName": "grok-4.20-0309-non-reasoning",
+    "aliases": [
+      "grok-4.20-0309-non-reasoning"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 2.5,
+      "cacheReadPerMTok": 0.2,
+      "tiers": {
+        "long-context": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 5,
+          "cacheReadPerMTok": 0.4
+        },
+        "batch": {
+          "inputPerMTok": 1,
+          "outputPerMTok": 2,
+          "cacheReadPerMTok": 0.16
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "grok",
+    "version": "4.20",
+    "status": "stable",
+    "active": true,
+    "contextWindow": 1000000,
+    "wireSpec": "openai/responses",
+    "maxOutput": 1000000,
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": true
+    }
+  },
+  "xai/grok-4.20-multi-agent": {
+    "providerModelName": "grok-4.20-multi-agent-0309",
+    "aliases": [
+      "grok-4.20-multi-agent-0309"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 2.5,
+      "cacheReadPerMTok": 0.2,
+      "tiers": {
+        "long-context": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 5,
+          "cacheReadPerMTok": 0.4
+        },
+        "batch": {
+          "inputPerMTok": 1,
+          "outputPerMTok": 2,
+          "cacheReadPerMTok": 0.16
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 2000000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "grok",
+    "version": "4.20",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": true
+    }
+  },
+  "xai/grok-4.3": {
+    "providerModelName": "grok-4.3",
+    "aliases": [
+      "grok-4.3"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 2.5,
+      "cacheReadPerMTok": 0.2,
+      "tiers": {
+        "long-context": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 5,
+          "cacheReadPerMTok": 0.4
+        },
+        "batch": {
+          "inputPerMTok": 1,
+          "outputPerMTok": 2,
+          "cacheReadPerMTok": 0.16
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 1000000,
+    "maxOutput": 1000000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "grok",
+    "version": "4.3",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": true
+    }
+  },
+  "xai/grok-build-0.1": {
+    "providerModelName": "grok-build-0.1",
+    "aliases": [
+      "grok-build-0.1"
+    ],
+    "pricing": {
+      "inputPerMTok": 1,
+      "outputPerMTok": 2,
+      "cacheReadPerMTok": 0.2,
+      "tiers": {
+        "long-context": {
+          "inputPerMTok": 2,
+          "outputPerMTok": 4,
+          "cacheReadPerMTok": 0.4
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 256000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "code",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "grok",
+    "version": "0.1",
+    "status": "preview",
+    "active": true,
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": true
+    }
+  },
+  "xai/grok-imagine-image": {
+    "providerModelName": "grok-imagine-image",
+    "aliases": [
+      "grok-imagine-image"
+    ],
+    "pricing": {
+      "perUnit": {
+        "1k": 0.002,
+        "2k": 0.02
+      },
+      "perImage": 0.02
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": true,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "image",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "image"
+    ],
+    "family": "grok-imagine-image",
+    "version": "1",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "aspectRatio": {
+        "values": [
+          "1:1",
+          "3:4",
+          "4:3",
+          "9:16",
+          "16:9",
+          "2:3",
+          "3:2",
+          "9:19.5",
+          "19.5:9",
+          "9:20",
+          "20:9",
+          "1:2",
+          "2:1",
+          "auto"
+        ]
+      },
+      "resolution": {
+        "values": [
+          "1k",
+          "2k"
+        ]
+      }
+    },
+    "mediaOnly": true,
+    "tokenizer": {
+      "strategy": "heuristic",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false
+    }
+  },
+  "xai/grok-imagine-image-quality": {
+    "providerModelName": "grok-imagine-image-quality",
+    "aliases": [
+      "grok-imagine-image-quality"
+    ],
+    "pricing": {
+      "perUnit": {
+        "1k": 0.01,
+        "2k": 0.05
+      },
+      "perImage": 0.05
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": true,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "image",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "image"
+    ],
+    "family": "grok-imagine-image",
+    "version": "1",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "aspectRatio": {
+        "values": [
+          "1:1",
+          "3:4",
+          "4:3",
+          "9:16",
+          "16:9",
+          "2:3",
+          "3:2",
+          "9:19.5",
+          "19.5:9",
+          "9:20",
+          "20:9",
+          "1:2",
+          "2:1",
+          "auto"
+        ]
+      },
+      "resolution": {
+        "values": [
+          "1k",
+          "2k"
+        ]
+      }
+    },
+    "tokenizer": {
+      "strategy": "heuristic",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false
+    }
+  },
+  "xai/grok-imagine-video": {
+    "providerModelName": "grok-imagine-video",
+    "aliases": [
+      "grok-imagine-video"
+    ],
+    "pricing": {
+      "perSecond": 0.01,
+      "perUnit": {
+        "480p": 0.002,
+        "720p": 0.05
+      },
+      "perImage": 0.01
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": true,
+      "videoExtension": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "video",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "video"
+    ],
+    "family": "grok-imagine-video",
+    "version": "1",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "duration": {
+        "min": 1,
+        "max": 15,
+        "default": 8
+      },
+      "aspectRatio": {
+        "values": [
+          "1:1",
+          "16:9",
+          "9:16",
+          "4:3",
+          "3:4",
+          "3:2",
+          "2:3"
+        ]
+      },
+      "resolution": {
+        "values": [
+          "480p",
+          "720p",
+          "1080p"
+        ]
+      }
+    },
+    "mediaOnly": true,
+    "tokenizer": {
+      "strategy": "heuristic",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false
+    }
+  },
+  "xai/grok-imagine-video-1.5": {
+    "providerModelName": "grok-imagine-video-1.5",
+    "aliases": [
+      "grok-imagine-video-1.5",
+      "grok-imagine-video-1.5-preview"
+    ],
+    "pricing": {
+      "perSecond": 0.25,
+      "perUnit": {
+        "480p": 0.01,
+        "720p": 0.08,
+        "1080p": 0.14
+      },
+      "perImage": 0.01
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "video",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "video"
+    ],
+    "family": "grok-imagine-video",
+    "version": "1.5",
+    "status": "preview",
+    "active": true,
+    "mediaParams": {
+      "duration": {
+        "min": 1,
+        "max": 15,
+        "default": 8
+      },
+      "aspectRatio": {
+        "values": [
+          "1:1",
+          "16:9",
+          "9:16",
+          "4:3",
+          "3:4",
+          "3:2",
+          "2:3"
+        ]
+      },
+      "resolution": {
+        "values": [
+          "480p",
+          "720p",
+          "1080p"
+        ]
+      }
+    },
+    "tokenizer": {
+      "strategy": "heuristic",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false
+    }
+  },
+  "xai/grok-4.5": {
+    "providerModelName": "grok-4.5",
+    "aliases": [
+      "grok-4.5"
+    ],
+    "pricing": {
+      "inputPerMTok": 2,
+      "outputPerMTok": 6,
+      "cacheReadPerMTok": 0.5,
+      "tiers": {
+        "long-context": {
+          "inputPerMTok": 4,
+          "outputPerMTok": 12,
+          "cacheReadPerMTok": 1
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 500000,
+    "maxOutput": 500000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "grok",
+    "version": "4.5",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": true
+    }
+  },
+  "xai/grok-4.6": {
+    "providerModelName": "grok-4.6",
+    "aliases": [
+      "grok-4.6"
+    ],
+    "pricing": {
+      "inputPerMTok": 2,
+      "outputPerMTok": 6,
+      "cacheReadPerMTok": 0.5,
+      "tiers": {
+        "long-context": {
+          "inputPerMTok": 4,
+          "outputPerMTok": 12,
+          "cacheReadPerMTok": 1
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 500000,
+    "maxOutput": 500000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "grok",
+    "version": "4.6",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": true
+    },
+    "wireSpec": "openai/responses"
+  },
+  "xai/grok-imagine-image-2.0": {
+    "providerModelName": "grok-imagine-image-2.0",
+    "aliases": [
+      "grok-imagine-image-2.0"
+    ],
+    "pricing": {
+      "perImage": 0.06,
+      "perUnit": {
+        "1k": 0.01,
+        "2k": 0.04
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": true,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "image",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "image"
+    ],
+    "family": "grok-imagine-image",
+    "version": "2.0",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "aspectRatio": {
+        "values": [
+          "1:1",
+          "3:4",
+          "4:3",
+          "9:16",
+          "16:9",
+          "2:3",
+          "3:2",
+          "9:19.5",
+          "19.5:9",
+          "9:20",
+          "20:9",
+          "1:2",
+          "2:1",
+          "auto"
+        ]
+      },
+      "resolution": {
+        "values": [
+          "1k",
+          "2k"
+        ]
+      }
+    },
+    "tokenizer": {
+      "strategy": "heuristic",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false
+    },
+    "mediaOnly": true
+  }
+}

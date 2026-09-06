@@ -1,0 +1,8 @@
+{
+  "id": "anthropic/batch.getStatus",
+  "extends": "anthropic/batch.base",
+  "envelope": {
+    "method": "GET", "bodyKind": "none",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/messages/batches/", { "$": "batchId" }] }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "mcp-oauth/register",
+  "extends": "mcp-oauth/base",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$": "registrationEndpoint"
+    },
+    "headers": [
+      {
+        "name": "content-type",
+        "value": "application/json"
+      }
+    ]
+  },
+  "blocks": [
+    {
+      "name": "metadata",
+      "_note": "SEP-837: declare the OIDC application_type. MCP clients are overwhelmingly native (a local process with a loopback redirect), and some authorization servers apply stricter redirect-URI rules to `web` clients — omitting it lets the server guess, and the guess is usually `web`. The caller's own value wins, which is why the spread comes second.",
+      "template": {
+        "application_type": "native",
+        "$spread": {
+          "$": "metadata"
+        }
+      }
+    }
+  ]
+}

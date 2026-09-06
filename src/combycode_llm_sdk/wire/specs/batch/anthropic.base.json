@@ -1,0 +1,11 @@
+{
+  "id": "anthropic/batch.base",
+  "provider": "anthropic", "api": "batch",
+  "envelope": {
+    "headers": [
+      { "name": "x-api-key", "value": { "$config": "apiKey" } },
+      { "name": "anthropic-version", "value": { "$config": "apiVersion" } },
+      { "name": "content-type", "value": "application/json" }
+    ]
+  }
+}

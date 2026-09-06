@@ -1,0 +1,47 @@
+{
+  "id": "google/generate.response",
+  "_note": "Transposed from GoogleAdapter.parseResponse. Google's parts[] carries no type tag -- a part IS text because it has a `text` key -- so the collect rule has no discriminator and every rule guards itself by returning undefined, which mirrors the hand-written run of independent ifs.",
+
+  "accumulators": {
+    "content": { "kind": "array" },
+    "toolCalls": { "kind": "array" },
+    "media": { "kind": "array" },
+    "files": { "kind": "array", "omitEmpty": true },
+    "builtinToolCalls": { "kind": "array", "omitEmpty": true },
+    "thinking": { "kind": "scalar", "default": null }
+  },
+
+  "fields": [
+    { "to": "model", "value": "" }
+  ],
+
+  "collect": [
+    {
+      "from": "raw.candidates.0.content.parts",
+      "default": [
+        { "emit": "content", "as": { "$call": "googleTextPart" } },
+        { "emit": "thinking", "mode": "scalar", "as": { "$call": "googleThinking" } },
+        { "emit": "files", "as": { "$call": "googleInlineFile" } },
+        { "emit": ["content", "media"], "as": { "$call": "googleInlineMedia" } },
+        { "emit": ["content", "toolCalls"], "as": { "$call": "googleToolCall" } }
+      ]
+    }
+  ],
+
+  "finalize": [
+    {
+      "_note": "Hosted tools are decided from the whole parts array plus candidate metadata, not from any one part: Google issues no call ids.",
+      "emit": "builtinToolCalls",
+      "mode": "concat",
+      "as": { "$call": "googleBuiltinCalls" }
+    }
+  ],
+
+  "derive": {
+    "id": { "$call": "googleId" },
+    "text": { "$call": "googleText" },
+    "usage": { "$call": "googleUsageFull" },
+    "finishReason": { "$call": "googleFinish" },
+    "citations": { "$call": "googleCitations" }
+  }
+}

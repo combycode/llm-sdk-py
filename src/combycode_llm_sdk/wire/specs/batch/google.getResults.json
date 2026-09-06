@@ -1,0 +1,29 @@
+{
+  "id": "google/batch.getResults",
+  "provider": "google",
+  "api": "batch",
+  "_note": "Same wire as `google/batch.getStatus` - Google returns the results inline on the batch resource itself, so reading status and reading results are one request. Kept as its own id because they are two OPERATIONS, and a future divergence should be a diff here rather than a surprise. Auth is the x-goog-api-key HEADER, never ?key= in the URL: a key in a query string is copied into every access log and telemetry span the request passes through.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1beta/",
+        {
+          "$": "batchId"
+        }
+      ]
+    },
+    "headers": [
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      }
+    ]
+  }
+}

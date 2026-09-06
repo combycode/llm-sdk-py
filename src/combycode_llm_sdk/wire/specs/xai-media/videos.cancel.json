@@ -1,0 +1,34 @@
+{
+  "id": "xai/videos.cancel",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1/videos/",
+        {
+          "$": "operationId"
+        },
+        "/cancel"
+      ]
+    },
+    "headers": [
+      {
+        "name": "authorization",
+        "value": {
+          "$join": [
+            "Bearer ",
+            {
+              "$config": "apiKey"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "provider": "xai",
+  "api": "media",
+  "_note": "Cancel a video job. Standalone rather than extending xai/media.base, which adds a content-type this call does not send."
+}

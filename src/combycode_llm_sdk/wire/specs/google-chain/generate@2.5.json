@@ -1,0 +1,349 @@
+{
+  "id": "google/generate@2.5",
+  "provider": "google",
+  "api": "generate",
+  "_toolConstraints": "Measured 2026-08-25: Google answers 400 \"The mime type: X is not supported for code execution\" when codeExecution is sent with a PDF or a video part. Images are fine, googleSearch is fine, and OpenAI accepts every combination -- so this is one provider's rule, kept with that provider's spec.",
+  "toolConstraints": [
+    {
+      "tool": "code_interpreter",
+      "conflictsWith": {
+        "hasPartType": [
+          "document",
+          "video"
+        ]
+      },
+      "why": "google: code execution cannot run alongside a PDF or video attachment, so the request was sent without it"
+    }
+  ],
+  "tables": {
+    "toolMode": {
+      "auto": "AUTO",
+      "none": "NONE",
+      "required": "ANY"
+    },
+    "thinkingBudgets": {
+      "low": 2048,
+      "medium": 8192,
+      "high": 16384,
+      "max": 24576
+    },
+    "thinkingLevels": {
+      "low": "LOW",
+      "medium": "MEDIUM",
+      "high": "HIGH",
+      "max": "HIGH"
+    },
+    "includeThoughts": {
+      "full": true,
+      "summary": true,
+      "hidden": false
+    }
+  },
+  "fields": [
+    {
+      "from": "maxTokens",
+      "to": "generationConfig.maxOutputTokens",
+      "presence": "truthy"
+    },
+    {
+      "from": "temperature",
+      "to": "generationConfig.temperature"
+    },
+    {
+      "from": "topP",
+      "to": "generationConfig.topP"
+    },
+    {
+      "from": "topK",
+      "to": "generationConfig.topK"
+    },
+    {
+      "from": "seed",
+      "to": "generationConfig.seed"
+    },
+    {
+      "from": "presencePenalty",
+      "to": "generationConfig.presencePenalty"
+    },
+    {
+      "from": "frequencyPenalty",
+      "to": "generationConfig.frequencyPenalty"
+    },
+    {
+      "from": "stop",
+      "to": "generationConfig.stopSequences",
+      "presence": "truthy"
+    },
+    {
+      "from": "serviceTier",
+      "to": "serviceTier",
+      "presence": "truthy",
+      "call": "googleTier"
+    },
+    {
+      "from": "toolChoice",
+      "to": "toolConfig.functionCallingConfig.mode",
+      "presence": "truthy",
+      "table": "toolMode",
+      "tableDefault": "AUTO"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "contents",
+      "call": "googleContents",
+      "to": "contents"
+    },
+    {
+      "name": "generationConfig.root",
+      "to": "generationConfig",
+      "merge": true,
+      "template": {},
+      "note": "generationConfig is always present, even when empty"
+    },
+    {
+      "name": "audio.output",
+      "when": {
+        "includes": [
+          "outputModalities",
+          "audio"
+        ]
+      },
+      "to": "generationConfig",
+      "merge": true,
+      "template": {
+        "responseModalities": [
+          "AUDIO"
+        ],
+        "speechConfig": {
+          "$when": {
+            "pred": "googleHasVoice"
+          },
+          "$value": {
+            "voiceConfig": {
+              "prebuiltVoiceConfig": {
+                "voiceName": {
+                  "$call": "resolveVoiceGoogle"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "system",
+      "when": {
+        "truthy": "system"
+      },
+      "to": "systemInstruction",
+      "template": {
+        "parts": [
+          {
+            "text": {
+              "$": "system"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "tools",
+      "when": {
+        "any": [
+          {
+            "hasFunctionTool": true
+          },
+          {
+            "hasTool": "web_search"
+          },
+          {
+            "hasTool": "code_interpreter"
+          },
+          {
+            "hasTool": "web_fetch"
+          },
+          {
+            "hasTool": "file_search"
+          }
+        ]
+      },
+      "to": "tools",
+      "template": [
+        {
+          "$when": {
+            "hasFunctionTool": true
+          },
+          "$value": {
+            "functionDeclarations": {
+              "$map": "tools",
+              "$dropUnmatched": true,
+              "$case": [
+                {
+                  "when": {
+                    "isFunctionTool": true
+                  },
+                  "value": {
+                    "name": {
+                      "$": "@name"
+                    },
+                    "description": {
+                      "$": "@description"
+                    },
+                    "parametersJsonSchema": {
+                      "$": "@parameters"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "$when": {
+            "hasTool": "web_search"
+          },
+          "$value": {
+            "googleSearch": {}
+          }
+        },
+        {
+          "$when": {
+            "hasTool": "code_interpreter"
+          },
+          "$value": {
+            "codeExecution": {}
+          }
+        },
+        {
+          "$when": {
+            "hasTool": "web_fetch"
+          },
+          "$value": {
+            "urlContext": {}
+          }
+        },
+        {
+          "$note": "Gemini's hosted corpus tool. Shape from the official SDK: Tool.fileSearch = { fileSearchStoreNames, metadataFilter? }. Mapped through $each because the params come from the CALLER's tool entry, not from a constant like googleSearch.",
+          "$each": {
+            "$map": "tools",
+            "$dropUnmatched": true,
+            "$case": [
+              {
+                "when": {
+                  "builtin": "file_search"
+                },
+                "value": {
+                  "fileSearch": {
+                    "$spread": {
+                      "$": "@params"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "thinking.budget",
+      "when": {
+        "all": [
+          {
+            "truthy": "thinking"
+          },
+          {
+            "ne": [
+              "thinking.mode",
+              "off"
+            ]
+          }
+        ]
+      },
+      "to": "generationConfig.thinkingConfig",
+      "template": {
+        "includeThoughts": {
+          "$table": "includeThoughts",
+          "$key": "thinking.visibility",
+          "$default": true
+        },
+        "thinkingBudget": {
+          "$table": "thinkingBudgets",
+          "$key": "thinking.effort",
+          "$default": 16384
+        }
+      }
+    },
+    {
+      "name": "thinking.off.budget",
+      "_note": "0 is the SDK's documented DISABLED. Measured: gemini-2.5-flash and -flash-lite return thoughtsTokenCount=0; 2.5-pro refuses (the catalog marks it canDisable:false, and the client drops the request before it is built).",
+      "when": {
+        "eq": [
+          "thinking.mode",
+          "off"
+        ]
+      },
+      "to": "generationConfig.thinkingConfig",
+      "template": {
+        "thinkingBudget": 0
+      }
+    },
+    {
+      "name": "structured",
+      "when": {
+        "truthy": "structured"
+      },
+      "to": "generationConfig",
+      "merge": true,
+      "template": {
+        "responseMimeType": "application/json",
+        "responseJsonSchema": {
+          "$": "structured.schema"
+        }
+      }
+    },
+    {
+      "name": "passthrough.generationConfig",
+      "when": {
+        "truthy": "providerOptions"
+      },
+      "to": "generationConfig",
+      "merge": true,
+      "note": "runs after audio.output so an explicit responseModalities wins, as today; gated so it does not silently re-create generationConfig when there is nothing to pass through",
+      "template": {
+        "responseModalities": {
+          "$": "providerOptions.responseModalities"
+        },
+        "speechConfig": {
+          "$": "providerOptions.speechConfig"
+        },
+        "imageConfig": {
+          "$": "providerOptions.imageConfig"
+        },
+        "translationConfig": {
+          "$": "providerOptions.translationConfig"
+        }
+      }
+    },
+    {
+      "name": "passthrough.cachedContent",
+      "when": {
+        "truthy": "providerOptions.cachedContent"
+      },
+      "to": "cachedContent",
+      "template": {
+        "$call": "stringOnly",
+        "$arg": {
+          "$": "providerOptions.cachedContent"
+        }
+      }
+    }
+  ],
+  "envelope": {
+    "path": {
+      "$call": "googleGeneratePath"
+    }
+  },
+  "_note": "Gemini 2.5: thinkingBudget in tokens."
+}

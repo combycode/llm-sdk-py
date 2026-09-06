@@ -1,0 +1,13 @@
+{
+  "id": "openai/media.base",
+  "provider": "openai",
+  "api": "media",
+  "_note": "Everything OpenAI media shares: bearer auth, JSON, POST. The endpoints below differ in body and URL, not in transport.",
+  "envelope": {
+    "method": "POST",
+    "headers": [
+      { "name": "authorization", "value": { "$join": ["Bearer ", { "$config": "apiKey" }] } },
+      { "name": "content-type", "value": "application/json" }
+    ]
+  }
+}

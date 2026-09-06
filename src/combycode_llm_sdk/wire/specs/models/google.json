@@ -1,0 +1,19 @@
+{
+  "id": "google/models.list",
+  "provider": "google",
+  "api": "models",
+  "_note": "Reading the catalog from the provider itself. The SHAPE of the answer differs per provider and is parsed in code; only the request is described here.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models",
+    "headers": [
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      }
+    ]
+  }
+}

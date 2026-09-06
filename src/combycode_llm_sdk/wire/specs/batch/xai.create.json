@@ -1,0 +1,11 @@
+{
+  "id": "xai/batch.create",
+  "extends": "xai/batch.base",
+  "_note": "Step 1 of submit. Previously unmodellable: the body embedded Date.now(). Report 039 A3 made the name a function of the batch contents, so the request is reproducible and specced like everything else.",
+  "envelope": {
+    "method": "POST",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/batches"] },
+    "headers": [{ "name": "content-type", "value": "application/json" }]
+  },
+  "blocks": [{ "name": "name", "to": "name", "template": { "$call": "xaiBatchName" } }]
+}

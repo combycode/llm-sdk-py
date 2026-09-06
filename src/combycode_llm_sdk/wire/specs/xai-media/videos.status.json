@@ -1,0 +1,34 @@
+{
+  "id": "xai/videos.status",
+  "_note": "Poll a video job. All three xAI video endpoints (generations, extensions, edits) return a request_id polled here. Deliberately NOT extending xai/media.base: that base adds content-type for the JSON posts, and these GETs have no body. Inherited headers merge by name rather than replace, so sending fewer means declaring them here.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1/videos/",
+        {
+          "$": "operationId"
+        }
+      ]
+    },
+    "headers": [
+      {
+        "name": "authorization",
+        "value": {
+          "$join": [
+            "Bearer ",
+            {
+              "$config": "apiKey"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "provider": "xai",
+  "api": "media"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "openai/moderations",
+  "provider": "openai", "api": "moderation",
+  "_note": "Report-only content classification. `input` passes through untouched: it may be a string, an array of strings, or content parts, and the API accepts all three.",
+  "envelope": {
+    "method": "POST",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/moderations"] },
+    "headers": [
+      { "name": "authorization", "value": { "$join": ["Bearer ", { "$config": "apiKey" }] } },
+      { "name": "content-type", "value": "application/json" }
+    ]
+  },
+  "fields": [{ "from": "model", "to": "model" }],
+  "blocks": [{ "name": "input", "to": "input", "template": { "$": "input" } }]
+}

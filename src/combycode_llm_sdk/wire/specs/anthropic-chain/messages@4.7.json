@@ -1,0 +1,8 @@
+{
+  "id": "anthropic/messages@4.7",
+  "extends": "anthropic/messages@4.6",
+  "_note": "top_k deprecated: models from 4.7 reject it with a 400.",
+  "removeFields": [
+    "top_k"
+  ]
+}

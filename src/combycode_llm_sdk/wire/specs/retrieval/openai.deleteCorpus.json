@@ -1,0 +1,19 @@
+{
+  "id": "openai/retrieval.deleteCorpus",
+  "extends": "openai/retrieval.json",
+  "envelope": {
+    "method": "DELETE",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1/vector_stores/",
+        {
+          "$": "corpusId"
+        }
+      ]
+    }
+  }
+}

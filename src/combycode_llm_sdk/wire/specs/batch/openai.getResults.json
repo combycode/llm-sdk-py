@@ -1,0 +1,9 @@
+{
+  "id": "openai/batch.getResults",
+  "extends": "openai/batch.base",
+  "_note": "The SECOND call of the results flow. The first is `openai/batch.getStatus`, which returns `output_file_id`; this fetches that file's contents. It is JSONL, so the adapter decodes it as text - the spec describes the request, and the response type is the engine's business.",
+  "envelope": {
+    "method": "GET", "bodyKind": "none",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/files/", { "$": "fileId" }, "/content"] }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "openai/batch.cancel",
+  "extends": "openai/batch.base",
+  "_note": "Cancel posts an EMPTY body rather than none: OpenAI's endpoint takes no fields, but it is a POST and the adapter has always sent `{}`. `bodyKind: none` would drop the body entirely, which is a different request.",
+  "envelope": {
+    "method": "POST",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/batches/", { "$": "batchId" }, "/cancel"] }
+  }
+}

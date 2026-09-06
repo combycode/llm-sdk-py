@@ -1,0 +1,45 @@
+{
+  "id": "anthropic/messages.pins",
+  "spec": "anthropic/messages",
+  "_note": "Which chain node an Anthropic model uses when the catalog has no pin for it - a model newer than this build, or an engine running without a catalog. Data rather than code, so the Python and Rust ports derive the same node from the same file instead of each re-implementing the version arithmetic. Rules are ordered; the first match wins.",
+  "_bands": "The chain is keyed on two independent questions: adaptive vs budgeted thinking (4.6 is the boundary) and whether top_k is still accepted (retired after Opus 4.6). Four combinations, four nodes.",
+  "rules": [
+    {
+      "match": "^claude-(opus|sonnet)-4-6($|[^0-9])",
+      "spec": "anthropic/messages@4.6",
+      "why": "adaptive thinking AND still accepts top_k - the only band where both are true"
+    },
+    {
+      "match": "^claude-(opus-4-(1|5)|sonnet-4-5|haiku-4-5)($|[^0-9])",
+      "spec": "anthropic/messages@4.1",
+      "why": "budgeted thinking, top_k accepted"
+    },
+    {
+      "match": "^claude-[0-9]",
+      "spec": "anthropic/messages@4.0",
+      "why": "legacy family-last ids (claude-3-5-sonnet) - all predate extended thinking"
+    },
+    {
+      "match": "^claude-[a-z]+-4$",
+      "spec": "anthropic/messages@4.0",
+      "why": "4.0 with no minor at all"
+    },
+    {
+      "match": "^claude-[a-z]+-4-[0-9]{5,}",
+      "spec": "anthropic/messages@4.0",
+      "why": "4.0 carrying a release DATE. Five digits or more is a date, not a minor - reading one as the other is exactly the bug fixed in 2.3.0, where claude-opus-4-20250514 parsed as minor 20250514 and cleared the 4.6 test"
+    },
+    {
+      "match": "^claude-[a-z]+-4-[0-5]($|[^0-9])",
+      "spec": "anthropic/messages@4.0",
+      "why": "minor 0-5 that the top_k allow-list above did not claim"
+    },
+    {
+      "match": "^claude-[a-z]+-4[.][0-5]($|[^0-9])",
+      "spec": "anthropic/messages@4.0",
+      "why": "DOTTED slugs below 4.6. These get no top_k where the hyphenated form of the same model would - the retired allow-list only ever matched hyphens. Omitting top_k is a no-op and sending it to a model that retired it is a 400, so the asymmetry keeps this the safe side. Catalogued models are unaffected: they carry an explicit pin."
+    }
+  ],
+  "default": "anthropic/messages@4.7",
+  "_default": "Anything unrecognised is far likelier to be NEWER than this build than older, and the newest node is the fail-safe one: adaptive thinking, no top_k."
+}

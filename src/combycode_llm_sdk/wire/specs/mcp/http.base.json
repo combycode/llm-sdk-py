@@ -1,0 +1,61 @@
+{
+  "id": "mcp/http.base",
+  "provider": "mcp",
+  "api": "streamable-http",
+  "envelope": {
+    "url": {
+      "$config": "url"
+    },
+    "headers": [
+      {
+        "name": "content-type",
+        "value": "application/json"
+      },
+      {
+        "name": "accept",
+        "value": "application/json, text/event-stream"
+      },
+      {
+        "spread": {
+          "$config": "headers"
+        },
+        "_note": "headers the caller configured on the server entry"
+      },
+      {
+        "name": "mcp-session-id",
+        "value": {
+          "$": "sessionId"
+        },
+        "_note": "The 2026 wire is stateless: there is no session to identify, and echoing a stale id invites a header/body mismatch (-32020).",
+        "when": {
+          "all": [
+            {
+              "truthy": "sessionId"
+            },
+            {
+              "ne": [
+                "era",
+                "modern"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "mcp-protocol-version",
+        "value": {
+          "$": "protocolVersion"
+        },
+        "when": {
+          "truthy": "protocolVersion"
+        }
+      },
+      {
+        "spread": {
+          "$": "authHeaders"
+        },
+        "_note": "resolved OAuth bearer, if the server needs one"
+      }
+    ]
+  }
+}

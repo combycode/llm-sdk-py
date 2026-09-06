@@ -1,0 +1,10 @@
+{
+  "id": "openai/batch.uploadJsonl",
+  "extends": "openai/batch.base",
+  "_note": "Step 1 of submit: the batch is a JSONL FILE upload with purpose=batch, then step 2 creates the batch from the returned file id.",
+  "envelope": {
+    "method": "POST", "bodyKind": "multipart",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/files"] }
+  },
+  "multipart": [{ "name": "file", "file": true }, { "name": "purpose", "value": "batch" }]
+}

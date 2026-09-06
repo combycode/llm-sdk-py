@@ -1,0 +1,27 @@
+{
+  "id": "xai/retrieval.uploadFile",
+  "extends": "xai/retrieval.standard",
+  "_note": "Uploads go to the STANDARD plane, and drop content-type so the multipart boundary survives.",
+  "envelope": {
+    "method": "POST",
+    "bodyKind": "multipart",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/files"
+      ]
+    }
+  },
+  "multipart": [
+    {
+      "name": "file",
+      "file": true
+    },
+    {
+      "name": "purpose",
+      "value": "assistants"
+    }
+  ]
+}

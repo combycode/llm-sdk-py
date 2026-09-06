@@ -1,0 +1,58 @@
+{
+  "id": "xai/retrieval.search",
+  "extends": "xai/retrieval.standardJson",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/documents/search"
+      ]
+    }
+  },
+  "tables": {
+    "mode": {
+      "hybrid": "hybrid",
+      "keyword": "keyword",
+      "semantic": "semantic"
+    }
+  },
+  "fields": [
+    {
+      "from": "query",
+      "to": "query"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "source",
+      "to": "source",
+      "template": {
+        "collection_ids": {
+          "$map": "corpusIds",
+          "$case": [
+            {
+              "value": {
+                "$": "@"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "retrievalMode",
+      "_note": "An unknown mode falls back to the default here rather than being rejected by the API. The table IS the allow-list.",
+      "to": "retrieval_mode",
+      "template": {
+        "type": {
+          "$table": "mode",
+          "$key": "searchMode",
+          "$default": "hybrid"
+        }
+      }
+    }
+  ]
+}

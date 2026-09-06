@@ -1,0 +1,7 @@
+{ "id": "openrouter/media.image", "extends": "openrouter/media.base",
+  "blocks": [
+    { "name": "modalities", "to": "modalities", "template": ["image", "text"] },
+    { "name": "messages", "to": "messages",
+      "template": [{ "role": "user", "content": [{ "type": "text", "text": { "$": "prompt" } }] }] },
+    { "name": "image_config", "when": { "pred": "openrouterHasImageConfig" }, "to": "image_config",
+      "template": { "$call": "openrouterImageConfig" } } ] }

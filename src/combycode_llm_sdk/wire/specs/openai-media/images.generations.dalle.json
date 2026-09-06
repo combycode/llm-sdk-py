@@ -1,0 +1,8 @@
+{
+  "id": "openai/images.generations@dall-e",
+  "extends": "openai/images.generations",
+  "_note": "dall-e-2 / dall-e-3 still need an explicit response_format. gpt-image-1 always returns b64_json and REJECTS the parameter, so the newer model is the parent and the legacy branch adds the field — a family branch, not a version step.",
+  "blocks": [
+    { "name": "responseFormat", "to": "response_format", "template": "b64_json" }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "id": "openrouter/embeddings",
+  "extends": "openai/embeddings",
+  "_note": "OpenAI-compatible, different host and path prefix. The only delta is the URL — a sibling, expressed as one override.",
+  "envelope": { "url": { "$join": [{ "$config": "baseURL" }, "/api/v1/embeddings"] } }
+}

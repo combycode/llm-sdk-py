@@ -1,0 +1,35 @@
+{
+  "id": "openai/files.content",
+  "provider": "openai",
+  "api": "files",
+  "_note": "Also serves xAI and OpenRouter, which are OpenAI-compatible here and differ only by base URL.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1/files/",
+        {
+          "$": "id"
+        },
+        "/content"
+      ]
+    },
+    "headers": [
+      {
+        "name": "authorization",
+        "value": {
+          "$join": [
+            "Bearer ",
+            {
+              "$config": "apiKey"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

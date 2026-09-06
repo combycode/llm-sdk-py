@@ -1,0 +1,6 @@
+{
+  "id": "mcp/http.longLived",
+  "extends": "mcp/http.request",
+  "_note": "subscriptions/listen: the POST's RESPONSE BODY is the event stream. Both media types are offered exactly as an ordinary POST does — a modern server answers `text/event-stream` alone with 406 and an empty body, so the subscription would be rejected before it began.",
+  "envelope": {}
+}

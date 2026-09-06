@@ -1,0 +1,9 @@
+{
+  "id": "mcp/http.close",
+  "extends": "mcp/http.base",
+  "_note": "Session termination. Best-effort: a server that does not support it answers 405.",
+  "envelope": {
+    "method": "DELETE",
+    "bodyKind": "none"
+  }
+}

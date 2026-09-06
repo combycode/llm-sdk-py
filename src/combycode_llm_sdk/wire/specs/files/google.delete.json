@@ -1,0 +1,29 @@
+{
+  "id": "google/files.delete",
+  "provider": "google",
+  "api": "files",
+  "_note": "Query-string auth and NO headers at all — unlike every other Google surface. Auth is the x-goog-api-key HEADER, never ?key= in the URL: a key in a query string is copied into every access log and telemetry span the request passes through.",
+  "envelope": {
+    "method": "DELETE",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1beta/files/",
+        {
+          "$": "name"
+        }
+      ]
+    },
+    "headers": [
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      }
+    ]
+  }
+}

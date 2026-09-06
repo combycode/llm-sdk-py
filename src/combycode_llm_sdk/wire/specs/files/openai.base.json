@@ -1,0 +1,8 @@
+{
+  "id": "openai/files.base",
+  "provider": "openai", "api": "files",
+  "_note": "Bearer only — no content-type, because the upload is multipart and the rest carry no body.",
+  "envelope": {
+    "headers": [{ "name": "authorization", "value": { "$join": ["Bearer ", { "$config": "apiKey" }] } }]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "mcp/http.message",
+  "extends": "mcp/http.base",
+  "_note": "An already-formed JSON-RPC object going back to the server — the client's RESPONSE to a server-initiated request. The base transport builds the payload (result or error), so the spec owns the envelope and passes the message through rather than re-deriving a shape it does not decide. No routing headers: a response is not a method call.",
+  "envelope": {
+    "method": "POST"
+  },
+  "blocks": [
+    {
+      "name": "message",
+      "template": {
+        "$spread": {
+          "$": "message"
+        }
+      }
+    }
+  ]
+}

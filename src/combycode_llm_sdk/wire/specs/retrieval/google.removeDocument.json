@@ -1,0 +1,20 @@
+{
+  "id": "google/retrieval.removeDocument",
+  "extends": "google/retrieval.json",
+  "_note": "docId is a Files API resource name (`files/abc`), so it carries its own collection segment.",
+  "envelope": {
+    "method": "DELETE",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1beta/",
+        {
+          "$": "docId"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "openai/files.upload",
+  "extends": "openai/files.base",
+  "envelope": {
+    "method": "POST",
+    "bodyKind": "multipart",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/files"] }
+  },
+  "multipart": [{ "name": "file", "file": true }, { "name": "purpose", "value": "user_data" }]
+}

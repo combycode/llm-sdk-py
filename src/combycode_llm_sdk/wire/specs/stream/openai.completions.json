@@ -1,0 +1,71 @@
+{
+  "id": "openai/completions.stream",
+  "_note": "Transposed from OpenAIAdapter.parseStreamEvent. Chat Completions chunks are not a discriminated union: every chunk has the same shape and the meaning is in which fields of choices[0].delta are populated. So this is one ordered list of self-guarding rules, which is what the hand-written parser is. The two `stop` rules are its two early returns.",
+
+  "state": {
+    "toolIdByIndex": {
+      "kind": "scalar",
+      "default": {},
+      "_note": "Only the first fragment of a tool call carries an id; the argument fragments are correlated by index."
+    },
+    "audio": {
+      "kind": "scalar",
+      "default": { "open": false },
+      "_note": "Whether the audio media block has been opened, so media_start fires once."
+    }
+  },
+
+  "on": [
+    {
+      "_note": "Moderation arrives on its own chunk and returns early -- but only when it actually produced entries, which is what the predicate checks.",
+      "when": { "pred": "openaiStreamHasModeration" },
+      "stop": true,
+      "default": {
+        "emit": "events",
+        "mode": "concat",
+        "as": { "$call": "openaiStreamModeration" }
+      }
+    },
+    {
+      "_note": "No choices: the usage-only chunk from stream_options.include_usage. Emits usage if present and returns either way.",
+      "when": { "not": { "defined": "raw.choices.0" } },
+      "stop": true,
+      "default": {
+        "emit": "events",
+        "mode": "concat",
+        "as": { "$call": "openaiStreamUsage" }
+      }
+    },
+    {
+      "default": [
+        {
+          "_note": "reasoning_content comes from OpenAI-compatible providers (DeepSeek, xAI via Chat Completions), never from OpenAI itself.",
+          "when": { "truthy": "raw.choices.0.delta.reasoning_content" },
+          "emit": "events",
+          "as": {
+            "type": "thinking",
+            "text": { "$": "raw.choices.0.delta.reasoning_content" }
+          }
+        },
+        {
+          "when": { "truthy": "raw.choices.0.delta.content" },
+          "emit": "events",
+          "as": { "type": "text", "text": { "$": "raw.choices.0.delta.content" } }
+        },
+        { "effect": "openaiStreamAudio" },
+        {
+          "emit": "events",
+          "mode": "concat",
+          "as": { "$call": "openaiStreamCitations" }
+        },
+        { "effect": "openaiStreamToolCalls" },
+        { "emit": "events", "as": { "$call": "openaiStreamDone" } },
+        {
+          "emit": "events",
+          "mode": "concat",
+          "as": { "$call": "openaiStreamUsage" }
+        }
+      ]
+    }
+  ]
+}

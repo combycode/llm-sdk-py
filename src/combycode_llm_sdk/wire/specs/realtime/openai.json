@@ -1,0 +1,61 @@
+{
+  "id": "openai/realtime",
+  "provider": "openai",
+  "api": "realtime",
+  "_note": "A realtime session is three outbound artifacts, not one request: the connection descriptor, the handshake frame, and the per-turn frames. OpenAI authenticates in the WebSocket subprotocol list and is ready to send as soon as the socket opens.",
+  "tables": {},
+  "operations": {
+    "connect": {
+      "url": { "$join": ["wss://api.openai.com/v1/realtime?model=", { "$": "model" }] },
+      "protocols": ["realtime", { "$join": ["openai-insecure-api-key.", { "$config": "apiKey" }] }]
+    },
+    "open": {
+      "frames": [
+        {
+          "name": "session.update",
+          "template": {
+            "type": "session.update",
+            "session": {
+              "type": "realtime",
+              "output_modalities": { "$": "modalities", "$default": ["text"] },
+              "instructions": { "$when": { "truthy": "instructions" }, "$value": { "$": "instructions" } },
+              "audio": {
+                "$when": { "truthy": "voice" },
+                "$value": { "output": { "voice": { "$": "voice" } } }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "send": {
+      "frames": [
+        {
+          "name": "conversation.item.create",
+          "template": {
+            "type": "conversation.item.create",
+            "item": {
+              "type": "message",
+              "role": "user",
+              "content": [
+                {
+                  "$when": { "pred": "realtimeHasText" },
+                  "$value": { "type": "input_text", "text": { "$": "text" } }
+                },
+                {
+                  "$when": { "truthy": "audio" },
+                  "$value": { "type": "input_audio", "audio": { "$call": "realtimeAudioBase64" } }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "response.create",
+          "when": { "ne": ["turnComplete", false] },
+          "template": { "type": "response.create" }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "openrouter/models.list",
+  "provider": "openrouter",
+  "api": "models",
+  "_note": "Reading the catalog from the provider itself. The SHAPE of the answer differs per provider and is parsed in code; only the request is described here.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": "https://openrouter.ai/api/v1/models",
+    "headers": [
+      {
+        "name": "authorization",
+        "value": {
+          "$join": [
+            "Bearer ",
+            {
+              "$config": "apiKey"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

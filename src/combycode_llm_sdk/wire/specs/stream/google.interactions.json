@@ -1,0 +1,47 @@
+{
+  "id": "google/interactions.stream",
+  "_note": "Transposed from GoogleInteractionsAdapter.streamEvents. The discriminator is `event_type ?? type`, which is what the match LIST expresses. interaction.created / status_update / requires_action map to no unified event and are simply absent from the cases.",
+
+  "state": {
+    "callId": {
+      "kind": "scalar",
+      "default": null,
+      "_note": "The open function call: its argument fragments and its close carry only an index."
+    },
+    "sawToolCall": {
+      "kind": "scalar",
+      "default": false,
+      "_note": "Decides the finish reason on the terminal frame."
+    }
+  },
+
+  "on": [
+    {
+      "match": ["event_type", "type"],
+      "cases": {
+        "step.start": { "effect": "gaStreamStepStart" },
+        "step.delta": [
+          {
+            "when": { "eq": ["raw.delta.type", "text"] },
+            "emit": "events",
+            "as": { "type": "text", "text": { "$": "raw.delta.text", "$default": "" } }
+          },
+          {
+            "when": { "eq": ["raw.delta.type", "thought_summary"] },
+            "emit": "events",
+            "as": { "type": "thinking", "text": { "$": "raw.delta.text", "$default": "" } }
+          },
+          {
+            "_note": "thought_signature and other delta kinds are internal, so they map to nothing.",
+            "when": { "eq": ["raw.delta.type", "arguments_delta"] },
+            "emit": "events",
+            "as": { "$call": "gaStreamArgsDelta" }
+          }
+        ],
+        "step.stop": { "effect": "gaStreamStepStop" },
+        "interaction.completed": { "effect": "gaStreamCompleted" },
+        "interaction.failed": { "effect": "gaStreamCompleted" }
+      }
+    }
+  ]
+}

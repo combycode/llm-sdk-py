@@ -1,0 +1,70 @@
+{
+  "id": "google/batch.submit",
+  "provider": "google",
+  "api": "batch",
+  "_note": "Gemini inline batch: requests nest as batch.inputConfig.requests.requests, each {request, metadata:{key}}. The flat {requests:[...]} shape is rejected with \"Unknown name 'requests'\". Auth is the x-goog-api-key HEADER, never ?key= in the URL: a key in a query string is copied into every access log and telemetry span the request passes through.",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1beta/models/",
+        {
+          "$config": "model"
+        },
+        ":batchGenerateContent"
+      ]
+    },
+    "headers": [
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      },
+      {
+        "name": "content-type",
+        "value": "application/json"
+      }
+    ]
+  },
+  "blocks": [
+    {
+      "name": "batch",
+      "to": "batch",
+      "template": {
+        "displayName": {
+          "$join": [
+            "orxa-batch-",
+            {
+              "$call": "requestCount"
+            }
+          ]
+        },
+        "inputConfig": {
+          "requests": {
+            "requests": {
+              "$map": "requests",
+              "$case": [
+                {
+                  "value": {
+                    "request": {
+                      "$": "@body"
+                    },
+                    "metadata": {
+                      "key": {
+                        "$": "@customId"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

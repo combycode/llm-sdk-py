@@ -1,0 +1,136 @@
+{
+  "id": "google/realtime",
+  "provider": "google",
+  "api": "realtime",
+  "_note": "Gemini Live. Authenticates with a query-string key, names the model inside the setup frame rather than the URL, and defers readiness until the server answers setupComplete — so the same three operations carry very different content. The query key is deliberate here and ONLY here: this is a WebSocket handshake, and a browser cannot set a header on one. Every HTTP endpoint uses x-goog-api-key instead.",
+  "tables": {
+    "responseModality": {
+      "audio": "AUDIO",
+      "text": "TEXT"
+    }
+  },
+  "operations": {
+    "connect": {
+      "url": {
+        "$join": [
+          {
+            "$config": "wsBase"
+          },
+          "/ws/google.ai.generativelanguage.",
+          {
+            "$config": "apiVersion"
+          },
+          ".GenerativeService.BidiGenerateContent?key=",
+          {
+            "$config": "apiKey"
+          }
+        ]
+      }
+    },
+    "open": {
+      "frames": [
+        {
+          "name": "setup",
+          "template": {
+            "setup": {
+              "model": {
+                "$call": "googleModelPath"
+              },
+              "generationConfig": {
+                "responseModalities": {
+                  "$map": "modalities",
+                  "$mapDefault": [
+                    "text"
+                  ],
+                  "$case": [
+                    {
+                      "when": {
+                        "itemEq": "audio"
+                      },
+                      "value": "AUDIO"
+                    },
+                    {
+                      "value": "TEXT"
+                    }
+                  ]
+                },
+                "speechConfig": {
+                  "$when": {
+                    "truthy": "voice"
+                  },
+                  "$value": {
+                    "voiceConfig": {
+                      "prebuiltVoiceConfig": {
+                        "voiceName": {
+                          "$": "voice"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "systemInstruction": {
+                "$when": {
+                  "truthy": "instructions"
+                },
+                "$value": {
+                  "parts": [
+                    {
+                      "text": {
+                        "$": "instructions"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "send": {
+      "frames": [
+        {
+          "name": "clientContent",
+          "template": {
+            "clientContent": {
+              "turns": [
+                {
+                  "role": "user",
+                  "parts": [
+                    {
+                      "$when": {
+                        "pred": "realtimeHasText"
+                      },
+                      "$value": {
+                        "text": {
+                          "$": "text"
+                        }
+                      }
+                    },
+                    {
+                      "$when": {
+                        "truthy": "audio"
+                      },
+                      "$value": {
+                        "inlineData": {
+                          "mimeType": "audio/pcm",
+                          "data": {
+                            "$call": "realtimeAudioBase64"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "turnComplete": {
+                "$call": "realtimeTurnComplete"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

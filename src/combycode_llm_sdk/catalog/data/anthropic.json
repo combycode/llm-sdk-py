@@ -1,0 +1,926 @@
+{
+  "anthropic/claude-opus-4": {
+    "providerModelName": "claude-opus-4-20250514",
+    "aliases": [
+      "claude-opus-4-20250514"
+    ],
+    "pricing": {
+      "inputPerMTok": 15,
+      "outputPerMTok": 75,
+      "cacheReadPerMTok": 1.5,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 7.5,
+          "outputPerMTok": 37.5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 200000,
+    "maxOutput": 32000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-opus",
+    "version": "4",
+    "status": "legacy",
+    "active": false,
+    "deprecation": {
+      "date": "2026-06-15",
+      "source": "litellm"
+    },
+    "wireSpec": "anthropic/messages@4.0",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    }
+  },
+  "anthropic/claude-opus-4.1": {
+    "providerModelName": "claude-opus-4-1-20250805",
+    "aliases": [
+      "claude-opus-4-1-20250805",
+      "claude-opus-4-1"
+    ],
+    "pricing": {
+      "inputPerMTok": 15,
+      "outputPerMTok": 75,
+      "cacheReadPerMTok": 1.5,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 7.5,
+          "outputPerMTok": 37.5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 200000,
+    "maxOutput": 32000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-opus",
+    "version": "4.1",
+    "status": "legacy",
+    "active": false,
+    "deprecation": {
+      "date": "2026-08-23",
+      "source": "delisted"
+    },
+    "wireSpec": "anthropic/messages@4.1",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    }
+  },
+  "anthropic/claude-opus-4.5": {
+    "providerModelName": "claude-opus-4-5-20251101",
+    "aliases": [
+      "claude-opus-4-5-20251101",
+      "claude-opus-4-5"
+    ],
+    "pricing": {
+      "inputPerMTok": 5,
+      "outputPerMTok": 25,
+      "cacheReadPerMTok": 0.5,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 12.5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 200000,
+    "maxOutput": 64000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-opus",
+    "version": "4.5",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "anthropic/messages@4.1",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    },
+    "deprecation": {
+      "date": "2026-11-24",
+      "source": "litellm"
+    }
+  },
+  "anthropic/claude-opus-4.6": {
+    "providerModelName": "claude-opus-4-6",
+    "aliases": [
+      "claude-opus-4-6"
+    ],
+    "pricing": {
+      "inputPerMTok": 5,
+      "outputPerMTok": 25,
+      "cacheReadPerMTok": 0.5,
+      "tiers": {
+        "priority": {
+          "inputPerMTok": 30,
+          "outputPerMTok": 150
+        },
+        "batch": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 12.5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 1000000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": true,
+      "effortValues": [
+        "low",
+        "medium",
+        "high",
+        "max"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": false,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-opus",
+    "version": "4.6",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "anthropic/messages@4.6",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    },
+    "deprecation": {
+      "date": "2027-02-05",
+      "source": "litellm"
+    }
+  },
+  "anthropic/claude-opus-4.7": {
+    "providerModelName": "claude-opus-4-7",
+    "aliases": [
+      "claude-opus-4-7"
+    ],
+    "pricing": {
+      "inputPerMTok": 5,
+      "outputPerMTok": 25,
+      "cacheReadPerMTok": 0.5,
+      "tiers": {
+        "priority": {
+          "inputPerMTok": 30,
+          "outputPerMTok": 150
+        },
+        "batch": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 12.5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 1000000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-opus",
+    "version": "4.7",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "anthropic/messages@4.7",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    },
+    "deprecation": {
+      "date": "2027-04-16",
+      "source": "litellm"
+    }
+  },
+  "anthropic/claude-opus-4.8": {
+    "providerModelName": "claude-opus-4-8",
+    "aliases": [
+      "claude-opus-4-8"
+    ],
+    "pricing": {
+      "inputPerMTok": 5,
+      "outputPerMTok": 25,
+      "cacheReadPerMTok": 0.5,
+      "tiers": {
+        "priority": {
+          "inputPerMTok": 10,
+          "outputPerMTok": 50
+        },
+        "batch": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 12.5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 1000000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-opus",
+    "version": "4.8",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "anthropic/messages@4.7",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    },
+    "deprecation": {
+      "date": "2027-05-28",
+      "source": "litellm"
+    }
+  },
+  "anthropic/claude-sonnet-4": {
+    "providerModelName": "claude-sonnet-4-20250514",
+    "aliases": [
+      "claude-sonnet-4-20250514"
+    ],
+    "pricing": {
+      "inputPerMTok": 3,
+      "outputPerMTok": 15,
+      "cacheReadPerMTok": 0.3,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 1.5,
+          "outputPerMTok": 7.5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 1000000,
+    "maxOutput": 64000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-sonnet",
+    "version": "4",
+    "status": "legacy",
+    "active": false,
+    "deprecation": {
+      "date": "2026-06-15",
+      "source": "litellm"
+    },
+    "wireSpec": "anthropic/messages@4.0",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    }
+  },
+  "anthropic/claude-sonnet-4.5": {
+    "providerModelName": "claude-sonnet-4-5-20250929",
+    "aliases": [
+      "claude-sonnet-4-5-20250929",
+      "claude-sonnet-4-5"
+    ],
+    "pricing": {
+      "inputPerMTok": 3,
+      "outputPerMTok": 15,
+      "cacheReadPerMTok": 0.3,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 1.5,
+          "outputPerMTok": 7.5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 1000000,
+    "maxOutput": 64000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-sonnet",
+    "version": "4.5",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "anthropic/messages@4.1",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    },
+    "deprecation": {
+      "date": "2026-09-29",
+      "source": "litellm"
+    }
+  },
+  "anthropic/claude-sonnet-4.6": {
+    "providerModelName": "claude-sonnet-4-6",
+    "aliases": [
+      "claude-sonnet-4-6"
+    ],
+    "pricing": {
+      "inputPerMTok": 3,
+      "outputPerMTok": 15,
+      "cacheReadPerMTok": 0.3,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 1.5,
+          "outputPerMTok": 7.5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 1000000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": true,
+      "effortValues": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": false,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-sonnet",
+    "version": "4.6",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "anthropic/messages@4.6",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    },
+    "deprecation": {
+      "date": "2027-02-17",
+      "source": "litellm"
+    }
+  },
+  "anthropic/claude-haiku-4.5": {
+    "providerModelName": "claude-haiku-4-5-20251001",
+    "aliases": [
+      "claude-haiku-4-5-20251001",
+      "claude-haiku-4-5"
+    ],
+    "pricing": {
+      "inputPerMTok": 1,
+      "outputPerMTok": 5,
+      "cacheReadPerMTok": 0.1,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 0.5,
+          "outputPerMTok": 2.5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 200000,
+    "maxOutput": 64000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-haiku",
+    "version": "4.5",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "anthropic/messages@4.1",
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    },
+    "deprecation": {
+      "date": "2026-10-15",
+      "source": "litellm"
+    }
+  },
+  "anthropic/claude-fable-5": {
+    "providerModelName": "claude-fable-5",
+    "aliases": [
+      "claude-fable-5"
+    ],
+    "pricing": {
+      "inputPerMTok": 10,
+      "outputPerMTok": 50,
+      "cacheReadPerMTok": 1,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 5,
+          "outputPerMTok": 25
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 1000000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-fable",
+    "version": "5",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "anthropic/messages@4.7",
+    "deprecation": {
+      "date": "2027-06-09",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    }
+  },
+  "anthropic/claude-sonnet-5": {
+    "providerModelName": "claude-sonnet-5",
+    "aliases": [
+      "claude-sonnet-5"
+    ],
+    "pricing": {
+      "inputPerMTok": 2,
+      "outputPerMTok": 10,
+      "cacheReadPerMTok": 0.2,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 1,
+          "outputPerMTok": 5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 1000000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-sonnet",
+    "version": "5",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "anthropic/messages@4.7",
+    "deprecation": {
+      "date": "2027-06-30",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    }
+  },
+  "anthropic/claude-mythos-5": {
+    "providerModelName": "claude-mythos-5",
+    "aliases": [
+      "claude-mythos-5"
+    ],
+    "pricing": {
+      "inputPerMTok": 10,
+      "outputPerMTok": 50,
+      "cacheReadPerMTok": 1,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 5,
+          "outputPerMTok": 25
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-mythos",
+    "version": "5",
+    "status": "stable",
+    "active": false,
+    "availability": "limited",
+    "wireSpec": "anthropic/messages@4.7",
+    "contextWindow": 1000000,
+    "maxOutput": 128000,
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    }
+  },
+  "anthropic/claude-opus-5": {
+    "providerModelName": "claude-opus-5",
+    "aliases": [
+      "claude-opus-5"
+    ],
+    "pricing": {
+      "inputPerMTok": 5,
+      "outputPerMTok": 25,
+      "cacheReadPerMTok": 0.5,
+      "tiers": {
+        "priority": {
+          "inputPerMTok": 10,
+          "outputPerMTok": 50
+        },
+        "batch": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 12.5
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 1000000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-opus",
+    "version": "5",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "anthropic/messages@4.7",
+    "deprecation": {
+      "date": "2027-07-24",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "count_api",
+      "charsPerTokenDefault": 3.5,
+      "countApiAvailable": true
+    }
+  }
+}

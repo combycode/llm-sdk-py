@@ -1,0 +1,15 @@
+{
+  "id": "google/files.finishUpload",
+  "provider": "google", "api": "files",
+  "_note": "Step TWO of the resumable upload. The URL is not ours to build - the server hands it back in the `x-goog-upload-url` header of step one - so it arrives as an INPUT, exactly as batchId does elsewhere. A URL supplied at runtime is still perfectly describable; what a spec cannot do is invent it.",
+  "envelope": {
+    "method": "POST",
+    "url": { "$": "uploadUrl" },
+    "bodyKind": "raw",
+    "headers": [
+      { "name": "X-Goog-Upload-Command", "value": "upload, finalize" },
+      { "name": "X-Goog-Upload-Offset", "value": "0" },
+      { "name": "Content-Type", "value": { "$": "mimeType" } }
+    ]
+  }
+}

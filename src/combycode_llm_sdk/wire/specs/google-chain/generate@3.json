@@ -1,0 +1,67 @@
+{
+  "id": "google/generate@3",
+  "extends": "google/generate@2.5",
+  "_note": "Gemini 3 and later: thinkingLevel enum; thinkingBudget is not accepted.",
+  "removeBlocks": [
+    "thinking.budget",
+    "thinking.off.budget"
+  ],
+  "blocks": [
+    {
+      "name": "thinking.level",
+      "when": {
+        "all": [
+          {
+            "truthy": "thinking"
+          },
+          {
+            "ne": [
+              "thinking.mode",
+              "off"
+            ]
+          },
+          {
+            "not": {
+              "variant": "thinkingBudget"
+            }
+          }
+        ]
+      },
+      "to": "generationConfig.thinkingConfig",
+      "template": {
+        "includeThoughts": {
+          "$table": "includeThoughts",
+          "$key": "thinking.visibility",
+          "$default": true
+        },
+        "thinkingLevel": {
+          "$table": "thinkingLevels",
+          "$key": "thinking.effort",
+          "$default": "HIGH"
+        }
+      }
+    },
+    {
+      "name": "thinking.off.level",
+      "_note": "3.x takes a level, not a budget: 3.5-flash-lite, 3.6-flash and gemma-4 reject thinkingBudget outright, while MINIMAL returns thoughtsTokenCount=0 on every 3.x model that can disable thinking at all.",
+      "when": {
+        "eq": [
+          "thinking.mode",
+          "off"
+        ]
+      },
+      "to": "generationConfig.thinkingConfig",
+      "template": {
+        "thinkingLevel": "MINIMAL"
+      }
+    }
+  ],
+  "placeBlocks": {
+    "thinking.level": {
+      "before": "structured"
+    },
+    "thinking.off.level": {
+      "before": "structured"
+    }
+  }
+}

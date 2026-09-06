@@ -1,0 +1,12 @@
+{
+  "id": "google/retrieval.json",
+  "extends": "google/retrieval.base",
+  "envelope": {
+    "headers": [
+      {
+        "name": "content-type",
+        "value": "application/json"
+      }
+    ]
+  }
+}

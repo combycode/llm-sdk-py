@@ -1,0 +1,8 @@
+{
+  "id": "openai/files.getInfo",
+  "extends": "openai/files.base",
+  "envelope": {
+    "method": "GET", "bodyKind": "none",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/files/", { "$": "remoteId" }] }
+  }
+}

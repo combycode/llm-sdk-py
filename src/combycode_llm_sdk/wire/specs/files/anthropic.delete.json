@@ -1,0 +1,8 @@
+{
+  "id": "anthropic/files.delete",
+  "extends": "anthropic/files.base",
+  "envelope": {
+    "method": "DELETE", "bodyKind": "none",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/files/", { "$": "remoteId" }] }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "xai/retrieval.listCorpora",
+  "extends": "xai/retrieval.management",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "managementBaseURL"
+        },
+        "/collections"
+      ]
+    }
+  }
+}

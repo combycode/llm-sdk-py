@@ -1,0 +1,50 @@
+{
+  "id": "anthropic/count.messages",
+  "provider": "anthropic",
+  "api": "count",
+  "_note": "The exact-count endpoint. It takes the SAME message array the completion would, which is the only reason its answer matches what the completion is billed for.",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1/messages/count_tokens"
+      ]
+    },
+    "headers": [
+      {
+        "name": "x-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      },
+      {
+        "name": "anthropic-version",
+        "value": {
+          "$config": "apiVersion"
+        }
+      },
+      {
+        "name": "content-type",
+        "value": "application/json"
+      }
+    ]
+  },
+  "fields": [
+    {
+      "from": "model",
+      "to": "model"
+    },
+    {
+      "from": "messages",
+      "to": "messages"
+    },
+    {
+      "from": "system",
+      "to": "system",
+      "presence": "truthy"
+    }
+  ]
+}

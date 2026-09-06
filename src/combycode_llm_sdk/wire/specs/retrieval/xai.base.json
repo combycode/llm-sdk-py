@@ -1,0 +1,7 @@
+{
+  "id": "xai/retrieval.base",
+  "provider": "xai",
+  "api": "retrieval",
+  "_note": "Two API planes with two SEPARATE credentials, exactly as the official SDK: collection management on management-api.x.ai with the management key, files and search on api.x.ai with the standard key. Sending one key to the other plane is a 401. Content-type is NOT here: the multipart upload inherits from the standard plane, and setting content-type on a FormData body overrides the boundary the runtime chose.",
+  "envelope": {}
+}

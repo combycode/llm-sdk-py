@@ -1,0 +1,342 @@
+{
+  "id": "anthropic/messages@4.0",
+  "provider": "anthropic",
+  "api": "messages",
+  "tables": {
+    "requestTier": {
+      "auto": "auto",
+      "standard": "standard_only",
+      "priority": "auto",
+      "flex": "standard_only",
+      "scale": "auto"
+    },
+    "toolChoiceType": {
+      "auto": "auto",
+      "none": "none",
+      "required": "any"
+    },
+    "thinkingBudgets": {
+      "low": 1024,
+      "medium": 4096,
+      "high": 8192,
+      "max": 16384
+    }
+  },
+  "unsupported": [
+    {
+      "from": "seed",
+      "reason": "400 'seed: Extra inputs are not permitted' (live 2026-07-28)"
+    },
+    {
+      "from": "topP+topK together",
+      "reason": "not enforced here; see topK variant"
+    }
+  ],
+  "fields": [
+    {
+      "from": "model",
+      "to": "model"
+    },
+    {
+      "from": "maxTokens",
+      "to": "max_tokens",
+      "default": 4096
+    },
+    {
+      "from": "temperature",
+      "to": "temperature"
+    },
+    {
+      "from": "topP",
+      "to": "top_p"
+    },
+    {
+      "from": "stop",
+      "to": "stop_sequences",
+      "presence": "truthy"
+    },
+    {
+      "from": "serviceTier",
+      "to": "service_tier",
+      "presence": "truthy",
+      "table": "requestTier",
+      "tableDefault": "auto"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "messages",
+      "call": "anthropicMessages",
+      "to": "messages"
+    },
+    {
+      "name": "system.cached",
+      "when": {
+        "all": [
+          {
+            "truthy": "system"
+          },
+          {
+            "pred": "anthropicCacheSystem"
+          }
+        ]
+      },
+      "to": "system",
+      "template": [
+        {
+          "type": "text",
+          "text": {
+            "$": "system"
+          },
+          "cache_control": {
+            "type": "ephemeral"
+          }
+        }
+      ]
+    },
+    {
+      "name": "system.plain",
+      "when": {
+        "all": [
+          {
+            "truthy": "system"
+          },
+          {
+            "not": {
+              "pred": "anthropicCacheSystem"
+            }
+          }
+        ]
+      },
+      "to": "system",
+      "template": {
+        "$": "system"
+      }
+    },
+    {
+      "name": "tools",
+      "when": {
+        "truthy": "tools"
+      },
+      "to": "tools",
+      "template": {
+        "$map": "tools",
+        "$dropUnmatched": true,
+        "$case": [
+          {
+            "when": {
+              "builtin": "web_search"
+            },
+            "value": {
+              "type": "web_search_20260318",
+              "name": "web_search",
+              "max_uses": 5,
+              "allowed_callers": [
+                "direct"
+              ],
+              "$spread": {
+                "$": "@params"
+              }
+            }
+          },
+          {
+            "when": {
+              "builtin": "web_fetch"
+            },
+            "value": {
+              "type": "web_fetch_20260318",
+              "name": "web_fetch",
+              "allowed_callers": [
+                "direct"
+              ],
+              "$spread": {
+                "$": "@params"
+              }
+            }
+          },
+          {
+            "when": {
+              "builtin": "code_interpreter"
+            },
+            "value": {
+              "type": "code_execution_20260521",
+              "name": "code_execution"
+            }
+          },
+          {
+            "when": {
+              "isFunctionTool": true
+            },
+            "value": {
+              "name": {
+                "$": "@name"
+              },
+              "description": {
+                "$": "@description"
+              },
+              "input_schema": {
+                "$call": "anthropicToolSchema",
+                "$arg": {
+                  "$": "@"
+                }
+              },
+              "strict": {
+                "$when": {
+                  "itemTruthy": "strict"
+                },
+                "$value": true
+              },
+              "cache_control": {
+                "$when": {
+                  "all": [
+                    {
+                      "any": [
+                        {
+                          "itemTruthy": "cache"
+                        },
+                        {
+                          "pred": "anthropicCacheTools"
+                        }
+                      ]
+                    },
+                    {
+                      "isLast": true
+                    }
+                  ]
+                },
+                "$value": {
+                  "type": "ephemeral"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "toolChoice.keyword",
+      "when": {
+        "all": [
+          {
+            "truthy": "toolChoice"
+          },
+          {
+            "pred": "toolChoiceIsString"
+          }
+        ]
+      },
+      "to": "tool_choice",
+      "template": {
+        "type": {
+          "$table": "toolChoiceType",
+          "$key": "toolChoice"
+        }
+      }
+    },
+    {
+      "name": "toolChoice.named",
+      "when": {
+        "all": [
+          {
+            "truthy": "toolChoice"
+          },
+          {
+            "not": {
+              "pred": "toolChoiceIsString"
+            }
+          }
+        ]
+      },
+      "to": "tool_choice",
+      "template": {
+        "type": "tool",
+        "name": {
+          "$": "toolChoice.name"
+        }
+      }
+    },
+    {
+      "name": "thinking.budgeted",
+      "when": {
+        "all": [
+          {
+            "truthy": "thinking"
+          },
+          {
+            "ne": [
+              "thinking.mode",
+              "off"
+            ]
+          }
+        ]
+      },
+      "to": "thinking",
+      "template": {
+        "type": "enabled",
+        "budget_tokens": {
+          "$table": "thinkingBudgets",
+          "$key": "thinking.effort",
+          "$default": 2048
+        },
+        "display": {
+          "$when": {
+            "eq": [
+              "thinking.visibility",
+              "hidden"
+            ]
+          },
+          "$value": "omitted"
+        }
+      },
+      "effects": [
+        "liftMaxTokensAboveBudget"
+      ]
+    },
+    {
+      "name": "structured",
+      "when": {
+        "truthy": "structured"
+      },
+      "to": "output_config",
+      "merge": true,
+      "template": {
+        "format": {
+          "type": "json_schema",
+          "schema": {
+            "$call": "ensureAdditionalProperties",
+            "$arg": {
+              "$": "structured.schema"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "envelope": {
+    "headers": [
+      {
+        "name": "anthropic-beta",
+        "when": {
+          "pred": "hasFileRef"
+        },
+        "value": "files-api-2025-04-14"
+      },
+      {
+        "name": "anthropic-user-profile-id",
+        "when": {
+          "pred": "hasUserProfileId"
+        },
+        "value": {
+          "$": "providerOptions.userProfileId"
+        }
+      }
+    ],
+    "path": {
+      "$when": {
+        "pred": "usesCodeExec"
+      },
+      "$value": "/v1/messages?beta=true"
+    }
+  },
+  "_note": "Base of the Anthropic messages chain: budgeted thinking, no top_k."
+}

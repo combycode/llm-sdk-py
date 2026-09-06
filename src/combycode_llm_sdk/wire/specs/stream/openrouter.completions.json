@@ -1,0 +1,11 @@
+{
+  "id": "openrouter/completions.stream",
+  "extends": "openai/completions.stream",
+  "_note": "The adapter calls super.parseStreamEvent and then appends the pair, so this rule is appended after the inherited ones. The base's two `stop` rules (moderation, usage-only) short-circuit before it -- which changes nothing, because annotations live in choices[0].delta and neither of those chunks has choices.",
+
+  "state": {
+    "webSearchEmitted": { "kind": "scalar", "default": false }
+  },
+
+  "on": [{ "default": { "effect": "openrouterStreamWebSearch" } }]
+}

@@ -1,0 +1,7 @@
+{ "id": "openrouter/media.imageEdit", "extends": "openrouter/media.image",
+  "_note": "Same call with the source image appended as a second content part.",
+  "blocks": [
+    { "name": "messages", "to": "messages",
+      "template": [{ "role": "user", "content": [
+        { "type": "text", "text": { "$": "prompt" } },
+        { "type": "image_url", "image_url": { "url": { "$call": "openrouterDataUrl" } } } ] }] } ] }

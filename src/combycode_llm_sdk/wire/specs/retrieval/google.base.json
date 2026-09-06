@@ -1,0 +1,16 @@
+{
+  "id": "google/retrieval.base",
+  "provider": "google",
+  "api": "retrieval",
+  "_note": "Auth is the x-goog-api-key HEADER, never ?key= in the URL: a key in a query string is copied into every access log and telemetry span it passes through.",
+  "envelope": {
+    "headers": [
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      }
+    ]
+  }
+}

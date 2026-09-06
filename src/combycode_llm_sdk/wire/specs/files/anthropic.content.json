@@ -1,0 +1,57 @@
+{
+  "id": "anthropic/files.content",
+  "provider": "anthropic",
+  "api": "files",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1/files/",
+        {
+          "$": "id"
+        },
+        "/content"
+      ]
+    },
+    "query": [
+      {
+        "name": "beta",
+        "value": true
+      }
+    ],
+    "headers": [
+      {
+        "name": "x-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      },
+      {
+        "name": "anthropic-version",
+        "value": {
+          "$config": "apiVersion"
+        }
+      },
+      {
+        "name": "anthropic-beta",
+        "value": "files-api-2025-04-14"
+      },
+      {
+        "name": "accept",
+        "value": "application/binary"
+      },
+      {
+        "name": "anthropic-dangerous-direct-browser-access",
+        "value": "true",
+        "_note": "Only in a browser, where the download is otherwise blocked by CORS. Harmless on Node and Bun, but not sent there — the header names an exception, and an exception nobody needs should not be asked for.",
+        "when": {
+          "truthy": "browser"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{ "id": "xai/videos.extensions", "extends": "xai/media.base",
+  "_note": "sourceVideo + videoMode 'extend' (the default) routes here instead of generations.",
+  "envelope": { "url": { "$join": [{ "$config": "baseURL" }, "/v1/videos/extensions"] } },
+  "fields": [
+    { "from": "model", "to": "model", "default": "grok-imagine-video" },
+    { "from": "prompt", "to": "prompt" },
+    { "from": "params.duration", "to": "duration", "presence": "truthy" } ],
+  "blocks": [{ "name": "video", "to": "video", "template": { "$call": "xaiSourceVideoRef" } }] }

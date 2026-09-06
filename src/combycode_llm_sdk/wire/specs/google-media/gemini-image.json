@@ -1,0 +1,22 @@
+{
+  "id": "google/gemini-image@generateContent",
+  "extends": "google/media.generateContent",
+  "_note": "gemini-* image models generate inline via responseModalities:['IMAGE'].",
+  "blocks": [
+    {
+      "name": "generationConfig.image",
+      "to": "generationConfig",
+      "merge": true,
+      "template": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+          "$when": { "any": [{ "truthy": "params.aspectRatio" }, { "truthy": "params.imageSize" }] },
+          "$value": {
+            "aspectRatio": { "$": "params.aspectRatio" },
+            "imageSize": { "$": "params.imageSize" }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,1448 @@
+{
+  "_doc": "What the embeddings and seamless-media adapters sent, captured through an injected fetch. Regenerate ONLY with --force and only when the wire genuinely changed. REFROZEN 2026-08-23 for one deliberate change: the Google API key moved out of the URL and into the x-goog-api-key header. 21 artifacts across the two corpora changed and every one differs ONLY in that way, checked pairwise against the previous fixture; the key set is identical. Verified live first - google files, image, tts and batch all pass with header auth. REFROZEN 2026-08-28 for one deliberate change: xai batch_request is a tagged union whose variant name is the KEY, so {endpoint: 'responses', body} became {responses: body}. Exactly two artifacts changed and both differ only in that way. Measured live - the old form is rejected 422 as an unknown variant, so this corpus had frozen a request xAI has never accepted. REFROZEN 2026-09-04 for one deliberate change: the xai batch cancel route is `<id>:cancel`, not `<id>/cancel`. Exactly ONE artifact changed and it differs only in that way. Measured live -- the slash form answers 404 'No handler found on route', DELETE and PATCH on the bare batch answer 405, and the colon form answers 200. This corpus had frozen a route xAI has never served.",
+  "frozenAtCommit": "d358f1ed59aaeebbb104f74914edf0260bb4f191",
+  "counts": {
+    "cases": 84
+  },
+  "index": {
+    "embeddings/openai/single": {
+      "body": {
+        "input": [
+          "hello"
+        ],
+        "model": "text-embedding-3-small"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "text-embedding-3-small",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/embeddings"
+    },
+    "embeddings/openai/batch": {
+      "body": {
+        "input": [
+          "a",
+          "b",
+          "c"
+        ],
+        "model": "text-embedding-3-small"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "text-embedding-3-small",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/embeddings"
+    },
+    "embeddings/openrouter/single": {
+      "body": {
+        "input": [
+          "hello"
+        ],
+        "model": "openai/text-embedding-3-small"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "openai/text-embedding-3-small",
+      "provider": "openrouter",
+      "responseType": "json",
+      "url": "https://openrouter.ai/api/v1/embeddings"
+    },
+    "embeddings/openrouter/batch": {
+      "body": {
+        "input": [
+          "a",
+          "b"
+        ],
+        "model": "openai/text-embedding-3-small"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "openai/text-embedding-3-small",
+      "provider": "openrouter",
+      "responseType": "json",
+      "url": "https://openrouter.ai/api/v1/embeddings"
+    },
+    "embeddings/google/bare": {
+      "body": {
+        "content": {
+          "parts": [
+            {
+              "text": "hello"
+            }
+          ]
+        },
+        "model": "models/gemini-embedding-001"
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "gemini-embedding-001",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent"
+    },
+    "embeddings/google/prefixed": {
+      "body": {
+        "content": {
+          "parts": [
+            {
+              "text": "hello"
+            }
+          ]
+        },
+        "model": "models/gemini-embedding-001"
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "models/gemini-embedding-001",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent"
+    },
+    "xai-media/image.minimal": {
+      "body": {
+        "model": "grok-imagine-image",
+        "n": 1,
+        "prompt": "a cat",
+        "response_format": "b64_json"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "grok-imagine-image",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/images/generations"
+    },
+    "xai-media/image.params": {
+      "body": {
+        "model": "grok-imagine-image",
+        "n": 2,
+        "prompt": "a cat",
+        "response_format": "b64_json"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "grok-imagine-image",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/images/generations"
+    },
+    "xai-media/imageEdit": {
+      "body": {
+        "image": {
+          "url": "data:image/png;base64,aGk="
+        },
+        "model": "grok-imagine-image",
+        "prompt": "add a hat",
+        "response_format": "b64_json"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "grok-imagine-image",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/images/edits"
+    },
+    "xai-media/audio": {
+      "body": {
+        "codec": "wav",
+        "language": "en",
+        "text": "hello",
+        "voice": "alloy"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "",
+      "provider": "xai",
+      "responseType": "arraybuffer",
+      "url": "https://api.x.ai/v1/tts"
+    },
+    "xai-media/video": {
+      "body": {
+        "model": "grok-imagine-video",
+        "prompt": "a wave"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "grok-imagine-video",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/videos/generations"
+    },
+    "xai-media/video.fromImage": {
+      "body": {
+        "image": {
+          "url": "data:image/png;base64,aGk="
+        },
+        "model": "grok-imagine-video",
+        "prompt": "animate"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "grok-imagine-video",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/videos/generations"
+    },
+    "xai-media/video.extend": {
+      "body": {
+        "model": "grok-imagine-video",
+        "prompt": "keep going",
+        "video": {
+          "url": "data:video/mp4;base64,AAAAGGZ0"
+        }
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "grok-imagine-video",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/videos/extensions"
+    },
+    "xai-media/video.edit": {
+      "body": {
+        "model": "grok-imagine-video",
+        "prompt": "make it night",
+        "video": {
+          "url": "data:video/mp4;base64,AAAAGGZ0"
+        }
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "grok-imagine-video",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/videos/edits"
+    },
+    "openrouter-media/image.minimal": {
+      "body": {
+        "messages": [
+          {
+            "content": [
+              {
+                "text": "a cat",
+                "type": "text"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "modalities": [
+          "image",
+          "text"
+        ],
+        "model": ""
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "",
+      "provider": "openrouter",
+      "responseType": "json",
+      "url": "https://openrouter.ai/api/v1/chat/completions"
+    },
+    "openrouter-media/image.config": {
+      "body": {
+        "image_config": {
+          "aspect_ratio": "16:9"
+        },
+        "messages": [
+          {
+            "content": [
+              {
+                "text": "a cat",
+                "type": "text"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "modalities": [
+          "image",
+          "text"
+        ],
+        "model": ""
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "",
+      "provider": "openrouter",
+      "responseType": "json",
+      "url": "https://openrouter.ai/api/v1/chat/completions"
+    },
+    "openrouter-media/imageEdit": {
+      "body": {
+        "messages": [
+          {
+            "content": [
+              {
+                "text": "add a hat",
+                "type": "text"
+              },
+              {
+                "image_url": {
+                  "url": "data:image/png;base64,aGk="
+                },
+                "type": "image_url"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "modalities": [
+          "image",
+          "text"
+        ],
+        "model": ""
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "",
+      "provider": "openrouter",
+      "responseType": "json",
+      "url": "https://openrouter.ai/api/v1/chat/completions"
+    },
+    "openrouter-media/audio": {
+      "body": {
+        "audio": {
+          "format": "mp3",
+          "voice": "Kore"
+        },
+        "messages": [
+          {
+            "content": "hello",
+            "role": "user"
+          }
+        ],
+        "modalities": [
+          "audio",
+          "text"
+        ],
+        "model": ""
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "",
+      "provider": "openrouter",
+      "responseType": "json",
+      "url": "https://openrouter.ai/api/v1/chat/completions"
+    },
+    "realtime/openai/text/connect": {
+      "model": "gpt-realtime",
+      "protocols": [
+        "realtime",
+        "openai-insecure-api-key.k"
+      ],
+      "provider": "openai",
+      "url": "wss://api.openai.com/v1/realtime?model=gpt-realtime"
+    },
+    "realtime/openai/text/open": {
+      "session": {
+        "output_modalities": [
+          "text"
+        ],
+        "type": "realtime"
+      },
+      "type": "session.update"
+    },
+    "realtime/openai/text/turn.text": [
+      {
+        "item": {
+          "content": [
+            {
+              "text": "hello",
+              "type": "input_text"
+            }
+          ],
+          "role": "user",
+          "type": "message"
+        },
+        "type": "conversation.item.create"
+      },
+      {
+        "type": "response.create"
+      }
+    ],
+    "realtime/openai/text/turn.text.open": [
+      {
+        "item": {
+          "content": [
+            {
+              "text": "hello",
+              "type": "input_text"
+            }
+          ],
+          "role": "user",
+          "type": "message"
+        },
+        "type": "conversation.item.create"
+      }
+    ],
+    "realtime/openai/audio/connect": {
+      "model": "gpt-realtime",
+      "protocols": [
+        "realtime",
+        "openai-insecure-api-key.k"
+      ],
+      "provider": "openai",
+      "url": "wss://api.openai.com/v1/realtime?model=gpt-realtime"
+    },
+    "realtime/openai/audio/open": {
+      "session": {
+        "audio": {
+          "output": {
+            "voice": "alloy"
+          }
+        },
+        "instructions": "be brief",
+        "output_modalities": [
+          "text",
+          "audio"
+        ],
+        "type": "realtime"
+      },
+      "type": "session.update"
+    },
+    "realtime/openai/audio/turn.audio": [
+      {
+        "item": {
+          "content": [
+            {
+              "audio": "AAECAw==",
+              "type": "input_audio"
+            }
+          ],
+          "role": "user",
+          "type": "message"
+        },
+        "type": "conversation.item.create"
+      },
+      {
+        "type": "response.create"
+      }
+    ],
+    "realtime/openai/audio/turn.both": [
+      {
+        "item": {
+          "content": [
+            {
+              "text": "and this",
+              "type": "input_text"
+            },
+            {
+              "audio": "AAECAw==",
+              "type": "input_audio"
+            }
+          ],
+          "role": "user",
+          "type": "message"
+        },
+        "type": "conversation.item.create"
+      },
+      {
+        "type": "response.create"
+      }
+    ],
+    "realtime/google/text/connect": {
+      "model": "gemini-3.1-flash-live-preview",
+      "provider": "google",
+      "url": "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=k"
+    },
+    "realtime/google/text/open": {
+      "setup": {
+        "generationConfig": {
+          "responseModalities": [
+            "TEXT"
+          ]
+        },
+        "model": "models/gemini-3.1-flash-live-preview"
+      }
+    },
+    "realtime/google/text/turn.text": [
+      {
+        "clientContent": {
+          "turnComplete": true,
+          "turns": [
+            {
+              "parts": [
+                {
+                  "text": "hello"
+                }
+              ],
+              "role": "user"
+            }
+          ]
+        }
+      }
+    ],
+    "realtime/google/text/turn.text.open": [
+      {
+        "clientContent": {
+          "turnComplete": false,
+          "turns": [
+            {
+              "parts": [
+                {
+                  "text": "hello"
+                }
+              ],
+              "role": "user"
+            }
+          ]
+        }
+      }
+    ],
+    "realtime/google/audio/connect": {
+      "model": "models/gemini-3.1-flash-live-preview",
+      "provider": "google",
+      "url": "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=k"
+    },
+    "realtime/google/audio/open": {
+      "setup": {
+        "generationConfig": {
+          "responseModalities": [
+            "AUDIO"
+          ],
+          "speechConfig": {
+            "voiceConfig": {
+              "prebuiltVoiceConfig": {
+                "voiceName": "Kore"
+              }
+            }
+          }
+        },
+        "model": "models/gemini-3.1-flash-live-preview",
+        "systemInstruction": {
+          "parts": [
+            {
+              "text": "be brief"
+            }
+          ]
+        }
+      }
+    },
+    "realtime/google/audio/turn.audio": [
+      {
+        "clientContent": {
+          "turnComplete": true,
+          "turns": [
+            {
+              "parts": [
+                {
+                  "inlineData": {
+                    "data": "AAECAw==",
+                    "mimeType": "audio/pcm"
+                  }
+                }
+              ],
+              "role": "user"
+            }
+          ]
+        }
+      }
+    ],
+    "batch/anthropic/submit": {
+      "body": {
+        "requests": [
+          {
+            "custom_id": "r1",
+            "params": {
+              "messages": [
+                {
+                  "content": "hi",
+                  "role": "user"
+                }
+              ],
+              "model": "m"
+            }
+          },
+          {
+            "custom_id": "r2",
+            "params": {
+              "messages": [
+                {
+                  "content": "yo",
+                  "role": "user"
+                }
+              ],
+              "model": "m"
+            }
+          }
+        ]
+      },
+      "headers": {
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+        "x-api-key": "k"
+      },
+      "method": "POST",
+      "model": "batch",
+      "provider": "anthropic",
+      "responseType": "json",
+      "url": "https://api.anthropic.com/v1/messages/batches"
+    },
+    "batch/anthropic/getStatus": {
+      "headers": {
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+        "x-api-key": "k"
+      },
+      "method": "GET",
+      "model": "batch",
+      "provider": "anthropic",
+      "responseType": "json",
+      "url": "https://api.anthropic.com/v1/messages/batches/batch_abc"
+    },
+    "batch/anthropic/getResults": {
+      "headers": {
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+        "x-api-key": "k"
+      },
+      "method": "GET",
+      "model": "batch",
+      "provider": "anthropic",
+      "responseType": "text",
+      "url": "https://api.anthropic.com/v1/messages/batches/batch_abc/results"
+    },
+    "batch/anthropic/cancel": {
+      "body": {},
+      "headers": {
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+        "x-api-key": "k"
+      },
+      "method": "POST",
+      "model": "batch",
+      "provider": "anthropic",
+      "responseType": "json",
+      "url": "https://api.anthropic.com/v1/messages/batches/batch_abc/cancel"
+    },
+    "batch/openai/submit": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "batch_input.jsonl",
+            "name": "file",
+            "size": 243,
+            "type": "application/jsonl"
+          },
+          {
+            "name": "purpose",
+            "value": "batch"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "batch",
+      "provider": "openai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/files"
+    },
+    "batch/openai/submit.1": {
+      "body": {
+        "completion_window": "24h",
+        "endpoint": "/v1/responses",
+        "input_file_id": "batch_abc"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "batch",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/batches"
+    },
+    "batch/openai/getStatus": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "model": "batch",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/batches/batch_abc"
+    },
+    "batch/openai/getResults": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "model": "batch",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/batches/batch_abc"
+    },
+    "batch/openai/getResults.1": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "model": "batch",
+      "provider": "openai",
+      "responseType": "text",
+      "url": "https://api.openai.com/v1/files/file_out/content"
+    },
+    "batch/openai/cancel": {
+      "body": {},
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "batch",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/batches/batch_abc/cancel"
+    },
+    "batch/google/submit": {
+      "body": {
+        "batch": {
+          "displayName": "orxa-batch-2",
+          "inputConfig": {
+            "requests": {
+              "requests": [
+                {
+                  "metadata": {
+                    "key": "r1"
+                  },
+                  "request": {
+                    "messages": [
+                      {
+                        "content": "hi",
+                        "role": "user"
+                      }
+                    ],
+                    "model": "m"
+                  }
+                },
+                {
+                  "metadata": {
+                    "key": "r2"
+                  },
+                  "request": {
+                    "messages": [
+                      {
+                        "content": "yo",
+                        "role": "user"
+                      }
+                    ],
+                    "model": "m"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "gemini-3-flash",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:batchGenerateContent"
+    },
+    "batch/google/getStatus": {
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "gemini-3-flash",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/batch_abc"
+    },
+    "batch/google/getResults": {
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "gemini-3-flash",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/batch_abc"
+    },
+    "batch/google/cancel": {
+      "body": {},
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "gemini-3-flash",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/batch_abc:cancel"
+    },
+    "batch/xai/submit": {
+      "body": {
+        "name": "batch_2_01602c10"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "batch",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/batches"
+    },
+    "batch/xai/submit.1": {
+      "body": {
+        "batch_requests": [
+          {
+            "batch_request": {
+              "responses": {
+                "messages": [
+                  {
+                    "content": "hi",
+                    "role": "user"
+                  }
+                ],
+                "model": "m"
+              }
+            },
+            "batch_request_id": "r1"
+          },
+          {
+            "batch_request": {
+              "responses": {
+                "messages": [
+                  {
+                    "content": "yo",
+                    "role": "user"
+                  }
+                ],
+                "model": "m"
+              }
+            },
+            "batch_request_id": "r2"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "batch",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/batches/batch_abc/requests"
+    },
+    "batch/xai/getStatus": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "model": "batch",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/batches/batch_abc"
+    },
+    "batch/xai/getResults": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "model": "batch",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/batches/batch_abc/results"
+    },
+    "batch/xai/cancel": {
+      "body": {},
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "batch",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/batches/batch_abc:cancel"
+    },
+    "files/anthropic/upload": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "note.txt",
+            "name": "file",
+            "size": 5,
+            "type": "text/plain;charset=utf-8"
+          }
+        ]
+      },
+      "headers": {
+        "anthropic-beta": "files-api-2025-04-14",
+        "anthropic-version": "2023-06-01",
+        "x-api-key": "k"
+      },
+      "method": "POST",
+      "model": "files",
+      "provider": "anthropic",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.anthropic.com/v1/files"
+    },
+    "files/anthropic/delete": {
+      "headers": {
+        "anthropic-beta": "files-api-2025-04-14",
+        "anthropic-version": "2023-06-01",
+        "x-api-key": "k"
+      },
+      "method": "DELETE",
+      "model": "files",
+      "provider": "anthropic",
+      "responseType": "json",
+      "url": "https://api.anthropic.com/v1/files/file_abc"
+    },
+    "files/anthropic/getInfo": {
+      "headers": {
+        "anthropic-beta": "files-api-2025-04-14",
+        "anthropic-version": "2023-06-01",
+        "x-api-key": "k"
+      },
+      "method": "GET",
+      "model": "files",
+      "provider": "anthropic",
+      "responseType": "json",
+      "url": "https://api.anthropic.com/v1/files/file_abc"
+    },
+    "files/anthropic/list": {
+      "headers": {
+        "anthropic-beta": "files-api-2025-04-14",
+        "anthropic-version": "2023-06-01",
+        "x-api-key": "k"
+      },
+      "method": "GET",
+      "model": "files",
+      "provider": "anthropic",
+      "responseType": "json",
+      "url": "https://api.anthropic.com/v1/files"
+    },
+    "files/openai/upload": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "note.txt",
+            "name": "file",
+            "size": 5,
+            "type": "text/plain;charset=utf-8"
+          },
+          {
+            "name": "purpose",
+            "value": "user_data"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "files",
+      "provider": "openai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/files"
+    },
+    "files/openai/delete": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "DELETE",
+      "model": "files",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/files/file-abc"
+    },
+    "files/openai/getInfo": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "model": "files",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/files/file-abc"
+    },
+    "files/openai/list": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "model": "files",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/files"
+    },
+    "files/google/upload": {
+      "body": {
+        "file": {
+          "display_name": "note.txt"
+        }
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Goog-Upload-Command": "start",
+        "X-Goog-Upload-Header-Content-Length": "5",
+        "X-Goog-Upload-Header-Content-Type": "text/plain",
+        "X-Goog-Upload-Protocol": "resumable",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "files",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/upload/v1beta/files"
+    },
+    "files/google/upload.1": {
+      "body": {
+        "__bytes": 5
+      },
+      "headers": {
+        "Content-Type": "text/plain",
+        "X-Goog-Upload-Command": "upload, finalize",
+        "X-Goog-Upload-Offset": "0"
+      },
+      "method": "POST",
+      "model": "files",
+      "provider": "google",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://upload.example/session"
+    },
+    "files/google/delete": {
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "DELETE",
+      "model": "files",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/files/abc"
+    },
+    "files/google/getInfo": {
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "files",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/files/abc"
+    },
+    "files/google/list": {
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "files",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/files?pageSize=100"
+    },
+    "files/xai/upload": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "note.txt",
+            "name": "file",
+            "size": 5,
+            "type": "text/plain;charset=utf-8"
+          },
+          {
+            "name": "purpose",
+            "value": "assistants"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "files",
+      "provider": "xai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/files"
+    },
+    "lifecycle/openai/videoStatus": {
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "GET",
+      "model": "",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/videos/video_123"
+    },
+    "lifecycle/openai/videoDownload": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "model": "",
+      "provider": "openai",
+      "responseType": "arraybuffer",
+      "url": "https://api.openai.com/v1/videos/video_123/content"
+    },
+    "lifecycle/google/videoStatus": {
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "operations",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-3.1/operations/op_1"
+    },
+    "lifecycle/google/videoDownload": {
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "operations",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-3.1/operations/op_1"
+    },
+    "lifecycle/google/videoDownload.1": {
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "model": "operations",
+      "provider": "google",
+      "responseType": "arraybuffer",
+      "url": "https://generativelanguage.googleapis.com/v/1.mp4?key=k"
+    },
+    "lifecycle/google/videoCancel": {
+      "body": {},
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "model": "operations",
+      "provider": "google",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-3.1/operations/op_1:cancel"
+    },
+    "lifecycle/xai/videoStatus": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "model": "",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/videos/req_1"
+    },
+    "lifecycle/xai/videoDownload": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "model": "",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/videos/req_1"
+    },
+    "lifecycle/xai/videoDownload.1": {
+      "headers": {},
+      "method": "GET",
+      "model": "",
+      "provider": "xai",
+      "responseType": "arraybuffer",
+      "url": "https://cdn.x.ai/v/1.mp4"
+    },
+    "lifecycle/xai/videoCancel": {
+      "body": {},
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "",
+      "provider": "xai",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/videos/req_1/cancel"
+    },
+    "moderation/string": {
+      "body": {
+        "input": "hello",
+        "model": "omni-moderation-latest"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "omni-moderation-latest",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/moderations"
+    },
+    "moderation/array": {
+      "body": {
+        "input": [
+          "a",
+          "b"
+        ],
+        "model": "omni-moderation-latest"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "omni-moderation-latest",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/moderations"
+    },
+    "moderation/parts": {
+      "body": {
+        "input": [
+          {
+            "text": "hi",
+            "type": "text"
+          }
+        ],
+        "model": "omni-moderation-latest"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "model": "omni-moderation-latest",
+      "provider": "openai",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/moderations"
+    },
+    "transcription/minimal": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "audio.wav",
+            "name": "file",
+            "size": 3,
+            "type": "audio/wav"
+          },
+          {
+            "name": "model",
+            "value": "gpt-transcribe"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "gpt-transcribe",
+      "provider": "openai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/audio/transcriptions"
+    },
+    "transcription/language": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "audio.wav",
+            "name": "file",
+            "size": 3,
+            "type": "audio/wav"
+          },
+          {
+            "name": "model",
+            "value": "gpt-transcribe"
+          },
+          {
+            "name": "language",
+            "value": "en"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "gpt-transcribe",
+      "provider": "openai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/audio/transcriptions"
+    },
+    "transcription/lists": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "audio.mp3",
+            "name": "file",
+            "size": 3,
+            "type": "audio/mpeg"
+          },
+          {
+            "name": "model",
+            "value": "gpt-transcribe"
+          },
+          {
+            "name": "languages[]",
+            "value": "en"
+          },
+          {
+            "name": "languages[]",
+            "value": "fr"
+          },
+          {
+            "name": "keywords[]",
+            "value": "orxa"
+          },
+          {
+            "name": "keywords[]",
+            "value": "combycode"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "gpt-transcribe",
+      "provider": "openai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/audio/transcriptions"
+    },
+    "transcription/wordTimestamps": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "audio.wav",
+            "name": "file",
+            "size": 3,
+            "type": "audio/wav"
+          },
+          {
+            "name": "model",
+            "value": "gpt-transcribe"
+          },
+          {
+            "name": "response_format",
+            "value": "verbose_json"
+          },
+          {
+            "name": "timestamp_granularities[]",
+            "value": "segment"
+          },
+          {
+            "name": "timestamp_granularities[]",
+            "value": "word"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "gpt-transcribe",
+      "provider": "openai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/audio/transcriptions"
+    },
+    "transcription/diarization": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "audio.wav",
+            "name": "file",
+            "size": 3,
+            "type": "audio/wav"
+          },
+          {
+            "name": "model",
+            "value": "gpt-transcribe"
+          },
+          {
+            "name": "response_format",
+            "value": "diarized_json"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "model": "gpt-transcribe",
+      "provider": "openai",
+      "rawBody": true,
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/audio/transcriptions"
+    }
+  }
+}

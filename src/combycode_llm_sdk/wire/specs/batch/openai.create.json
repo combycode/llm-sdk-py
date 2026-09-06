@@ -1,0 +1,15 @@
+{
+  "id": "openai/batch.create",
+  "extends": "openai/batch.base",
+  "_note": "The SECOND call of submit: the JSONL is uploaded first (openai/batch.uploadJsonl), then the batch is created referencing that file id. Endpoint and window are fixed - /v1/responses is where batched chat requests execute.",
+  "envelope": {
+    "method": "POST",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/batches"] },
+    "headers": [{ "name": "content-type", "value": "application/json" }]
+  },
+  "fields": [{ "from": "fileId", "to": "input_file_id" }],
+  "blocks": [
+    { "name": "endpoint", "to": "endpoint", "template": "/v1/responses" },
+    { "name": "completionWindow", "to": "completion_window", "template": "24h" }
+  ]
+}

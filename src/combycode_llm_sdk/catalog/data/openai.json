@@ -1,0 +1,4681 @@
+{
+  "openai/gpt-3.5-turbo": {
+    "providerModelName": "gpt-3.5-turbo",
+    "aliases": [
+      "gpt-3.5-turbo",
+      "gpt-3.5-turbo-0125",
+      "gpt-3.5-turbo-1106",
+      "gpt-3.5-turbo-16k"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.5,
+      "outputPerMTok": 1.5
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 16385,
+    "maxOutput": 4096,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt",
+    "version": "3.5",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "deprecation": {
+      "date": "2026-10-23",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "cl100k_base"
+    }
+  },
+  "openai/gpt-4": {
+    "providerModelName": "gpt-4",
+    "aliases": [
+      "gpt-4",
+      "gpt-4-0613"
+    ],
+    "pricing": {
+      "inputPerMTok": 30,
+      "outputPerMTok": 60
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 8191,
+    "maxOutput": 4096,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt",
+    "version": "4",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "cl100k_base"
+    },
+    "deprecation": {
+      "date": "2026-10-23",
+      "source": "litellm"
+    }
+  },
+  "openai/gpt-4-turbo": {
+    "providerModelName": "gpt-4-turbo",
+    "aliases": [
+      "gpt-4-turbo",
+      "gpt-4-turbo-2024-04-09"
+    ],
+    "pricing": {
+      "inputPerMTok": 10,
+      "outputPerMTok": 30
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 4096,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt",
+    "version": "4",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "deprecation": {
+      "date": "2026-10-23",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "cl100k_base"
+    }
+  },
+  "openai/gpt-4.1": {
+    "providerModelName": "gpt-4.1",
+    "aliases": [
+      "gpt-4.1",
+      "gpt-4.1-2025-04-14"
+    ],
+    "pricing": {
+      "inputPerMTok": 2,
+      "outputPerMTok": 8,
+      "cacheReadPerMTok": 0.5
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 1047576,
+    "maxOutput": 32768,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt",
+    "version": "4.1",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5": {
+    "providerModelName": "gpt-5",
+    "aliases": [
+      "gpt-5",
+      "gpt-5-2025-08-07"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 10,
+      "cacheReadPerMTok": 0.125
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt",
+    "version": "5",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5-search": {
+    "providerModelName": "gpt-5-search-api",
+    "aliases": [
+      "gpt-5-search-api",
+      "gpt-5-search-api-2025-10-14"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 10,
+      "cacheReadPerMTok": 0.125
+    },
+    "preferredApi": "completions",
+    "supportedApis": [
+      "completions"
+    ],
+    "contextWindow": 272000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "search",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt",
+    "version": "5",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.1": {
+    "providerModelName": "gpt-5.1",
+    "aliases": [
+      "gpt-5.1",
+      "gpt-5.1-2025-11-13"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 10,
+      "cacheReadPerMTok": 0.13
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt",
+    "version": "5.1",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.2": {
+    "providerModelName": "gpt-5.2",
+    "aliases": [
+      "gpt-5.2",
+      "gpt-5.2-2025-12-11"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.75,
+      "outputPerMTok": 14,
+      "cacheReadPerMTok": 0.175
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt",
+    "version": "5.2",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.4": {
+    "providerModelName": "gpt-5.4",
+    "aliases": [
+      "gpt-5.4",
+      "gpt-5.4-2026-03-05"
+    ],
+    "pricing": {
+      "inputPerMTok": 2.5,
+      "outputPerMTok": 15,
+      "cacheReadPerMTok": 0.25,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 1.25,
+          "outputPerMTok": 7.5,
+          "cacheReadPerMTok": 0.13
+        },
+        "flex": {
+          "inputPerMTok": 1.25,
+          "outputPerMTok": 7.5,
+          "cacheReadPerMTok": 0.13
+        },
+        "priority": {
+          "inputPerMTok": 5,
+          "outputPerMTok": 30,
+          "cacheReadPerMTok": 0.5
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 1050000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": true,
+      "effortValues": [
+        "none",
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt",
+    "version": "5.4",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.5": {
+    "providerModelName": "gpt-5.5",
+    "aliases": [
+      "gpt-5.5",
+      "gpt-5.5-2026-04-23"
+    ],
+    "pricing": {
+      "inputPerMTok": 5,
+      "outputPerMTok": 30,
+      "cacheReadPerMTok": 0.5,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 15,
+          "cacheReadPerMTok": 0.25
+        },
+        "flex": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 15,
+          "cacheReadPerMTok": 0.25
+        },
+        "priority": {
+          "inputPerMTok": 12.5,
+          "outputPerMTok": 75,
+          "cacheReadPerMTok": 1.25
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 1050000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt",
+    "version": "5.5",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5-chat": {
+    "providerModelName": "gpt-5-chat-latest",
+    "aliases": [
+      "gpt-5-chat-latest"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 10,
+      "cacheReadPerMTok": 0.125
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-chat",
+    "version": "5",
+    "status": "legacy",
+    "active": false,
+    "wireSpec": "openai/responses",
+    "deprecation": {
+      "date": "2026-07-23",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.1-chat": {
+    "providerModelName": "gpt-5.1-chat-latest",
+    "aliases": [
+      "gpt-5.1-chat-latest"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 10,
+      "cacheReadPerMTok": 0.13
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 32000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-chat",
+    "version": "5.1",
+    "status": "legacy",
+    "active": false,
+    "wireSpec": "openai/responses",
+    "deprecation": {
+      "date": "2026-07-23",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.2-chat": {
+    "providerModelName": "gpt-5.2-chat-latest",
+    "aliases": [
+      "gpt-5.2-chat-latest"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.75,
+      "outputPerMTok": 14,
+      "cacheReadPerMTok": 0.175
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-chat",
+    "version": "5.2",
+    "status": "stable",
+    "active": true,
+    "deprecation": {
+      "date": "2026-08-10",
+      "source": "litellm"
+    },
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.3-chat": {
+    "providerModelName": "gpt-5.3-chat-latest",
+    "aliases": [
+      "gpt-5.3-chat-latest"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.75,
+      "outputPerMTok": 14,
+      "cacheReadPerMTok": 0.175
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-chat",
+    "version": "5.3",
+    "status": "stable",
+    "active": true,
+    "deprecation": {
+      "date": "2026-08-10",
+      "source": "litellm"
+    },
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5-codex": {
+    "providerModelName": "gpt-5-codex",
+    "aliases": [
+      "gpt-5-codex"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 10,
+      "cacheReadPerMTok": 0.125
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "code",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-codex",
+    "version": "5",
+    "status": "legacy",
+    "active": false,
+    "deprecation": {
+      "date": "2026-07-23",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.1-codex": {
+    "providerModelName": "gpt-5.1-codex",
+    "aliases": [
+      "gpt-5.1-codex"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 10,
+      "cacheReadPerMTok": 0.13
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "code",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-codex",
+    "version": "5.1",
+    "status": "stable",
+    "active": false,
+    "deprecation": {
+      "date": "2026-07-23",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.1-codex-max": {
+    "providerModelName": "gpt-5.1-codex-max",
+    "aliases": [
+      "gpt-5.1-codex-max"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 10,
+      "cacheReadPerMTok": 0.125
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "code",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-codex",
+    "version": "5.1",
+    "status": "stable",
+    "active": false,
+    "deprecation": {
+      "date": "2026-07-23",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.1-codex-mini": {
+    "providerModelName": "gpt-5.1-codex-mini",
+    "aliases": [
+      "gpt-5.1-codex-mini"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.25,
+      "outputPerMTok": 2,
+      "cacheReadPerMTok": 0.025
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 100000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "code",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-codex",
+    "version": "5.1",
+    "status": "stable",
+    "active": false,
+    "deprecation": {
+      "date": "2026-07-23",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.2-codex": {
+    "providerModelName": "gpt-5.2-codex",
+    "aliases": [
+      "gpt-5.2-codex"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.75,
+      "outputPerMTok": 14,
+      "cacheReadPerMTok": 0.175
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "code",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-codex",
+    "version": "5.2",
+    "status": "stable",
+    "active": false,
+    "deprecation": {
+      "date": "2026-07-23",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.3-codex": {
+    "providerModelName": "gpt-5.3-codex",
+    "aliases": [
+      "gpt-5.3-codex"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.75,
+      "outputPerMTok": 14,
+      "cacheReadPerMTok": 0.175,
+      "tiers": {
+        "priority": {
+          "inputPerMTok": 3.5,
+          "outputPerMTok": 28,
+          "cacheReadPerMTok": 0.35
+        },
+        "fast": {
+          "inputPerMTok": 3.5,
+          "outputPerMTok": 28,
+          "cacheReadPerMTok": 0.35
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "code",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-codex",
+    "version": "5.3",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-4.1-mini": {
+    "providerModelName": "gpt-4.1-mini",
+    "aliases": [
+      "gpt-4.1-mini",
+      "gpt-4.1-mini-2025-04-14"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.4,
+      "outputPerMTok": 1.6,
+      "cacheReadPerMTok": 0.1
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 1047576,
+    "maxOutput": 32768,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": true,
+      "effortValues": [
+        "none",
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-mini",
+    "version": "4.1",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5-mini": {
+    "providerModelName": "gpt-5-mini",
+    "aliases": [
+      "gpt-5-mini",
+      "gpt-5-mini-2025-08-07"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.25,
+      "outputPerMTok": 2,
+      "cacheReadPerMTok": 0.025
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": true,
+      "effortValues": [
+        "none",
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-mini",
+    "version": "5",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.4-mini": {
+    "providerModelName": "gpt-5.4-mini",
+    "aliases": [
+      "gpt-5.4-mini",
+      "gpt-5.4-mini-2026-03-17"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.75,
+      "outputPerMTok": 4.5,
+      "cacheReadPerMTok": 0.075,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 0.375,
+          "outputPerMTok": 2.25,
+          "cacheReadPerMTok": 0.0375
+        },
+        "flex": {
+          "inputPerMTok": 0.375,
+          "outputPerMTok": 2.25,
+          "cacheReadPerMTok": 0.0375
+        },
+        "priority": {
+          "inputPerMTok": 1.5,
+          "outputPerMTok": 9,
+          "cacheReadPerMTok": 0.15
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": true,
+      "effortValues": [
+        "none",
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-mini",
+    "version": "5.4",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-4.1-nano": {
+    "providerModelName": "gpt-4.1-nano",
+    "aliases": [
+      "gpt-4.1-nano",
+      "gpt-4.1-nano-2025-04-14"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.1,
+      "outputPerMTok": 0.4,
+      "cacheReadPerMTok": 0.025
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 1047576,
+    "maxOutput": 32768,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": true,
+      "effortValues": [
+        "none",
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-nano",
+    "version": "4.1",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    },
+    "deprecation": {
+      "date": "2026-10-23",
+      "source": "litellm"
+    }
+  },
+  "openai/gpt-5-nano": {
+    "providerModelName": "gpt-5-nano",
+    "aliases": [
+      "gpt-5-nano",
+      "gpt-5-nano-2025-08-07"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.05,
+      "outputPerMTok": 0.4,
+      "cacheReadPerMTok": 0.01
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": true,
+      "effortValues": [
+        "none",
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-nano",
+    "version": "5",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.4-nano": {
+    "providerModelName": "gpt-5.4-nano",
+    "aliases": [
+      "gpt-5.4-nano",
+      "gpt-5.4-nano-2026-03-17"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.2,
+      "outputPerMTok": 1.25,
+      "cacheReadPerMTok": 0.02,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 0.1,
+          "outputPerMTok": 0.625,
+          "cacheReadPerMTok": 0.01
+        },
+        "flex": {
+          "inputPerMTok": 0.1,
+          "outputPerMTok": 0.625,
+          "cacheReadPerMTok": 0.01
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": true,
+      "effortValues": [
+        "none",
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-nano",
+    "version": "5.4",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5-pro": {
+    "providerModelName": "gpt-5-pro",
+    "aliases": [
+      "gpt-5-pro",
+      "gpt-5-pro-2025-10-06"
+    ],
+    "pricing": {
+      "inputPerMTok": 15,
+      "outputPerMTok": 120
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-pro",
+    "version": "5",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.2-pro": {
+    "providerModelName": "gpt-5.2-pro",
+    "aliases": [
+      "gpt-5.2-pro",
+      "gpt-5.2-pro-2025-12-11"
+    ],
+    "pricing": {
+      "inputPerMTok": 21,
+      "outputPerMTok": 168
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 400000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-pro",
+    "version": "5.2",
+    "status": "legacy",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.4-pro": {
+    "providerModelName": "gpt-5.4-pro",
+    "aliases": [
+      "gpt-5.4-pro",
+      "gpt-5.4-pro-2026-03-05"
+    ],
+    "pricing": {
+      "inputPerMTok": 30,
+      "outputPerMTok": 180,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 15,
+          "outputPerMTok": 90
+        },
+        "flex": {
+          "inputPerMTok": 15,
+          "outputPerMTok": 90
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 1050000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": true,
+      "effortValues": [
+        "medium",
+        "high",
+        "xhigh"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-pro",
+    "version": "5.4",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.5-pro": {
+    "providerModelName": "gpt-5.5-pro",
+    "aliases": [
+      "gpt-5.5-pro",
+      "gpt-5.5-pro-2026-04-23"
+    ],
+    "pricing": {
+      "inputPerMTok": 30,
+      "outputPerMTok": 180,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 15,
+          "outputPerMTok": 90
+        },
+        "flex": {
+          "inputPerMTok": 15,
+          "outputPerMTok": 90
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 1050000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-pro",
+    "version": "5.5",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-4o": {
+    "providerModelName": "gpt-4o",
+    "aliases": [
+      "gpt-4o",
+      "gpt-4o-2024-05-13",
+      "gpt-4o-2024-08-06",
+      "gpt-4o-2024-11-20"
+    ],
+    "pricing": {
+      "inputPerMTok": 2.5,
+      "outputPerMTok": 10
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-4o",
+    "version": "4o",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-4o-mini": {
+    "providerModelName": "gpt-4o-mini",
+    "aliases": [
+      "gpt-4o-mini",
+      "gpt-4o-mini-2024-07-18"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.15,
+      "outputPerMTok": 0.6,
+      "perMinute": 0.003,
+      "cacheReadPerMTok": 0.075
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-4o",
+    "version": "4o",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-4o-search": {
+    "providerModelName": "gpt-4o-search-preview",
+    "aliases": [
+      "gpt-4o-search-preview",
+      "gpt-4o-search-preview-2025-03-11"
+    ],
+    "pricing": {
+      "inputPerMTok": 2.5,
+      "outputPerMTok": 10
+    },
+    "preferredApi": "completions",
+    "supportedApis": [
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "search",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-4o",
+    "version": "4o",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-4o-mini-search": {
+    "providerModelName": "gpt-4o-mini-search-preview",
+    "aliases": [
+      "gpt-4o-mini-search-preview",
+      "gpt-4o-mini-search-preview-2025-03-11"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.15,
+      "outputPerMTok": 0.6
+    },
+    "preferredApi": "completions",
+    "supportedApis": [
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "search",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-4o",
+    "version": "4o",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-image-1": {
+    "providerModelName": "gpt-image-1",
+    "aliases": [
+      "gpt-image-1"
+    ],
+    "pricing": {
+      "inputPerMTok": 8,
+      "outputPerMTok": 32,
+      "cacheReadPerMTok": 2
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": true,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "image",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "image"
+    ],
+    "family": "gpt-image",
+    "version": "1",
+    "status": "legacy",
+    "active": true,
+    "mediaParams": {
+      "size": {
+        "values": [
+          "auto",
+          "1024x1024",
+          "1536x1024",
+          "1024x1536"
+        ],
+        "default": "auto"
+      },
+      "quality": {
+        "values": [
+          "auto",
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "auto"
+      },
+      "background": {
+        "values": [
+          "auto",
+          "transparent",
+          "opaque"
+        ],
+        "default": "auto"
+      },
+      "outputFormat": {
+        "values": [
+          "png",
+          "jpeg",
+          "webp"
+        ],
+        "default": "png"
+      },
+      "n": {
+        "min": 1,
+        "max": 10,
+        "default": 1
+      }
+    },
+    "mediaOnly": true,
+    "deprecation": {
+      "date": "2026-10-23",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-image-1-mini": {
+    "providerModelName": "gpt-image-1-mini",
+    "aliases": [
+      "gpt-image-1-mini"
+    ],
+    "pricing": {
+      "inputPerMTok": 2.5,
+      "outputPerMTok": 8,
+      "cacheReadPerMTok": 0.25,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 1.25,
+          "outputPerMTok": 4,
+          "cacheReadPerMTok": 0.13
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": true,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "image",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "image"
+    ],
+    "family": "gpt-image",
+    "version": "1",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "size": {
+        "values": [
+          "auto",
+          "1024x1024",
+          "1536x1024",
+          "1024x1536"
+        ],
+        "default": "auto"
+      },
+      "quality": {
+        "values": [
+          "auto",
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "auto"
+      },
+      "background": {
+        "values": [
+          "auto",
+          "transparent",
+          "opaque"
+        ],
+        "default": "auto"
+      },
+      "outputFormat": {
+        "values": [
+          "png",
+          "jpeg",
+          "webp"
+        ],
+        "default": "png"
+      },
+      "n": {
+        "min": 1,
+        "max": 10,
+        "default": 1
+      }
+    },
+    "mediaOnly": true,
+    "deprecation": {
+      "date": "2026-12-01",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-image-1.5": {
+    "providerModelName": "gpt-image-1.5",
+    "aliases": [
+      "gpt-image-1.5"
+    ],
+    "pricing": {
+      "inputPerMTok": 8,
+      "outputPerMTok": 32,
+      "cacheReadPerMTok": 2,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 4,
+          "outputPerMTok": 16,
+          "cacheReadPerMTok": 1
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": true,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "image",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "image"
+    ],
+    "family": "gpt-image",
+    "version": "1.5",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "size": {
+        "values": [
+          "auto",
+          "1024x1024",
+          "1536x1024",
+          "1024x1536"
+        ],
+        "default": "auto"
+      },
+      "quality": {
+        "values": [
+          "auto",
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "auto"
+      },
+      "background": {
+        "values": [
+          "auto",
+          "transparent",
+          "opaque"
+        ],
+        "default": "auto"
+      },
+      "outputFormat": {
+        "values": [
+          "png",
+          "jpeg",
+          "webp"
+        ],
+        "default": "png"
+      },
+      "n": {
+        "min": 1,
+        "max": 10,
+        "default": 1
+      }
+    },
+    "mediaOnly": true,
+    "deprecation": {
+      "date": "2026-12-01",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-image-2": {
+    "providerModelName": "gpt-image-2",
+    "aliases": [
+      "gpt-image-2",
+      "gpt-image-2-2026-04-21"
+    ],
+    "pricing": {
+      "inputPerMTok": 8,
+      "outputPerMTok": 30,
+      "cacheReadPerMTok": 2,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 4,
+          "outputPerMTok": 15,
+          "cacheReadPerMTok": 1
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": true,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "image",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "image"
+    ],
+    "family": "gpt-image",
+    "version": "2",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "size": {
+        "values": [
+          "auto",
+          "1024x1024",
+          "1536x1024",
+          "1024x1536"
+        ],
+        "default": "auto"
+      },
+      "quality": {
+        "values": [
+          "auto",
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "auto"
+      },
+      "background": {
+        "values": [
+          "auto",
+          "transparent",
+          "opaque"
+        ],
+        "default": "auto"
+      },
+      "outputFormat": {
+        "values": [
+          "png",
+          "jpeg",
+          "webp"
+        ],
+        "default": "png"
+      },
+      "n": {
+        "min": 1,
+        "max": 10,
+        "default": 1
+      }
+    },
+    "mediaOnly": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-audio": {
+    "providerModelName": "gpt-audio",
+    "aliases": [
+      "gpt-audio",
+      "gpt-audio-2025-08-28"
+    ],
+    "pricing": {
+      "inputPerMTok": 2.5,
+      "outputPerMTok": 10
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "audio-chat",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-audio",
+    "version": "1",
+    "status": "legacy",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    },
+    "deprecation": {
+      "date": "2027-01-20",
+      "source": "litellm"
+    }
+  },
+  "openai/gpt-audio-1.5": {
+    "providerModelName": "gpt-audio-1.5",
+    "aliases": [
+      "gpt-audio-1.5"
+    ],
+    "pricing": {
+      "inputPerMTok": 2.5,
+      "outputPerMTok": 10,
+      "audioInputPerMTok": 32,
+      "audioOutputPerMTok": 64
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "audio-chat",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-audio",
+    "version": "1.5",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-audio-mini": {
+    "providerModelName": "gpt-audio-mini",
+    "aliases": [
+      "gpt-audio-mini",
+      "gpt-audio-mini-2025-10-06",
+      "gpt-audio-mini-2025-12-15"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.6,
+      "outputPerMTok": 2.4
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "audio-chat",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-audio",
+    "version": "1",
+    "status": "stable",
+    "active": true,
+    "deprecation": {
+      "date": "2027-01-20",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-realtime": {
+    "providerModelName": "gpt-realtime",
+    "aliases": [
+      "gpt-realtime",
+      "gpt-realtime-2025-08-28"
+    ],
+    "pricing": {
+      "inputPerMTok": 32,
+      "outputPerMTok": 64,
+      "cacheReadPerMTok": 0.4,
+      "audioInputPerMTok": 32,
+      "audioOutputPerMTok": 64
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 32000,
+    "maxOutput": 4096,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "realtime",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-realtime",
+    "version": "1",
+    "status": "legacy",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    },
+    "deprecation": {
+      "date": "2027-01-20",
+      "source": "litellm"
+    }
+  },
+  "openai/gpt-realtime-1.5": {
+    "providerModelName": "gpt-realtime-1.5",
+    "aliases": [
+      "gpt-realtime-1.5"
+    ],
+    "pricing": {
+      "inputPerMTok": 4,
+      "outputPerMTok": 16,
+      "cacheReadPerMTok": 0.4,
+      "audioInputPerMTok": 32,
+      "audioOutputPerMTok": 64
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 32000,
+    "maxOutput": 4096,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "realtime",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-realtime",
+    "version": "1.5",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-realtime-2": {
+    "providerModelName": "gpt-realtime-2",
+    "aliases": [
+      "gpt-realtime-2"
+    ],
+    "pricing": {
+      "inputPerMTok": 32,
+      "outputPerMTok": 64,
+      "cacheReadPerMTok": 0.4,
+      "audioInputPerMTok": 32,
+      "audioOutputPerMTok": 64
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 32000,
+    "maxOutput": 4096,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "realtime",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-realtime",
+    "version": "2",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-realtime-mini": {
+    "providerModelName": "gpt-realtime-mini",
+    "aliases": [
+      "gpt-realtime-mini",
+      "gpt-realtime-mini-2025-10-06",
+      "gpt-realtime-mini-2025-12-15"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.6,
+      "outputPerMTok": 2.4,
+      "audioInputPerMTok": 10,
+      "audioOutputPerMTok": 20
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 4096,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "realtime",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-realtime",
+    "version": "1",
+    "status": "stable",
+    "active": true,
+    "deprecation": {
+      "date": "2027-01-20",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-realtime-translate": {
+    "providerModelName": "gpt-realtime-translate",
+    "aliases": [
+      "gpt-realtime-translate"
+    ],
+    "pricing": {
+      "perMinute": 0.034
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "realtime",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-realtime",
+    "version": "1",
+    "status": "stable",
+    "active": true,
+    "contextWindow": 16000,
+    "maxOutput": 2000,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-realtime-whisper": {
+    "providerModelName": "gpt-realtime-whisper",
+    "aliases": [
+      "gpt-realtime-whisper"
+    ],
+    "pricing": {
+      "perMinute": 0.017
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "realtime",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-realtime",
+    "version": "1",
+    "status": "stable",
+    "active": true,
+    "contextWindow": 128000,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/o1": {
+    "providerModelName": "o1",
+    "aliases": [
+      "o1",
+      "o1-2024-12-17"
+    ],
+    "pricing": {
+      "inputPerMTok": 15,
+      "outputPerMTok": 60,
+      "cacheReadPerMTok": 7.5
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 200000,
+    "maxOutput": 100000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": true,
+      "effortControl": true,
+      "effortValues": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "o-series",
+    "version": "1",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    },
+    "deprecation": {
+      "date": "2026-10-23",
+      "source": "litellm"
+    }
+  },
+  "openai/o1-pro": {
+    "providerModelName": "o1-pro",
+    "aliases": [
+      "o1-pro",
+      "o1-pro-2025-03-19"
+    ],
+    "pricing": {
+      "inputPerMTok": 150,
+      "outputPerMTok": 600
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 200000,
+    "maxOutput": 100000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "o-series",
+    "version": "1",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "deprecation": {
+      "date": "2026-10-23",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/o3": {
+    "providerModelName": "o3",
+    "aliases": [
+      "o3",
+      "o3-2025-04-16"
+    ],
+    "pricing": {
+      "inputPerMTok": 2,
+      "outputPerMTok": 8,
+      "cacheReadPerMTok": 0.5
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 200000,
+    "maxOutput": 100000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": true,
+      "effortControl": true,
+      "effortValues": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "o-series",
+    "version": "3",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/o3-mini": {
+    "providerModelName": "o3-mini",
+    "aliases": [
+      "o3-mini",
+      "o3-mini-2025-01-31"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.1,
+      "outputPerMTok": 4.4,
+      "cacheReadPerMTok": 0.55
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 200000,
+    "maxOutput": 100000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": true,
+      "effortControl": true,
+      "effortValues": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "o-series",
+    "version": "3",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    },
+    "deprecation": {
+      "date": "2026-10-23",
+      "source": "litellm"
+    }
+  },
+  "openai/o3-pro": {
+    "providerModelName": "o3-pro",
+    "aliases": [
+      "o3-pro",
+      "o3-pro-2025-06-10"
+    ],
+    "pricing": {
+      "inputPerMTok": 20,
+      "outputPerMTok": 80
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses"
+    ],
+    "contextWindow": 200000,
+    "maxOutput": 100000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "o-series",
+    "version": "3",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/o4-mini": {
+    "providerModelName": "o4-mini",
+    "aliases": [
+      "o4-mini",
+      "o4-mini-2025-04-16"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.1,
+      "outputPerMTok": 4.4,
+      "cacheReadPerMTok": 0.275,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 2,
+          "outputPerMTok": 8,
+          "cacheReadPerMTok": 0.5
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 200000,
+    "maxOutput": 100000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": true,
+      "effortControl": true,
+      "effortValues": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "effortMeaning": "thinking_depth",
+      "encryptedContent": true,
+      "summaryAvailable": true
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "o-series",
+    "version": "4",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    },
+    "deprecation": {
+      "date": "2026-10-23",
+      "source": "litellm"
+    }
+  },
+  "openai/sora-2": {
+    "providerModelName": "sora-2",
+    "aliases": [
+      "sora-2"
+    ],
+    "pricing": {
+      "perSecond": 0.1,
+      "perUnit": {
+        "720p": 0.1
+      },
+      "tiers": {
+        "batch": {
+          "perSecond": 0.05,
+          "perUnit": {
+            "720p": 0.05
+          }
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "video",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "video"
+    ],
+    "family": "sora",
+    "version": "2",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "duration": {
+        "values": [
+          "4",
+          "8",
+          "12"
+        ],
+        "default": "4"
+      },
+      "size": {
+        "values": [
+          "720x1280",
+          "1280x720",
+          "1024x1792",
+          "1792x1024"
+        ],
+        "default": "720x1280"
+      }
+    },
+    "deprecation": {
+      "date": "2026-09-24",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/sora-2-pro": {
+    "providerModelName": "sora-2-pro",
+    "aliases": [
+      "sora-2-pro"
+    ],
+    "pricing": {
+      "perSecond": 0.3,
+      "perUnit": {
+        "720p": 0.3,
+        "1024p": 0.5,
+        "1080p": 0.7
+      },
+      "tiers": {
+        "batch": {
+          "perSecond": 0.15,
+          "perUnit": {
+            "720p": 0.15,
+            "1024p": 0.25,
+            "1080p": 0.35
+          }
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "video",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "video"
+    ],
+    "family": "sora",
+    "version": "2",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "duration": {
+        "values": [
+          "4",
+          "8",
+          "12"
+        ],
+        "default": "4"
+      },
+      "size": {
+        "values": [
+          "720x1280",
+          "1280x720",
+          "1024x1792",
+          "1792x1024"
+        ],
+        "default": "720x1280"
+      }
+    },
+    "deprecation": {
+      "date": "2026-09-24",
+      "source": "litellm"
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/text-embedding-3-small": {
+    "providerModelName": "text-embedding-3-small",
+    "aliases": [
+      "text-embedding-3-small"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.02,
+      "outputPerMTok": 0
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 8191,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "embedding",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "text-embedding",
+    "version": "3",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/text-embedding-3-large": {
+    "providerModelName": "text-embedding-3-large",
+    "aliases": [
+      "text-embedding-3-large"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.13,
+      "outputPerMTok": 0
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 8191,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "embedding",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "text-embedding",
+    "version": "3",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/text-embedding-ada-002": {
+    "providerModelName": "text-embedding-ada-002",
+    "aliases": [
+      "text-embedding-ada-002"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.1,
+      "outputPerMTok": 0
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 8191,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "embedding",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "text-embedding",
+    "version": "2",
+    "status": "legacy",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/tts-1": {
+    "providerModelName": "tts-1",
+    "aliases": [
+      "tts-1",
+      "tts-1-1106"
+    ],
+    "pricing": {
+      "perMChars": 15
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": true,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "tts",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "audio"
+    ],
+    "family": "tts",
+    "version": "1",
+    "status": "legacy",
+    "active": true,
+    "mediaParams": {
+      "voice": {
+        "values": [
+          "alloy",
+          "ash",
+          "ballad",
+          "coral",
+          "echo",
+          "fable",
+          "onyx",
+          "nova",
+          "sage",
+          "shimmer",
+          "verse",
+          "marin",
+          "cedar"
+        ],
+        "default": "alloy"
+      },
+      "format": {
+        "values": [
+          "mp3",
+          "opus",
+          "aac",
+          "flac",
+          "wav",
+          "pcm"
+        ],
+        "default": "mp3"
+      },
+      "speed": {
+        "min": 0.25,
+        "max": 4,
+        "default": 1
+      }
+    },
+    "mediaOnly": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/tts-1-hd": {
+    "providerModelName": "tts-1-hd",
+    "aliases": [
+      "tts-1-hd",
+      "tts-1-hd-1106"
+    ],
+    "pricing": {
+      "perMChars": 30
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": true,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "tts",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "audio"
+    ],
+    "family": "tts",
+    "version": "1",
+    "status": "legacy",
+    "active": true,
+    "mediaParams": {
+      "voice": {
+        "values": [
+          "alloy",
+          "ash",
+          "ballad",
+          "coral",
+          "echo",
+          "fable",
+          "onyx",
+          "nova",
+          "sage",
+          "shimmer",
+          "verse",
+          "marin",
+          "cedar"
+        ],
+        "default": "alloy"
+      },
+      "format": {
+        "values": [
+          "mp3",
+          "opus",
+          "aac",
+          "flac",
+          "wav",
+          "pcm"
+        ],
+        "default": "mp3"
+      },
+      "speed": {
+        "min": 0.25,
+        "max": 4,
+        "default": 1
+      }
+    },
+    "mediaOnly": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-4o-mini-tts": {
+    "providerModelName": "gpt-4o-mini-tts",
+    "aliases": [
+      "gpt-4o-mini-tts",
+      "gpt-4o-mini-tts-2025-03-20",
+      "gpt-4o-mini-tts-2025-12-15"
+    ],
+    "pricing": {
+      "inputPerMTok": 2.5,
+      "outputPerMTok": 10,
+      "audioOutputPerMTok": 12
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": true,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "tts",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "audio"
+    ],
+    "family": "tts",
+    "version": "4o",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "voice": {
+        "values": [
+          "alloy",
+          "ash",
+          "ballad",
+          "coral",
+          "echo",
+          "fable",
+          "onyx",
+          "nova",
+          "sage",
+          "shimmer",
+          "verse",
+          "marin",
+          "cedar"
+        ],
+        "default": "alloy"
+      },
+      "format": {
+        "values": [
+          "mp3",
+          "opus",
+          "aac",
+          "flac",
+          "wav",
+          "pcm"
+        ],
+        "default": "mp3"
+      },
+      "speed": {
+        "min": 0.25,
+        "max": 4,
+        "default": 1
+      }
+    },
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/whisper-1": {
+    "providerModelName": "whisper-1",
+    "aliases": [
+      "whisper-1"
+    ],
+    "pricing": {
+      "perMinute": 0.006
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "stt",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "whisper",
+    "version": "1",
+    "status": "legacy",
+    "active": true,
+    "contextWindow": 16000,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-4o-transcribe": {
+    "providerModelName": "gpt-4o-transcribe",
+    "aliases": [
+      "gpt-4o-transcribe"
+    ],
+    "pricing": {
+      "inputPerMTok": 2.5,
+      "outputPerMTok": 10,
+      "perMinute": 0.006
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 16000,
+    "maxOutput": 2000,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "stt",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "whisper",
+    "version": "4o",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-4o-transcribe-diarize": {
+    "providerModelName": "gpt-4o-transcribe-diarize",
+    "aliases": [
+      "gpt-4o-transcribe-diarize"
+    ],
+    "pricing": {
+      "inputPerMTok": 2.5,
+      "outputPerMTok": 10,
+      "audioInputPerMTok": 2.5,
+      "perMinute": 0.006
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 16000,
+    "maxOutput": 2000,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "stt",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "whisper",
+    "version": "4o",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-4o-mini-transcribe": {
+    "providerModelName": "gpt-4o-mini-transcribe",
+    "aliases": [
+      "gpt-4o-mini-transcribe",
+      "gpt-4o-mini-transcribe-2025-03-20",
+      "gpt-4o-mini-transcribe-2025-12-15"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.25,
+      "outputPerMTok": 5,
+      "perMinute": 0.003
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 16000,
+    "maxOutput": 2000,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "stt",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "whisper",
+    "version": "4o",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/omni-moderation": {
+    "providerModelName": "omni-moderation-2024-09-26",
+    "aliases": [
+      "omni-moderation-2024-09-26",
+      "omni-moderation-latest"
+    ],
+    "pricing": {
+      "inputPerMTok": 0,
+      "outputPerMTok": 0
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 32768,
+    "maxOutput": 0,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "moderation",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "moderation",
+    "version": "1",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-realtime-2.1-mini": {
+    "providerModelName": "gpt-realtime-2.1-mini",
+    "aliases": [
+      "gpt-realtime-2.1-mini"
+    ],
+    "pricing": {
+      "inputPerMTok": 10,
+      "cacheReadPerMTok": 0.3,
+      "outputPerMTok": 20
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 4096,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "realtime",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-realtime",
+    "version": "2.1",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-realtime-2.1": {
+    "providerModelName": "gpt-realtime-2.1",
+    "aliases": [
+      "gpt-realtime-2.1"
+    ],
+    "pricing": {
+      "inputPerMTok": 32,
+      "cacheReadPerMTok": 0.4,
+      "outputPerMTok": 64
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 128000,
+    "maxOutput": 32000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "realtime",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-realtime",
+    "version": "2.1",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.6-sol": {
+    "providerModelName": "gpt-5.6-sol",
+    "aliases": [
+      "gpt-5.6-sol"
+    ],
+    "pricing": {
+      "inputPerMTok": 4,
+      "outputPerMTok": 20,
+      "cacheReadPerMTok": 0.4,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 15,
+          "cacheReadPerMTok": 0.25
+        },
+        "flex": {
+          "inputPerMTok": 2.5,
+          "outputPerMTok": 15,
+          "cacheReadPerMTok": 0.25
+        },
+        "priority": {
+          "inputPerMTok": 10,
+          "outputPerMTok": 60,
+          "cacheReadPerMTok": 1
+        },
+        "fast": {
+          "inputPerMTok": 8,
+          "outputPerMTok": 40,
+          "cacheReadPerMTok": 0.8
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 1050000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-sol",
+    "version": "5.6",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.6-terra": {
+    "providerModelName": "gpt-5.6-terra",
+    "aliases": [
+      "gpt-5.6-terra"
+    ],
+    "pricing": {
+      "inputPerMTok": 2,
+      "outputPerMTok": 12,
+      "cacheReadPerMTok": 0.2,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 1.25,
+          "outputPerMTok": 7.5,
+          "cacheReadPerMTok": 0.125
+        },
+        "flex": {
+          "inputPerMTok": 1.25,
+          "outputPerMTok": 7.5,
+          "cacheReadPerMTok": 0.125
+        },
+        "priority": {
+          "inputPerMTok": 5,
+          "outputPerMTok": 30,
+          "cacheReadPerMTok": 0.5
+        },
+        "fast": {
+          "inputPerMTok": 4,
+          "outputPerMTok": 24,
+          "cacheReadPerMTok": 0.4
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 1050000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-terra",
+    "version": "5.6",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-5.6-luna": {
+    "providerModelName": "gpt-5.6-luna",
+    "aliases": [
+      "gpt-5.6-luna"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.2,
+      "outputPerMTok": 1.2,
+      "cacheReadPerMTok": 0.02,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 0.5,
+          "outputPerMTok": 3,
+          "cacheReadPerMTok": 0.05
+        },
+        "flex": {
+          "inputPerMTok": 0.5,
+          "outputPerMTok": 3,
+          "cacheReadPerMTok": 0.05
+        },
+        "priority": {
+          "inputPerMTok": 2,
+          "outputPerMTok": 12,
+          "cacheReadPerMTok": 0.2
+        },
+        "fast": {
+          "inputPerMTok": 0.4,
+          "outputPerMTok": 2.4,
+          "cacheReadPerMTok": 0.04
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 1050000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-luna",
+    "version": "5.6",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses",
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-live-transcribe": {
+    "providerModelName": "gpt-live-transcribe",
+    "aliases": [
+      "gpt-live-transcribe"
+    ],
+    "pricing": {
+      "perMinute": 0.017
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 16000,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "stt",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "whisper",
+    "version": "1",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  },
+  "openai/gpt-transcribe": {
+    "providerModelName": "gpt-transcribe",
+    "aliases": [
+      "gpt-transcribe"
+    ],
+    "pricing": {
+      "perMinute": 0.0045
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 16000,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "stt",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "whisper",
+    "version": "1",
+    "status": "stable",
+    "active": true,
+    "tokenizer": {
+      "strategy": "tiktoken",
+      "charsPerTokenDefault": 3.8,
+      "countApiAvailable": false,
+      "tiktokenEncoding": "o200k_base"
+    }
+  }
+}

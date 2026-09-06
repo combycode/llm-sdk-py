@@ -1,0 +1,26 @@
+{
+  "id": "openai/retrieval.uploadFile",
+  "extends": "openai/retrieval.base",
+  "envelope": {
+    "method": "POST",
+    "bodyKind": "multipart",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1/files"
+      ]
+    }
+  },
+  "multipart": [
+    {
+      "name": "file",
+      "file": true
+    },
+    {
+      "name": "purpose",
+      "value": "assistants"
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "_doc": "What token counting, model listing, file retrieval and the provenance check sent, normalised so the record survives the fetch-shape change. Regenerate ONLY with --force and only when the wire genuinely changed.",
+  "frozenAtCommit": "889262b9059f193318a757dd557c35bd11472666",
+  "counts": {
+    "cases": 18,
+    "requests": 18
+  },
+  "index": {
+    "utility/count.anthropic.text": {
+      "body": {
+        "messages": [
+          {
+            "content": "hello",
+            "role": "user"
+          }
+        ],
+        "model": "claude-haiku-4-5"
+      },
+      "headers": {
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+        "x-api-key": "k"
+      },
+      "method": "POST",
+      "responseType": "json",
+      "url": "https://api.anthropic.com/v1/messages/count_tokens"
+    },
+    "utility/count.anthropic.system": {
+      "body": {
+        "messages": [
+          {
+            "content": "hello",
+            "role": "user"
+          }
+        ],
+        "model": "claude-haiku-4-5",
+        "system": "be brief"
+      },
+      "headers": {
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+        "x-api-key": "k"
+      },
+      "method": "POST",
+      "responseType": "json",
+      "url": "https://api.anthropic.com/v1/messages/count_tokens"
+    },
+    "utility/count.google.bare": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hello"
+              }
+            ]
+          }
+        ]
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:countTokens"
+    },
+    "utility/count.xai.text": {
+      "body": {
+        "model": "grok-4.3",
+        "text": "hello"
+      },
+      "headers": {
+        "authorization": "Bearer k",
+        "content-type": "application/json"
+      },
+      "method": "POST",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/tokenize-text"
+    },
+    "utility/count.google.prefixed": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hello"
+              }
+            ]
+          }
+        ]
+      },
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-key": "k"
+      },
+      "method": "POST",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:countTokens"
+    },
+    "utility/models.openai": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/models"
+    },
+    "utility/models.anthropic": {
+      "headers": {
+        "anthropic-version": "2023-06-01",
+        "x-api-key": "k"
+      },
+      "method": "GET",
+      "responseType": "json",
+      "url": "https://api.anthropic.com/v1/models"
+    },
+    "utility/models.google": {
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "responseType": "json",
+      "url": "https://generativelanguage.googleapis.com/v1beta/models"
+    },
+    "utility/models.xai": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "responseType": "json",
+      "url": "https://api.x.ai/v1/models"
+    },
+    "utility/models.openrouter": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "responseType": "json",
+      "url": "https://openrouter.ai/api/v1/models"
+    },
+    "utility/retrieve.openai.byId": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "responseType": "arraybuffer",
+      "url": "https://api.openai.com/v1/files/file-abc/content"
+    },
+    "utility/retrieve.anthropic.byId": {
+      "headers": {
+        "accept": "application/binary",
+        "anthropic-beta": "files-api-2025-04-14",
+        "anthropic-version": "2023-06-01",
+        "x-api-key": "k"
+      },
+      "method": "GET",
+      "responseType": "arraybuffer",
+      "url": "https://api.anthropic.com/v1/files/file-abc/content?beta=true"
+    },
+    "utility/retrieve.google.byId": {
+      "headers": {
+        "x-goog-api-key": "k"
+      },
+      "method": "GET",
+      "responseType": "arraybuffer",
+      "url": "https://generativelanguage.googleapis.com/v1beta/files/files/abc:download?alt=media"
+    },
+    "utility/retrieve.xai.byId": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "responseType": "arraybuffer",
+      "url": "https://api.x.ai/v1/files/file-abc/content"
+    },
+    "utility/retrieve.absoluteUrl": {
+      "headers": {},
+      "method": "GET",
+      "responseType": "arraybuffer",
+      "url": "https://cdn.example.com/out/r.pdf"
+    },
+    "utility/retrieve.openai.container": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "responseType": "arraybuffer",
+      "url": "https://api.openai.com/v1/containers/cntr-1/files/file-abc/content"
+    },
+    "utility/stream.openai.stream": {
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "GET",
+      "responseType": "stream",
+      "url": "https://api.openai.com/v1/files/file-abc/content"
+    },
+    "utility/provenance.png": {
+      "body": {
+        "__formData": [
+          {
+            "filename": "shot.png",
+            "name": "file",
+            "size": 4,
+            "type": "image/png"
+          }
+        ]
+      },
+      "headers": {
+        "authorization": "Bearer k"
+      },
+      "method": "POST",
+      "responseType": "json",
+      "url": "https://api.openai.com/v1/content_provenance_checks"
+    }
+  }
+}

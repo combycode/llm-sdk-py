@@ -1,0 +1,12 @@
+{
+  "id": "xai/retrieval.standardJson",
+  "extends": "xai/retrieval.standard",
+  "envelope": {
+    "headers": [
+      {
+        "name": "content-type",
+        "value": "application/json"
+      }
+    ]
+  }
+}

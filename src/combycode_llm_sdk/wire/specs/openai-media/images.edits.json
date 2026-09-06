@@ -1,0 +1,15 @@
+{
+  "id": "openai/images.edits",
+  "extends": "openai/media.images",
+  "_note": "Image-to-image. Sibling of generations: same field set plus the source image and an optional mask, minus `style`.",
+  "envelope": { "url": { "$join": [{ "$config": "baseURL" }, "/v1/images/edits"] } },
+  "blocks": [
+    { "name": "images", "to": "images", "template": [{ "$call": "openaiSourceImageRef" }] },
+    {
+      "name": "mask",
+      "when": { "truthy": "mask" },
+      "to": "mask",
+      "template": { "$call": "openaiMaskRef" }
+    }
+  ]
+}

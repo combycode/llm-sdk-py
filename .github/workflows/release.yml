@@ -1,0 +1,98 @@
+name: Release
+
+# Tag-triggered PyPI release. `workflow_dispatch` is a build-only dry run.
+#
+# Publishing is OIDC trusted publishing -- no API token is stored anywhere. PyPI
+# supports a "pending publisher" for a project that does not exist yet, so even
+# the FIRST release goes out this way and the pending publisher converts to a
+# normal one on first use. There is no manual bootstrap step.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  # The lowest version the package supports, so the gate runs against the
+  # oldest interpreter a consumer might have rather than the newest.
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  publish:
+    name: build + publish PyPI
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: pypi
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]" build
+
+      # The same gate that guards a local commit. A red check is a red release.
+      - run: python -m ruff check src tests examples
+      - run: python -m mypy src tests
+      - run: python -m pytest -q
+        env:
+          PYTHONPATH: src
+
+      # The tag is the release; the package has to agree with it, or the
+      # artifact says one version and the tag another. Read from the INSTALLED
+      # metadata rather than pyproject: the version is dynamic, sourced from
+      # `__version__`, so pyproject has no literal to compare against.
+      - name: Tag and package must agree
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          declared=$(python -c "import importlib.metadata as m;print(m.version('combycode-llm-sdk'))")
+          if [ "$tag" != "$declared" ]; then
+            echo "tag v$tag does not match the package version $declared"; exit 1
+          fi
+          echo "version $declared"
+
+      - name: Build sdist + wheel
+        run: python -m build
+
+      - name: Check the artifacts are well formed
+        run: |
+          python -m pip install twine
+          python -m twine check dist/*
+
+      - name: Stop here on a dry run
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "dry-run: built only, not publishing"
+
+      # Idempotent: re-running a tag that is already on PyPI must not fail the
+      # job, the way a re-run of the npm release does not.
+      - name: Skip if this version is already on PyPI
+        if: github.event_name == 'push'
+        id: exists
+        shell: bash
+        run: |
+          name=combycode-llm-sdk
+          tag="${GITHUB_REF_NAME#v}"
+          code=$(curl -s -o /dev/null -w '%{http_code}' "https://pypi.org/pypi/$name/$tag/json")
+          if [ "$code" = "200" ]; then
+            echo "$name $tag already on PyPI -- skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish to PyPI
+        if: github.event_name == 'push' && steps.exists.outputs.skip == 'false'
+        uses: pypa/gh-action-pypi-publish@v1.14.2

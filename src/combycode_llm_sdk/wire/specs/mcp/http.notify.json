@@ -1,0 +1,23 @@
+{
+  "id": "mcp/http.notify",
+  "extends": "mcp/http.base",
+  "_note": "Identical to a request except that it carries no id, which is what makes it a notification: a server must not answer it. It also carries NO routing headers. That asymmetry is what the transport has always sent and what the frozen corpus records; whether a modern gateway would prefer Mcp-Method here is untested against a real 2026 server, so it is not being changed on a guess.",
+  "envelope": {
+    "method": "POST"
+  },
+  "fields": [
+    {
+      "from": "jsonrpc",
+      "to": "jsonrpc",
+      "default": "2.0"
+    },
+    {
+      "from": "method",
+      "to": "method"
+    },
+    {
+      "from": "params",
+      "to": "params"
+    }
+  ]
+}

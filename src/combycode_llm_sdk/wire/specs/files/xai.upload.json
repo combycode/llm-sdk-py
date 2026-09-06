@@ -1,0 +1,10 @@
+{
+  "id": "xai/files.upload",
+  "extends": "openai/files.base",
+  "_note": "Identical to OpenAI's upload except the purpose value — the whole xAI files surface is one field different.",
+  "envelope": {
+    "method": "POST", "bodyKind": "multipart",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/files"] }
+  },
+  "multipart": [{ "name": "file", "file": true }, { "name": "purpose", "value": "assistants" }]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "openai/transcriptions",
+  "provider": "openai", "api": "transcription",
+  "_note": "Multipart. The list options use REPEATED keys (`languages[]` once per code), not one array-valued field - which is why `repeat` exists. `response_format` is mutually exclusive between diarization and word timestamps: they select different formats and no model serves both, so the adapter rejects the combination before it gets here.",
+  "envelope": {
+    "method": "POST", "bodyKind": "multipart",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/audio/transcriptions"] },
+    "headers": [
+      { "name": "authorization", "value": { "$join": ["Bearer ", { "$config": "apiKey" }] } }
+    ]
+  },
+  "multipart": [
+    { "name": "file", "file": true },
+    { "name": "model", "value": { "$": "model" } },
+    { "name": "language", "when": { "truthy": "language" }, "value": { "$": "language" } },
+    { "name": "languages[]", "repeat": true, "when": { "truthy": "languages" }, "value": { "$": "languages" } },
+    { "name": "keywords[]", "repeat": true, "when": { "truthy": "keywords" }, "value": { "$": "keywords" } },
+    { "name": "response_format", "when": { "truthy": "diarization" }, "value": "diarized_json" },
+    {
+      "name": "response_format",
+      "when": { "all": [{ "truthy": "wordTimestamps" }, { "not": { "truthy": "diarization" } }] },
+      "value": "verbose_json"
+    },
+    {
+      "name": "timestamp_granularities[]",
+      "repeat": true,
+      "when": { "all": [{ "truthy": "wordTimestamps" }, { "not": { "truthy": "diarization" } }] },
+      "value": ["segment", "word"]
+    }
+  ]
+}

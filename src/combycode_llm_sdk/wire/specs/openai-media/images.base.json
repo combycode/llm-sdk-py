@@ -1,0 +1,14 @@
+{
+  "id": "openai/media.images",
+  "extends": "openai/media.base",
+  "_note": "Fields common to /v1/images/generations and /v1/images/edits. Two endpoints, one field set — a shared parent rather than duplicated specs.",
+  "fields": [
+    { "from": "model", "to": "model", "default": "gpt-image-1" },
+    { "from": "prompt", "to": "prompt" },
+    { "from": "params.n", "to": "n", "default": 1 },
+    { "from": "params.size", "to": "size", "presence": "truthy" },
+    { "from": "params.quality", "to": "quality", "presence": "truthy" },
+    { "from": "params.background", "to": "background", "presence": "truthy" },
+    { "from": "params.outputFormat", "to": "output_format", "presence": "truthy" }
+  ]
+}

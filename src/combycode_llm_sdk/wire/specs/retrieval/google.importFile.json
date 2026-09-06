@@ -1,0 +1,55 @@
+{
+  "id": "google/retrieval.importFile",
+  "extends": "google/retrieval.json",
+  "_note": "`:importFile` is a custom method suffixed onto the store resource name, not a subpath.",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1beta/",
+        {
+          "$": "corpusId"
+        },
+        ":importFile"
+      ]
+    }
+  },
+  "fields": [
+    {
+      "from": "fileName",
+      "to": "fileName"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "customMetadata",
+      "_note": "Google takes metadata as a LIST of {key,value} with STRING values — an object, or a numeric value, is rejected.",
+      "when": {
+        "truthy": "metadata"
+      },
+      "to": "customMetadata",
+      "template": {
+        "$call": "googleCustomMetadata",
+        "$arg": {
+          "$": "metadata"
+        }
+      }
+    },
+    {
+      "name": "chunkingConfig",
+      "when": {
+        "truthy": "text"
+      },
+      "to": "chunkingConfig",
+      "template": {
+        "whiteSpaceConfig": {
+          "maxTokensPerChunk": 512,
+          "maxOverlapTokens": 64
+        }
+      }
+    }
+  ]
+}

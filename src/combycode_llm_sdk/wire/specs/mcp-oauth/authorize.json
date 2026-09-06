@@ -1,0 +1,70 @@
+{
+  "id": "mcp-oauth/authorize",
+  "provider": "mcp",
+  "api": "oauth",
+  "_note": "Not a request this library sends — it is the URL the USER opens. It is described here anyway because a wrong or missing parameter fails exactly like a malformed request, and because query parameters are now something a spec can express.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "url": {
+      "$": "authorizationEndpoint"
+    },
+    "queryEncoding": "form",
+    "query": [
+      {
+        "name": "response_type",
+        "value": "code"
+      },
+      {
+        "name": "client_id",
+        "value": {
+          "$": "client_id"
+        }
+      },
+      {
+        "name": "redirect_uri",
+        "value": {
+          "$": "redirect_uri"
+        }
+      },
+      {
+        "name": "code_challenge",
+        "value": {
+          "$": "code_challenge"
+        }
+      },
+      {
+        "name": "code_challenge_method",
+        "value": "S256",
+        "_note": "S256 only. `plain` is still in RFC 7636 and is worth nothing against an attacker who can read the authorization request."
+      },
+      {
+        "name": "scope",
+        "value": {
+          "$": "scope"
+        },
+        "when": {
+          "truthy": "scope"
+        }
+      },
+      {
+        "name": "state",
+        "value": {
+          "$": "state"
+        },
+        "when": {
+          "truthy": "state"
+        }
+      },
+      {
+        "name": "resource",
+        "value": {
+          "$": "resource"
+        },
+        "when": {
+          "truthy": "resource"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "openai/retrieval.json",
+  "extends": "openai/retrieval.base",
+  "_note": "Every JSON-bodied vector-store call. content-type is sent on the bodyless GET/DELETE calls too — harmless, and preserved deliberately so the migration changed no bytes.",
+  "envelope": {
+    "headers": [
+      {
+        "name": "content-type",
+        "value": "application/json"
+      }
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "id": "google/interactions",
+  "provider": "google",
+  "api": "interactions",
+  "_note": "Google's Interactions API. Same provider as generate, entirely different wire shape: snake_case fields, a generation_config that is OMITTED when empty (generate always ships it), and tool parameters on the plain `parameters` field because this API takes full JSON Schema there.",
+  "tables": {
+    "thinkingLevel": { "low": "low", "medium": "medium", "high": "high", "max": "high" }
+  },
+  "fields": [
+    { "from": "previousResponseId", "to": "previous_interaction_id", "presence": "truthy" },
+    { "from": "system", "to": "system_instruction", "presence": "truthy" },
+    { "from": "maxTokens", "to": "generation_config.max_output_tokens", "presence": "truthy" },
+    { "from": "temperature", "to": "generation_config.temperature" },
+    { "from": "topP", "to": "generation_config.top_p" },
+    { "from": "topK", "to": "generation_config.top_k" },
+    { "from": "seed", "to": "generation_config.seed" },
+    { "from": "stop", "to": "generation_config.stop_sequences", "presence": "truthy" }
+  ],
+  "blocks": [
+    { "name": "model", "to": "model", "template": { "$call": "googleModelPath" } },
+    { "name": "input", "call": "googleInteractionsInput", "to": "input" },
+    {
+      "name": "tools",
+      "when": { "truthy": "tools" },
+      "to": "tools",
+      "template": {
+        "$map": "tools",
+        "$dropUnmatched": true,
+        "$case": [
+          {
+            "when": { "isFunctionTool": true },
+            "value": {
+              "type": "function",
+              "name": { "$": "@name" },
+              "description": { "$": "@description" },
+              "parameters": { "$": "@parameters" }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "thinking",
+      "when": { "all": [{ "truthy": "thinking" }, { "ne": ["thinking.mode", "off"] }] },
+      "to": "generation_config.thinking_level",
+      "template": { "$table": "thinkingLevel", "$key": "thinking.effort", "$default": "high" }
+    },
+    {
+      "name": "structured",
+      "when": { "truthy": "structured" },
+      "to": "response_format",
+      "template": {
+        "type": "text",
+        "mime_type": "application/json",
+        "schema": { "$": "structured.schema" }
+      }
+    }
+  ]
+}

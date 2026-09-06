@@ -1,0 +1,19 @@
+{
+  "id": "xai/retrieval.standard",
+  "extends": "xai/retrieval.base",
+  "envelope": {
+    "headers": [
+      {
+        "name": "authorization",
+        "value": {
+          "$join": [
+            "Bearer ",
+            {
+              "$config": "apiKey"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

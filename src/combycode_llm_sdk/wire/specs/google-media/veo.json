@@ -1,0 +1,70 @@
+{
+  "id": "google/veo@predictLongRunning",
+  "extends": "google/media.predict",
+  "_note": "Veo video generation. Same envelope as imagen, different endpoint, different parameters, and an optional first-frame image — a sibling, not a successor. Auth is the x-goog-api-key HEADER, never ?key= in the URL: a key in a query string is copied into every access log and telemetry span the request passes through.",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1beta/models/",
+        {
+          "$": "model"
+        },
+        ":predictLongRunning"
+      ]
+    },
+    "headers": [
+      {
+        "name": "x-goog-api-key",
+        "value": {
+          "$config": "apiKey"
+        }
+      },
+      {
+        "name": "content-type",
+        "value": "application/json"
+      }
+    ]
+  },
+  "fields": [
+    {
+      "from": "params.duration",
+      "to": "parameters.durationSeconds",
+      "presence": "truthy"
+    },
+    {
+      "from": "params.aspectRatio",
+      "to": "parameters.aspectRatio",
+      "presence": "truthy"
+    },
+    {
+      "from": "params.resolution",
+      "to": "parameters.resolution",
+      "presence": "truthy"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "instances",
+      "to": "instances",
+      "template": [
+        {
+          "prompt": {
+            "$": "prompt"
+          },
+          "image": {
+            "$when": {
+              "truthy": "sourceImage"
+            },
+            "$value": {
+              "$call": "googleVeoImagePart"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

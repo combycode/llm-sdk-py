@@ -1,0 +1,9 @@
+{
+  "id": "openai/videos.status",
+  "extends": "openai/media.base",
+  "_note": "Poll a Sora job. Same auth as the rest of the OpenAI media family, hence the shared base.",
+  "envelope": {
+    "method": "GET", "bodyKind": "none",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/videos/", { "$": "videoId" }] }
+  }
+}

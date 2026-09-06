@@ -1,0 +1,73 @@
+{
+  "id": "anthropic/messages@4.6",
+  "extends": "anthropic/messages@4.1",
+  "_note": "Adaptive thinking replaces the token budget. budget_tokens is rejected from here on.",
+  "removeBlocks": [
+    "thinking.budgeted"
+  ],
+  "blocks": [
+    {
+      "name": "thinking.adaptive",
+      "when": {
+        "all": [
+          {
+            "truthy": "thinking"
+          },
+          {
+            "ne": [
+              "thinking.mode",
+              "off"
+            ]
+          }
+        ]
+      },
+      "to": "thinking",
+      "template": {
+        "type": "adaptive",
+        "display": {
+          "$when": {
+            "eq": [
+              "thinking.visibility",
+              "hidden"
+            ]
+          },
+          "$value": "omitted"
+        }
+      }
+    },
+    {
+      "name": "thinking.adaptive.effort",
+      "when": {
+        "all": [
+          {
+            "truthy": "thinking"
+          },
+          {
+            "ne": [
+              "thinking.mode",
+              "off"
+            ]
+          },
+          {
+            "truthy": "thinking.effort"
+          }
+        ]
+      },
+      "to": "output_config",
+      "merge": true,
+      "template": {
+        "effort": {
+          "$": "thinking.effort"
+        }
+      }
+    }
+  ],
+  "placeBlocks": {
+    "thinking.adaptive": {
+      "before": "structured"
+    },
+    "thinking.adaptive.effort": {
+      "before": "structured"
+    }
+  }
+}

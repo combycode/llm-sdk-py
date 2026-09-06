@@ -1,0 +1,5 @@
+{
+  "id": "xai/responses.stream",
+  "extends": "openai/responses.stream",
+  "_note": "xAI's Responses stream is OpenAI's. XAIResponsesAdapter overrides no stream parsing -- but it DOES override file extraction, so its registry replaces oaiRespStreamFiles while the spec inherits everything."
+}

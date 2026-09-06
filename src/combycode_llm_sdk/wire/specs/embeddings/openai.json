@@ -1,0 +1,15 @@
+{
+  "id": "openai/embeddings",
+  "provider": "openai", "api": "embeddings",
+  "_note": "One request for the whole batch; `input` is always an array on the wire even when the caller passes a single string.",
+  "envelope": {
+    "method": "POST",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/embeddings"] },
+    "headers": [
+      { "name": "authorization", "value": { "$join": ["Bearer ", { "$config": "apiKey" }] } },
+      { "name": "content-type", "value": "application/json" }
+    ]
+  },
+  "fields": [{ "from": "model", "to": "model" }],
+  "blocks": [{ "name": "input", "to": "input", "template": { "$call": "asArray", "$arg": { "$": "input" } } }]
+}

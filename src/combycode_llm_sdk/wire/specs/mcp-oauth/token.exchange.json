@@ -1,0 +1,51 @@
+{
+  "id": "mcp-oauth/token.exchange",
+  "extends": "mcp-oauth/base",
+  "_note": "Authorization-code grant with PKCE. `code_verifier` is what proves this is the same client that started the flow, so it is never optional.",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$": "tokenEndpoint"
+    },
+    "bodyKind": "form",
+    "headers": [
+      {
+        "name": "content-type",
+        "value": "application/x-www-form-urlencoded"
+      }
+    ]
+  },
+  "fields": [
+    {
+      "from": "grant_type",
+      "to": "grant_type",
+      "default": "authorization_code"
+    },
+    {
+      "from": "code",
+      "to": "code"
+    },
+    {
+      "from": "code_verifier",
+      "to": "code_verifier"
+    },
+    {
+      "from": "client_id",
+      "to": "client_id"
+    },
+    {
+      "from": "redirect_uri",
+      "to": "redirect_uri"
+    },
+    {
+      "from": "client_secret",
+      "to": "client_secret",
+      "presence": "truthy"
+    },
+    {
+      "from": "resource",
+      "to": "resource",
+      "presence": "truthy"
+    }
+  ]
+}

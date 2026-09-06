@@ -1,0 +1,4 @@
+{ "id": "xai/images.edits", "extends": "xai/images.base",
+  "_note": "No `n` and no mask — a sibling of generations with one field added and one removed.",
+  "envelope": { "url": { "$join": [{ "$config": "baseURL" }, "/v1/images/edits"] } },
+  "blocks": [{ "name": "image", "to": "image", "template": { "$call": "xaiSourceImageRef" } }] }

@@ -1,0 +1,59 @@
+{
+  "id": "openai/retrieval.createCorpus",
+  "extends": "openai/retrieval.json",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1/vector_stores"
+      ]
+    }
+  },
+  "fields": [
+    {
+      "from": "name",
+      "to": "name"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "chunking",
+      "_note": "An EMPTY chunking object still asks for static chunking at the defaults; omitting the block would silently leave the store on `auto`.",
+      "when": {
+        "truthy": "chunking"
+      },
+      "to": "chunking_strategy",
+      "template": {
+        "type": "static",
+        "static": {
+          "max_chunk_size_tokens": {
+            "$": "chunking.maxTokens",
+            "$default": 800
+          },
+          "chunk_overlap_tokens": {
+            "$": "chunking.overlapTokens",
+            "$default": 400
+          }
+        }
+      }
+    },
+    {
+      "name": "expiry",
+      "when": {
+        "truthy": "expiresAfter"
+      },
+      "to": "expires_after",
+      "template": {
+        "anchor": {
+          "$": "expiresAfter.anchor"
+        },
+        "days": {
+          "$": "expiresAfter.days"
+        }
+      }
+    }
+  ]
+}

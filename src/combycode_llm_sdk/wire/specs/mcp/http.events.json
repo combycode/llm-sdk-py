@@ -1,0 +1,24 @@
+{
+  "id": "mcp/http.events",
+  "extends": "mcp/http.base",
+  "_note": "The server->client GET stream. `last-event-id` is the resumption cursor: without it a reconnect silently starts from now and the caller never learns what it missed.",
+  "envelope": {
+    "method": "GET",
+    "bodyKind": "none",
+    "headers": [
+      {
+        "name": "accept",
+        "value": "text/event-stream"
+      },
+      {
+        "name": "last-event-id",
+        "value": {
+          "$": "lastEventId"
+        },
+        "when": {
+          "truthy": "lastEventId"
+        }
+      }
+    ]
+  }
+}

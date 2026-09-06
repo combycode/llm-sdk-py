@@ -1,0 +1,21 @@
+{
+  "id": "xai/retrieval.createCorpus",
+  "extends": "xai/retrieval.management",
+  "envelope": {
+    "method": "POST",
+    "url": {
+      "$join": [
+        {
+          "$config": "managementBaseURL"
+        },
+        "/collections"
+      ]
+    }
+  },
+  "fields": [
+    {
+      "from": "name",
+      "to": "collection_name"
+    }
+  ]
+}

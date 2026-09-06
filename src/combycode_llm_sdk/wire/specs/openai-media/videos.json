@@ -1,0 +1,20 @@
+{
+  "id": "openai/videos",
+  "extends": "openai/media.base",
+  "_note": "Sora. `seconds` is sent as a STRING even though the unified param is a number.",
+  "envelope": { "url": { "$join": [{ "$config": "baseURL" }, "/v1/videos"] } },
+  "fields": [
+    { "from": "model", "to": "model", "default": "sora-2" },
+    { "from": "prompt", "to": "prompt" },
+    { "from": "params.duration", "to": "seconds", "presence": "truthy", "call": "stringify" },
+    { "from": "params.size", "to": "size", "presence": "truthy" }
+  ],
+  "blocks": [
+    {
+      "name": "inputReference",
+      "when": { "truthy": "sourceImage" },
+      "to": "input_reference",
+      "template": { "$call": "openaiSourceImageRef" }
+    }
+  ]
+}

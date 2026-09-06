@@ -1,0 +1,49 @@
+{
+  "id": "google/interactions.response",
+  "_note": "Transposed from GoogleInteractionsAdapter.parseResponse. NOT FULLY SELF-CONTAINED: the hand-written parser also populates the adapter's `toolCallNames` map, which buildRequest later reads to name a tool RESULT (interactions.ts:145). That is request-side state, not part of the response, so it cannot live in a spec. Whoever switches this adapter to the interpreter must keep feeding that map -- iterating result.toolCalls after the build does it -- or tool results go out with an empty name.",
+
+  "accumulators": {
+    "content": { "kind": "array" },
+    "toolCalls": { "kind": "array" },
+    "media": { "kind": "array" },
+    "thinking": { "kind": "scalar", "default": null },
+    "items": {
+      "kind": "array",
+      "internal": true,
+      "_note": "The step_list flattened. A model_output step carries a content[] of typed parts; any other step stands for itself. Collect walks this rather than the raw response, because the items are not a field of it."
+    }
+  },
+
+  "fields": [
+    { "to": "model", "value": "" }
+  ],
+
+  "seed": [
+    { "emit": "items", "mode": "concat", "as": { "$call": "gaFlatten" } }
+  ],
+
+  "collect": [
+    {
+      "from": "out.items",
+      "match": "type",
+      "cases": {
+        "text": { "emit": "content", "as": { "$call": "gaTextPart" } },
+        "function_call": {
+          "emit": ["content", "toolCalls"],
+          "as": { "$call": "gaToolCall" }
+        },
+        "image": { "emit": ["content", "media"], "as": { "$call": "gaMediaPart" } },
+        "audio": { "emit": ["content", "media"], "as": { "$call": "gaMediaPart" } },
+        "video": { "emit": ["content", "media"], "as": { "$call": "gaMediaPart" } }
+      }
+    }
+  ],
+
+  "derive": {
+    "id": { "$call": "gaId" },
+    "text": { "$call": "gaText" },
+    "usage": { "$call": "gaUsage" },
+    "finishReason": { "$call": "gaFinish" },
+    "citations": { "$call": "gaCitations" }
+  }
+}

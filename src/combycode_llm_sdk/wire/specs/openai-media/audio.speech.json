@@ -1,0 +1,14 @@
+{
+  "id": "openai/audio.speech",
+  "extends": "openai/media.base",
+  "_note": "TTS. No model default: the adapter throws when one is missing, so the spec never invents one.",
+  "envelope": { "url": { "$join": [{ "$config": "baseURL" }, "/v1/audio/speech"] } },
+  "fields": [
+    { "from": "model", "to": "model" },
+    { "from": "input", "to": "input" },
+    { "from": "params.format", "to": "response_format", "presence": "truthy" },
+    { "from": "params.speed", "to": "speed", "presence": "truthy" },
+    { "from": "params.instructions", "to": "instructions", "presence": "truthy" }
+  ],
+  "blocks": [{ "name": "voice", "to": "voice", "template": { "$call": "openaiTtsVoice" } }]
+}

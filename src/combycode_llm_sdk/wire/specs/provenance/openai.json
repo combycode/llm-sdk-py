@@ -1,0 +1,37 @@
+{
+  "id": "openai/provenance.check",
+  "provider": "openai",
+  "api": "provenance",
+  "_note": "Bearer only: the body is multipart, and setting content-type would override the boundary the runtime chose.",
+  "envelope": {
+    "method": "POST",
+    "bodyKind": "multipart",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/v1/content_provenance_checks"
+      ]
+    },
+    "headers": [
+      {
+        "name": "authorization",
+        "value": {
+          "$join": [
+            "Bearer ",
+            {
+              "$config": "apiKey"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "multipart": [
+    {
+      "name": "file",
+      "file": true
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "id": "openai/completions.response",
+  "_note": "Transposed from OpenAIAdapter.parseResponse. Chat Completions is not a discriminated array like Anthropic: the assistant's text, its spoken audio and its tool calls live in three different places under choices[0].message, and their ORDER inside content[] is text, then audio, then tool calls. `seed` carries the first two; `collect` walks the third.",
+
+  "accumulators": {
+    "content": { "kind": "array" },
+    "toolCalls": { "kind": "array" },
+    "media": { "kind": "array" },
+    "thinking": { "kind": "scalar", "default": null }
+  },
+
+  "fields": [
+    { "to": "id", "from": "raw.id" },
+    { "to": "model", "from": "raw.model" }
+  ],
+
+  "seed": [
+    {
+      "_note": "message.content, falling back to the audio transcript: for a gpt-audio reply message.content is null and the spoken words are the transcript. Empty text emits nothing at all.",
+      "emit": "content",
+      "as": { "$call": "openaiTextPart" }
+    },
+    {
+      "_note": "One object into content AND media, as the adapter does.",
+      "emit": ["content", "media"],
+      "as": { "$call": "openaiAudioPart" }
+    }
+  ],
+
+  "collect": [
+    {
+      "_note": "No discriminator: every element of tool_calls is a tool call.",
+      "from": "raw.choices.0.message.tool_calls",
+      "default": {
+        "emit": ["content", "toolCalls"],
+        "as": { "$call": "openaiToolCall" }
+      }
+    }
+  ],
+
+  "derive": {
+    "text": { "$call": "openaiText" },
+    "usage": { "$call": "openaiUsageFull" },
+    "finishReason": { "$call": "openaiFinish" },
+    "citations": { "$call": "openaiCitations" },
+    "thinking": { "$call": "openaiThinking" },
+    "moderation": { "$call": "openaiModeration" }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "id": "openai/batch.base",
+  "provider": "openai", "api": "batch",
+  "envelope": {
+    "headers": [{ "name": "authorization", "value": { "$join": ["Bearer ", { "$config": "apiKey" }] } }]
+  }
+}

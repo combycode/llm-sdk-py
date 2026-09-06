@@ -1,0 +1,19 @@
+{
+  "id": "google/gemini-tts@generateContent",
+  "extends": "google/media.generateContent",
+  "_note": "Gemini TTS: same endpoint, AUDIO modality plus a speechConfig. The text field is `input`, not `prompt`.",
+  "blocks": [
+    { "name": "contents", "to": "contents", "template": [{ "parts": [{ "text": { "$": "input" } }] }] },
+    {
+      "name": "generationConfig.audio",
+      "to": "generationConfig",
+      "merge": true,
+      "template": {
+        "responseModalities": ["AUDIO"],
+        "speechConfig": {
+          "voiceConfig": { "prebuiltVoiceConfig": { "voiceName": { "$call": "googleTtsVoice" } } }
+        }
+      }
+    }
+  ]
+}

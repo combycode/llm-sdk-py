@@ -1,0 +1,133 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "combycode-llm-sdk"
+dynamic = ["version"]
+description = "Unified LLM client for every major provider - one API, spec-driven wire format, real cost tracking."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [{ name = "CombyCode" }]
+keywords = ["llm", "agent", "anthropic", "openai", "google", "xai", "openrouter"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Typing :: Typed",
+]
+
+# One dependency, deliberately. The TypeScript library is zero-dependency because
+# the platform gives it `fetch`; Python has no equivalent in the stdlib worth
+# shipping against, so httpx2 buys sync, async, proxies and HTTP/2. The transport
+# stays injectable, so this is a default rather than a lock-in.
+#
+# The package is `httpx2` and the module it installs is `httpx2`. That is not a
+# detail: the previous attempt declared httpx2 and wrote `import httpx` at every
+# call site, so a clean install raised ModuleNotFoundError on the first real
+# request while 1403 tests passed -- every one of them injecting a transport, on
+# a machine that happened to have `httpx` installed for something else. There is
+# a test for this; see tests/test_packaging.py once it lands.
+dependencies = ["httpx2>=2.7,<3"]
+
+[project.optional-dependencies]
+# MCP over WebSocket. httpx2 -- already a dependency -- speaks WebSocket
+# through its own `ws` extra, so this costs an optional package rather
+# than a new one. Everything else works without it.
+ws = ["httpx2[ws]>=2.7,<3"]
+# Exact local token counting. The catalog already names `"strategy": "tiktoken"`
+# and a `tiktokenEncoding` per model, so this is a counting strategy the library
+# declares support for -- it was simply not installable, and `TiktokenCounter`
+# fell back to the heuristic on any machine that happened not to have it. Which
+# strategy ran then depended on what was installed for something else entirely,
+# the trap the note above this block describes.
+#
+# Floor is the version this project has actually run against, not a guess about
+# when an encoding first shipped.
+tokens = ["tiktoken>=0.8,<1"]
+# tiktoken is in `dev` on purpose: without it the exact branch of
+# `TiktokenCounter.count` is never executed by the suite, and its absence looks
+# exactly like a pass.
+dev = [
+  "pytest>=8",
+  "pytest-asyncio>=0.24",
+  "mypy>=1.13",
+  "ruff>=0.8",
+  "tiktoken>=0.8,<1",
+  # `wsproto`, via the same extra a consumer would ask for. Here for the reason
+  # tiktoken is: the suite has twelve WebSocket transport tests, and without the
+  # package they do not skip -- they fail on a machine that happens not to have
+  # it, and pass on one that does for reasons nothing declares. Measured
+  # 2026-09-06: green locally, twelve failures on a clean CI runner.
+  "httpx2[ws]>=2.7,<3",
+  # A hung test is worse than a failing one: it stalls a runner until the job
+  # cap fires and says nothing about WHICH test. Measured 2026-09-06, twice --
+  # a job sat in pytest for 27 minutes and the log named nothing.
+  "pytest-timeout>=2.4,<3",
+]
+
+[tool.hatch.version]
+# Read from the package rather than restated here: two copies of a version
+# number stay equal only until someone bumps one of them.
+path = "src/combycode_llm_sdk/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/combycode_llm_sdk"]
+# The vendored wire specs, pin tables, catalog and shape book are DATA the library
+# reads at runtime, not fixtures. A wheel without them installs cleanly and fails
+# on first use -- so `tests/test_packaging.py` asserts that every .json under the
+# package is covered by a glob here, rather than trusting this list to be kept up
+# to date by hand. It already was not: the pins and the shape book arrived with
+# the client batch and were missing until that test was written.
+artifacts = [
+  # Both forms of the specs tree: the three chat specs sit directly in `specs/`
+  # and the rest in family subdirectories. Whether `**/` also matches zero
+  # directories depends on the glob dialect, and the test that guards this list
+  # deliberately assumes it does NOT -- a redundant glob costs one line, a
+  # missing file ships a wheel that dies on the first request.
+  "src/combycode_llm_sdk/wire/specs/*.json",
+  "src/combycode_llm_sdk/wire/specs/**/*.json",
+  "src/combycode_llm_sdk/wire/pins/*.json",
+  "src/combycode_llm_sdk/catalog/data/*.json",
+  "src/combycode_llm_sdk/llm/response-shapes.json",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+
+# numpy arrives transitively (tokens.py imports tiktoken, tiktoken imports
+# numpy) and its stubs use PEP 695 `type X = ...`, which mypy refuses to PARSE
+# under our declared floor of 3.11. It is a parse failure rather than a reported
+# error, so `ignore_errors` does not reach it and neither does a bare
+# `follow_imports`; stubs are only skipped when `follow_imports_for_stubs` says
+# so. Scoped to numpy alone: nothing here imports it, whereas tiktoken's own
+# types ARE used and skipping those would quietly turn them into Any.
+#
+# The floor is the thing being protected. Raising python_version to 3.12 would
+# also silence this, by dropping a version we claim to support.
+[[tool.mypy.overrides]]
+module = ["numpy.*"]
+follow_imports = "skip"
+follow_imports_for_stubs = true
+
+[tool.pytest.ini_options]
+# The whole suite is ~3 minutes for 2600 tests, so no honest test is near this.
+# It exists to convert a HANG into a named failure with a stack.
+timeout = 60
+# `thread`, not the unix default `signal`: a signal cannot interrupt a thread
+# blocked in accept() or a socket read, which is exactly the shape suspected
+# here -- and it is the only method that works on Windows, so local and CI
+# behave the same way.
+timeout_method = "thread"
+asyncio_mode = "auto"
+testpaths = ["tests"]

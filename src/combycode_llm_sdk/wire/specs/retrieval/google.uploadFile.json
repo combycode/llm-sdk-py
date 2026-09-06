@@ -1,0 +1,23 @@
+{
+  "id": "google/retrieval.uploadFile",
+  "extends": "google/retrieval.base",
+  "_note": "The Files API upload lives under a DIFFERENT path prefix (/upload) on the same host.",
+  "envelope": {
+    "method": "POST",
+    "bodyKind": "multipart",
+    "url": {
+      "$join": [
+        {
+          "$config": "baseURL"
+        },
+        "/upload/v1beta/files"
+      ]
+    }
+  },
+  "multipart": [
+    {
+      "name": "file",
+      "file": true
+    }
+  ]
+}

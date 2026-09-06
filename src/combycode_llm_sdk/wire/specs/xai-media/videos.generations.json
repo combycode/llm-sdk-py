@@ -1,0 +1,10 @@
+{ "id": "xai/videos.generations", "extends": "xai/media.base",
+  "envelope": { "url": { "$join": [{ "$config": "baseURL" }, "/v1/videos/generations"] } },
+  "fields": [
+    { "from": "model", "to": "model", "default": "grok-imagine-video" },
+    { "from": "prompt", "to": "prompt" },
+    { "from": "params.duration", "to": "duration", "presence": "truthy" },
+    { "from": "params.aspectRatio", "to": "aspect_ratio", "presence": "truthy" },
+    { "from": "params.resolution", "to": "resolution", "presence": "truthy" } ],
+  "blocks": [{ "name": "image", "when": { "truthy": "sourceImage" }, "to": "image",
+               "template": { "$call": "xaiSourceImageRef" } }] }

@@ -1,0 +1,9 @@
+{
+  "id": "anthropic/batch.cancel",
+  "extends": "anthropic/batch.base",
+  "_note": "POST with an empty JSON object body, not an absent one.",
+  "envelope": {
+    "method": "POST",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/messages/batches/", { "$": "batchId" }, "/cancel"] }
+  }
+}

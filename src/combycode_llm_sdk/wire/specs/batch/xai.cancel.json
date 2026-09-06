@@ -1,0 +1,9 @@
+{
+  "id": "xai/batch.cancel",
+  "extends": "xai/batch.base",
+  "_note": "The route is `<id>:cancel`, NOT `<id>/cancel`. Measured live 2026-09-04: the slash form answers 404 'No handler found on route', DELETE and PATCH on the bare batch answer 405, and the colon form answers 200. The slash form had never been sent to xAI, here or in the TypeScript adapter this spec came from.",
+  "envelope": {
+    "method": "POST",
+    "url": { "$join": [{ "$config": "baseURL" }, "/v1/batches/", { "$": "batchId" }, ":cancel"] }
+  }
+}

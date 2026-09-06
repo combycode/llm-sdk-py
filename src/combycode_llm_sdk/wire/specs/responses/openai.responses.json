@@ -1,0 +1,76 @@
+{
+  "id": "openai/responses.response",
+  "_note": "Transposed from OpenAIResponsesAdapter.parseResponse. Two collect rules walk the SAME output[] array: the first applies to every item whatever its type (output files, hosted builtin-tool calls), the second switches on the type. Splitting them changes no result -- each accumulator still fills in item order -- and it is the only way to express 'this happens for all of them, and then this happens for some of them'.",
+
+  "accumulators": {
+    "content": { "kind": "array" },
+    "toolCalls": { "kind": "array" },
+    "media": { "kind": "array" },
+    "files": { "kind": "array", "omitEmpty": true },
+    "builtinToolCalls": { "kind": "array", "omitEmpty": true },
+    "thinking": { "kind": "scalar", "default": null },
+    "reasoningItems": {
+      "kind": "array",
+      "internal": true,
+      "_note": "Scaffolding, never a response field: a program item cannot be sent back without the reasoning items that preceded it in the same output."
+    }
+  },
+
+  "fields": [
+    { "to": "id", "from": "raw.id" },
+    { "to": "model", "from": "raw.model", "default": "" }
+  ],
+
+  "collect": [
+    {
+      "_note": "Every item, whatever its type.",
+      "from": "raw.output",
+      "default": [
+        { "emit": "files", "mode": "concat", "as": { "$call": "oaiRespFiles" } },
+        { "emit": "builtinToolCalls", "as": { "$call": "oaiRespBuiltinCall" } }
+      ]
+    },
+    {
+      "from": "raw.output",
+      "match": "type",
+      "cases": {
+        "message": {
+          "emit": "content",
+          "mode": "concat",
+          "as": { "$call": "oaiRespMessageParts" }
+        },
+        "reasoning": [
+          { "emit": "thinking", "mode": "scalar", "as": { "$call": "oaiRespThinking" } },
+          { "emit": "reasoningItems", "as": { "$call": "oaiRespSelf" } }
+        ],
+        "function_call": {
+          "emit": ["content", "toolCalls"],
+          "as": { "$call": "oaiRespToolCall" }
+        },
+        "program": { "emit": "content", "as": { "$call": "oaiRespProgram" } },
+        "program_output": { "emit": "content", "as": { "$call": "oaiRespProgramResult" } },
+        "image_generation_call": {
+          "emit": ["content", "media"],
+          "as": { "$call": "oaiRespImage" }
+        }
+      }
+    }
+  ],
+
+  "finalize": [
+    {
+      "_note": "The output_text convenience field, only when no message produced text and nothing else landed in content. UNEXERCISED: none of the 16 recorded Responses-API bodies carries `output_text`, and deleting this rule leaves the whole differential green. openai-ts documents it as the property to use 'where supported in SDKs' -- it is computed client-side, not returned on the wire. Kept because it transposes the adapter faithfully, but it is defensive code for a shape the HTTP API does not appear to send, and it is a deletion candidate for both paths at once.",
+      "emit": "content",
+      "as": { "$call": "oaiRespFallbackTextPart" }
+    }
+  ],
+
+  "derive": {
+    "text": { "$call": "oaiRespText" },
+    "usage": { "$call": "oaiRespUsage" },
+    "finishReason": { "$call": "oaiRespFinish" },
+    "citations": { "$call": "oaiRespCitations" },
+    "moderation": { "$call": "oaiRespModeration" },
+    "error": { "$call": "oaiRespError" }
+  }
+}

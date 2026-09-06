@@ -1,0 +1,9 @@
+# LF in the repository, always. Scripted edits on Windows silently write CRLF --
+# a generator using Path.write_text() did exactly that here, and the first
+# consequence was a mutation test that matched nothing and "passed", which made
+# a broken check look like a working one.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.wav binary
+*.mp3 binary

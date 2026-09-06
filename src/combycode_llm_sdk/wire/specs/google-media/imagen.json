@@ -1,0 +1,10 @@
+{
+  "id": "google/imagen@predict",
+  "extends": "google/media.predict",
+  "_note": "Imagen image generation.",
+  "fields": [
+    { "from": "params.n", "to": "parameters.sampleCount", "default": 1 },
+    { "from": "params.aspectRatio", "to": "parameters.aspectRatio", "presence": "truthy" },
+    { "from": "params.imageSize", "to": "parameters.sampleImageSize", "presence": "truthy" }
+  ]
+}

@@ -1,0 +1,281 @@
+{
+  "id": "openai/chat-completions",
+  "provider": "openai",
+  "api": "chat-completions",
+  "flavors": [
+    "openai",
+    "xai",
+    "openrouter"
+  ],
+  "tables": {},
+  "fields": [
+    {
+      "from": "model",
+      "to": "model"
+    },
+    {
+      "from": "maxTokens",
+      "to": "max_completion_tokens",
+      "default": 4096
+    },
+    {
+      "from": "temperature",
+      "to": "temperature"
+    },
+    {
+      "from": "topP",
+      "to": "top_p"
+    },
+    {
+      "from": "seed",
+      "to": "seed"
+    },
+    {
+      "from": "topK",
+      "to": "top_k",
+      "when": {
+        "not": {
+          "flavor": "openai"
+        }
+      },
+      "note": "OpenAI has no top_k; the OpenAI-compatible backends do"
+    },
+    {
+      "from": "presencePenalty",
+      "to": "presence_penalty"
+    },
+    {
+      "from": "frequencyPenalty",
+      "to": "frequency_penalty"
+    },
+    {
+      "from": "stop",
+      "to": "stop",
+      "presence": "truthy"
+    },
+    {
+      "from": "serviceTier",
+      "to": "service_tier",
+      "presence": "truthy",
+      "call": "openaiTier"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "messages",
+      "call": "openaiChatMessages",
+      "to": "messages"
+    },
+    {
+      "name": "moderation",
+      "when": {
+        "pred": "wantsNativeModeration"
+      },
+      "to": "moderation",
+      "template": {
+        "$call": "nativeModeration"
+      }
+    },
+    {
+      "name": "promptCacheOptions",
+      "when": {
+        "all": [
+          {
+            "flavor": "openai"
+          },
+          {
+            "truthy": "providerOptions.promptCacheOptions"
+          }
+        ]
+      },
+      "to": "prompt_cache_options",
+      "template": {
+        "$": "providerOptions.promptCacheOptions"
+      }
+    },
+    {
+      "name": "audio.input",
+      "when": {
+        "pred": "hasAudioInput"
+      },
+      "template": {
+        "modalities": [
+          "text",
+          "audio"
+        ],
+        "audio": {
+          "voice": {
+            "$call": "resolveVoiceOpenAI"
+          },
+          "format": {
+            "$call": "openaiAudioFormat"
+          }
+        }
+      }
+    },
+    {
+      "name": "tools",
+      "when": {
+        "truthy": "tools"
+      },
+      "to": "tools",
+      "template": {
+        "$map": "tools",
+        "$dropUnmatched": true,
+        "$case": [
+          {
+            "when": {
+              "isFunctionTool": true
+            },
+            "value": {
+              "type": "function",
+              "function": {
+                "name": {
+                  "$": "@name"
+                },
+                "description": {
+                  "$": "@description"
+                },
+                "parameters": {
+                  "$call": "openaiToolParams",
+                  "$arg": {
+                    "$": "@"
+                  }
+                },
+                "strict": {
+                  "$when": {
+                    "itemTruthy": "strict"
+                  },
+                  "$value": true
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "toolChoice.keyword",
+      "when": {
+        "all": [
+          {
+            "truthy": "toolChoice"
+          },
+          {
+            "pred": "toolChoiceIsString"
+          }
+        ]
+      },
+      "to": "tool_choice",
+      "template": {
+        "$": "toolChoice"
+      }
+    },
+    {
+      "name": "toolChoice.named",
+      "when": {
+        "all": [
+          {
+            "truthy": "toolChoice"
+          },
+          {
+            "not": {
+              "pred": "toolChoiceIsString"
+            }
+          }
+        ]
+      },
+      "to": "tool_choice",
+      "template": {
+        "type": "function",
+        "function": {
+          "name": {
+            "$": "toolChoice.name"
+          }
+        }
+      }
+    },
+    {
+      "name": "reasoning",
+      "when": {
+        "all": [
+          {
+            "truthy": "thinking"
+          },
+          {
+            "ne": [
+              "thinking.mode",
+              "off"
+            ]
+          }
+        ]
+      },
+      "to": "reasoning",
+      "template": {
+        "effort": {
+          "$": "thinking.effort",
+          "$default": "medium"
+        }
+      }
+    },
+    {
+      "name": "structured",
+      "when": {
+        "truthy": "structured"
+      },
+      "to": "response_format",
+      "template": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": {
+            "$": "structured.name",
+            "$default": "response"
+          },
+          "schema": {
+            "$call": "openaiStructuredSchema"
+          },
+          "strict": {
+            "$call": "openaiStructuredStrict"
+          }
+        }
+      }
+    }
+  ],
+  "overlays": {
+    "xai": {
+      "ops": [
+        {
+          "op": "rename",
+          "from": "max_completion_tokens",
+          "to": "max_tokens",
+          "_note": "xAI uses max_tokens on this API"
+        },
+        {
+          "op": "delete",
+          "from": "reasoning",
+          "_note": "xAI reasoning is a model variant, not a parameter"
+        }
+      ]
+    },
+    "openrouter": {
+      "ops": [
+        {
+          "op": "rename",
+          "from": "max_completion_tokens",
+          "to": "max_tokens"
+        },
+        {
+          "op": "call",
+          "call": "openrouterOnline",
+          "_note": "web_search becomes a :online model suffix; structural, so code"
+        },
+        {
+          "op": "mergeFrom",
+          "from": "providerOptions.openrouter",
+          "_note": "routing options merged into the body root"
+        }
+      ]
+    }
+  },
+  "_note": "Unversioned for the same reason as openai/responses: the shape does not vary by model, only by flavor."
+}

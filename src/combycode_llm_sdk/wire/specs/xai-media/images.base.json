@@ -1,0 +1,8 @@
+{ "id": "xai/images.base", "extends": "xai/media.base",
+  "_note": "Fields shared by generations and edits. response_format defaults to b64_json on BOTH.",
+  "fields": [
+    { "from": "model", "to": "model", "default": "grok-imagine-image" },
+    { "from": "prompt", "to": "prompt" },
+    { "from": "params.responseFormat", "to": "response_format", "default": "b64_json" },
+    { "from": "params.aspectRatio", "to": "aspect_ratio", "presence": "truthy" },
+    { "from": "params.resolution", "to": "resolution", "presence": "truthy" } ] }

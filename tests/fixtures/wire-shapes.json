@@ -1,0 +1,622 @@
+{
+  "_doc": "Request shapes for the wire golden corpus, projected from tests/unit/wire/wire-corpus.ts so implementations in other languages can replay it. \"$MODEL\" is substituted per model. Generated — edit wire-corpus.ts and re-run scripts/export-wire-shapes.ts.",
+  "modelPlaceholder": "$MODEL",
+  "shapes": [
+    {
+      "name": "minimal",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ]
+      }
+    },
+    {
+      "name": "sampling",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "maxTokens": 256,
+        "temperature": 0.3,
+        "topP": 0.8,
+        "topK": 5,
+        "seed": 7,
+        "presencePenalty": 0.1,
+        "frequencyPenalty": 0.2,
+        "stop": [
+          "x"
+        ]
+      }
+    },
+    {
+      "name": "system",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "system": "sys"
+      }
+    },
+    {
+      "name": "tools",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "name": "get_weather",
+            "description": "w",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "a": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "a"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "tools.strict",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "name": "get_weather",
+            "description": "w",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "a": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "a"
+              ]
+            },
+            "strict": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "tools.builtin",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "tools": [
+          {
+            "type": "web_search"
+          },
+          {
+            "type": "code_interpreter"
+          },
+          {
+            "type": "web_fetch"
+          }
+        ]
+      }
+    },
+    {
+      "name": "toolChoice.required",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "name": "get_weather",
+            "description": "w",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "a": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "a"
+              ]
+            }
+          }
+        ],
+        "toolChoice": "required"
+      }
+    },
+    {
+      "name": "toolChoice.named",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "name": "get_weather",
+            "description": "w",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "a": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "a"
+              ]
+            }
+          }
+        ],
+        "toolChoice": {
+          "name": "get_weather"
+        }
+      }
+    },
+    {
+      "name": "thinking.on",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "thinking": {
+          "mode": "on"
+        }
+      }
+    },
+    {
+      "name": "thinking.effort",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "thinking": {
+          "mode": "on",
+          "effort": "high"
+        }
+      }
+    },
+    {
+      "name": "thinking.hidden",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "thinking": {
+          "mode": "on",
+          "visibility": "hidden",
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "thinking.off",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "thinking": {
+          "mode": "off"
+        }
+      }
+    },
+    {
+      "name": "thinking.lowMaxTokens",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "maxTokens": 100,
+        "thinking": {
+          "mode": "on",
+          "effort": "high"
+        }
+      }
+    },
+    {
+      "name": "structured",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "structured": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "a": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "a"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "structured+thinking",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "thinking": {
+          "mode": "on",
+          "effort": "medium"
+        },
+        "structured": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "a": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "a"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "cache.auto",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "system": "sys",
+        "cache": "auto",
+        "tools": [
+          {
+            "type": "function",
+            "name": "get_weather",
+            "description": "w",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "a": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "a"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "tier",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "serviceTier": "priority"
+      }
+    },
+    {
+      "name": "audio.out",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "outputModalities": [
+          "text",
+          "audio"
+        ],
+        "audio": {
+          "voice": "alloy",
+          "format": "wav"
+        }
+      }
+    },
+    {
+      "name": "content.multimodal",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "what is this"
+              },
+              {
+                "type": "image",
+                "source": {
+                  "type": "base64",
+                  "mimeType": "image/png",
+                  "data": "aGk="
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "serverState",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "previousResponseId": "resp_1"
+      }
+    },
+    {
+      "name": "moderation",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "moderation": {
+          "mode": "report"
+        }
+      }
+    },
+    {
+      "name": "content.audio",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "transcribe"
+              },
+              {
+                "type": "audio",
+                "source": {
+                  "type": "base64",
+                  "mimeType": "audio/wav",
+                  "data": "UklGRg=="
+                }
+              }
+            ]
+          }
+        ],
+        "audio": {
+          "voice": "alloy",
+          "format": "wav"
+        }
+      }
+    },
+    {
+      "name": "providerOptions",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "hi"
+          }
+        ],
+        "providerOptions": {
+          "userProfileId": "u_1",
+          "promptCacheOptions": {
+            "scope": "session"
+          },
+          "reasoningMode": "pro",
+          "responseModalities": [
+            "TEXT"
+          ],
+          "cachedContent": "cc-1",
+          "speechConfig": {
+            "voiceConfig": {
+              "prebuiltVoiceConfig": {
+                "voiceName": "Kore"
+              }
+            }
+          },
+          "imageConfig": {
+            "aspectRatio": "1:1"
+          },
+          "translationConfig": {
+            "targetLanguage": "fr"
+          },
+          "moderationPolicy": {
+            "categories": [
+              "hate"
+            ]
+          },
+          "openrouter": {
+            "provider": {
+              "order": [
+                "a"
+              ]
+            },
+            "transforms": [
+              "x"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "content.audioFirst",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "audio",
+                "source": {
+                  "type": "base64",
+                  "mimeType": "audio/wav",
+                  "data": "UklGRg=="
+                }
+              },
+              {
+                "type": "text",
+                "text": "what does this say"
+              }
+            ]
+          }
+        ],
+        "audio": {
+          "voice": "alloy",
+          "format": "wav"
+        }
+      }
+    },
+    {
+      "name": "multiTurn.toolRoundTrip",
+      "req": {
+        "model": "$MODEL",
+        "messages": [
+          {
+            "role": "user",
+            "content": "weather in Paris?"
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "Let me check."
+              },
+              {
+                "type": "tool_call",
+                "id": "call_1",
+                "name": "get_weather",
+                "arguments": {
+                  "city": "Paris"
+                },
+                "_meta": {
+                  "thoughtSignature": "sig_abc"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": [
+              {
+                "type": "tool_result",
+                "id": "call_1",
+                "content": "sunny"
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "name": "get_weather",
+            "description": "w",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "a": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "a"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
