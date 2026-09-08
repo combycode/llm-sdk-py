@@ -20,7 +20,21 @@
     "openrouter/tencent/hy-mt2-7b": "2.3.0",
     "openrouter/dots-studio/dots-3-note-preview:free": "2.3.0",
     "openrouter/nvidia/nemotron-3.5-lightning": "2.3.0",
-    "openrouter/thinkingmachines/inkling-small": "2.3.0"
+    "openrouter/thinkingmachines/inkling-small": "2.3.0",
+    "anthropic/claude-fable-5-1": "3.3.0",
+    "openai/gpt-6-astra": "3.3.0",
+    "google/gemini-3.8-flash": "3.3.0",
+    "openrouter/anthropic/claude-fable-5.1": "3.3.0",
+    "openrouter/openai/gpt-6-astra": "3.3.0",
+    "openrouter/openai/gpt-6-astra-pro": "3.3.0",
+    "openrouter/google/gemini-3.8-flash": "3.3.0",
+    "openrouter/qwen/qwen3.8-flash": "3.3.0",
+    "openrouter/z-ai/glm-5.3-flash": "3.3.0",
+    "openrouter/ibm-granite/granite-4.2-8b": "3.3.0",
+    "openrouter/inception/mercury-2.5-preview": "3.3.0",
+    "openrouter/inclusionai/ling-3.0-flash-sante:free": "3.3.0",
+    "openrouter/inclusionai/ling-3.0-flash-fin": "3.3.0",
+    "openrouter/tencent/hy4-preview": "3.3.0"
   },
   "shapesAddedLater": {
     "content.audioFirst": "3.1.0",
@@ -54,10 +68,10 @@
     "multiTurn.toolRoundTrip"
   ],
   "counts": {
-    "models": 309,
+    "models": 323,
     "shapes": 25,
-    "bodies": 618,
-    "distinct": 592
+    "bodies": 350,
+    "distinct": 625
   },
   "bodies": {
     "30387636": {
@@ -13033,6 +13047,775 @@
           }
         ]
       }
+    },
+    "34cde36b": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {}
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "00d644fe": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {
+          "frequencyPenalty": 0.2,
+          "maxOutputTokens": 256,
+          "presencePenalty": 0.1,
+          "seed": 7,
+          "stopSequences": [
+            "x"
+          ],
+          "temperature": 0.3,
+          "topK": 5,
+          "topP": 0.8
+        }
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "a39ca0f0": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {},
+        "systemInstruction": {
+          "parts": [
+            {
+              "text": "sys"
+            }
+          ]
+        }
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "f860c495": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {},
+        "tools": [
+          {
+            "functionDeclarations": [
+              {
+                "description": "w",
+                "name": "get_weather",
+                "parametersJsonSchema": {
+                  "properties": {
+                    "a": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "a"
+                  ],
+                  "type": "object"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "e0eece86": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {},
+        "tools": [
+          {
+            "googleSearch": {}
+          },
+          {
+            "codeExecution": {}
+          },
+          {
+            "urlContext": {}
+          }
+        ]
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "1afa636e": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {},
+        "toolConfig": {
+          "functionCallingConfig": {
+            "mode": "ANY"
+          }
+        },
+        "tools": [
+          {
+            "functionDeclarations": [
+              {
+                "description": "w",
+                "name": "get_weather",
+                "parametersJsonSchema": {
+                  "properties": {
+                    "a": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "a"
+                  ],
+                  "type": "object"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "da119ba3": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {},
+        "toolConfig": {
+          "functionCallingConfig": {
+            "mode": "AUTO"
+          }
+        },
+        "tools": [
+          {
+            "functionDeclarations": [
+              {
+                "description": "w",
+                "name": "get_weather",
+                "parametersJsonSchema": {
+                  "properties": {
+                    "a": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "a"
+                  ],
+                  "type": "object"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "67821a01": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {
+          "thinkingConfig": {
+            "includeThoughts": true,
+            "thinkingLevel": "HIGH"
+          }
+        }
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "be65983e": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {
+          "thinkingConfig": {
+            "includeThoughts": false,
+            "thinkingLevel": "LOW"
+          }
+        }
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "fa3075d6": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {
+          "thinkingConfig": {
+            "thinkingLevel": "MINIMAL"
+          }
+        }
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "663e43a3": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {
+          "maxOutputTokens": 100,
+          "thinkingConfig": {
+            "includeThoughts": true,
+            "thinkingLevel": "HIGH"
+          }
+        }
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "dc7768bb": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {
+          "responseJsonSchema": {
+            "properties": {
+              "a": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "a"
+            ],
+            "type": "object"
+          },
+          "responseMimeType": "application/json"
+        }
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "ba4b263c": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {
+          "responseJsonSchema": {
+            "properties": {
+              "a": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "a"
+            ],
+            "type": "object"
+          },
+          "responseMimeType": "application/json",
+          "thinkingConfig": {
+            "includeThoughts": true,
+            "thinkingLevel": "MEDIUM"
+          }
+        }
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "ba80ff90": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {},
+        "systemInstruction": {
+          "parts": [
+            {
+              "text": "sys"
+            }
+          ]
+        },
+        "tools": [
+          {
+            "functionDeclarations": [
+              {
+                "description": "w",
+                "name": "get_weather",
+                "parametersJsonSchema": {
+                  "properties": {
+                    "a": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "a"
+                  ],
+                  "type": "object"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "fb05fad4": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {},
+        "serviceTier": "priority"
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "9703d904": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {
+          "responseModalities": [
+            "AUDIO"
+          ],
+          "speechConfig": {
+            "voiceConfig": {
+              "prebuiltVoiceConfig": {
+                "voiceName": "alloy"
+              }
+            }
+          }
+        }
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "ef39e86e": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "what is this"
+              },
+              {
+                "inlineData": {
+                  "data": "aGk=",
+                  "mimeType": "image/png"
+                }
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {}
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "105789ad": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "transcribe"
+              },
+              {
+                "inlineData": {
+                  "data": "UklGRg==",
+                  "mimeType": "audio/wav"
+                }
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {}
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "88b71022": {
+      "body": {
+        "cachedContent": "cc-1",
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {
+          "imageConfig": {
+            "aspectRatio": "1:1"
+          },
+          "responseModalities": [
+            "TEXT"
+          ],
+          "speechConfig": {
+            "voiceConfig": {
+              "prebuiltVoiceConfig": {
+                "voiceName": "Kore"
+              }
+            }
+          },
+          "translationConfig": {
+            "targetLanguage": "fr"
+          }
+        }
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "ded5592c": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "inlineData": {
+                  "data": "UklGRg==",
+                  "mimeType": "audio/wav"
+                }
+              },
+              {
+                "text": "what does this say"
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {}
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "491a39fb": {
+      "body": {
+        "contents": [
+          {
+            "parts": [
+              {
+                "text": "weather in Paris?"
+              }
+            ],
+            "role": "user"
+          },
+          {
+            "parts": [
+              {
+                "text": "Let me check."
+              },
+              {
+                "functionCall": {
+                  "args": {
+                    "city": "Paris"
+                  },
+                  "id": "call_1",
+                  "name": "get_weather"
+                },
+                "thoughtSignature": "sig_abc"
+              }
+            ],
+            "role": "model"
+          },
+          {
+            "parts": [
+              {
+                "functionResponse": {
+                  "id": "call_1",
+                  "name": "get_weather",
+                  "response": {
+                    "result": "sunny"
+                  }
+                }
+              }
+            ],
+            "role": "user"
+          }
+        ],
+        "generationConfig": {},
+        "tools": [
+          {
+            "functionDeclarations": [
+              {
+                "description": "w",
+                "name": "get_weather",
+                "parametersJsonSchema": {
+                  "properties": {
+                    "a": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "a"
+                  ],
+                  "type": "object"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "path": "/v1beta/models/gemini-3.8-flash:generateContent"
+    },
+    "68b68bfb": {
+      "body": {
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "model": "anthropic/claude-fable-5.1:online"
+      }
+    },
+    "7aa1d598": {
+      "body": {
+        "audio": {
+          "format": "wav",
+          "voice": "alloy"
+        },
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "modalities": [
+          "text",
+          "audio"
+        ],
+        "model": "$MODEL"
+      }
+    },
+    "ff6cf24b": {
+      "body": {
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "model": "openai/gpt-6-astra:online"
+      }
+    },
+    "4574925d": {
+      "body": {
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "model": "openai/gpt-6-astra-pro:online"
+      }
+    },
+    "d3fd89d4": {
+      "body": {
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "model": "google/gemini-3.8-flash:online"
+      }
+    },
+    "62416f29": {
+      "body": {
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "model": "qwen/qwen3.8-flash:online"
+      }
+    },
+    "8e7afd7c": {
+      "body": {
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "model": "z-ai/glm-5.3-flash:online"
+      }
+    },
+    "f58d2716": {
+      "body": {
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "model": "ibm-granite/granite-4.2-8b:online"
+      }
+    },
+    "ada60834": {
+      "body": {
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "model": "inception/mercury-2.5-preview:online"
+      }
+    },
+    "fd8ef09e": {
+      "body": {
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "model": "inclusionai/ling-3.0-flash-sante:free:online"
+      }
+    },
+    "4174341c": {
+      "body": {
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "model": "inclusionai/ling-3.0-flash-fin:online"
+      }
+    },
+    "afd11de8": {
+      "body": {
+        "max_tokens": 4096,
+        "messages": [
+          {
+            "content": "hi",
+            "role": "user"
+          }
+        ],
+        "model": "tencent/hy4-preview:online"
+      }
     }
   },
   "index": {
@@ -21371,6 +22154,384 @@
       "cache.auto": "5054e235",
       "tier": "557070e4",
       "audio.out": "4e4ed97a",
+      "content.multimodal": "73950945",
+      "serverState": "4e4ed97a",
+      "moderation": "b51d27cd",
+      "content.audio": "3a79fdf5",
+      "providerOptions": "1d7cbd18",
+      "content.audioFirst": "605f5a10",
+      "multiTurn.toolRoundTrip": "24335db6"
+    },
+    "anthropic/claude-fable-5-1": {
+      "minimal": "9ec64032",
+      "sampling": "013c2e2c",
+      "system": "6e8bd3b4",
+      "tools": "66363f9e",
+      "tools.strict": "0a32e836",
+      "tools.builtin": "aa92d8ef",
+      "toolChoice.required": "8d639350",
+      "toolChoice.named": "2c9d9a7a",
+      "thinking.on": "d93b8d5a",
+      "thinking.effort": "e5f96ef2",
+      "thinking.hidden": "e5aa56f4",
+      "thinking.off": "9ec64032",
+      "thinking.lowMaxTokens": "47659862",
+      "structured": "e6050263",
+      "structured+thinking": "ac5aa4e2",
+      "cache.auto": "66aefab5",
+      "tier": "2cbf8753",
+      "audio.out": "9ec64032",
+      "content.multimodal": "b3b150a8",
+      "serverState": "9ec64032",
+      "moderation": "9ec64032",
+      "content.audio": "ca484b37",
+      "providerOptions": "9dde0163",
+      "content.audioFirst": "13d0db04",
+      "multiTurn.toolRoundTrip": "9ef8c027"
+    },
+    "openai/gpt-6-astra": {
+      "minimal": "d9c84240",
+      "sampling": "237f9cd7",
+      "system": "66063906",
+      "tools": "b66f17d6",
+      "tools.strict": "b66f17d6",
+      "tools.builtin": "53afdb53",
+      "toolChoice.required": "ade86c49",
+      "toolChoice.named": "b61aba44",
+      "thinking.on": "bf73a59e",
+      "thinking.effort": "0e5b7c4f",
+      "thinking.hidden": "c997b750",
+      "thinking.off": "d9c84240",
+      "thinking.lowMaxTokens": "3e41ab29",
+      "structured": "bcbb17e3",
+      "structured+thinking": "3f2e377d",
+      "cache.auto": "5b142130",
+      "tier": "e538231a",
+      "audio.out": "d9c84240",
+      "content.multimodal": "76614b9e",
+      "serverState": "2c33d51f",
+      "moderation": "461eeb37",
+      "content.audio": "d882d12b",
+      "providerOptions": "df863fa1",
+      "content.audioFirst": "634d429a",
+      "multiTurn.toolRoundTrip": "c7db0f24"
+    },
+    "google/gemini-3.8-flash": {
+      "minimal": "34cde36b",
+      "sampling": "00d644fe",
+      "system": "a39ca0f0",
+      "tools": "f860c495",
+      "tools.strict": "f860c495",
+      "tools.builtin": "e0eece86",
+      "toolChoice.required": "1afa636e",
+      "toolChoice.named": "da119ba3",
+      "thinking.on": "67821a01",
+      "thinking.effort": "67821a01",
+      "thinking.hidden": "be65983e",
+      "thinking.off": "fa3075d6",
+      "thinking.lowMaxTokens": "663e43a3",
+      "structured": "dc7768bb",
+      "structured+thinking": "ba4b263c",
+      "cache.auto": "ba80ff90",
+      "tier": "fb05fad4",
+      "audio.out": "9703d904",
+      "content.multimodal": "ef39e86e",
+      "serverState": "34cde36b",
+      "moderation": "34cde36b",
+      "content.audio": "105789ad",
+      "providerOptions": "88b71022",
+      "content.audioFirst": "ded5592c",
+      "multiTurn.toolRoundTrip": "491a39fb"
+    },
+    "openrouter/anthropic/claude-fable-5.1": {
+      "minimal": "4e4ed97a",
+      "sampling": "46d95049",
+      "system": "cc1d74a3",
+      "tools": "2cfbf59a",
+      "tools.strict": "79debac2",
+      "tools.builtin": "68b68bfb",
+      "toolChoice.required": "cb79bfc5",
+      "toolChoice.named": "e78f4700",
+      "thinking.on": "20187f1d",
+      "thinking.effort": "215ced06",
+      "thinking.hidden": "ebcad382",
+      "thinking.off": "4e4ed97a",
+      "thinking.lowMaxTokens": "ac475af6",
+      "structured": "143935c2",
+      "structured+thinking": "8f603ebf",
+      "cache.auto": "5054e235",
+      "tier": "557070e4",
+      "audio.out": "7aa1d598",
+      "content.multimodal": "73950945",
+      "serverState": "4e4ed97a",
+      "moderation": "b51d27cd",
+      "content.audio": "3a79fdf5",
+      "providerOptions": "1d7cbd18",
+      "content.audioFirst": "605f5a10",
+      "multiTurn.toolRoundTrip": "24335db6"
+    },
+    "openrouter/openai/gpt-6-astra": {
+      "minimal": "4e4ed97a",
+      "sampling": "46d95049",
+      "system": "cc1d74a3",
+      "tools": "2cfbf59a",
+      "tools.strict": "79debac2",
+      "tools.builtin": "ff6cf24b",
+      "toolChoice.required": "cb79bfc5",
+      "toolChoice.named": "e78f4700",
+      "thinking.on": "20187f1d",
+      "thinking.effort": "215ced06",
+      "thinking.hidden": "ebcad382",
+      "thinking.off": "4e4ed97a",
+      "thinking.lowMaxTokens": "ac475af6",
+      "structured": "143935c2",
+      "structured+thinking": "8f603ebf",
+      "cache.auto": "5054e235",
+      "tier": "557070e4",
+      "audio.out": "7aa1d598",
+      "content.multimodal": "73950945",
+      "serverState": "4e4ed97a",
+      "moderation": "b51d27cd",
+      "content.audio": "3a79fdf5",
+      "providerOptions": "1d7cbd18",
+      "content.audioFirst": "605f5a10",
+      "multiTurn.toolRoundTrip": "24335db6"
+    },
+    "openrouter/openai/gpt-6-astra-pro": {
+      "minimal": "4e4ed97a",
+      "sampling": "46d95049",
+      "system": "cc1d74a3",
+      "tools": "2cfbf59a",
+      "tools.strict": "79debac2",
+      "tools.builtin": "4574925d",
+      "toolChoice.required": "cb79bfc5",
+      "toolChoice.named": "e78f4700",
+      "thinking.on": "20187f1d",
+      "thinking.effort": "215ced06",
+      "thinking.hidden": "ebcad382",
+      "thinking.off": "4e4ed97a",
+      "thinking.lowMaxTokens": "ac475af6",
+      "structured": "143935c2",
+      "structured+thinking": "8f603ebf",
+      "cache.auto": "5054e235",
+      "tier": "557070e4",
+      "audio.out": "7aa1d598",
+      "content.multimodal": "73950945",
+      "serverState": "4e4ed97a",
+      "moderation": "b51d27cd",
+      "content.audio": "3a79fdf5",
+      "providerOptions": "1d7cbd18",
+      "content.audioFirst": "605f5a10",
+      "multiTurn.toolRoundTrip": "24335db6"
+    },
+    "openrouter/google/gemini-3.8-flash": {
+      "minimal": "4e4ed97a",
+      "sampling": "46d95049",
+      "system": "cc1d74a3",
+      "tools": "2cfbf59a",
+      "tools.strict": "79debac2",
+      "tools.builtin": "d3fd89d4",
+      "toolChoice.required": "cb79bfc5",
+      "toolChoice.named": "e78f4700",
+      "thinking.on": "20187f1d",
+      "thinking.effort": "215ced06",
+      "thinking.hidden": "ebcad382",
+      "thinking.off": "4e4ed97a",
+      "thinking.lowMaxTokens": "ac475af6",
+      "structured": "143935c2",
+      "structured+thinking": "8f603ebf",
+      "cache.auto": "5054e235",
+      "tier": "557070e4",
+      "audio.out": "7aa1d598",
+      "content.multimodal": "73950945",
+      "serverState": "4e4ed97a",
+      "moderation": "b51d27cd",
+      "content.audio": "3a79fdf5",
+      "providerOptions": "1d7cbd18",
+      "content.audioFirst": "605f5a10",
+      "multiTurn.toolRoundTrip": "24335db6"
+    },
+    "openrouter/qwen/qwen3.8-flash": {
+      "minimal": "4e4ed97a",
+      "sampling": "46d95049",
+      "system": "cc1d74a3",
+      "tools": "2cfbf59a",
+      "tools.strict": "79debac2",
+      "tools.builtin": "62416f29",
+      "toolChoice.required": "cb79bfc5",
+      "toolChoice.named": "e78f4700",
+      "thinking.on": "20187f1d",
+      "thinking.effort": "215ced06",
+      "thinking.hidden": "ebcad382",
+      "thinking.off": "4e4ed97a",
+      "thinking.lowMaxTokens": "ac475af6",
+      "structured": "143935c2",
+      "structured+thinking": "8f603ebf",
+      "cache.auto": "5054e235",
+      "tier": "557070e4",
+      "audio.out": "7aa1d598",
+      "content.multimodal": "73950945",
+      "serverState": "4e4ed97a",
+      "moderation": "b51d27cd",
+      "content.audio": "3a79fdf5",
+      "providerOptions": "1d7cbd18",
+      "content.audioFirst": "605f5a10",
+      "multiTurn.toolRoundTrip": "24335db6"
+    },
+    "openrouter/z-ai/glm-5.3-flash": {
+      "minimal": "4e4ed97a",
+      "sampling": "46d95049",
+      "system": "cc1d74a3",
+      "tools": "2cfbf59a",
+      "tools.strict": "79debac2",
+      "tools.builtin": "8e7afd7c",
+      "toolChoice.required": "cb79bfc5",
+      "toolChoice.named": "e78f4700",
+      "thinking.on": "20187f1d",
+      "thinking.effort": "215ced06",
+      "thinking.hidden": "ebcad382",
+      "thinking.off": "4e4ed97a",
+      "thinking.lowMaxTokens": "ac475af6",
+      "structured": "143935c2",
+      "structured+thinking": "8f603ebf",
+      "cache.auto": "5054e235",
+      "tier": "557070e4",
+      "audio.out": "7aa1d598",
+      "content.multimodal": "73950945",
+      "serverState": "4e4ed97a",
+      "moderation": "b51d27cd",
+      "content.audio": "3a79fdf5",
+      "providerOptions": "1d7cbd18",
+      "content.audioFirst": "605f5a10",
+      "multiTurn.toolRoundTrip": "24335db6"
+    },
+    "openrouter/ibm-granite/granite-4.2-8b": {
+      "minimal": "4e4ed97a",
+      "sampling": "46d95049",
+      "system": "cc1d74a3",
+      "tools": "2cfbf59a",
+      "tools.strict": "79debac2",
+      "tools.builtin": "f58d2716",
+      "toolChoice.required": "cb79bfc5",
+      "toolChoice.named": "e78f4700",
+      "thinking.on": "20187f1d",
+      "thinking.effort": "215ced06",
+      "thinking.hidden": "ebcad382",
+      "thinking.off": "4e4ed97a",
+      "thinking.lowMaxTokens": "ac475af6",
+      "structured": "143935c2",
+      "structured+thinking": "8f603ebf",
+      "cache.auto": "5054e235",
+      "tier": "557070e4",
+      "audio.out": "7aa1d598",
+      "content.multimodal": "73950945",
+      "serverState": "4e4ed97a",
+      "moderation": "b51d27cd",
+      "content.audio": "3a79fdf5",
+      "providerOptions": "1d7cbd18",
+      "content.audioFirst": "605f5a10",
+      "multiTurn.toolRoundTrip": "24335db6"
+    },
+    "openrouter/inception/mercury-2.5-preview": {
+      "minimal": "4e4ed97a",
+      "sampling": "46d95049",
+      "system": "cc1d74a3",
+      "tools": "2cfbf59a",
+      "tools.strict": "79debac2",
+      "tools.builtin": "ada60834",
+      "toolChoice.required": "cb79bfc5",
+      "toolChoice.named": "e78f4700",
+      "thinking.on": "20187f1d",
+      "thinking.effort": "215ced06",
+      "thinking.hidden": "ebcad382",
+      "thinking.off": "4e4ed97a",
+      "thinking.lowMaxTokens": "ac475af6",
+      "structured": "143935c2",
+      "structured+thinking": "8f603ebf",
+      "cache.auto": "5054e235",
+      "tier": "557070e4",
+      "audio.out": "7aa1d598",
+      "content.multimodal": "73950945",
+      "serverState": "4e4ed97a",
+      "moderation": "b51d27cd",
+      "content.audio": "3a79fdf5",
+      "providerOptions": "1d7cbd18",
+      "content.audioFirst": "605f5a10",
+      "multiTurn.toolRoundTrip": "24335db6"
+    },
+    "openrouter/inclusionai/ling-3.0-flash-sante:free": {
+      "minimal": "4e4ed97a",
+      "sampling": "46d95049",
+      "system": "cc1d74a3",
+      "tools": "2cfbf59a",
+      "tools.strict": "79debac2",
+      "tools.builtin": "fd8ef09e",
+      "toolChoice.required": "cb79bfc5",
+      "toolChoice.named": "e78f4700",
+      "thinking.on": "20187f1d",
+      "thinking.effort": "215ced06",
+      "thinking.hidden": "ebcad382",
+      "thinking.off": "4e4ed97a",
+      "thinking.lowMaxTokens": "ac475af6",
+      "structured": "143935c2",
+      "structured+thinking": "8f603ebf",
+      "cache.auto": "5054e235",
+      "tier": "557070e4",
+      "audio.out": "7aa1d598",
+      "content.multimodal": "73950945",
+      "serverState": "4e4ed97a",
+      "moderation": "b51d27cd",
+      "content.audio": "3a79fdf5",
+      "providerOptions": "1d7cbd18",
+      "content.audioFirst": "605f5a10",
+      "multiTurn.toolRoundTrip": "24335db6"
+    },
+    "openrouter/inclusionai/ling-3.0-flash-fin": {
+      "minimal": "4e4ed97a",
+      "sampling": "46d95049",
+      "system": "cc1d74a3",
+      "tools": "2cfbf59a",
+      "tools.strict": "79debac2",
+      "tools.builtin": "4174341c",
+      "toolChoice.required": "cb79bfc5",
+      "toolChoice.named": "e78f4700",
+      "thinking.on": "20187f1d",
+      "thinking.effort": "215ced06",
+      "thinking.hidden": "ebcad382",
+      "thinking.off": "4e4ed97a",
+      "thinking.lowMaxTokens": "ac475af6",
+      "structured": "143935c2",
+      "structured+thinking": "8f603ebf",
+      "cache.auto": "5054e235",
+      "tier": "557070e4",
+      "audio.out": "7aa1d598",
+      "content.multimodal": "73950945",
+      "serverState": "4e4ed97a",
+      "moderation": "b51d27cd",
+      "content.audio": "3a79fdf5",
+      "providerOptions": "1d7cbd18",
+      "content.audioFirst": "605f5a10",
+      "multiTurn.toolRoundTrip": "24335db6"
+    },
+    "openrouter/tencent/hy4-preview": {
+      "minimal": "4e4ed97a",
+      "sampling": "46d95049",
+      "system": "cc1d74a3",
+      "tools": "2cfbf59a",
+      "tools.strict": "79debac2",
+      "tools.builtin": "afd11de8",
+      "toolChoice.required": "cb79bfc5",
+      "toolChoice.named": "e78f4700",
+      "thinking.on": "20187f1d",
+      "thinking.effort": "215ced06",
+      "thinking.hidden": "ebcad382",
+      "thinking.off": "4e4ed97a",
+      "thinking.lowMaxTokens": "ac475af6",
+      "structured": "143935c2",
+      "structured+thinking": "8f603ebf",
+      "cache.auto": "5054e235",
+      "tier": "557070e4",
+      "audio.out": "7aa1d598",
       "content.multimodal": "73950945",
       "serverState": "4e4ed97a",
       "moderation": "b51d27cd",

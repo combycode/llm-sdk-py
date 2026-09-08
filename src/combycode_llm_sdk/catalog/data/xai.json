@@ -327,7 +327,7 @@
     ],
     "pricing": {
       "perUnit": {
-        "1k": 0.002,
+        "1k": 0.02,
         "2k": 0.02
       },
       "perImage": 0.02
@@ -407,8 +407,8 @@
     ],
     "pricing": {
       "perUnit": {
-        "1k": 0.01,
-        "2k": 0.05
+        "1k": 0.05,
+        "2k": 0.07
       },
       "perImage": 0.05
     },
@@ -485,12 +485,12 @@
       "grok-imagine-video"
     ],
     "pricing": {
-      "perSecond": 0.01,
+      "perSecond": 0.05,
       "perUnit": {
-        "480p": 0.002,
-        "720p": 0.05
+        "480p": 0.05,
+        "720p": 0.07
       },
-      "perImage": 0.01
+      "perImage": 0.002
     },
     "preferredApi": "responses",
     "supportedApis": [
@@ -567,11 +567,11 @@
       "grok-imagine-video-1.5-preview"
     ],
     "pricing": {
-      "perSecond": 0.25,
+      "perSecond": 0.08,
       "perUnit": {
-        "480p": 0.01,
-        "720p": 0.08,
-        "1080p": 0.14
+        "480p": 0.08,
+        "720p": 0.14,
+        "1080p": 0.25
       },
       "perImage": 0.01
     },
@@ -771,8 +771,8 @@
     "pricing": {
       "perImage": 0.06,
       "perUnit": {
-        "1k": 0.01,
-        "2k": 0.04
+        "1k": 0.04,
+        "2k": 0.06
       }
     },
     "preferredApi": "responses",

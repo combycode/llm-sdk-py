@@ -2506,7 +2506,7 @@
       "inputPerMTok": 2.5,
       "outputPerMTok": 10
     },
-    "preferredApi": "responses",
+    "preferredApi": "completions",
     "supportedApis": [
       "responses",
       "completions"
@@ -2521,7 +2521,7 @@
       "audio": true,
       "video": false,
       "imageGeneration": false,
-      "audioGeneration": false,
+      "audioGeneration": true,
       "videoGeneration": false
     },
     "reasoning": {
@@ -2537,7 +2537,8 @@
       "audio"
     ],
     "outputModalities": [
-      "text"
+      "text",
+      "audio"
     ],
     "family": "gpt-audio",
     "version": "1",
@@ -2565,7 +2566,7 @@
       "audioInputPerMTok": 32,
       "audioOutputPerMTok": 64
     },
-    "preferredApi": "responses",
+    "preferredApi": "completions",
     "supportedApis": [
       "responses",
       "completions"
@@ -2580,7 +2581,7 @@
       "audio": true,
       "video": false,
       "imageGeneration": false,
-      "audioGeneration": false,
+      "audioGeneration": true,
       "videoGeneration": false
     },
     "reasoning": {
@@ -2596,7 +2597,8 @@
       "audio"
     ],
     "outputModalities": [
-      "text"
+      "text",
+      "audio"
     ],
     "family": "gpt-audio",
     "version": "1.5",
@@ -2620,7 +2622,7 @@
       "inputPerMTok": 0.6,
       "outputPerMTok": 2.4
     },
-    "preferredApi": "responses",
+    "preferredApi": "completions",
     "supportedApis": [
       "responses",
       "completions"
@@ -2635,7 +2637,7 @@
       "audio": true,
       "video": false,
       "imageGeneration": false,
-      "audioGeneration": false,
+      "audioGeneration": true,
       "videoGeneration": false
     },
     "reasoning": {
@@ -2651,7 +2653,8 @@
       "audio"
     ],
     "outputModalities": [
-      "text"
+      "text",
+      "audio"
     ],
     "family": "gpt-audio",
     "version": "1",
@@ -3889,7 +3892,7 @@
       "outputPerMTok": 10,
       "audioOutputPerMTok": 12
     },
-    "preferredApi": "responses",
+    "preferredApi": "completions",
     "supportedApis": [
       "responses",
       "completions"
@@ -4014,6 +4017,10 @@
       "charsPerTokenDefault": 3.8,
       "countApiAvailable": false,
       "tiktokenEncoding": "o200k_base"
+    },
+    "deprecation": {
+      "date": "2027-02-26",
+      "source": "litellm"
     }
   },
   "openai/gpt-4o-transcribe": {
@@ -4026,7 +4033,7 @@
       "outputPerMTok": 10,
       "perMinute": 0.006
     },
-    "preferredApi": "responses",
+    "preferredApi": "completions",
     "supportedApis": [
       "responses",
       "completions"
@@ -4067,6 +4074,10 @@
       "charsPerTokenDefault": 3.8,
       "countApiAvailable": false,
       "tiktokenEncoding": "o200k_base"
+    },
+    "deprecation": {
+      "date": "2027-02-26",
+      "source": "litellm"
     }
   },
   "openai/gpt-4o-transcribe-diarize": {
@@ -4121,6 +4132,10 @@
       "charsPerTokenDefault": 3.8,
       "countApiAvailable": false,
       "tiktokenEncoding": "o200k_base"
+    },
+    "deprecation": {
+      "date": "2027-02-26",
+      "source": "litellm"
     }
   },
   "openai/gpt-4o-mini-transcribe": {
@@ -4176,6 +4191,10 @@
       "charsPerTokenDefault": 3.8,
       "countApiAvailable": false,
       "tiktokenEncoding": "o200k_base"
+    },
+    "deprecation": {
+      "date": "2027-02-26",
+      "source": "litellm"
     }
   },
   "openai/omni-moderation": {
@@ -4677,5 +4696,72 @@
       "countApiAvailable": false,
       "tiktokenEncoding": "o200k_base"
     }
+  },
+  "openai/gpt-6-astra": {
+    "providerModelName": "gpt-6-astra",
+    "aliases": [
+      "gpt-6-astra"
+    ],
+    "pricing": {
+      "inputPerMTok": 10,
+      "outputPerMTok": 50,
+      "cacheReadPerMTok": 1,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 5,
+          "outputPerMTok": 25,
+          "cacheReadPerMTok": 0.5
+        },
+        "flex": {
+          "inputPerMTok": 5,
+          "outputPerMTok": 25,
+          "cacheReadPerMTok": 0.5
+        },
+        "fast": {
+          "inputPerMTok": 20,
+          "outputPerMTok": 100,
+          "cacheReadPerMTok": 2
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 922000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-astra",
+    "version": "6",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses"
   }
 }

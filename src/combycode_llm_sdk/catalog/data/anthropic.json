@@ -118,7 +118,7 @@
     "status": "legacy",
     "active": false,
     "deprecation": {
-      "date": "2026-08-23",
+      "date": "2026-09-07",
       "source": "delisted"
     },
     "wireSpec": "anthropic/messages@4.1",
@@ -922,5 +922,64 @@
       "charsPerTokenDefault": 3.5,
       "countApiAvailable": true
     }
+  },
+  "anthropic/claude-fable-5.1": {
+    "providerModelName": "claude-fable-5-1",
+    "aliases": [
+      "claude-fable-5-1"
+    ],
+    "pricing": {
+      "inputPerMTok": 10,
+      "outputPerMTok": 50,
+      "cacheReadPerMTok": 0.25,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 5,
+          "outputPerMTok": 25
+        }
+      }
+    },
+    "preferredApi": "messages",
+    "supportedApis": [
+      "messages"
+    ],
+    "contextWindow": 1000000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "pdf"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "claude-fable",
+    "version": "5.1",
+    "status": "stable",
+    "active": true,
+    "deprecation": {
+      "date": "2027-09-01",
+      "source": "litellm"
+    },
+    "wireSpec": "anthropic/messages@4.7"
   }
 }

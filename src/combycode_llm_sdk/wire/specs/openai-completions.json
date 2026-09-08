@@ -94,9 +94,20 @@
       }
     },
     {
-      "name": "audio.input",
+      "name": "audio",
+      "_note": "Fires for audio IN or audio OUT. It was `hasAudioInput` alone, so `outputModalities: ['text','audio']` reached the request object and was dropped here: gpt-audio then refused the call with 'This model requires that either input content or output modality contain audio'. The parser has always built an audio_output part from `message.audio`, so both ends of the audio-output path existed and only this guard kept them apart.",
       "when": {
-        "pred": "hasAudioInput"
+        "any": [
+          {
+            "pred": "hasAudioInput"
+          },
+          {
+            "includes": [
+              "outputModalities",
+              "audio"
+            ]
+          }
+        ]
       },
       "template": {
         "modalities": [

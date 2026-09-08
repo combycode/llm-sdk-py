@@ -37,7 +37,8 @@ ApiType = str
 #: `perMinute` is the speech-to-text rate (USD per minute of audio), used by
 #: whisper-class and gpt-4o-transcribe when the provider bills by duration rather
 #: than by token. `perUnit` is keyed by a quality/resolution tier (video
-#: `{"720p":0.1,"1080p":0.12}`, image `{"1k":0.002,"2k":0.02}`) and overrides the
+#: `{"720p":0.1,"1080p":0.12}`, image `{"1k":0.02,"2k":0.02}`). Rates are what the
+#: model EMITS: an input-media price does not belong here. Overrides the
 #: flat `perImage`/`perSecond` when the selected resolution matches a key.
 #: `tiers` is keyed by the provider's OWN billed tier name (the value the
 #: provider returns: anthropic `standard|priority|batch`, openai

@@ -662,7 +662,8 @@
       "image"
     ],
     "outputModalities": [
-      "image"
+      "image",
+      "text"
     ],
     "family": "gemini-image",
     "version": "2.5",
@@ -763,7 +764,8 @@
       "image"
     ],
     "outputModalities": [
-      "image"
+      "image",
+      "text"
     ],
     "family": "gemini-image",
     "version": "3",
@@ -862,7 +864,8 @@
       "image"
     ],
     "outputModalities": [
-      "image"
+      "image",
+      "text"
     ],
     "family": "gemini-image",
     "version": "3.1",
@@ -908,7 +911,10 @@
     "aliases": [
       "nano-banana-pro-preview"
     ],
-    "pricing": {},
+    "pricing": {
+      "inputPerMTok": 2,
+      "outputPerMTok": 12
+    },
     "preferredApi": "generate",
     "supportedApis": [
       "generate"
@@ -2383,7 +2389,8 @@
       "image"
     ],
     "outputModalities": [
-      "text"
+      "text",
+      "audio"
     ],
     "family": "lyria",
     "version": "3",
@@ -2434,7 +2441,8 @@
       "image"
     ],
     "outputModalities": [
-      "text"
+      "text",
+      "audio"
     ],
     "family": "lyria",
     "version": "3",
@@ -2606,10 +2614,10 @@
     "family": "other",
     "version": "1.6",
     "status": "preview",
-    "active": true,
+    "active": false,
     "deprecation": {
-      "date": "2026-08-31",
-      "source": "litellm"
+      "date": "2026-09-07",
+      "source": "delisted"
     },
     "tokenizer": {
       "strategy": "heuristic",
@@ -2671,7 +2679,8 @@
       "image"
     ],
     "outputModalities": [
-      "image"
+      "image",
+      "text"
     ],
     "family": "gemini-image",
     "version": "3.1",
@@ -2758,6 +2767,10 @@
       "strategy": "count_api",
       "charsPerTokenDefault": 4,
       "countApiAvailable": true
+    },
+    "deprecation": {
+      "date": "2026-09-30",
+      "source": "litellm"
     }
   },
   "google/gemini-3.6-flash": {
@@ -2916,9 +2929,9 @@
       "gemini-3.7-flash"
     ],
     "pricing": {
-      "inputPerMTok": 1.5,
-      "outputPerMTok": 7.5,
-      "cacheReadPerMTok": 0.15,
+      "inputPerMTok": 0.75,
+      "outputPerMTok": 3.75,
+      "cacheReadPerMTok": 0.075,
       "tiers": {
         "batch": {
           "inputPerMTok": 0.75,
@@ -3098,5 +3111,257 @@
       "charsPerTokenDefault": 4,
       "countApiAvailable": false
     }
+  },
+  "google/gemini-3.8-flash": {
+    "providerModelName": "gemini-3.8-flash",
+    "aliases": [
+      "gemini-3.8-flash"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.75,
+      "outputPerMTok": 3.75,
+      "cacheReadPerMTok": 0.075,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 0.75,
+          "outputPerMTok": 3.75,
+          "cacheReadPerMTok": 0.075
+        },
+        "flex": {
+          "inputPerMTok": 0.75,
+          "outputPerMTok": 3.75,
+          "cacheReadPerMTok": 0.075
+        },
+        "priority": {
+          "inputPerMTok": 2.7,
+          "outputPerMTok": 13.5,
+          "cacheReadPerMTok": 0.27
+        }
+      }
+    },
+    "preferredApi": "generate",
+    "supportedApis": [
+      "generate"
+    ],
+    "contextWindow": 1048576,
+    "maxOutput": 65536,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gemini-flash",
+    "version": "3.8",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "google/generate@3"
+  },
+  "google/gemini-omni-1.1-flash": {
+    "providerModelName": "gemini-omni-1.1-flash",
+    "aliases": [
+      "gemini-omni-1.1-flash"
+    ],
+    "pricing": {
+      "inputPerMTok": 1.5,
+      "outputPerMTok": 9,
+      "audioInputPerMTok": 1.5
+    },
+    "preferredApi": "generate",
+    "supportedApis": [
+      "generate"
+    ],
+    "contextWindow": 131072,
+    "maxOutput": 65536,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "audio-chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gemini-audio",
+    "version": "1.1",
+    "status": "preview",
+    "active": true
+  },
+  "google/lyria-3.5": {
+    "providerModelName": "lyria-3.5",
+    "aliases": [
+      "lyria-3.5"
+    ],
+    "pricing": {},
+    "preferredApi": "generate",
+    "supportedApis": [
+      "generate"
+    ],
+    "contextWindow": 1048576,
+    "maxOutput": 65536,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "music",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "lyria",
+    "version": "3.5",
+    "status": "preview",
+    "active": true
+  },
+  "google/gemini-3.5-transcribe": {
+    "providerModelName": "gemini-3.5-transcribe",
+    "aliases": [
+      "gemini-3.5-transcribe"
+    ],
+    "pricing": {
+      "inputPerMTok": 2,
+      "outputPerMTok": 12,
+      "audioInputPerMTok": 0.003,
+      "audioOutputPerMTok": 0.002
+    },
+    "preferredApi": "generate",
+    "supportedApis": [
+      "generate"
+    ],
+    "contextWindow": 98304,
+    "maxOutput": 32768,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "stt",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gemini-transcribe",
+    "version": "3.5",
+    "status": "stable",
+    "active": true
+  },
+  "google/gemini-3.5-transcribe-live": {
+    "providerModelName": "gemini-3.5-transcribe-live",
+    "aliases": [
+      "gemini-3.5-transcribe-live"
+    ],
+    "pricing": {
+      "inputPerMTok": 3.5,
+      "outputPerMTok": 21,
+      "audioInputPerMTok": 0.005,
+      "audioOutputPerMTok": 0.004
+    },
+    "preferredApi": "generate",
+    "supportedApis": [
+      "generate"
+    ],
+    "contextWindow": 131072,
+    "maxOutput": 65536,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "stt",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gemini-transcribe",
+    "version": "3.5",
+    "status": "stable",
+    "active": true
   }
 }

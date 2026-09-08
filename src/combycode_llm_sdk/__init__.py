@@ -22,7 +22,7 @@ from __future__ import annotations
 #: The distribution's version. This literal is the ONLY place it is written:
 #: `pyproject.toml` declares the version dynamic and hatchling reads it from
 #: here, so the package and the wheel cannot disagree about what they are.
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 from .agent.history import ConversationHistory as ConversationHistory
 from .agent.history import HistoryEntry as HistoryEntry
