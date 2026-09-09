@@ -17,8 +17,12 @@ maintained by hand.
 from __future__ import annotations
 
 import fnmatch
+import shutil
+import subprocess
 import tomllib
 from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "src" / "combycode_llm_sdk"
@@ -100,3 +104,63 @@ def test_dunder_version_is_the_distribution_version() -> None:
     import combycode_llm_sdk
 
     assert combycode_llm_sdk.__version__ == importlib.metadata.version("combycode-llm-sdk")
+
+
+# Every markdown file this repo tracks, and therefore every one an sdist carries.
+# A file is on this list because a stranger who downloads the package should see
+# it -- not because it happens to exist.
+SHIPPABLE_MARKDOWN = {
+    "CHANGELOG.md",
+    "README.md",
+    "examples/README.md",
+    "examples/features-highlight/README.md",
+}
+
+
+def _tracked_markdown() -> set[str]:
+    if shutil.which("git") is None:
+        pytest.skip("git is not on PATH; nothing to ask about what the repo tracks")
+    result = subprocess.run(
+        ["git", "ls-files", "*.md"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        pytest.skip("not a git work tree here")
+    return {line.strip() for line in result.stdout.splitlines() if line.strip()}
+
+
+def test_the_package_ships_no_development_notes() -> None:
+    """Only documentation a USER wants is allowed to reach PyPI.
+
+    This exists because 0.1.0 and 0.1.1 both shipped `PORTING.md` and
+    `PORTING_REGISTRY.md` inside the sdist: an instruction sheet opening "Read
+    this before writing a line of Python. It exists because the first attempt
+    failed", and a 656-line status table of what was still `pending`, pointing at
+    a sibling TypeScript repository nobody outside this workspace has. No secret,
+    no path -- just the development process, published, describing a quality
+    process that had not caught it.
+
+    Hatchling's sdist takes whatever is tracked and not ignored, so "tracked" IS
+    "published" for this repo, and that is the thing worth asserting. A NEW
+    markdown file fails here on purpose: adding one is a decision about what the
+    package shows the world, and it should cost a line in this set rather than be
+    noticed after a release.
+    """
+    tracked = _tracked_markdown()
+    unexpected = tracked - SHIPPABLE_MARKDOWN
+    assert not unexpected, (
+        f"these markdown files would ship to PyPI: {sorted(unexpected)}. "
+        "If a file documents the LIBRARY, add it to SHIPPABLE_MARKDOWN. If it "
+        "documents how we work, untrack it (`git rm --cached`) and gitignore it "
+        "-- it stays on disk either way."
+    )
+
+
+def test_the_shippable_list_has_no_dead_entries() -> None:
+    """A name left behind after a rename would quietly widen what is allowed."""
+    tracked = _tracked_markdown()
+    missing = SHIPPABLE_MARKDOWN - tracked
+    assert not missing, f"listed as shippable but not tracked: {sorted(missing)}"
