@@ -24,6 +24,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from ..llm.wire_transforms import make_registry
+from ..network.errors import UnsupportedError
 from ..wire.interpreter import build_from_spec
 from ..wire.media_specs import media_spec
 from .types import (
@@ -223,7 +224,28 @@ class OpenAIMediaAdapter:
     def submit_video(
         self, prompt: str, model: str, fetch: Any, params: Mapping[str, Any] | None = None
     ) -> str:
+        """Submit a Sora job -- an API that shut down on the date it announced.
+
+        Measured 2026-09-29: `/v1/videos` answers 404 to both GET and POST.
+        `sora-2` and `sora-2-pro` are STILL listed by `/v1/models`, which is why
+        nothing downstream noticed: a catalog built from ListModels keeps
+        reporting a model no endpoint serves.
+
+        The method stays, and so does the public video surface that other
+        providers serve. What changes is that a 404 raises a typed error naming
+        the cause instead of returning an empty id, which reads as a submitted
+        job and fails later somewhere that cannot explain itself.
+        """
         response = fetch(self.build_video_request(prompt, model, params))
+        if _status(response) == 404:
+            raise UnsupportedError(
+                "The OpenAI Sora video API shut down on 2026-09-24 and /v1/videos now "
+                f'answers 404. "{model}" is still listed by /v1/models, but no endpoint '
+                "serves it. Use another provider for video generation.",
+                provider="openai",
+                model=model,
+                status=404,
+            )
         return str(_body(response).get("id") or "")
 
     def get_video_status(self, video_id: str, fetch: Any) -> VideoStatus:

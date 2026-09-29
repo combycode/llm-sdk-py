@@ -28,7 +28,23 @@ from .types import MediaCapabilities, RawMediaResult, VideoStatus
 
 DEFAULT_BASE_URL = "https://generativelanguage.googleapis.com"
 
-DEFAULT_IMAGE_MODEL = "imagen-4.0-generate-001"
+#: Was `imagen-4.0-generate-001` until 2026-09-29, when a live check found its
+#: `:predict` endpoint answering 404 on the Developer API -- "is not found for
+#: API version v1beta, or is not supported for predict" -- so the DEFAULT image
+#: path was broken. Both Google SDKs deleted their Developer-API converters, and
+#: `generate_images` now raises "only supported in Gemini Enterprise Agent
+#: Platform mode".
+#:
+#: `gemini-3.1-flash-image` is the model Google's docs call the go-to image
+#: generator, and it was verified generating an image through generateContent in
+#: the same check.
+#:
+#: Routing an explicitly NAMED `imagen*` model to a typed refusal was tried in
+#: the TypeScript tree and reverted: it breaks the frozen media corpus and the
+#: spec/adapter parity check, which both record the `:predict` envelope as this
+#: adapter's contract, and an Enterprise deployment can still reach it. So a
+#: caller who names imagen still gets Google's own 404; only the default moved.
+DEFAULT_IMAGE_MODEL = "gemini-3.1-flash-image"
 DEFAULT_TTS_MODEL = "gemini-2.5-flash-preview-tts"
 DEFAULT_EDIT_MODEL = "gemini-2.5-flash-image"
 
