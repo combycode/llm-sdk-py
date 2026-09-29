@@ -58,14 +58,30 @@ def _has_code_exec(raw: Mapping[str, Any]) -> bool:
     return any(p.get("executableCode") or p.get("codeExecutionResult") for p in _parts_of(raw))
 
 
-_FINISH = {
+#: Google's terminal reasons, for BOTH the buffered and the streamed path.
+#:
+#: Public because the stream registry used to carry its own inline table holding
+#: a single entry, `MAX_TOKENS`. Everything else fell through to `stop`, so the
+#: SAME response finished differently depending on whether it was streamed: a
+#: SAFETY block read as a clean finish with no content, and
+#: MALFORMED_FUNCTION_CALL never reached reflect-and-retry on a stream. Two
+#: tables for one provider's vocabulary can only drift; there is now one.
+GOOGLE_FINISH = {
     "MAX_TOKENS": "length",
     "SAFETY": "content_filter",
     # Verified in google-ts src/types.ts:510. Unmapped it fell through to `stop`,
     # so a turn that failed to produce a usable tool call looked like a clean
     # finish with no content.
     "MALFORMED_FUNCTION_CALL": "malformed_tool_call",
+    # google-ts types.ts:554. `FinishReason` is open by design (R1) precisely so
+    # a provider inventing a terminal state is not a breaking change for everyone
+    # else, so this keeps its own name rather than being folded into `stop`
+    # (which would claim the turn ended cleanly) or `length` (which would blame
+    # tokens).
+    "TOO_MANY_TOOL_CALLS": "too_many_tool_calls",
 }
+
+_FINISH = GOOGLE_FINISH
 
 
 def _text_part(_arg: Any, ctx: Ctx) -> dict[str, Any] | None:

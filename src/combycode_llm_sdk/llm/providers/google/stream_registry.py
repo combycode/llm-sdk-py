@@ -23,6 +23,7 @@ from typing import Any
 from ....wire.interpreter import Ctx, Registry, js_json
 from .._shared.response_utils import extract_finish_reason
 from .parse_helpers import google_usage
+from .response_registry import GOOGLE_FINISH
 
 
 def _raw(ctx: Ctx) -> Mapping[str, Any]:
@@ -104,7 +105,9 @@ def _done(_arg: Any, ctx: Ctx) -> dict[str, Any] | None:
         return None
     return {
         "type": "done",
-        "finishReason": extract_finish_reason(False, fr, {"MAX_TOKENS": "length"}),
+        # The SAME table the buffered path uses. Inlining a one-entry copy here
+        # is what made a streamed SAFETY block look like a clean stop.
+        "finishReason": extract_finish_reason(False, fr, GOOGLE_FINISH),
     }
 
 

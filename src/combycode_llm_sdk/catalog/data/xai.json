@@ -692,9 +692,15 @@
       "videoGeneration": false
     },
     "reasoning": {
-      "supported": false,
-      "automatic": false,
-      "effortControl": false,
+      "supported": true,
+      "automatic": true,
+      "effortControl": true,
+      "effortValues": [
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
       "encryptedContent": false,
       "summaryAvailable": false
     },
@@ -753,9 +759,15 @@
       "videoGeneration": false
     },
     "reasoning": {
-      "supported": false,
-      "automatic": false,
-      "effortControl": false,
+      "supported": true,
+      "automatic": true,
+      "effortControl": true,
+      "effortValues": [
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
       "encryptedContent": false,
       "summaryAvailable": false
     },

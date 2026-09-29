@@ -49,7 +49,7 @@ from ..wire.interpreter import MISSING, Ctx, Registry, get_path, is_obj, js_stri
 from .audio.voices import resolve_voice
 from .moderation.native import build_native_moderation
 from .providers.google.tiers import google_request_tier
-from .providers.openai.tiers import openai_request_tier
+from .providers.openai.tiers import openai_tier_decision
 from .providers.xai.tiers import xai_request_tier
 from .types.schema_utils import ensure_additional_properties, strict_support
 
@@ -172,7 +172,17 @@ def make_registry(a: AdapterHandles) -> Registry:
     # -- provider value maps that are already functions in the library -------
 
     transforms["googleTier"] = lambda v, ctx: google_request_tier(_undef(v))
-    transforms["openaiTier"] = lambda v, ctx: openai_request_tier(_undef(v))
+    def _openai_tier(v: Any, ctx: Any) -> Any:
+        # The surface decides: `ultrafast` is a Responses value and
+        # chat-completions rejects it. A downgrade is RECORDED rather than
+        # performed quietly -- `ctx.notes` is what the client turns into
+        # `request_adjusted`.
+        value, note = openai_tier_decision(_undef(v), (ctx.spec or {}).get("api"))
+        if note and note not in ctx.notes:
+            ctx.notes.append(note)
+        return value
+
+    transforms["openaiTier"] = _openai_tier
 
     # -- audio ---------------------------------------------------------------
 

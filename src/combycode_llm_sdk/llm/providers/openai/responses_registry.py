@@ -216,14 +216,28 @@ def _usage(_arg: Any, ctx: Ctx) -> dict[str, Any]:
     }
 
 
+#: Only one of the four sub-reasons means what `length` means. The clone's enum
+#: is `max_output_tokens | max_messages | content_filter | steered`; everything
+#: but `content_filter` used to arrive as `length`, i.e. "your output was cut off
+#: by the token limit" -- wrong for a MESSAGE cap, and actively misleading for
+#: `steered`, where the turn was superseded and a successor `response.created`
+#: follows it automatically. The distinct values ride the open `FinishReason`
+#: union (R1); the raw provider value stays reachable on the response's `raw`.
+_BY_SUB_REASON = {
+    "content_filter": "content_filter",
+    "max_output_tokens": "length",
+    "max_messages": "max_messages",
+    "steered": "steered",
+}
+
+
 def _finish(_arg: Any, ctx: Ctx) -> str:
-    """`incomplete` carries a sub-reason: a content_filter block must not be
-    reported as a length truncation."""
+    """`incomplete` carries a sub-reason, and it decides."""
     raw = _raw(ctx)
     details = raw.get("incomplete_details")
     reason = details.get("reason") if isinstance(details, Mapping) else None
-    if reason == "content_filter":
-        return "content_filter"
+    if isinstance(reason, str) and reason in _BY_SUB_REASON:
+        return _BY_SUB_REASON[reason]
     status = raw.get("status")
     return extract_finish_reason(
         len(_out(ctx)["toolCalls"]) > 0,
