@@ -90,6 +90,19 @@ class GoogleInteractionsAdapter:
                     items.append({"type": "user_input", "content": parts})
 
         elif role == "assistant":
+            # Signed steps first, in the order they arrived: they preceded the
+            # model_output in the turn that produced them, and that is where the
+            # API accepts them back (measured 2026-09-29 -- echoing a `thought`
+            # step is accepted, and corrupting its signature is refused 400, so
+            # the server reads it).
+            #
+            # Only OUR OWN: `origin.signatures` is provider-bound by contract, and
+            # a signature minted by another provider would be a 400 at best.
+            origin = msg.get("origin")
+            if isinstance(origin, Mapping) and origin.get("provider") == "google":
+                signed = origin.get("signatures")
+                if isinstance(signed, list):
+                    items.extend(signed)
             content_items: list[Any] = []
             for p in _as_parts(msg.get("content")):
                 # `p.text` truthiness, not presence: an empty assistant text part

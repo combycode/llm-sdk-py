@@ -75,6 +75,10 @@ def build_assistant_message(
     }
     if stateful and response.get("id"):
         message_origin["serverStateId"] = response["id"]
+    # Opaque and provider-bound: copied, never read. The adapter that produced it
+    # is the only one allowed to send it back.
+    if response.get("signatures"):
+        message_origin["signatures"] = response["signatures"]
     return {
         "role": "assistant",
         "content": response.get("content"),

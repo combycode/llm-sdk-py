@@ -44,6 +44,8 @@
     "text": { "$call": "gaText" },
     "usage": { "$call": "gaUsage" },
     "finishReason": { "$call": "gaFinish" },
-    "citations": { "$call": "gaCitations" }
+    "citations": { "$call": "gaCitations" },
+    "error": { "$call": "gaError" },
+    "signatures": { "$call": "gaSignatures" }
   }
 }

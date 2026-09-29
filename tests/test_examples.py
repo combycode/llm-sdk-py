@@ -48,6 +48,7 @@ PASSING = [
     "final_answer_phase",
     "lazy_tools",
     "llm_backed_tools",
+    "interaction_signatures",
     "mcp_lazy_server",
     "model_filters",
     "model_selector",

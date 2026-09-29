@@ -3238,9 +3238,9 @@
     "model": "gemini-3.1-flash-lite",
     "api": "interactions",
     "streaming": false,
-    "recordedAt": "2026-08-24",
+    "recordedAt": "2026-09-29",
     "raw": {
-      "id": "v1_ChcyeWVNYXJHaUN2bVd2ZElQcWZfQ3FBaxIXMnllTWFyR2lDdm1XdmRJUHFmX0NxQWs",
+      "id": "v1_ChdfUlM4YXJEekVlX0V2ZElQeDR5dDZRVRIXX1JTOGFyRHpFZV9FdmRJUHg0eXQ2UVU",
       "status": "completed",
       "usage": {
         "total_tokens": 7,
@@ -3255,14 +3255,46 @@
         "total_output_tokens": 1,
         "total_tool_use_tokens": 0,
         "total_thought_tokens": 0,
-        "raw_prompt_token": 35
+        "raw_prompt_token": 35,
+        "model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 35
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 5
+              }
+            ]
+          }
+        ],
+        "non_grounding_model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 35
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 5
+              }
+            ]
+          }
+        ]
       },
-      "created": "2026-08-24T11:15:39Z",
-      "updated": "2026-08-24T11:15:39Z",
+      "created": "2026-09-29T19:43:57Z",
+      "updated": "2026-09-29T19:43:57Z",
       "service_tier": "standard",
       "steps": [
         {
-          "signature": "EnEKbwERTTIP9JbfOz6Y0DO9q5LElTwYDn2p9paUf9AyFlYeRRZH8QZHLgtO11bP5BodSLeQImUk8cxapccDUwpv41l7OwPOymSANkBsaj6AgG55UdxCXUg9OVqQV7aZLQFpF2L/NgFD+O4gfCrxCJHpuQ==",
+          "signature": "EnMKcQFpFH0TSvkjoKwOEghRRZdGvC3ICA0FZOoJaq4F2i/ah1TX197ArRIDuebmsy8ByzpuTOtbYOngbOryREzKVclyvOuD/xeW9LVjcveLHARElzgGUs02x4TZaBShOf+PtKOkDjqT9ser/NFgUQlxqG2D",
           "type": "thought"
         },
         {
@@ -3279,30 +3311,9 @@
       "model": "models/gemini-3.1-flash-lite"
     },
     "parsed": {
-      "id": "v1_ChcyeWVNYXJHaUN2bVd2ZElQcWZfQ3FBaxIXMnllTWFyR2lDdm1XdmRJUHFmX0NxQWs",
-      "model": "",
-      "content": [
-        {
-          "type": "text",
-          "text": "OK"
-        }
-      ],
-      "finishReason": "stop",
-      "usage": {
-        "inputTokens": 6,
-        "outputTokens": 1,
-        "totalTokens": 7,
-        "cachedTokens": 0,
-        "cacheWriteTokens": 0,
-        "reasoningTokens": 0
-      },
-      "text": "OK",
-      "toolCalls": [],
-      "media": [],
-      "thinking": null,
       "latencyMs": 0,
       "raw": {
-        "id": "v1_ChcyeWVNYXJHaUN2bVd2ZElQcWZfQ3FBaxIXMnllTWFyR2lDdm1XdmRJUHFmX0NxQWs",
+        "id": "v1_ChdfUlM4YXJEekVlX0V2ZElQeDR5dDZRVRIXX1JTOGFyRHpFZV9FdmRJUHg0eXQ2UVU",
         "status": "completed",
         "usage": {
           "total_tokens": 7,
@@ -3317,14 +3328,46 @@
           "total_output_tokens": 1,
           "total_tool_use_tokens": 0,
           "total_thought_tokens": 0,
-          "raw_prompt_token": 35
+          "raw_prompt_token": 35,
+          "model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 35
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 5
+                }
+              ]
+            }
+          ],
+          "non_grounding_model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 35
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 5
+                }
+              ]
+            }
+          ]
         },
-        "created": "2026-08-24T11:15:39Z",
-        "updated": "2026-08-24T11:15:39Z",
+        "created": "2026-09-29T19:43:57Z",
+        "updated": "2026-09-29T19:43:57Z",
         "service_tier": "standard",
         "steps": [
           {
-            "signature": "EnEKbwERTTIP9JbfOz6Y0DO9q5LElTwYDn2p9paUf9AyFlYeRRZH8QZHLgtO11bP5BodSLeQImUk8cxapccDUwpv41l7OwPOymSANkBsaj6AgG55UdxCXUg9OVqQV7aZLQFpF2L/NgFD+O4gfCrxCJHpuQ==",
+            "signature": "EnMKcQFpFH0TSvkjoKwOEghRRZdGvC3ICA0FZOoJaq4F2i/ah1TX197ArRIDuebmsy8ByzpuTOtbYOngbOryREzKVclyvOuD/xeW9LVjcveLHARElzgGUs02x4TZaBShOf+PtKOkDjqT9ser/NFgUQlxqG2D",
             "type": "thought"
           },
           {
@@ -3339,7 +3382,34 @@
         ],
         "object": "interaction",
         "model": "models/gemini-3.1-flash-lite"
-      }
+      },
+      "model": "",
+      "content": [
+        {
+          "type": "text",
+          "text": "OK"
+        }
+      ],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "id": "v1_ChdfUlM4YXJEekVlX0V2ZElQeDR5dDZRVRIXX1JTOGFyRHpFZV9FdmRJUHg0eXQ2UVU",
+      "text": "OK",
+      "usage": {
+        "inputTokens": 6,
+        "outputTokens": 1,
+        "totalTokens": 7,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0
+      },
+      "finishReason": "stop",
+      "signatures": [
+        {
+          "signature": "EnMKcQFpFH0TSvkjoKwOEghRRZdGvC3ICA0FZOoJaq4F2i/ah1TX197ArRIDuebmsy8ByzpuTOtbYOngbOryREzKVclyvOuD/xeW9LVjcveLHARElzgGUs02x4TZaBShOf+PtKOkDjqT9ser/NFgUQlxqG2D",
+          "type": "thought"
+        }
+      ]
     }
   },
   "google/interactions::tools": {
@@ -3349,9 +3419,9 @@
     "model": "gemini-3.1-flash-lite",
     "api": "interactions",
     "streaming": false,
-    "recordedAt": "2026-08-24",
+    "recordedAt": "2026-09-29",
     "raw": {
-      "id": "v1_ChczQ2VNYXQzNk9OYnJ2ZElQNmI3cGlRNBIXM0NlTWF0MzZPTmJydmRJUDZiN3BpUTQ",
+      "id": "v1_ChdfeFM4YXRHMUs3S1d2ZElQMU1qT2dRWRIXX3hTOGF0RzFLN0tXdmRJUDFNak9nUVk",
       "status": "requires_action",
       "usage": {
         "total_tokens": 71,
@@ -3366,18 +3436,51 @@
         "total_output_tokens": 16,
         "total_tool_use_tokens": 0,
         "total_thought_tokens": 0,
-        "raw_prompt_token": 93
+        "raw_prompt_token": 93,
+        "model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 93
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 22
+              }
+            ]
+          }
+        ],
+        "non_grounding_model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 93
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 22
+              }
+            ]
+          }
+        ]
       },
-      "created": "2026-08-24T11:15:40Z",
-      "updated": "2026-08-24T11:15:40Z",
+      "created": "2026-09-29T19:43:59Z",
+      "updated": "2026-09-29T19:43:59Z",
       "service_tier": "standard",
       "steps": [
         {
-          "signature": "EnEKbwERTTIPFKqavclvCTXvYGuzNN8+IfISi3dnIiXab168oRNc3HbvpfxA7dDQRIuvERNoOide/SeCSggTO3VxHmMVUto4gqXl8h7L/lnfGXGElFrfNX12IRhG6rEL7W0C4swd3Vv3Wy+N/xlNoH6WTg==",
+          "signature": "EnMKcQFpFH0TSWNDBMyg6x/qp9LnJM1iypttUzNLNgLk59EoSiQ+8x8yEbavK54S8t/27ieDi0w6ir/rD7PnUvJcZ9oDVPfmQkJ/avyglZqN3iyn4o4lA4unIMbIzVgrdBO46MyJ4QFNlUpIAW1aq0xYETkj",
           "type": "thought"
         },
         {
-          "id": "call_1930294",
+          "id": "call_80172",
+          "signature": "EnMKcQFpFH0TSWNDBMyg6x/qp9LnJM1iypttUzNLNgLk59EoSiQ+8x8yEbavK54S8t/27ieDi0w6ir/rD7PnUvJcZ9oDVPfmQkJ/avyglZqN3iyn4o4lA4unIMbIzVgrdBO46MyJ4QFNlUpIAW1aq0xYETkj",
           "type": "function_call",
           "name": "get_weather",
           "arguments": {
@@ -3389,43 +3492,9 @@
       "model": "models/gemini-3.1-flash-lite"
     },
     "parsed": {
-      "id": "v1_ChczQ2VNYXQzNk9OYnJ2ZElQNmI3cGlRNBIXM0NlTWF0MzZPTmJydmRJUDZiN3BpUTQ",
-      "model": "",
-      "content": [
-        {
-          "type": "tool_call",
-          "id": "call_1930294",
-          "name": "get_weather",
-          "arguments": {
-            "city": "Paris"
-          }
-        }
-      ],
-      "finishReason": "tool_use",
-      "usage": {
-        "inputTokens": 55,
-        "outputTokens": 16,
-        "totalTokens": 71,
-        "cachedTokens": 0,
-        "cacheWriteTokens": 0,
-        "reasoningTokens": 0
-      },
-      "text": "",
-      "toolCalls": [
-        {
-          "type": "tool_call",
-          "id": "call_1930294",
-          "name": "get_weather",
-          "arguments": {
-            "city": "Paris"
-          }
-        }
-      ],
-      "media": [],
-      "thinking": null,
       "latencyMs": 0,
       "raw": {
-        "id": "v1_ChczQ2VNYXQzNk9OYnJ2ZElQNmI3cGlRNBIXM0NlTWF0MzZPTmJydmRJUDZiN3BpUTQ",
+        "id": "v1_ChdfeFM4YXRHMUs3S1d2ZElQMU1qT2dRWRIXX3hTOGF0RzFLN0tXdmRJUDFNak9nUVk",
         "status": "requires_action",
         "usage": {
           "total_tokens": 71,
@@ -3440,18 +3509,51 @@
           "total_output_tokens": 16,
           "total_tool_use_tokens": 0,
           "total_thought_tokens": 0,
-          "raw_prompt_token": 93
+          "raw_prompt_token": 93,
+          "model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 93
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 22
+                }
+              ]
+            }
+          ],
+          "non_grounding_model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 93
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 22
+                }
+              ]
+            }
+          ]
         },
-        "created": "2026-08-24T11:15:40Z",
-        "updated": "2026-08-24T11:15:40Z",
+        "created": "2026-09-29T19:43:59Z",
+        "updated": "2026-09-29T19:43:59Z",
         "service_tier": "standard",
         "steps": [
           {
-            "signature": "EnEKbwERTTIPFKqavclvCTXvYGuzNN8+IfISi3dnIiXab168oRNc3HbvpfxA7dDQRIuvERNoOide/SeCSggTO3VxHmMVUto4gqXl8h7L/lnfGXGElFrfNX12IRhG6rEL7W0C4swd3Vv3Wy+N/xlNoH6WTg==",
+            "signature": "EnMKcQFpFH0TSWNDBMyg6x/qp9LnJM1iypttUzNLNgLk59EoSiQ+8x8yEbavK54S8t/27ieDi0w6ir/rD7PnUvJcZ9oDVPfmQkJ/avyglZqN3iyn4o4lA4unIMbIzVgrdBO46MyJ4QFNlUpIAW1aq0xYETkj",
             "type": "thought"
           },
           {
-            "id": "call_1930294",
+            "id": "call_80172",
+            "signature": "EnMKcQFpFH0TSWNDBMyg6x/qp9LnJM1iypttUzNLNgLk59EoSiQ+8x8yEbavK54S8t/27ieDi0w6ir/rD7PnUvJcZ9oDVPfmQkJ/avyglZqN3iyn4o4lA4unIMbIzVgrdBO46MyJ4QFNlUpIAW1aq0xYETkj",
             "type": "function_call",
             "name": "get_weather",
             "arguments": {
@@ -3461,7 +3563,56 @@
         ],
         "object": "interaction",
         "model": "models/gemini-3.1-flash-lite"
-      }
+      },
+      "model": "",
+      "content": [
+        {
+          "type": "tool_call",
+          "id": "call_80172",
+          "name": "get_weather",
+          "arguments": {
+            "city": "Paris"
+          }
+        }
+      ],
+      "toolCalls": [
+        {
+          "type": "tool_call",
+          "id": "call_80172",
+          "name": "get_weather",
+          "arguments": {
+            "city": "Paris"
+          }
+        }
+      ],
+      "media": [],
+      "thinking": null,
+      "id": "v1_ChdfeFM4YXRHMUs3S1d2ZElQMU1qT2dRWRIXX3hTOGF0RzFLN0tXdmRJUDFNak9nUVk",
+      "text": "",
+      "usage": {
+        "inputTokens": 55,
+        "outputTokens": 16,
+        "totalTokens": 71,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0
+      },
+      "finishReason": "tool_use",
+      "signatures": [
+        {
+          "signature": "EnMKcQFpFH0TSWNDBMyg6x/qp9LnJM1iypttUzNLNgLk59EoSiQ+8x8yEbavK54S8t/27ieDi0w6ir/rD7PnUvJcZ9oDVPfmQkJ/avyglZqN3iyn4o4lA4unIMbIzVgrdBO46MyJ4QFNlUpIAW1aq0xYETkj",
+          "type": "thought"
+        },
+        {
+          "id": "call_80172",
+          "signature": "EnMKcQFpFH0TSWNDBMyg6x/qp9LnJM1iypttUzNLNgLk59EoSiQ+8x8yEbavK54S8t/27ieDi0w6ir/rD7PnUvJcZ9oDVPfmQkJ/avyglZqN3iyn4o4lA4unIMbIzVgrdBO46MyJ4QFNlUpIAW1aq0xYETkj",
+          "type": "function_call",
+          "name": "get_weather",
+          "arguments": {
+            "city": "Paris"
+          }
+        }
+      ]
     }
   },
   "google/interactions::tools.parallel": {
@@ -3471,9 +3622,9 @@
     "model": "gemini-3.1-flash-lite",
     "api": "interactions",
     "streaming": false,
-    "recordedAt": "2026-08-24",
+    "recordedAt": "2026-09-29",
     "raw": {
-      "id": "v1_ChczaWVNYXFyQ09MNi14TjhQN2VpaHlBcxIXM2llTWFxckNPTDYteE44UDdlaWh5QXM",
+      "id": "v1_ChZBUlc4YW82T1BKS2N2ZElQLTh2SlVREhZBUlc4YW82T1BKS2N2ZElQLTh2SlVR",
       "status": "requires_action",
       "usage": {
         "total_tokens": 92,
@@ -3488,18 +3639,51 @@
         "total_output_tokens": 32,
         "total_tool_use_tokens": 0,
         "total_thought_tokens": 0,
-        "raw_prompt_token": 98
+        "raw_prompt_token": 98,
+        "model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 98
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 40
+              }
+            ]
+          }
+        ],
+        "non_grounding_model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 98
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 40
+              }
+            ]
+          }
+        ]
       },
-      "created": "2026-08-24T11:15:42Z",
-      "updated": "2026-08-24T11:15:42Z",
+      "created": "2026-09-29T19:44:01Z",
+      "updated": "2026-09-29T19:44:01Z",
       "service_tier": "standard",
       "steps": [
         {
-          "signature": "EnEKbwERTTIPH7svwVfNC52iKqyR2rSjcpJ0It+wlJZvk16mooDAHLZBsQB14E3Wy2b0khS7qhlxKOklGtq+SRy0wD41sMbQz+FV1sWIlf9X99O4zYGEMB+W5h7k2pUH2qsd7bjyFSD23Y1aFl3O+LsBqA==",
+          "signature": "EnMKcQFpFH0TkgR0tWLhATrb1cT/s0AdE0f+pIb9W+indwVoSi0kWATrGN3672FoV3QOmLZ051PAtjiOrlnB68RQvEz5tkXl8mjlPggrLKkaUFpHt/hL7lDsDDdTqj4eARhUtgNdDja07gMDKk7VmiQkfwRv",
           "type": "thought"
         },
         {
-          "id": "call_1602248",
+          "id": "call_75835",
+          "signature": "EnMKcQFpFH0TkgR0tWLhATrb1cT/s0AdE0f+pIb9W+indwVoSi0kWATrGN3672FoV3QOmLZ051PAtjiOrlnB68RQvEz5tkXl8mjlPggrLKkaUFpHt/hL7lDsDDdTqj4eARhUtgNdDja07gMDKk7VmiQkfwRv",
           "type": "function_call",
           "name": "get_weather",
           "arguments": {
@@ -3507,7 +3691,7 @@
           }
         },
         {
-          "id": "call_1602249",
+          "id": "call_75836",
           "type": "function_call",
           "name": "get_weather",
           "arguments": {
@@ -3519,59 +3703,9 @@
       "model": "models/gemini-3.1-flash-lite"
     },
     "parsed": {
-      "id": "v1_ChczaWVNYXFyQ09MNi14TjhQN2VpaHlBcxIXM2llTWFxckNPTDYteE44UDdlaWh5QXM",
-      "model": "",
-      "content": [
-        {
-          "type": "tool_call",
-          "id": "call_1602248",
-          "name": "get_weather",
-          "arguments": {
-            "city": "Paris"
-          }
-        },
-        {
-          "type": "tool_call",
-          "id": "call_1602249",
-          "name": "get_weather",
-          "arguments": {
-            "city": "Tokyo"
-          }
-        }
-      ],
-      "finishReason": "tool_use",
-      "usage": {
-        "inputTokens": 60,
-        "outputTokens": 32,
-        "totalTokens": 92,
-        "cachedTokens": 0,
-        "cacheWriteTokens": 0,
-        "reasoningTokens": 0
-      },
-      "text": "",
-      "toolCalls": [
-        {
-          "type": "tool_call",
-          "id": "call_1602248",
-          "name": "get_weather",
-          "arguments": {
-            "city": "Paris"
-          }
-        },
-        {
-          "type": "tool_call",
-          "id": "call_1602249",
-          "name": "get_weather",
-          "arguments": {
-            "city": "Tokyo"
-          }
-        }
-      ],
-      "media": [],
-      "thinking": null,
       "latencyMs": 0,
       "raw": {
-        "id": "v1_ChczaWVNYXFyQ09MNi14TjhQN2VpaHlBcxIXM2llTWFxckNPTDYteE44UDdlaWh5QXM",
+        "id": "v1_ChZBUlc4YW82T1BKS2N2ZElQLTh2SlVREhZBUlc4YW82T1BKS2N2ZElQLTh2SlVR",
         "status": "requires_action",
         "usage": {
           "total_tokens": 92,
@@ -3586,18 +3720,51 @@
           "total_output_tokens": 32,
           "total_tool_use_tokens": 0,
           "total_thought_tokens": 0,
-          "raw_prompt_token": 98
+          "raw_prompt_token": 98,
+          "model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 98
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 40
+                }
+              ]
+            }
+          ],
+          "non_grounding_model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 98
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 40
+                }
+              ]
+            }
+          ]
         },
-        "created": "2026-08-24T11:15:42Z",
-        "updated": "2026-08-24T11:15:42Z",
+        "created": "2026-09-29T19:44:01Z",
+        "updated": "2026-09-29T19:44:01Z",
         "service_tier": "standard",
         "steps": [
           {
-            "signature": "EnEKbwERTTIPH7svwVfNC52iKqyR2rSjcpJ0It+wlJZvk16mooDAHLZBsQB14E3Wy2b0khS7qhlxKOklGtq+SRy0wD41sMbQz+FV1sWIlf9X99O4zYGEMB+W5h7k2pUH2qsd7bjyFSD23Y1aFl3O+LsBqA==",
+            "signature": "EnMKcQFpFH0TkgR0tWLhATrb1cT/s0AdE0f+pIb9W+indwVoSi0kWATrGN3672FoV3QOmLZ051PAtjiOrlnB68RQvEz5tkXl8mjlPggrLKkaUFpHt/hL7lDsDDdTqj4eARhUtgNdDja07gMDKk7VmiQkfwRv",
             "type": "thought"
           },
           {
-            "id": "call_1602248",
+            "id": "call_75835",
+            "signature": "EnMKcQFpFH0TkgR0tWLhATrb1cT/s0AdE0f+pIb9W+indwVoSi0kWATrGN3672FoV3QOmLZ051PAtjiOrlnB68RQvEz5tkXl8mjlPggrLKkaUFpHt/hL7lDsDDdTqj4eARhUtgNdDja07gMDKk7VmiQkfwRv",
             "type": "function_call",
             "name": "get_weather",
             "arguments": {
@@ -3605,7 +3772,7 @@
             }
           },
           {
-            "id": "call_1602249",
+            "id": "call_75836",
             "type": "function_call",
             "name": "get_weather",
             "arguments": {
@@ -3615,7 +3782,72 @@
         ],
         "object": "interaction",
         "model": "models/gemini-3.1-flash-lite"
-      }
+      },
+      "model": "",
+      "content": [
+        {
+          "type": "tool_call",
+          "id": "call_75835",
+          "name": "get_weather",
+          "arguments": {
+            "city": "Paris"
+          }
+        },
+        {
+          "type": "tool_call",
+          "id": "call_75836",
+          "name": "get_weather",
+          "arguments": {
+            "city": "Tokyo"
+          }
+        }
+      ],
+      "toolCalls": [
+        {
+          "type": "tool_call",
+          "id": "call_75835",
+          "name": "get_weather",
+          "arguments": {
+            "city": "Paris"
+          }
+        },
+        {
+          "type": "tool_call",
+          "id": "call_75836",
+          "name": "get_weather",
+          "arguments": {
+            "city": "Tokyo"
+          }
+        }
+      ],
+      "media": [],
+      "thinking": null,
+      "id": "v1_ChZBUlc4YW82T1BKS2N2ZElQLTh2SlVREhZBUlc4YW82T1BKS2N2ZElQLTh2SlVR",
+      "text": "",
+      "usage": {
+        "inputTokens": 60,
+        "outputTokens": 32,
+        "totalTokens": 92,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0
+      },
+      "finishReason": "tool_use",
+      "signatures": [
+        {
+          "signature": "EnMKcQFpFH0TkgR0tWLhATrb1cT/s0AdE0f+pIb9W+indwVoSi0kWATrGN3672FoV3QOmLZ051PAtjiOrlnB68RQvEz5tkXl8mjlPggrLKkaUFpHt/hL7lDsDDdTqj4eARhUtgNdDja07gMDKk7VmiQkfwRv",
+          "type": "thought"
+        },
+        {
+          "id": "call_75835",
+          "signature": "EnMKcQFpFH0TkgR0tWLhATrb1cT/s0AdE0f+pIb9W+indwVoSi0kWATrGN3672FoV3QOmLZ051PAtjiOrlnB68RQvEz5tkXl8mjlPggrLKkaUFpHt/hL7lDsDDdTqj4eARhUtgNdDja07gMDKk7VmiQkfwRv",
+          "type": "function_call",
+          "name": "get_weather",
+          "arguments": {
+            "city": "Paris"
+          }
+        }
+      ]
     }
   },
   "google/interactions::structured": {
@@ -3625,9 +3857,9 @@
     "model": "gemini-3.1-flash-lite",
     "api": "interactions",
     "streaming": false,
-    "recordedAt": "2026-08-24",
+    "recordedAt": "2026-09-29",
     "raw": {
-      "id": "v1_Chc0Q2VNYXAtNE5QeTZ4TjhQdlp5MXFRMBIXNENlTWFwLTROUHk2eE44UHZaeTFxUTA",
+      "id": "v1_ChdBeFc4YXBmV01jcmx4TjhQXzVHZzBRYxIXQXhXOGFwZldNY3JseE44UF81R2cwUWM",
       "status": "completed",
       "usage": {
         "total_tokens": 31,
@@ -3642,14 +3874,46 @@
         "total_output_tokens": 19,
         "total_tool_use_tokens": 0,
         "total_thought_tokens": 0,
-        "raw_prompt_token": 111
+        "raw_prompt_token": 111,
+        "model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 111
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 36
+              }
+            ]
+          }
+        ],
+        "non_grounding_model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 111
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 36
+              }
+            ]
+          }
+        ]
       },
-      "created": "2026-08-24T11:15:44Z",
-      "updated": "2026-08-24T11:15:44Z",
+      "created": "2026-09-29T19:44:04Z",
+      "updated": "2026-09-29T19:44:04Z",
       "service_tier": "standard",
       "steps": [
         {
-          "signature": "EnEKbwERTTIPKbVamqZZCUkrEBdtR1aY0vEObEGtgOGL7HEQZX94MGKmkq8PLkkNmG3cK2CkreO1Ar2q9etPsvdiVt2ub0MknA9uQrEvzvUYW/JHJj7nB3NAuvNqockSJczB7yU80WJEPvPC2ahK2LP6Dg==",
+          "signature": "EnMKcQFpFH0TwGXUsqyOs6xL4ZUM0TTuKW5324DPTnE21VVzQpRMGEM2hvZVwy5AImTwERnXWv1JlgY2bjDrYBk12YMFDfQD0GOizsOJxaNPGp8BMARfsoV4KRgvL+yMbRZPI6gCXiwMazRNYrfqrEW0iQ7Z",
           "type": "thought"
         },
         {
@@ -3666,30 +3930,9 @@
       "model": "models/gemini-3.1-flash-lite"
     },
     "parsed": {
-      "id": "v1_Chc0Q2VNYXAtNE5QeTZ4TjhQdlp5MXFRMBIXNENlTWFwLTROUHk2eE44UHZaeTFxUTA",
-      "model": "",
-      "content": [
-        {
-          "type": "text",
-          "text": "{\n  \"city\": \"Paris\",\n  \"country\": \"France\"\n}"
-        }
-      ],
-      "finishReason": "stop",
-      "usage": {
-        "inputTokens": 12,
-        "outputTokens": 19,
-        "totalTokens": 31,
-        "cachedTokens": 0,
-        "cacheWriteTokens": 0,
-        "reasoningTokens": 0
-      },
-      "text": "{\n  \"city\": \"Paris\",\n  \"country\": \"France\"\n}",
-      "toolCalls": [],
-      "media": [],
-      "thinking": null,
       "latencyMs": 0,
       "raw": {
-        "id": "v1_Chc0Q2VNYXAtNE5QeTZ4TjhQdlp5MXFRMBIXNENlTWFwLTROUHk2eE44UHZaeTFxUTA",
+        "id": "v1_ChdBeFc4YXBmV01jcmx4TjhQXzVHZzBRYxIXQXhXOGFwZldNY3JseE44UF81R2cwUWM",
         "status": "completed",
         "usage": {
           "total_tokens": 31,
@@ -3704,14 +3947,46 @@
           "total_output_tokens": 19,
           "total_tool_use_tokens": 0,
           "total_thought_tokens": 0,
-          "raw_prompt_token": 111
+          "raw_prompt_token": 111,
+          "model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 111
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 36
+                }
+              ]
+            }
+          ],
+          "non_grounding_model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 111
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 36
+                }
+              ]
+            }
+          ]
         },
-        "created": "2026-08-24T11:15:44Z",
-        "updated": "2026-08-24T11:15:44Z",
+        "created": "2026-09-29T19:44:04Z",
+        "updated": "2026-09-29T19:44:04Z",
         "service_tier": "standard",
         "steps": [
           {
-            "signature": "EnEKbwERTTIPKbVamqZZCUkrEBdtR1aY0vEObEGtgOGL7HEQZX94MGKmkq8PLkkNmG3cK2CkreO1Ar2q9etPsvdiVt2ub0MknA9uQrEvzvUYW/JHJj7nB3NAuvNqockSJczB7yU80WJEPvPC2ahK2LP6Dg==",
+            "signature": "EnMKcQFpFH0TwGXUsqyOs6xL4ZUM0TTuKW5324DPTnE21VVzQpRMGEM2hvZVwy5AImTwERnXWv1JlgY2bjDrYBk12YMFDfQD0GOizsOJxaNPGp8BMARfsoV4KRgvL+yMbRZPI6gCXiwMazRNYrfqrEW0iQ7Z",
             "type": "thought"
           },
           {
@@ -3726,7 +4001,34 @@
         ],
         "object": "interaction",
         "model": "models/gemini-3.1-flash-lite"
-      }
+      },
+      "model": "",
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"city\": \"Paris\",\n  \"country\": \"France\"\n}"
+        }
+      ],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "id": "v1_ChdBeFc4YXBmV01jcmx4TjhQXzVHZzBRYxIXQXhXOGFwZldNY3JseE44UF81R2cwUWM",
+      "text": "{\n  \"city\": \"Paris\",\n  \"country\": \"France\"\n}",
+      "usage": {
+        "inputTokens": 12,
+        "outputTokens": 19,
+        "totalTokens": 31,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0
+      },
+      "finishReason": "stop",
+      "signatures": [
+        {
+          "signature": "EnMKcQFpFH0TwGXUsqyOs6xL4ZUM0TTuKW5324DPTnE21VVzQpRMGEM2hvZVwy5AImTwERnXWv1JlgY2bjDrYBk12YMFDfQD0GOizsOJxaNPGp8BMARfsoV4KRgvL+yMbRZPI6gCXiwMazRNYrfqrEW0iQ7Z",
+          "type": "thought"
+        }
+      ]
     }
   },
   "google/interactions::stream.text": {
@@ -3736,15 +4038,15 @@
     "model": "gemini-3.1-flash-lite",
     "api": "interactions",
     "streaming": true,
-    "recordedAt": "2026-08-24",
+    "recordedAt": "2026-09-29",
     "raw": [
       {
         "event": "interaction.created",
-        "data": "{\"interaction\":{\"id\":\"v1_Chc0aWVNYXB1akljdmF2ZElQaFBmZ2lRaxIXNGllTWFwdWpJY3ZhdmRJUGhQZmdpUWs\",\"status\":\"in_progress\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.created\"}"
+        "data": "{\"interaction\":{\"id\":\"v1_ChdCUlc4YXFDRE5wYlF2ZElQOGRPaTBBVRIXQlJXOGFxQ0ROcGJRdmRJUDhkT2kwQVU\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.created\"}"
       },
       {
         "event": "interaction.status_update",
-        "data": "{\"interaction_id\":\"v1_Chc0aWVNYXB1akljdmF2ZElQaFBmZ2lRaxIXNGllTWFwdWpJY3ZhdmRJUGhQZmdpUWs\",\"status\":\"in_progress\",\"event_type\":\"interaction.status_update\"}"
+        "data": "{\"interaction_id\":\"v1_ChdCUlc4YXFDRE5wYlF2ZElQOGRPaTBBVRIXQlJXOGFxQ0ROcGJRdmRJUDhkT2kwQVU\",\"status\":\"in_progress\",\"event_type\":\"interaction.status_update\"}"
       },
       {
         "event": "step.start",
@@ -3752,7 +4054,7 @@
       },
       {
         "event": "step.delta",
-        "data": "{\"index\":0,\"delta\":{\"signature\":\"EnEKbwERTTIP6cU6NP4LTuUg/3gg1OfCd5XCvFPV5kfds0tiZXxvByaVe/ZBAceSY9k5STqLMNeEBYTVSSVAbTB/Ib0lkUNHITAUyECSDUhF56vTPk2/nhONTfNtrGTPyhIBx5hCW3R53woBix0mDV/wCA==\",\"type\":\"thought_signature\"},\"event_type\":\"step.delta\"}"
+        "data": "{\"index\":0,\"delta\":{\"signature\":\"EnMKcQFpFH0TkCkKsRx5yTub3tKjhQjne000w2c08bgBNnK7NFsdIK3l3CcoVuiPSRqJrHAexB/lI71tef5WM7KJEr9/b2deX41v1Lycel1TTLayI9rFAW8FGBMrLq+ac5dEpwCQdrGe8+ugVPK/35IFniih\",\"type\":\"thought_signature\"},\"event_type\":\"step.delta\"}"
       },
       {
         "event": "step.stop",
@@ -3764,11 +4066,7 @@
       },
       {
         "event": "step.delta",
-        "data": "{\"index\":1,\"delta\":{\"text\":\"1 \",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
-      },
-      {
-        "event": "step.delta",
-        "data": "{\"index\":1,\"delta\":{\"text\":\"2 3 4 5\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
+        "data": "{\"index\":1,\"delta\":{\"text\":\"1 2 3 4 5\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
       },
       {
         "event": "step.stop",
@@ -3776,17 +4074,13 @@
       },
       {
         "event": "interaction.completed",
-        "data": "{\"interaction\":{\"id\":\"v1_Chc0aWVNYXB1akljdmF2ZElQaFBmZ2lRaxIXNGllTWFwdWpJY3ZhdmRJUGhQZmdpUWs\",\"status\":\"completed\",\"usage\":{\"total_tokens\":22,\"total_input_tokens\":13,\"input_tokens_by_modality\":[{\"modality\":\"text\",\"tokens\":13}],\"total_cached_tokens\":0,\"total_output_tokens\":9,\"total_tool_use_tokens\":0,\"total_thought_tokens\":0,\"raw_prompt_token\":42},\"created\":\"2026-08-24T11:15:47Z\",\"updated\":\"2026-08-24T11:15:47Z\",\"service_tier\":\"standard\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.completed\"}"
+        "data": "{\"interaction\":{\"id\":\"v1_ChdCUlc4YXFDRE5wYlF2ZElQOGRPaTBBVRIXQlJXOGFxQ0ROcGJRdmRJUDhkT2kwQVU\",\"status\":\"completed\",\"usage\":{\"total_tokens\":22,\"total_input_tokens\":13,\"input_tokens_by_modality\":[{\"modality\":\"text\",\"tokens\":13}],\"total_cached_tokens\":0,\"total_output_tokens\":9,\"total_tool_use_tokens\":0,\"total_thought_tokens\":0,\"raw_prompt_token\":42,\"model_invocation_token_counts\":[{\"prompt_tokens_details\":[{\"modality\":\"text\",\"tokens\":42}],\"candidates_tokens_details\":[{\"modality\":\"text\",\"tokens\":13}]}],\"non_grounding_model_invocation_token_counts\":[{\"prompt_tokens_details\":[{\"modality\":\"text\",\"tokens\":42}],\"candidates_tokens_details\":[{\"modality\":\"text\",\"tokens\":13}]}]},\"created\":\"2026-09-29T19:44:07Z\",\"updated\":\"2026-09-29T19:44:07Z\",\"service_tier\":\"standard\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.completed\"}"
       }
     ],
     "parsed": [
       {
         "type": "text",
-        "text": "1 "
-      },
-      {
-        "type": "text",
-        "text": "2 3 4 5"
+        "text": "1 2 3 4 5"
       },
       {
         "type": "usage",
@@ -3801,7 +4095,13 @@
       },
       {
         "type": "done",
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "signatures": [
+          {
+            "type": "thought",
+            "signature": "EnMKcQFpFH0TkCkKsRx5yTub3tKjhQjne000w2c08bgBNnK7NFsdIK3l3CcoVuiPSRqJrHAexB/lI71tef5WM7KJEr9/b2deX41v1Lycel1TTLayI9rFAW8FGBMrLq+ac5dEpwCQdrGe8+ugVPK/35IFniih"
+          }
+        ]
       }
     ]
   },
@@ -3812,15 +4112,15 @@
     "model": "gemini-3.1-flash-lite",
     "api": "interactions",
     "streaming": true,
-    "recordedAt": "2026-08-24",
+    "recordedAt": "2026-09-29",
     "raw": [
       {
         "event": "interaction.created",
-        "data": "{\"interaction\":{\"id\":\"v1_Chc1U2VNYXVhYUEtYl92ZElQbmMzWTBBSRIXNVNlTWF1YWFBLWJfdmRJUG5jM1kwQUk\",\"status\":\"in_progress\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.created\"}"
+        "data": "{\"interaction\":{\"id\":\"v1_ChdDUlc4YXRLekZJWDJ4TjhQeEwyR3dBRRIXQ1JXOGF0S3pGSVgyeE44UHhMMkd3QUU\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.created\"}"
       },
       {
         "event": "interaction.status_update",
-        "data": "{\"interaction_id\":\"v1_Chc1U2VNYXVhYUEtYl92ZElQbmMzWTBBSRIXNVNlTWF1YWFBLWJfdmRJUG5jM1kwQUk\",\"status\":\"in_progress\",\"event_type\":\"interaction.status_update\"}"
+        "data": "{\"interaction_id\":\"v1_ChdDUlc4YXRLekZJWDJ4TjhQeEwyR3dBRRIXQ1JXOGF0S3pGSVgyeE44UHhMMkd3QUU\",\"status\":\"in_progress\",\"event_type\":\"interaction.status_update\"}"
       },
       {
         "event": "step.start",
@@ -3828,7 +4128,7 @@
       },
       {
         "event": "step.delta",
-        "data": "{\"index\":0,\"delta\":{\"signature\":\"EnEKbwERTTIPROvMODRFWe/VfW64wjdazib3mNR1+kApVQf6zwAwi+4002Nn2wqh2qcBgMLnbav9tSvylNbu8xPCK1DwHhC5nYANBEIq7CF26vQiFW8r2cfyy5pQslvgTqjCrjtq7CM7CclJUCQeM0gewQ==\",\"type\":\"thought_signature\"},\"event_type\":\"step.delta\"}"
+        "data": "{\"index\":0,\"delta\":{\"signature\":\"EnMKcQFpFH0TlI2KyneV7ryyltZSWAsoA631tUXL8Ly8s7R++UsGx0fkaVsXtZWyTOdDLMFdPCvZKbqTZBUVX4uXw/lDqr5vZRnt5kJTyMBVE5CSfBL/CHuwCq57CiFmagwtf7wYMcEJO5784JSHGbSthsL0\",\"type\":\"thought_signature\"},\"event_type\":\"step.delta\"}"
       },
       {
         "event": "step.stop",
@@ -3836,7 +4136,7 @@
       },
       {
         "event": "step.start",
-        "data": "{\"index\":1,\"step\":{\"id\":\"call_1434413\",\"type\":\"function_call\",\"name\":\"get_weather\",\"arguments\":{}},\"event_type\":\"step.start\"}"
+        "data": "{\"index\":1,\"step\":{\"id\":\"call_871055\",\"signature\":\"AWkUfROUjYrKd5XuvLKW1lJYCygDrfW1RcvwvLyztH75SwbHR+RpWxe1lbJM50MswV08K9kpupNkFRVfi5fD+UOqvm9lGe3mQlPIwFUTkJJ8Ev8Ie7AKrnsKIWZqDC1/vBgxwQk7nvzglIcZtK2GwvQ=\",\"type\":\"function_call\",\"name\":\"get_weather\",\"arguments\":{}},\"event_type\":\"step.start\"}"
       },
       {
         "event": "step.delta",
@@ -3848,23 +4148,23 @@
       },
       {
         "event": "interaction.completed",
-        "data": "{\"interaction\":{\"id\":\"v1_Chc1U2VNYXVhYUEtYl92ZElQbmMzWTBBSRIXNVNlTWF1YWFBLWJfdmRJUG5jM1kwQUk\",\"status\":\"requires_action\",\"usage\":{\"total_tokens\":71,\"total_input_tokens\":55,\"input_tokens_by_modality\":[{\"modality\":\"text\",\"tokens\":55}],\"total_cached_tokens\":0,\"total_output_tokens\":16,\"total_tool_use_tokens\":0,\"total_thought_tokens\":0,\"raw_prompt_token\":93},\"created\":\"2026-08-24T11:15:49Z\",\"updated\":\"2026-08-24T11:15:49Z\",\"service_tier\":\"standard\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.completed\"}"
+        "data": "{\"interaction\":{\"id\":\"v1_ChdDUlc4YXRLekZJWDJ4TjhQeEwyR3dBRRIXQ1JXOGF0S3pGSVgyeE44UHhMMkd3QUU\",\"status\":\"requires_action\",\"usage\":{\"total_tokens\":71,\"total_input_tokens\":55,\"input_tokens_by_modality\":[{\"modality\":\"text\",\"tokens\":55}],\"total_cached_tokens\":0,\"total_output_tokens\":16,\"total_tool_use_tokens\":0,\"total_thought_tokens\":0,\"raw_prompt_token\":93,\"model_invocation_token_counts\":[{\"prompt_tokens_details\":[{\"modality\":\"text\",\"tokens\":93}],\"candidates_tokens_details\":[{\"modality\":\"text\",\"tokens\":22}]}],\"non_grounding_model_invocation_token_counts\":[{\"prompt_tokens_details\":[{\"modality\":\"text\",\"tokens\":93}],\"candidates_tokens_details\":[{\"modality\":\"text\",\"tokens\":22}]}]},\"created\":\"2026-09-29T19:44:11Z\",\"updated\":\"2026-09-29T19:44:11Z\",\"service_tier\":\"standard\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.completed\"}"
       }
     ],
     "parsed": [
       {
         "type": "tool_call_start",
-        "id": "call_1434413",
+        "id": "call_871055",
         "name": "get_weather"
       },
       {
         "type": "tool_call_delta",
-        "id": "call_1434413",
+        "id": "call_871055",
         "arguments": "{\"city\":\"Paris\"}"
       },
       {
         "type": "tool_call_end",
-        "id": "call_1434413"
+        "id": "call_871055"
       },
       {
         "type": "usage",
@@ -3879,7 +4179,13 @@
       },
       {
         "type": "done",
-        "finishReason": "tool_use"
+        "finishReason": "tool_use",
+        "signatures": [
+          {
+            "type": "thought",
+            "signature": "EnMKcQFpFH0TlI2KyneV7ryyltZSWAsoA631tUXL8Ly8s7R++UsGx0fkaVsXtZWyTOdDLMFdPCvZKbqTZBUVX4uXw/lDqr5vZRnt5kJTyMBVE5CSfBL/CHuwCq57CiFmagwtf7wYMcEJO5784JSHGbSthsL0"
+          }
+        ]
       }
     ]
   },
@@ -9448,12 +9754,12 @@
     "model": "gemini-3.1-flash-lite",
     "api": "interactions",
     "streaming": false,
-    "recordedAt": "2026-08-31",
+    "recordedAt": "2026-09-29",
     "raw": {
-      "id": "v1_ChdxdXVWYW9mREk1eS12ZElQb2ZxOTBRMBIXcXV1VmFvZkRJNXktdmRJUG9mcTkwUTA",
+      "id": "v1_ChdEQlc4YXR5N0pPLWUyOG9Qd05pcjZBaxIXREJXOGF0eTdKTy1lMjhvUHdOaXI2QWs",
       "status": "completed",
       "usage": {
-        "total_tokens": 206,
+        "total_tokens": 139,
         "total_input_tokens": 16,
         "input_tokens_by_modality": [
           {
@@ -9462,23 +9768,55 @@
           }
         ],
         "total_cached_tokens": 0,
-        "total_output_tokens": 190,
+        "total_output_tokens": 123,
         "total_tool_use_tokens": 0,
         "total_thought_tokens": 0,
-        "raw_prompt_token": 45
+        "raw_prompt_token": 45,
+        "model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 45
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 127
+              }
+            ]
+          }
+        ],
+        "non_grounding_model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 45
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 127
+              }
+            ]
+          }
+        ]
       },
-      "created": "2026-08-31T21:01:30Z",
-      "updated": "2026-08-31T21:01:30Z",
+      "created": "2026-09-29T19:44:13Z",
+      "updated": "2026-09-29T19:44:13Z",
       "service_tier": "standard",
       "steps": [
         {
-          "signature": "EnEKbwERTTIPpfEZ+38/OGel3FmHOIr7WBUGbAatCuYAlv1SH8FzR1dvK0Y1LRNNypJDYSgR86Q7OyXd9REt4BA14b3aPSUGE0bBVWK+QGGuSVNBO0hWzMnahAV/C6vlcFe2XIOG6npe7GYv+1rfiyAixw==",
+          "signature": "EnMKcQFpFH0T6rPDfVQGsH9A+9Tnz3XMNwcD2thaoX0lQIDGtUUhci2T9EMoRnD6aQS8tvz9zLf8G0yKilkvYTvBjn/RyKrDte16t+xp11ZuFqXUoNbfEwL5eiRttXGU2w/8lGMIelN1fLXiR17xuLlS0H0V",
           "type": "thought"
         },
         {
           "content": [
             {
-              "text": "As of January 1, 2024, the population of the **City of Reykjavík** is **139,875**.\n\nIf you are referring to the **Capital Region** (the greater metropolitan area, which includes neighboring municipalities like Kópavogur, Hafnarfjörður, and Garðabær), the population is **253,307**.\n\n**Source:** [Statistics Iceland (Hagstofa Íslands)](https://statice.is/) – Specifically, their interactive database on [Population by municipality, sex and age 1 January 1998-2024](https://px.hagstofa.is/pxen/pxweb/en/Ibuar/Ibuar__mannfjoldi__1_yfirlit__1_sveitarfelog/MAN02001.px/).",
+              "text": "As of January 1, 2024, the population of Reykjavík is **139,875**.\n\n**Source:** [Statistics Iceland (Hagstofa Íslands)](https://statice.is/statistics/population/inhabitants/municipalities-and-urban-nuclei/) \n\n*(Note: This figure refers specifically to the municipality of Reykjavík. The surrounding Capital Region, which includes neighboring municipalities such as Kópavogur and Hafnarfjörður, has a total population of approximately 250,000.)*",
               "type": "text"
             }
           ],
@@ -9489,33 +9827,12 @@
       "model": "models/gemini-3.1-flash-lite"
     },
     "parsed": {
-      "id": "v1_ChdxdXVWYW9mREk1eS12ZElQb2ZxOTBRMBIXcXV1VmFvZkRJNXktdmRJUG9mcTkwUTA",
-      "model": "",
-      "content": [
-        {
-          "type": "text",
-          "text": "As of January 1, 2024, the population of the **City of Reykjavík** is **139,875**.\n\nIf you are referring to the **Capital Region** (the greater metropolitan area, which includes neighboring municipalities like Kópavogur, Hafnarfjörður, and Garðabær), the population is **253,307**.\n\n**Source:** [Statistics Iceland (Hagstofa Íslands)](https://statice.is/) – Specifically, their interactive database on [Population by municipality, sex and age 1 January 1998-2024](https://px.hagstofa.is/pxen/pxweb/en/Ibuar/Ibuar__mannfjoldi__1_yfirlit__1_sveitarfelog/MAN02001.px/)."
-        }
-      ],
-      "finishReason": "stop",
-      "usage": {
-        "inputTokens": 16,
-        "outputTokens": 190,
-        "totalTokens": 206,
-        "cachedTokens": 0,
-        "cacheWriteTokens": 0,
-        "reasoningTokens": 0
-      },
-      "text": "As of January 1, 2024, the population of the **City of Reykjavík** is **139,875**.\n\nIf you are referring to the **Capital Region** (the greater metropolitan area, which includes neighboring municipalities like Kópavogur, Hafnarfjörður, and Garðabær), the population is **253,307**.\n\n**Source:** [Statistics Iceland (Hagstofa Íslands)](https://statice.is/) – Specifically, their interactive database on [Population by municipality, sex and age 1 January 1998-2024](https://px.hagstofa.is/pxen/pxweb/en/Ibuar/Ibuar__mannfjoldi__1_yfirlit__1_sveitarfelog/MAN02001.px/).",
-      "toolCalls": [],
-      "media": [],
-      "thinking": null,
       "latencyMs": 0,
       "raw": {
-        "id": "v1_ChdxdXVWYW9mREk1eS12ZElQb2ZxOTBRMBIXcXV1VmFvZkRJNXktdmRJUG9mcTkwUTA",
+        "id": "v1_ChdEQlc4YXR5N0pPLWUyOG9Qd05pcjZBaxIXREJXOGF0eTdKTy1lMjhvUHdOaXI2QWs",
         "status": "completed",
         "usage": {
-          "total_tokens": 206,
+          "total_tokens": 139,
           "total_input_tokens": 16,
           "input_tokens_by_modality": [
             {
@@ -9524,23 +9841,55 @@
             }
           ],
           "total_cached_tokens": 0,
-          "total_output_tokens": 190,
+          "total_output_tokens": 123,
           "total_tool_use_tokens": 0,
           "total_thought_tokens": 0,
-          "raw_prompt_token": 45
+          "raw_prompt_token": 45,
+          "model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 45
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 127
+                }
+              ]
+            }
+          ],
+          "non_grounding_model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 45
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 127
+                }
+              ]
+            }
+          ]
         },
-        "created": "2026-08-31T21:01:30Z",
-        "updated": "2026-08-31T21:01:30Z",
+        "created": "2026-09-29T19:44:13Z",
+        "updated": "2026-09-29T19:44:13Z",
         "service_tier": "standard",
         "steps": [
           {
-            "signature": "EnEKbwERTTIPpfEZ+38/OGel3FmHOIr7WBUGbAatCuYAlv1SH8FzR1dvK0Y1LRNNypJDYSgR86Q7OyXd9REt4BA14b3aPSUGE0bBVWK+QGGuSVNBO0hWzMnahAV/C6vlcFe2XIOG6npe7GYv+1rfiyAixw==",
+            "signature": "EnMKcQFpFH0T6rPDfVQGsH9A+9Tnz3XMNwcD2thaoX0lQIDGtUUhci2T9EMoRnD6aQS8tvz9zLf8G0yKilkvYTvBjn/RyKrDte16t+xp11ZuFqXUoNbfEwL5eiRttXGU2w/8lGMIelN1fLXiR17xuLlS0H0V",
             "type": "thought"
           },
           {
             "content": [
               {
-                "text": "As of January 1, 2024, the population of the **City of Reykjavík** is **139,875**.\n\nIf you are referring to the **Capital Region** (the greater metropolitan area, which includes neighboring municipalities like Kópavogur, Hafnarfjörður, and Garðabær), the population is **253,307**.\n\n**Source:** [Statistics Iceland (Hagstofa Íslands)](https://statice.is/) – Specifically, their interactive database on [Population by municipality, sex and age 1 January 1998-2024](https://px.hagstofa.is/pxen/pxweb/en/Ibuar/Ibuar__mannfjoldi__1_yfirlit__1_sveitarfelog/MAN02001.px/).",
+                "text": "As of January 1, 2024, the population of Reykjavík is **139,875**.\n\n**Source:** [Statistics Iceland (Hagstofa Íslands)](https://statice.is/statistics/population/inhabitants/municipalities-and-urban-nuclei/) \n\n*(Note: This figure refers specifically to the municipality of Reykjavík. The surrounding Capital Region, which includes neighboring municipalities such as Kópavogur and Hafnarfjörður, has a total population of approximately 250,000.)*",
                 "type": "text"
               }
             ],
@@ -9549,7 +9898,34 @@
         ],
         "object": "interaction",
         "model": "models/gemini-3.1-flash-lite"
-      }
+      },
+      "model": "",
+      "content": [
+        {
+          "type": "text",
+          "text": "As of January 1, 2024, the population of Reykjavík is **139,875**.\n\n**Source:** [Statistics Iceland (Hagstofa Íslands)](https://statice.is/statistics/population/inhabitants/municipalities-and-urban-nuclei/) \n\n*(Note: This figure refers specifically to the municipality of Reykjavík. The surrounding Capital Region, which includes neighboring municipalities such as Kópavogur and Hafnarfjörður, has a total population of approximately 250,000.)*"
+        }
+      ],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "id": "v1_ChdEQlc4YXR5N0pPLWUyOG9Qd05pcjZBaxIXREJXOGF0eTdKTy1lMjhvUHdOaXI2QWs",
+      "text": "As of January 1, 2024, the population of Reykjavík is **139,875**.\n\n**Source:** [Statistics Iceland (Hagstofa Íslands)](https://statice.is/statistics/population/inhabitants/municipalities-and-urban-nuclei/) \n\n*(Note: This figure refers specifically to the municipality of Reykjavík. The surrounding Capital Region, which includes neighboring municipalities such as Kópavogur and Hafnarfjörður, has a total population of approximately 250,000.)*",
+      "usage": {
+        "inputTokens": 16,
+        "outputTokens": 123,
+        "totalTokens": 139,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0
+      },
+      "finishReason": "stop",
+      "signatures": [
+        {
+          "signature": "EnMKcQFpFH0T6rPDfVQGsH9A+9Tnz3XMNwcD2thaoX0lQIDGtUUhci2T9EMoRnD6aQS8tvz9zLf8G0yKilkvYTvBjn/RyKrDte16t+xp11ZuFqXUoNbfEwL5eiRttXGU2w/8lGMIelN1fLXiR17xuLlS0H0V",
+          "type": "thought"
+        }
+      ]
     }
   },
   "xai/responses::builtin.search": {
@@ -10429,9 +10805,9 @@
     "model": "gpt-5.4-nano",
     "api": "responses",
     "streaming": false,
-    "recordedAt": "2026-08-31",
+    "recordedAt": "2026-09-29",
     "synthetic": true,
-    "provenance": "openai-ts 7.4.0 `ResponseError` (code is a closed enum; `server_error` is a member) with `Response.status: ResponseStatus` = failed. google/interactions status per our own adapter mapping, matching the recorded envelope key `status`.",
+    "provenance": "openai-ts 7.4.0 `ResponseError` (code is a closed enum; `server_error` is a member) with `Response.status: ResponseStatus` = failed. google/interactions status per our own adapter mapping, matching the recorded envelope key `status`. Its `errors[]` is google-ts `Interaction.errors: Array<ErrorT>` with `ErrorT {code?, message?}` -- TYPE-DERIVED, not measured: a platform fault cannot be provoked on demand.",
     "raw": {
       "id": "resp_096b442ec1d76e0d006a8c27cc098087d2bebaa8d01f837298",
       "object": "response",
@@ -10514,28 +10890,6 @@
       "metadata": {}
     },
     "parsed": {
-      "id": "resp_096b442ec1d76e0d006a8c27cc098087d2bebaa8d01f837298",
-      "model": "gpt-5.4-nano-2026-03-17",
-      "content": [],
-      "finishReason": "error",
-      "usage": {
-        "inputTokens": 11,
-        "outputTokens": 5,
-        "totalTokens": 16,
-        "cachedTokens": 0,
-        "cacheWriteTokens": 0,
-        "reasoningTokens": 0,
-        "serviceTier": "default",
-        "pricingTier": "standard"
-      },
-      "text": "",
-      "toolCalls": [],
-      "thinking": null,
-      "media": [],
-      "error": {
-        "code": "server_error",
-        "message": "The model failed to generate a response."
-      },
       "latencyMs": 0,
       "raw": {
         "id": "resp_096b442ec1d76e0d006a8c27cc098087d2bebaa8d01f837298",
@@ -10617,6 +10971,28 @@
         },
         "user": null,
         "metadata": {}
+      },
+      "id": "resp_096b442ec1d76e0d006a8c27cc098087d2bebaa8d01f837298",
+      "model": "gpt-5.4-nano-2026-03-17",
+      "content": [],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "text": "",
+      "usage": {
+        "inputTokens": 11,
+        "outputTokens": 5,
+        "totalTokens": 16,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0,
+        "serviceTier": "default",
+        "pricingTier": "standard"
+      },
+      "finishReason": "error",
+      "error": {
+        "code": "server_error",
+        "message": "The model failed to generate a response."
       }
     }
   },
@@ -10819,11 +11195,11 @@
     "model": "gemini-3.1-flash-lite",
     "api": "interactions",
     "streaming": false,
-    "recordedAt": "2026-08-31",
+    "recordedAt": "2026-09-29",
     "synthetic": true,
-    "provenance": "openai-ts 7.4.0 `ResponseError` (code is a closed enum; `server_error` is a member) with `Response.status: ResponseStatus` = failed. google/interactions status per our own adapter mapping, matching the recorded envelope key `status`.",
+    "provenance": "openai-ts 7.4.0 `ResponseError` (code is a closed enum; `server_error` is a member) with `Response.status: ResponseStatus` = failed. google/interactions status per our own adapter mapping, matching the recorded envelope key `status`. Its `errors[]` is google-ts `Interaction.errors: Array<ErrorT>` with `ErrorT {code?, message?}` -- TYPE-DERIVED, not measured: a platform fault cannot be provoked on demand.",
     "raw": {
-      "id": "v1_ChcyeWVNYXJHaUN2bVd2ZElQcWZfQ3FBaxIXMnllTWFyR2lDdm1XdmRJUHFmX0NxQWs",
+      "id": "v1_ChdfUlM4YXJEekVlX0V2ZElQeDR5dDZRVRIXX1JTOGFyRHpFZV9FdmRJUHg0eXQ2UVU",
       "status": "failed",
       "usage": {
         "total_tokens": 7,
@@ -10838,35 +11214,57 @@
         "total_output_tokens": 1,
         "total_tool_use_tokens": 0,
         "total_thought_tokens": 0,
-        "raw_prompt_token": 35
+        "raw_prompt_token": 35,
+        "model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 35
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 5
+              }
+            ]
+          }
+        ],
+        "non_grounding_model_invocation_token_counts": [
+          {
+            "prompt_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 35
+              }
+            ],
+            "candidates_tokens_details": [
+              {
+                "modality": "text",
+                "tokens": 5
+              }
+            ]
+          }
+        ]
       },
-      "created": "2026-08-24T11:15:39Z",
-      "updated": "2026-08-24T11:15:39Z",
+      "created": "2026-09-29T19:43:57Z",
+      "updated": "2026-09-29T19:43:57Z",
       "service_tier": "standard",
       "steps": [],
       "object": "interaction",
-      "model": "models/gemini-3.1-flash-lite"
+      "model": "models/gemini-3.1-flash-lite",
+      "errors": [
+        {
+          "code": "https://developers.google.com/errors/internal",
+          "message": "The model failed to generate a response."
+        }
+      ]
     },
     "parsed": {
-      "id": "v1_ChcyeWVNYXJHaUN2bVd2ZElQcWZfQ3FBaxIXMnllTWFyR2lDdm1XdmRJUHFmX0NxQWs",
-      "model": "",
-      "content": [],
-      "finishReason": "error",
-      "usage": {
-        "inputTokens": 6,
-        "outputTokens": 1,
-        "totalTokens": 7,
-        "cachedTokens": 0,
-        "cacheWriteTokens": 0,
-        "reasoningTokens": 0
-      },
-      "text": "",
-      "toolCalls": [],
-      "media": [],
-      "thinking": null,
       "latencyMs": 0,
       "raw": {
-        "id": "v1_ChcyeWVNYXJHaUN2bVd2ZElQcWZfQ3FBaxIXMnllTWFyR2lDdm1XdmRJUHFmX0NxQWs",
+        "id": "v1_ChdfUlM4YXJEekVlX0V2ZElQeDR5dDZRVRIXX1JTOGFyRHpFZV9FdmRJUHg0eXQ2UVU",
         "status": "failed",
         "usage": {
           "total_tokens": 7,
@@ -10881,14 +11279,72 @@
           "total_output_tokens": 1,
           "total_tool_use_tokens": 0,
           "total_thought_tokens": 0,
-          "raw_prompt_token": 35
+          "raw_prompt_token": 35,
+          "model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 35
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 5
+                }
+              ]
+            }
+          ],
+          "non_grounding_model_invocation_token_counts": [
+            {
+              "prompt_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 35
+                }
+              ],
+              "candidates_tokens_details": [
+                {
+                  "modality": "text",
+                  "tokens": 5
+                }
+              ]
+            }
+          ]
         },
-        "created": "2026-08-24T11:15:39Z",
-        "updated": "2026-08-24T11:15:39Z",
+        "created": "2026-09-29T19:43:57Z",
+        "updated": "2026-09-29T19:43:57Z",
         "service_tier": "standard",
         "steps": [],
         "object": "interaction",
-        "model": "models/gemini-3.1-flash-lite"
+        "model": "models/gemini-3.1-flash-lite",
+        "errors": [
+          {
+            "code": "https://developers.google.com/errors/internal",
+            "message": "The model failed to generate a response."
+          }
+        ]
+      },
+      "model": "",
+      "content": [],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "id": "v1_ChdfUlM4YXJEekVlX0V2ZElQeDR5dDZRVRIXX1JTOGFyRHpFZV9FdmRJUHg0eXQ2UVU",
+      "text": "",
+      "usage": {
+        "inputTokens": 6,
+        "outputTokens": 1,
+        "totalTokens": 7,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0
+      },
+      "finishReason": "error",
+      "error": {
+        "code": "https://developers.google.com/errors/internal",
+        "message": "The model failed to generate a response."
       }
     }
   },
@@ -14599,15 +15055,15 @@
     "model": "gemini-3.1-flash-lite",
     "api": "interactions",
     "streaming": true,
-    "recordedAt": "2026-08-31",
+    "recordedAt": "2026-09-29",
     "raw": [
       {
         "event": "interaction.created",
-        "data": "{\"interaction\":{\"id\":\"v1_ChduUTJXYXJfT0dwMmZ2ZElQM2R5OGlRbxIXblEyV2FyX09HcDJmdmRJUDNkeThpUW8\",\"status\":\"in_progress\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.created\"}"
+        "data": "{\"interaction\":{\"id\":\"v1_ChZEeFc4YXJSby1ZZkd6UV96aDkyb0FnEhZEeFc4YXJSby1ZZkd6UV96aDkyb0Fn\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.created\"}"
       },
       {
         "event": "interaction.status_update",
-        "data": "{\"interaction_id\":\"v1_ChduUTJXYXJfT0dwMmZ2ZElQM2R5OGlRbxIXblEyV2FyX09HcDJmdmRJUDNkeThpUW8\",\"status\":\"in_progress\",\"event_type\":\"interaction.status_update\"}"
+        "data": "{\"interaction_id\":\"v1_ChZEeFc4YXJSby1ZZkd6UV96aDkyb0FnEhZEeFc4YXJSby1ZZkd6UV96aDkyb0Fn\",\"status\":\"in_progress\",\"event_type\":\"interaction.status_update\"}"
       },
       {
         "event": "step.start",
@@ -14615,7 +15071,7 @@
       },
       {
         "event": "step.delta",
-        "data": "{\"index\":0,\"delta\":{\"signature\":\"EnEKbwERTTIPifXhXj0eptMyQyQovdDQ1+53YTy8KmPLHDLXMyzOBZtLkJrOLllr6YQ58JHOERUtRMQZf+lJSpQV84k0hOkHJr1YJl3LmDh+i6e+G09Hl49Cp7FAE9VjN8Au3glLjq5Rvf2jB8L7cik/lQ==\",\"type\":\"thought_signature\"},\"event_type\":\"step.delta\"}"
+        "data": "{\"index\":0,\"delta\":{\"signature\":\"EnMKcQFpFH0TUWM+Py+fquP2R+FUugfvU6FWJVa+fyFpeWmfjqUfb7JJE/PJPj9daPHzPjbMEi9p9SHckClSJs/GqLTgATb8dN6Kv3TarFoypDXs3kii0OntzupXWZ5hm/kDLLeG52iKSfskLO1DJIaXgXLE\",\"type\":\"thought_signature\"},\"event_type\":\"step.delta\"}"
       },
       {
         "event": "step.stop",
@@ -14631,31 +15087,27 @@
       },
       {
         "event": "step.delta",
-        "data": "{\"index\":1,\"delta\":{\"text\":\" January 1, 2024, the population of the **Rey\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
+        "data": "{\"index\":1,\"delta\":{\"text\":\" January 1, 2024, the population of Reykjavík city\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
       },
       {
         "event": "step.delta",
-        "data": "{\"index\":1,\"delta\":{\"text\":\"kjavík municipality** is **139,875**.\\n\\nIf you are referring to the **Capital Region** (the Reykjavík\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
+        "data": "{\"index\":1,\"delta\":{\"text\":\" is **139,875**. \\n\\nIf you include the entire Capital Region (which encompasses the city\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
       },
       {
         "event": "step.delta",
-        "data": "{\"index\":1,\"delta\":{\"text\":\" metropolitan area, which includes neighboring municipalities like Kópavogur, Hafnarfjörður, and Garðabær\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
+        "data": "{\"index\":1,\"delta\":{\"text\":\" and six surrounding municipalities), the population is **252,287**.\\n\\n**Source:** \\n\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
       },
       {
         "event": "step.delta",
-        "data": "{\"index\":1,\"delta\":{\"text\":\"), the population is **251,106**.\\n\\n**Source:**\\n\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
+        "data": "{\"index\":1,\"delta\":{\"text\":\"[Statistics Iceland (Hagstofa Íslands)](https://statice.is/statistics/population/inhabitants/municipalities-and-urban\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
       },
       {
         "event": "step.delta",
-        "data": "{\"index\":1,\"delta\":{\"text\":\"[Statistics Iceland (Hagstofa Íslands)](https://statice.is/statistics/population/inhabitants/municipalities-and-urban-nucle\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
+        "data": "{\"index\":1,\"delta\":{\"text\":\"-nuclei/) — Population by municipality, sex and age 1 January 1998-2024\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
       },
       {
         "event": "step.delta",
-        "data": "{\"index\":1,\"delta\":{\"text\":\"i/) – *Table: Population by municipality, sex and age 1 January 1998-2024\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
-      },
-      {
-        "event": "step.delta",
-        "data": "{\"index\":1,\"delta\":{\"text\":\".*\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
+        "data": "{\"index\":1,\"delta\":{\"text\":\".\",\"type\":\"text\"},\"event_type\":\"step.delta\"}"
       },
       {
         "event": "step.stop",
@@ -14663,7 +15115,7 @@
       },
       {
         "event": "interaction.completed",
-        "data": "{\"interaction\":{\"id\":\"v1_ChduUTJXYXJfT0dwMmZ2ZElQM2R5OGlRbxIXblEyV2FyX09HcDJmdmRJUDNkeThpUW8\",\"status\":\"completed\",\"usage\":{\"total_tokens\":168,\"total_input_tokens\":16,\"input_tokens_by_modality\":[{\"modality\":\"text\",\"tokens\":16}],\"total_cached_tokens\":0,\"total_output_tokens\":152,\"total_tool_use_tokens\":0,\"total_thought_tokens\":0,\"raw_prompt_token\":45},\"created\":\"2026-08-31T23:26:22Z\",\"updated\":\"2026-08-31T23:26:22Z\",\"service_tier\":\"standard\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.completed\"}"
+        "data": "{\"interaction\":{\"id\":\"v1_ChZEeFc4YXJSby1ZZkd6UV96aDkyb0FnEhZEeFc4YXJSby1ZZkd6UV96aDkyb0Fn\",\"status\":\"completed\",\"usage\":{\"total_tokens\":139,\"total_input_tokens\":16,\"input_tokens_by_modality\":[{\"modality\":\"text\",\"tokens\":16}],\"total_cached_tokens\":0,\"total_output_tokens\":123,\"total_tool_use_tokens\":0,\"total_thought_tokens\":0,\"raw_prompt_token\":45,\"model_invocation_token_counts\":[{\"prompt_tokens_details\":[{\"modality\":\"text\",\"tokens\":45}],\"candidates_tokens_details\":[{\"modality\":\"text\",\"tokens\":127}]}],\"non_grounding_model_invocation_token_counts\":[{\"prompt_tokens_details\":[{\"modality\":\"text\",\"tokens\":45}],\"candidates_tokens_details\":[{\"modality\":\"text\",\"tokens\":127}]}]},\"created\":\"2026-09-29T19:44:17Z\",\"updated\":\"2026-09-29T19:44:17Z\",\"service_tier\":\"standard\",\"object\":\"interaction\",\"model\":\"models/gemini-3.1-flash-lite\"},\"event_type\":\"interaction.completed\"}"
       }
     ],
     "parsed": [
@@ -14673,38 +15125,34 @@
       },
       {
         "type": "text",
-        "text": " January 1, 2024, the population of the **Rey"
+        "text": " January 1, 2024, the population of Reykjavík city"
       },
       {
         "type": "text",
-        "text": "kjavík municipality** is **139,875**.\n\nIf you are referring to the **Capital Region** (the Reykjavík"
+        "text": " is **139,875**. \n\nIf you include the entire Capital Region (which encompasses the city"
       },
       {
         "type": "text",
-        "text": " metropolitan area, which includes neighboring municipalities like Kópavogur, Hafnarfjörður, and Garðabær"
+        "text": " and six surrounding municipalities), the population is **252,287**.\n\n**Source:** \n"
       },
       {
         "type": "text",
-        "text": "), the population is **251,106**.\n\n**Source:**\n"
+        "text": "[Statistics Iceland (Hagstofa Íslands)](https://statice.is/statistics/population/inhabitants/municipalities-and-urban"
       },
       {
         "type": "text",
-        "text": "[Statistics Iceland (Hagstofa Íslands)](https://statice.is/statistics/population/inhabitants/municipalities-and-urban-nucle"
+        "text": "-nuclei/) — Population by municipality, sex and age 1 January 1998-2024"
       },
       {
         "type": "text",
-        "text": "i/) – *Table: Population by municipality, sex and age 1 January 1998-2024"
-      },
-      {
-        "type": "text",
-        "text": ".*"
+        "text": "."
       },
       {
         "type": "usage",
         "usage": {
           "inputTokens": 16,
-          "outputTokens": 152,
-          "totalTokens": 168,
+          "outputTokens": 123,
+          "totalTokens": 139,
           "cachedTokens": 0,
           "cacheWriteTokens": 0,
           "reasoningTokens": 0
@@ -14712,7 +15160,13 @@
       },
       {
         "type": "done",
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "signatures": [
+          {
+            "type": "thought",
+            "signature": "EnMKcQFpFH0TUWM+Py+fquP2R+FUugfvU6FWJVa+fyFpeWmfjqUfb7JJE/PJPj9daPHzPjbMEi9p9SHckClSJs/GqLTgATb8dN6Kv3TarFoypDXs3kii0OntzupXWZ5hm/kDLLeG52iKSfskLO1DJIaXgXLE"
+          }
+        ]
       }
     ]
   },

@@ -55,6 +55,9 @@ def _step_start(ctx: Ctx) -> None:
     out = _out(ctx)
     step = _raw(ctx).get("step")
     step = step if isinstance(step, Mapping) else {}
+    # Remembered for the signature delta: `step.start` names the type, and the
+    # delta that carries the signature names only itself.
+    out["openStep"] = step.get("type") if isinstance(step.get("type"), str) else None
     if step.get("type") != "function_call":
         return
     call_id = step.get("id") or ""
@@ -71,9 +74,33 @@ def _step_start(ctx: Ctx) -> None:
         )
 
 
+def _signature(ctx: Ctx) -> None:
+    """A signature reaches a streamed turn ONLY here.
+
+    Measured 2026-09-29: `step.start` announces `{"type": "thought"}` with no
+    signature, the signature arrives as its own `step.delta`
+    (`delta.type == "thought_signature"`), and the terminal
+    `interaction.completed` carries the envelope WITHOUT steps. So a stream that
+    ignores this delta loses the signature outright -- which is what the spec's
+    old note, calling the delta "internal", assumed was harmless.
+
+    Rebuilt into the step shape the buffered path returns, because that is the
+    shape the API accepts back.
+    """
+    out = _out(ctx)
+    signature = _delta(ctx).get("signature")
+    if not isinstance(signature, str) or not signature:
+        return
+    out.setdefault("signatures", []).append(
+        {"type": out.get("openStep") or "thought", "signature": signature}
+    )
+
+
 def _step_stop(ctx: Ctx) -> None:
     """step.stop carries only an index, so the open call is what it closes."""
-    _close_open_call(_out(ctx))
+    out = _out(ctx)
+    _close_open_call(out)
+    out["openStep"] = None
 
 
 def _completed(ctx: Ctx) -> None:
@@ -92,22 +119,26 @@ def _completed(ctx: Ctx) -> None:
     # it must never close the stream with a `done`.
     status = interaction.get("status")
     if status != "queued":
-        out["events"].append(
-            {
-                "type": "done",
-                "finishReason": extract_finish_reason(
-                    bool(out["sawToolCall"]),
-                    status if isinstance(status, str) else None,
-                    {"failed": "error"},
-                ),
-            }
-        )
+        done: dict[str, Any] = {
+            "type": "done",
+            "finishReason": extract_finish_reason(
+                bool(out["sawToolCall"]),
+                status if isinstance(status, str) else None,
+                {"failed": "error"},
+            ),
+        }
+        # Once, at the end, rather than as its own event: an opaque blob the
+        # caller never reads is noise in a stream they do.
+        if out.get("signatures"):
+            done["signatures"] = out["signatures"]
+        out["events"].append(done)
 
 
 GOOGLE_INTERACTIONS_STREAM_REGISTRY = Registry(
     transforms={"gaStreamArgsDelta": _args_delta},
     effects={
         "gaStreamStepStart": _step_start,
+        "gaStreamSignature": _signature,
         "gaStreamStepStop": _step_stop,
         "gaStreamCompleted": _completed,
     },

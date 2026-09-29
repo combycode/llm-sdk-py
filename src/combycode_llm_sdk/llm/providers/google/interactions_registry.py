@@ -146,6 +146,63 @@ def _finish(_arg: Any, ctx: Ctx) -> str:
     )
 
 
+def _error(_arg: Any, ctx: Ctx) -> dict[str, Any] | None:
+    """`Interaction.errors[]` -- "diagnostic faults / platform errors recorded on
+    the interaction", per google-ts. A failed interaction used to arrive as
+    `finishReason: "error"` and nothing else: an empty answer, no exception to
+    catch, and no way to tell a content refusal from a platform fault.
+
+    Read only on a FAILED interaction. The field is output-only and Google
+    documents it as diagnostics rather than as the cause, so putting it on
+    `error` for a completed turn would report a successful call as failed. On a
+    completed one it stays reachable through `response["raw"]`.
+    """
+    raw = _raw(ctx)
+    if raw.get("status") != "failed":
+        return None
+    errors = raw.get("errors")
+    errors = errors if isinstance(errors, list) else []
+    first = errors[0] if errors else {}
+    code = first.get("code") if isinstance(first, Mapping) else None
+    # Every message, not just the first: a platform fault can record several, and
+    # the one that explains it is not reliably the first.
+    message = "; ".join(
+        e["message"]
+        for e in errors
+        if isinstance(e, Mapping) and isinstance(e.get("message"), str) and e["message"]
+    )
+    if not isinstance(code, str) and not message:
+        return {"message": "The interaction failed and reported no detail."}
+    out: dict[str, Any] = {}
+    if isinstance(code, str):
+        out["code"] = code
+    if message:
+        out["message"] = message
+    return out
+
+
+def _signatures(_arg: Any, ctx: Ctx) -> list[Any] | None:
+    """Steps that carry a `signature`, kept verbatim so the next turn can send
+    them back exactly as they arrived.
+
+    Matched on the PRESENCE of a signature rather than on a list of step types:
+    `thought` is the one seen today, and `processing_call`, `processing_result`,
+    `retrieval_call` and `retrieval_result` all declare one (google-ts) and are
+    all accepted as input types -- the live API enumerates them when it rejects
+    an unknown one. A type list here would need editing every time Google adds a
+    signed step, and until someone did, the signature would go missing with
+    nothing to show for it.
+    """
+    raw = _raw(ctx)
+    steps = raw.get("steps") or raw.get("outputs") or []
+    if not isinstance(steps, list):
+        return None
+    signed = [
+        s for s in steps if isinstance(s, Mapping) and isinstance(s.get("signature"), str) and s["signature"]
+    ]
+    return signed or None
+
+
 def _citations(_arg: Any, ctx: Ctx) -> list[dict[str, Any]] | None:
     c = extract_citations("interactions", _raw(ctx))
     return c or None
@@ -162,6 +219,8 @@ GOOGLE_INTERACTIONS_REGISTRY = Registry(
         "gaUsage": _usage,
         "gaFinish": _finish,
         "gaCitations": _citations,
+        "gaError": _error,
+        "gaSignatures": _signatures,
     },
 )
 

@@ -767,6 +767,7 @@ class StreamAccumulator:
         # late chunk, and a model that cites one page twice is still one source.
         self.citations_by_url: dict[str, Any] = {}
         self.cache_diagnostics: dict[str, Any] | None = None
+        self.signatures: Any = None
 
     def absorb(self, event: Mapping[str, Any], merge: Any) -> None:
         kind = event.get("type")
@@ -778,6 +779,10 @@ class StreamAccumulator:
             self.usage = event["usage"]
         elif kind == "done":
             self.finish_reason = event["finishReason"]
+            # Opaque, provider-bound, and the streamed turn's only chance to keep
+            # it: the terminal frame is where it rides out.
+            if event.get("signatures"):
+                self.signatures = event["signatures"]
         elif kind == "file":
             # Hosted-tool output file (a code-execution artifact) -- collected
             # for the final response so streamed `files` matches complete().
@@ -829,6 +834,8 @@ class StreamAccumulator:
             response["moderation"] = self.moderation
         if self.cache_diagnostics:
             response["cacheDiagnostics"] = self.cache_diagnostics
+        if self.signatures:
+            response["signatures"] = self.signatures
         response["latencyMs"] = latency_ms
         response["raw"] = None
         return response

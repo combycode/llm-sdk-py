@@ -32,7 +32,11 @@
             "as": { "type": "thinking", "text": { "$": "raw.delta.text", "$default": "" } }
           },
           {
-            "_note": "thought_signature and other delta kinds are internal, so they map to nothing.",
+            "_note": "The ONLY place a signature reaches a streamed turn: step.start names the type without one, and interaction.completed carries no steps at all. The previous note here called this delta internal; measured 2026-09-29, the server refuses a corrupted signature 400, so it is read rather than tolerated.",
+            "when": { "eq": ["raw.delta.type", "thought_signature"] },
+            "effect": "gaStreamSignature"
+          },
+          {
             "when": { "eq": ["raw.delta.type", "arguments_delta"] },
             "emit": "events",
             "as": { "$call": "gaStreamArgsDelta" }

@@ -8,6 +8,22 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Google Interactions hands its thought signature back.** A turn returns a `thought` step
+  carrying nothing but a `signature`, and this library dropped it on both paths. Measured
+  2026-09-29 on `gemini-3.1-flash-lite`: echoing the step on the next turn is accepted, and
+  echoing it with the signature corrupted is refused `400 Corrupted thought signature`, so the
+  server reads it rather than tolerating it. It now rides on `response["signatures"]`, is stamped
+  onto `message["origin"]["signatures"]` by `assistant_message()`, and is sent back in the position
+  it arrived in -- only by the provider that minted it. A streamed turn keeps it too: the signature
+  reaches the client only as its own delta, so it is rebuilt there and carried out on `done`. Kept
+  for ANY signed step rather than a list of types, since `processing_*` and `retrieval_*` declare
+  one too and are accepted as input.
+- **A failed interaction says why.** `Interaction.errors[]` is lifted onto `response["error"]`,
+  where a failure used to arrive as `finishReason: "error"` and nothing else. Every recorded
+  message is joined, not just the first. On a *completed* interaction the field stays on
+  `response["raw"]`: Google documents it as diagnostics rather than as a cause.
+- `Completion` exposes `error` and `signatures`. Both were parsed and neither was reachable without
+  touching the wire dict, so an in-band failure read as a successful empty answer.
 - **`cacheDiagnostics` asks WHY the prompt cache missed**, and `response["cacheDiagnostics"]`
   carries the answer. `usage.cached_tokens` says how much was reused; on a long system prompt the
   useful question is what broke the prefix, and Anthropic and OpenAI both answer it under

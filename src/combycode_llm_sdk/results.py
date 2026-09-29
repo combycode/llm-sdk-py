@@ -330,6 +330,17 @@ class Completion:
     raw: Any = None
     #: What the call was moderated as, when moderation was requested.
     moderation: Mapping[str, Any] | None = None
+    #: An in-band provider failure. Some providers report a failed generation IN
+    #: the response rather than by raising (OpenAI Responses `status: "failed"`,
+    #: Google Interactions likewise), so a caller that only catches exceptions
+    #: sees empty text and no error -- indistinguishable from a successful empty
+    #: answer. `{code?, message?}`.
+    error: Mapping[str, Any] | None = None
+    #: Opaque provider state this turn produced that the NEXT request has to send
+    #: back. Never interpreted here and never portable; `assistant_message()`
+    #: stamps it onto the message origin, which is what actually carries it.
+    #: Exposed so a multi-turn problem can be seen rather than guessed at.
+    signatures: Any = None
     #: Why the prompt cache could not reuse an earlier prefix, when
     #: `cache_diagnostics=` asked. `{status, reason?, missedTokens?,
     #: reusableTokens?, raw}`. **None is not "it hit"**: Anthropic reports a hit
@@ -377,6 +388,8 @@ class Completion:
             latency_ms=float(wire.get("latencyMs") or 0),
             raw=wire.get("raw"),
             moderation=wire.get("moderation"),
+            error=wire.get("error"),
+            signatures=wire.get("signatures"),
             cache_diagnostics=wire.get("cacheDiagnostics"),
             _wire=wire,
             _origin={"provider": provider, "model": model, "api": api},
