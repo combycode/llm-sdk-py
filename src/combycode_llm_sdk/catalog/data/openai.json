@@ -4763,5 +4763,359 @@
     "status": "stable",
     "active": true,
     "wireSpec": "openai/responses"
+  },
+  "openai/gpt-image-2.5-sunburst": {
+    "providerModelName": "gpt-image-2.5-sunburst",
+    "aliases": [
+      "gpt-image-2.5-sunburst",
+      "gpt-image-2.5-sunburst-2026-09-08"
+    ],
+    "pricing": {
+      "inputPerMTok": 8,
+      "cacheReadPerMTok": 2,
+      "outputPerMTok": 30
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": true,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "image",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "image"
+    ],
+    "family": "gpt-image",
+    "version": "2.5",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "size": {
+        "values": [
+          "auto",
+          "1024x1024",
+          "1536x1024",
+          "1024x1536"
+        ],
+        "default": "auto"
+      },
+      "quality": {
+        "values": [
+          "auto",
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "auto"
+      },
+      "background": {
+        "values": [
+          "auto",
+          "transparent",
+          "opaque"
+        ],
+        "default": "auto"
+      },
+      "outputFormat": {
+        "values": [
+          "png",
+          "jpeg",
+          "webp"
+        ],
+        "default": "png"
+      },
+      "n": {
+        "min": 1,
+        "max": 10,
+        "default": 1
+      }
+    }
+  },
+  "openai/gpt-image-2.5-flare": {
+    "providerModelName": "gpt-image-2.5-flare",
+    "aliases": [
+      "gpt-image-2.5-flare",
+      "gpt-image-2.5-flare-2026-09-08"
+    ],
+    "pricing": {
+      "inputPerMTok": 8,
+      "cacheReadPerMTok": 2,
+      "outputPerMTok": 30
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": true,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "image",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "image"
+    ],
+    "family": "gpt-image",
+    "version": "2.5",
+    "status": "stable",
+    "active": true,
+    "mediaParams": {
+      "size": {
+        "values": [
+          "auto",
+          "1024x1024",
+          "1536x1024",
+          "1024x1536"
+        ],
+        "default": "auto"
+      },
+      "quality": {
+        "values": [
+          "auto",
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "auto"
+      },
+      "background": {
+        "values": [
+          "auto",
+          "transparent",
+          "opaque"
+        ],
+        "default": "auto"
+      },
+      "outputFormat": {
+        "values": [
+          "png",
+          "jpeg",
+          "webp"
+        ],
+        "default": "png"
+      },
+      "n": {
+        "min": 1,
+        "max": 10,
+        "default": 1
+      }
+    }
+  },
+  "openai/gpt-6-sol": {
+    "providerModelName": "gpt-6-sol",
+    "aliases": [
+      "gpt-6-sol"
+    ],
+    "pricing": {
+      "inputPerMTok": 2,
+      "outputPerMTok": 10,
+      "cacheReadPerMTok": 0.2,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 1,
+          "outputPerMTok": 5,
+          "cacheReadPerMTok": 0.1
+        },
+        "flex": {
+          "inputPerMTok": 1,
+          "outputPerMTok": 5,
+          "cacheReadPerMTok": 0.1
+        },
+        "fast": {
+          "inputPerMTok": 4,
+          "outputPerMTok": 20,
+          "cacheReadPerMTok": 0.4
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 922000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-sol",
+    "version": "6",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses"
+  },
+  "openai/gpt-6-luna": {
+    "providerModelName": "gpt-6-luna",
+    "aliases": [
+      "gpt-6-luna"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.1,
+      "outputPerMTok": 0.5,
+      "cacheReadPerMTok": 0.01,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 0.05,
+          "outputPerMTok": 0.25,
+          "cacheReadPerMTok": 0.005
+        },
+        "flex": {
+          "inputPerMTok": 0.05,
+          "outputPerMTok": 0.25,
+          "cacheReadPerMTok": 0.005
+        },
+        "fast": {
+          "inputPerMTok": 0.2,
+          "outputPerMTok": 1,
+          "cacheReadPerMTok": 0.02
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 922000,
+    "maxOutput": 128000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": true,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-luna",
+    "version": "6",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses"
+  },
+  "openai/gpt-live-1": {
+    "providerModelName": "gpt-live-1",
+    "aliases": [
+      "gpt-live-1"
+    ],
+    "pricing": {
+      "perMinute": 0.05
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "realtime",
+    "inputModalities": [
+      "text",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gpt-live",
+    "version": "1",
+    "status": "stable",
+    "active": true
   }
 }

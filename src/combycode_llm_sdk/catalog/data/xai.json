@@ -408,6 +408,7 @@
     "pricing": {
       "perUnit": {
         "1k": 0.05,
+        "1.5k": 0.06,
         "2k": 0.07
       },
       "perImage": 0.05
@@ -477,6 +478,10 @@
       "strategy": "heuristic",
       "charsPerTokenDefault": 3.8,
       "countApiAvailable": false
+    },
+    "deprecation": {
+      "date": "2026-11-02",
+      "source": "litellm"
     }
   },
   "xai/grok-imagine-video": {
@@ -772,6 +777,7 @@
       "perImage": 0.06,
       "perUnit": {
         "1k": 0.04,
+        "1.5k": 0.05,
         "2k": 0.06
       }
     },
@@ -842,5 +848,61 @@
       "countApiAvailable": false
     },
     "mediaOnly": true
+  },
+  "xai/grok-4.7": {
+    "providerModelName": "grok-4.7",
+    "aliases": [
+      "grok-4.7"
+    ],
+    "pricing": {
+      "inputPerMTok": 2,
+      "outputPerMTok": 6,
+      "cacheReadPerMTok": 0.5,
+      "tiers": {
+        "long-context": {
+          "inputPerMTok": 4,
+          "outputPerMTok": 12,
+          "cacheReadPerMTok": 1
+        }
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "contextWindow": 500000,
+    "maxOutput": 450000,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": true,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "chat",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "grok",
+    "version": "4.7",
+    "status": "stable",
+    "active": true,
+    "wireSpec": "openai/responses"
   }
 }

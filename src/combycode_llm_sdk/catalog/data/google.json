@@ -71,6 +71,10 @@
       "strategy": "count_api",
       "charsPerTokenDefault": 4,
       "countApiAvailable": true
+    },
+    "deprecation": {
+      "shutdownDate": "2026-10-20",
+      "source": "openrouter"
     }
   },
   "google/gemini-3.1-pro": {
@@ -287,6 +291,10 @@
       "strategy": "count_api",
       "charsPerTokenDefault": 4,
       "countApiAvailable": true
+    },
+    "deprecation": {
+      "shutdownDate": "2026-10-20",
+      "source": "openrouter"
     }
   },
   "google/gemini-3-flash": {
@@ -524,6 +532,10 @@
       "strategy": "count_api",
       "charsPerTokenDefault": 4,
       "countApiAvailable": true
+    },
+    "deprecation": {
+      "shutdownDate": "2026-10-20",
+      "source": "openrouter"
     }
   },
   "google/gemini-3.1-flash-lite": {
@@ -3003,7 +3015,7 @@
       "gemini-robotics-er-2-preview"
     ],
     "pricing": {
-      "inputPerMTok": 2,
+      "inputPerMTok": 1,
       "outputPerMTok": 10,
       "cacheReadPerMTok": 0.2,
       "tiers": {
@@ -3065,7 +3077,7 @@
       "gemini-robotics-er-2-streaming-preview"
     ],
     "pricing": {
-      "inputPerMTok": 2,
+      "inputPerMTok": 1,
       "outputPerMTok": 10
     },
     "preferredApi": "generate",
@@ -3231,7 +3243,10 @@
     "aliases": [
       "lyria-3.5"
     ],
-    "pricing": {},
+    "pricing": {
+      "inputPerMTok": 0,
+      "outputPerMTok": 0
+    },
     "preferredApi": "generate",
     "supportedApis": [
       "generate"
@@ -3363,5 +3378,359 @@
     "version": "3.5",
     "status": "stable",
     "active": true
+  },
+  "google/gemini-3.8-flash-tts": {
+    "providerModelName": "gemini-3.8-flash-tts",
+    "aliases": [
+      "gemini-3.8-flash-tts"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.5,
+      "outputPerMTok": 9,
+      "cacheReadPerMTok": 0.125,
+      "audioOutputPerMTok": 9,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 0.25,
+          "outputPerMTok": 4.5,
+          "cacheReadPerMTok": 0.0625,
+          "audioOutputPerMTok": 4.5
+        },
+        "flex": {
+          "inputPerMTok": 0.25,
+          "outputPerMTok": 4.5,
+          "cacheReadPerMTok": 0.025,
+          "audioOutputPerMTok": 4.5
+        },
+        "priority": {
+          "inputPerMTok": 0.9,
+          "outputPerMTok": 16.2,
+          "cacheReadPerMTok": 0.225,
+          "audioOutputPerMTok": 16.2
+        }
+      }
+    },
+    "preferredApi": "generate",
+    "supportedApis": [
+      "generate"
+    ],
+    "contextWindow": 8192,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": true,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "tts",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "audio"
+    ],
+    "family": "gemini-tts",
+    "version": "3.8",
+    "status": "preview",
+    "active": false,
+    "mediaParams": {
+      "voice": {
+        "values": [
+          "Zephyr",
+          "Puck",
+          "Charon",
+          "Kore",
+          "Fenrir",
+          "Leda",
+          "Orus",
+          "Aoede",
+          "Callirrhoe",
+          "Autonoe",
+          "Enceladus",
+          "Iapetus",
+          "Umbriel",
+          "Algieba",
+          "Despina",
+          "Erinome",
+          "Algenib",
+          "Rasalgethi",
+          "Laomedeia",
+          "Achernar",
+          "Alnilam",
+          "Schedar",
+          "Gacrux",
+          "Pulcherrima",
+          "Achird",
+          "Zubenelgenubi",
+          "Vindemiatrix",
+          "Sadachbia",
+          "Sadaltager",
+          "Sulafat"
+        ],
+        "default": "Kore"
+      }
+    }
+  },
+  "google/gemini-3.8-flash-lite-tts": {
+    "providerModelName": "gemini-3.8-flash-lite-tts",
+    "aliases": [
+      "gemini-3.8-flash-lite-tts"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.5,
+      "outputPerMTok": 6,
+      "cacheReadPerMTok": 0.125,
+      "perSecond": 0.003,
+      "audioOutputPerMTok": 6,
+      "tiers": {
+        "batch": {
+          "inputPerMTok": 0.5,
+          "outputPerMTok": 6,
+          "cacheReadPerMTok": 0.125,
+          "perSecond": 0.0015
+        },
+        "flex": {
+          "inputPerMTok": 0.5,
+          "outputPerMTok": 6,
+          "cacheReadPerMTok": 0.05,
+          "perSecond": 0.0015
+        },
+        "priority": {
+          "inputPerMTok": 1.8,
+          "outputPerMTok": 21.6,
+          "cacheReadPerMTok": 0.45,
+          "perSecond": 0.0054
+        }
+      }
+    },
+    "preferredApi": "generate",
+    "supportedApis": [
+      "generate"
+    ],
+    "contextWindow": 8192,
+    "maxOutput": 16384,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": true,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "tts",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "audio"
+    ],
+    "family": "gemini-tts",
+    "version": "3.8",
+    "status": "preview",
+    "active": false,
+    "mediaParams": {
+      "voice": {
+        "values": [
+          "Zephyr",
+          "Puck",
+          "Charon",
+          "Kore",
+          "Fenrir",
+          "Leda",
+          "Orus",
+          "Aoede",
+          "Callirrhoe",
+          "Autonoe",
+          "Enceladus",
+          "Iapetus",
+          "Umbriel",
+          "Algieba",
+          "Despina",
+          "Erinome",
+          "Algenib",
+          "Rasalgethi",
+          "Laomedeia",
+          "Achernar",
+          "Alnilam",
+          "Schedar",
+          "Gacrux",
+          "Pulcherrima",
+          "Achird",
+          "Zubenelgenubi",
+          "Vindemiatrix",
+          "Sadachbia",
+          "Sadaltager",
+          "Sulafat"
+        ],
+        "default": "Kore"
+      }
+    }
+  },
+  "google/gemini-3.8-live": {
+    "providerModelName": "gemini-3.8-live",
+    "aliases": [
+      "gemini-3.8-live"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.75,
+      "outputPerMTok": 4.5,
+      "audioInputPerMTok": 3,
+      "audioOutputPerMTok": 12
+    },
+    "preferredApi": "generate",
+    "supportedApis": [
+      "generate"
+    ],
+    "contextWindow": 131072,
+    "maxOutput": 65536,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "audio-chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gemini-audio",
+    "version": "3.8",
+    "status": "preview",
+    "active": false
+  },
+  "google/gemini-3.8-live-extended-thinking": {
+    "providerModelName": "gemini-3.8-live-extended-thinking",
+    "aliases": [
+      "gemini-3.8-live-extended-thinking"
+    ],
+    "pricing": {
+      "inputPerMTok": 0.75,
+      "outputPerMTok": 4.5,
+      "audioInputPerMTok": 3,
+      "audioOutputPerMTok": 12
+    },
+    "preferredApi": "generate",
+    "supportedApis": [
+      "generate"
+    ],
+    "contextWindow": 131072,
+    "maxOutput": 65536,
+    "capabilities": {
+      "toolUse": true,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": true,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false,
+      "webSearch": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "audio-chat",
+    "inputModalities": [
+      "text",
+      "image",
+      "audio"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "gemini-audio",
+    "version": "3.8",
+    "status": "preview",
+    "active": false
+  },
+  "google/lyria-realtime-exp": {
+    "providerModelName": "lyria-realtime-exp",
+    "aliases": [
+      "lyria-realtime-exp"
+    ],
+    "pricing": {
+      "inputPerMTok": 0,
+      "outputPerMTok": 0
+    },
+    "preferredApi": "generate",
+    "supportedApis": [
+      "generate"
+    ],
+    "contextWindow": 1048576,
+    "maxOutput": 65536,
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": false,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": false
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "music",
+    "inputModalities": [
+      "text"
+    ],
+    "outputModalities": [
+      "text"
+    ],
+    "family": "lyria",
+    "version": "realtime-exp",
+    "status": "preview",
+    "active": false
   }
 }
