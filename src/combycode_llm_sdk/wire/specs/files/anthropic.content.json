@@ -37,10 +37,6 @@
         }
       },
       {
-        "name": "anthropic-beta",
-        "value": "files-api-2025-04-14"
-      },
-      {
         "name": "accept",
         "value": "application/binary"
       },

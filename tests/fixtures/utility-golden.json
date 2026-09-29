@@ -1,6 +1,6 @@
 {
   "_doc": "What token counting, model listing, file retrieval and the provenance check sent, normalised so the record survives the fetch-shape change. Regenerate ONLY with --force and only when the wire genuinely changed.",
-  "frozenAtCommit": "889262b9059f193318a757dd557c35bd11472666",
+  "frozenAtCommit": "ee757a56279561764b93ca2c7f4218d1b2484cf9",
   "counts": {
     "cases": 18,
     "requests": 18
@@ -150,7 +150,6 @@
     "utility/retrieve.anthropic.byId": {
       "headers": {
         "accept": "application/binary",
-        "anthropic-beta": "files-api-2025-04-14",
         "anthropic-version": "2023-06-01",
         "x-api-key": "k"
       },

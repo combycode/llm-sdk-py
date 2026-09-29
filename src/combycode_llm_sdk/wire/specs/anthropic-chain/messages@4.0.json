@@ -315,13 +315,6 @@
   "envelope": {
     "headers": [
       {
-        "name": "anthropic-beta",
-        "when": {
-          "pred": "hasFileRef"
-        },
-        "value": "files-api-2025-04-14"
-      },
-      {
         "name": "anthropic-user-profile-id",
         "when": {
           "pred": "hasUserProfileId"

@@ -1,6 +1,6 @@
 {
-  "_doc": "What the embeddings and seamless-media adapters sent, captured through an injected fetch. Regenerate ONLY with --force and only when the wire genuinely changed. REFROZEN 2026-08-23 for one deliberate change: the Google API key moved out of the URL and into the x-goog-api-key header. 21 artifacts across the two corpora changed and every one differs ONLY in that way, checked pairwise against the previous fixture; the key set is identical. Verified live first - google files, image, tts and batch all pass with header auth. REFROZEN 2026-08-28 for one deliberate change: xai batch_request is a tagged union whose variant name is the KEY, so {endpoint: 'responses', body} became {responses: body}. Exactly two artifacts changed and both differ only in that way. Measured live - the old form is rejected 422 as an unknown variant, so this corpus had frozen a request xAI has never accepted. REFROZEN 2026-09-04 for one deliberate change: the xai batch cancel route is `<id>:cancel`, not `<id>/cancel`. Exactly ONE artifact changed and it differs only in that way. Measured live -- the slash form answers 404 'No handler found on route', DELETE and PATCH on the bare batch answer 405, and the colon form answers 200. This corpus had frozen a route xAI has never served.",
-  "frozenAtCommit": "d358f1ed59aaeebbb104f74914edf0260bb4f191",
+  "_doc": "What the embeddings and seamless-media adapters sent, captured through an injected fetch. Regenerate ONLY with --force and only when the wire genuinely changed. REFROZEN 2026-08-23 for one deliberate change: the Google API key moved out of the URL and into the x-goog-api-key header. 21 artifacts across the two corpora changed and every one differs ONLY in that way, checked pairwise against the previous fixture; the key set is identical. Verified live first - google files, image, tts and batch all pass with header auth. REFROZEN 2026-08-28 for one deliberate change: xai batch_request is a tagged union whose variant name is the KEY, so {endpoint: 'responses', body} became {responses: body}. Exactly two artifacts changed and both differ only in that way. Measured live - the old form is rejected 422 as an unknown variant, so this corpus had frozen a request xAI has never accepted. REFROZEN 2026-09-04 for one deliberate change: the xai batch cancel route is `<id>:cancel`, not `<id>/cancel`. Exactly ONE artifact changed and it differs only in that way. Measured live -- the slash form answers 404 'No handler found on route', DELETE and PATCH on the bare batch answer 405, and the colon form answers 200. This corpus had frozen a route xAI has never served. REFROZEN 2026-09-29 for one deliberate change: the Anthropic Files API went GA, so the `files-api-2025-04-14` beta header is gone. Exactly FIVE artifacts changed and every one differs only by that header's absence. Measured live -- upload, list and a file-backed message all answer 200 without it, and sending it selects the OLD list shape (has_more/first_id/last_id) instead of GA's (next_page), so the header was changing the response contract rather than merely gating access.",
+  "frozenAtCommit": "ee757a56279561764b93ca2c7f4218d1b2484cf9",
   "counts": {
     "cases": 84
   },
@@ -935,7 +935,6 @@
         ]
       },
       "headers": {
-        "anthropic-beta": "files-api-2025-04-14",
         "anthropic-version": "2023-06-01",
         "x-api-key": "k"
       },
@@ -948,7 +947,6 @@
     },
     "files/anthropic/delete": {
       "headers": {
-        "anthropic-beta": "files-api-2025-04-14",
         "anthropic-version": "2023-06-01",
         "x-api-key": "k"
       },
@@ -960,7 +958,6 @@
     },
     "files/anthropic/getInfo": {
       "headers": {
-        "anthropic-beta": "files-api-2025-04-14",
         "anthropic-version": "2023-06-01",
         "x-api-key": "k"
       },
@@ -972,7 +969,6 @@
     },
     "files/anthropic/list": {
       "headers": {
-        "anthropic-beta": "files-api-2025-04-14",
         "anthropic-version": "2023-06-01",
         "x-api-key": "k"
       },

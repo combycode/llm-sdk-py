@@ -1,12 +1,11 @@
 {
   "id": "anthropic/files.base",
   "provider": "anthropic", "api": "files",
-  "_note": "The files API is still behind a beta header.",
+  "_note": "The Files API is GA. The `files-api-2025-04-14` beta header was dropped 2026-09-29 after a live check: upload, list and a file-backed message all answer 200 without it. Sending it is not merely redundant -- it selects the OLD list shape (has_more/first_id/last_id) instead of GA's (next_page), so the header changes the response contract, not just the gate.",
   "envelope": {
     "headers": [
       { "name": "x-api-key", "value": { "$config": "apiKey" } },
-      { "name": "anthropic-version", "value": { "$config": "apiVersion" } },
-      { "name": "anthropic-beta", "value": "files-api-2025-04-14" }
+      { "name": "anthropic-version", "value": { "$config": "apiVersion" } }
     ]
   }
 }
