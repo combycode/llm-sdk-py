@@ -10,10 +10,18 @@ these over its construction-time defaults to produce the normalized request.
   `{system?, history?, maxTokens?, temperature?, topP?, topK?, seed?,
     presencePenalty?, frequencyPenalty?, stop?, tools?, toolChoice?,
     structured?, audio?, outputModalities?, thinking?, cache?, serviceTier?,
-    moderation?, providerOptions?, previousResponseId?, stateful?, signal?,
+    moderation?, cacheDiagnostics?, providerOptions?, previousResponseId?, stateful?, signal?,
     timeout?, cacheKey?, cacheName?, configName?, ctx?}`
 
 Notes that are not derivable from the field names:
+
+- `cacheDiagnostics` `{compareWith?}` asks WHY the prompt cache missed against
+  a named earlier response. Anthropic and OpenAI Responses (gpt-5.6 and later)
+  only; the answer arrives as `response['cacheDiagnostics']`. Opt in on EVERY
+  request in the chain -- measured 2026-09-29, Anthropic keeps the prompt
+  fingerprint only for requests that themselves sent it, so comparing against
+  an ordinary response answers `comparison_not_found` with a perfectly valid
+  id. Asking where no field exists is reported as `request_adjusted`.
 
 - `system` is a per-call system prompt, STACKED with `LLMClient.system` and any
   `role='system'` messages from the input, in that priority order. When AgentLoop

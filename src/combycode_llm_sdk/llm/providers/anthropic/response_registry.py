@@ -15,6 +15,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from ....wire.interpreter import Ctx, Registry
+from ...cache_diagnostics import anthropic_cache_diagnostics
 from .._shared.builtin_tools import unified_builtin_tool
 from .._shared.citations import extract_citations
 from .._shared.response_utils import extract_finish_reason
@@ -106,6 +107,12 @@ def _citations(_arg: Any, ctx: Ctx) -> list[dict[str, Any]] | None:
     return c or None
 
 
+def _cache_diagnostics(_arg: Any, ctx: Ctx) -> dict[str, Any] | None:
+    """Absent when the provider said nothing -- which on Anthropic covers a cache
+    HIT as well as an undiagnosed request. See `cache_diagnostics.py`."""
+    return anthropic_cache_diagnostics(_raw(ctx).get("diagnostics"))
+
+
 def _attach_tool_output(ctx: Ctx) -> None:
     """Attach a tool result's stdout to the call it belongs to."""
     b = _block(ctx)
@@ -129,6 +136,7 @@ ANTHROPIC_RESPONSE_REGISTRY = Registry(
         "anthropicUsageFull": _usage_full,
         "anthropicFinish": _finish,
         "anthropicCitations": _citations,
+        "anthropicCacheDiagnostics": _cache_diagnostics,
     },
     effects={"anthropicAttachToolOutput": _attach_tool_output},
 )

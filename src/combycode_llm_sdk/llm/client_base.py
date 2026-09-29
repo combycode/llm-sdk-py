@@ -91,6 +91,7 @@ _PASSTHROUGH_OPTIONS = (
     "cache",
     "serviceTier",
     "moderation",
+    "cacheDiagnostics",
     "providerOptions",
     "audio",
     "outputModalities",
@@ -369,6 +370,39 @@ class BaseLLMClient:
             if note not in req.notes:
                 req.notes.append(note)
 
+    def _note_unsupported_cache_diagnostics(
+        self, normalized: Mapping[str, Any], req: ProviderHttpRequest
+    ) -> None:
+        """`cacheDiagnostics` is a two-provider feature (Anthropic `diagnostics`,
+        OpenAI Responses `prompt_cache_options.comparison_response_id`). Asking
+        for it anywhere else is dropped by the spec that has no field for it, and
+        the caller would be left watching for a `cacheDiagnostics` that can never
+        arrive.
+
+        Decided on the BUILT body rather than against a list of providers: the
+        question is whether the request about to go out carries the field, which
+        is the same question after a spec changes. A list would be right today
+        and quietly wrong later.
+        """
+        if not normalized.get("cacheDiagnostics"):
+            return
+        body = req.body if isinstance(req.body, Mapping) else {}
+        options = body.get("prompt_cache_options")
+        sent = "diagnostics" in body or (
+            isinstance(options, Mapping) and "comparison_response_id" in options
+        )
+        if sent:
+            return
+        note = (
+            f"cacheDiagnostics was requested, but {self.provider} has no field for it on "
+            f"this surface, so it was not sent and the response will carry none. Anthropic "
+            f"messages and OpenAI Responses (gpt-5.6 and later) are the surfaces that report it."
+        )
+        if req.notes is None:
+            req.notes = []
+        if note not in req.notes:
+            req.notes.append(note)
+
     def _attach_build_notes(
         self, result: dict[str, Any], req: ProviderHttpRequest
     ) -> dict[str, Any]:
@@ -532,6 +566,7 @@ class BaseLLMClient:
         if thinking_note:
             provider_req.notes = [*(provider_req.notes or []), thinking_note]
         self._note_unsupported_builtins(normalized, provider_req)
+        self._note_unsupported_cache_diagnostics(normalized, provider_req)
         self._report_build_notes(provider_req, ctx)
 
         # Compute cacheKey if a custom builder was provided.
@@ -689,6 +724,7 @@ class BaseLLMClient:
         if thinking_note:
             provider_req.notes = [*(provider_req.notes or []), thinking_note]
         self._note_unsupported_builtins(normalized, provider_req)
+        self._note_unsupported_cache_diagnostics(normalized, provider_req)
         self._report_build_notes(provider_req, ctx)
         # `enable_streaming` is OPTIONAL on the adapter protocol, and probed the
         # way the TypeScript writes `adapter.enableStreaming?.(...)`.
@@ -730,6 +766,7 @@ class StreamAccumulator:
         # Deduped by url: Google repeats its grounding chunks on more than one
         # late chunk, and a model that cites one page twice is still one source.
         self.citations_by_url: dict[str, Any] = {}
+        self.cache_diagnostics: dict[str, Any] | None = None
 
     def absorb(self, event: Mapping[str, Any], merge: Any) -> None:
         kind = event.get("type")
@@ -758,6 +795,11 @@ class StreamAccumulator:
                 if event.get(key):
                     call[key] = event[key]
             self.builtin_tool_calls.append(call)
+        elif kind == "cache_diagnostics":
+            # Same reason as `file` and `citation`: the streamed response must
+            # answer what complete() answers, or which call style you used
+            # changes the answer.
+            self.cache_diagnostics = event["diagnostics"]
         elif kind == "moderation":
             self.moderation = merge(
                 self.moderation, event["phase"], event["result"], event["source"]
@@ -775,7 +817,7 @@ class StreamAccumulator:
             "thinking": self.thinking or None,
             "media": [],
         }
-        # The four optional fields stay ABSENT when empty (CONSTITUTION.md R3),
+        # The optional fields stay ABSENT when empty (CONSTITUTION.md R3),
         # exactly as the buffered parse leaves them.
         if self.files:
             response["files"] = self.files
@@ -785,6 +827,8 @@ class StreamAccumulator:
             response["citations"] = list(self.citations_by_url.values())
         if self.moderation:
             response["moderation"] = self.moderation
+        if self.cache_diagnostics:
+            response["cacheDiagnostics"] = self.cache_diagnostics
         response["latencyMs"] = latency_ms
         response["raw"] = None
         return response

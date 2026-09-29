@@ -45,6 +45,10 @@
         "content[].thinking",
         "content[].tool_use_id",
         "content[].type",
+        "diagnostics",
+        "diagnostics.cache_miss_reason",
+        "diagnostics.cache_miss_reason.cache_missed_input_tokens",
+        "diagnostics.cache_miss_reason.type",
         "id",
         "model",
         "role",
@@ -115,6 +119,11 @@
           "thinking",
           "tool_use",
           "web_search_tool_result"
+        ],
+        "diagnostics.cache_miss_reason.type": [
+          "previous_message_not_found",
+          "system_changed",
+          "unavailable"
         ],
         "role": [
           "assistant"
@@ -1262,6 +1271,7 @@
   "openai/responses": {
     "response": {
       "known": [
+        "access_programs",
         "background",
         "billing",
         "billing.payer",
@@ -1436,7 +1446,16 @@
         "parallel_tool_calls",
         "presence_penalty",
         "previous_response_id",
+        "prompt_cache_diagnostics",
+        "prompt_cache_diagnostics.cache_missed_tokens",
+        "prompt_cache_diagnostics.comparison_reusable_tokens",
+        "prompt_cache_diagnostics.reason",
+        "prompt_cache_diagnostics.type",
         "prompt_cache_key",
+        "prompt_cache_options",
+        "prompt_cache_options.comparison_response_id",
+        "prompt_cache_options.mode",
+        "prompt_cache_options.ttl",
         "prompt_cache_retention",
         "reasoning",
         "reasoning.context",
@@ -1622,6 +1641,12 @@
           "function_call",
           "message",
           "web_search_call"
+        ],
+        "prompt_cache_diagnostics.type": [
+          "cache_hit",
+          "cache_miss",
+          "comparison_response_not_found",
+          "unavailable"
         ],
         "status": [
           "completed",

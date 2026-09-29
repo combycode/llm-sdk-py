@@ -8,6 +8,21 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **`cacheDiagnostics` asks WHY the prompt cache missed**, and `response["cacheDiagnostics"]`
+  carries the answer. `usage.cached_tokens` says how much was reused; on a long system prompt the
+  useful question is what broke the prefix, and Anthropic and OpenAI both answer it under
+  different names. Every shape was measured on 2026-09-29 rather than read out of the SDK types,
+  which would have got the central case wrong: **Anthropic has no cache-hit variant** -- a request
+  whose prefix WAS reused returns `diagnostics: null`, the same body an undiagnosed request
+  returns, so nothing here turns that silence into `status: "hit"`. Three more measured facts:
+  an unknown comparison id is a 200 on both providers (`comparison_not_found`, not an error);
+  OpenAI gates the feature to `gpt-5.6` and later, so every earlier model answers `unavailable`;
+  and Anthropic keeps the fingerprint only for requests that themselves opted in, so a chain must
+  pass the option on every call. `status` and `reason` are open unions (R1) and each provider's
+  own reason word is kept rather than translated. Requesting it where no field exists is reported
+  as `request_adjusted`. `stream()` reports it too, as a `CacheDiagnosticsEvent` and on the
+  streamed final response. The vendored response corpus gained a cell per branch, so the
+  Python parse is checked against the same frozen oracle as the TypeScript one.
 - **`catalog.refuse_call(provider, model)`** turns a measured `unavailable` into the refusal
   itself: the sentence to fail with, or `None` to go ahead. The media helpers call it before
   `generate_image`, `edit_image`, `generate_audio` and `generate_video`, so a dead endpoint costs

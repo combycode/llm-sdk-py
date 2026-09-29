@@ -330,6 +330,12 @@ class Completion:
     raw: Any = None
     #: What the call was moderated as, when moderation was requested.
     moderation: Mapping[str, Any] | None = None
+    #: Why the prompt cache could not reuse an earlier prefix, when
+    #: `cache_diagnostics=` asked. `{status, reason?, missedTokens?,
+    #: reusableTokens?, raw}`. **None is not "it hit"**: Anthropic reports a hit
+    #: by saying nothing at all, so read `usage.cached_tokens` for whether the
+    #: cache was used and this for why it was not.
+    cache_diagnostics: Mapping[str, Any] | None = None
     #: The wire response this view was built from, kept so `assistant_message`
     #: can stamp provenance without the caller holding two objects.
     _wire: Mapping[str, Any] = field(default_factory=dict, repr=False)
@@ -371,6 +377,7 @@ class Completion:
             latency_ms=float(wire.get("latencyMs") or 0),
             raw=wire.get("raw"),
             moderation=wire.get("moderation"),
+            cache_diagnostics=wire.get("cacheDiagnostics"),
             _wire=wire,
             _origin={"provider": provider, "model": model, "api": api},
         )

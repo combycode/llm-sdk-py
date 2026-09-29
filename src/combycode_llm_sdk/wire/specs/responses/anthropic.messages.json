@@ -64,6 +64,7 @@
     "text": { "$call": "anthropicText" },
     "usage": { "$call": "anthropicUsageFull" },
     "finishReason": { "$call": "anthropicFinish" },
-    "citations": { "$call": "anthropicCitations" }
+    "citations": { "$call": "anthropicCitations" },
+    "cacheDiagnostics": { "$call": "anthropicCacheDiagnostics" }
   }
 }

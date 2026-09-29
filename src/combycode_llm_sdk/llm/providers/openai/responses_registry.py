@@ -16,6 +16,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from ....wire.interpreter import Ctx, Registry
+from ...cache_diagnostics import openai_cache_diagnostics
 from ...moderation.native import parse_native_moderation
 from .._shared.citations import extract_citations
 from .._shared.response_utils import extract_finish_reason
@@ -271,6 +272,12 @@ def _moderation(_arg: Any, ctx: Ctx) -> Any:
     return parse_native_moderation(_raw(ctx).get("moderation"))
 
 
+def _cache_diagnostics(_arg: Any, ctx: Ctx) -> dict[str, Any] | None:
+    """Present only when the request asked for it via `cacheDiagnostics`; the
+    provider answers `unavailable` when there was too little to cache."""
+    return openai_cache_diagnostics(_raw(ctx).get("prompt_cache_diagnostics"))
+
+
 OPENAI_RESPONSES_REGISTRY = Registry(
     transforms={
         "oaiRespFiles": _files,
@@ -287,6 +294,7 @@ OPENAI_RESPONSES_REGISTRY = Registry(
         "oaiRespUsage": _usage,
         "oaiRespFinish": _finish,
         "oaiRespError": _error,
+        "oaiRespCacheDiagnostics": _cache_diagnostics,
         "oaiRespCitations": _citations,
         "oaiRespModeration": _moderation,
     },

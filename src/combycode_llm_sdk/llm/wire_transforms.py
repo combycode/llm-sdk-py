@@ -184,6 +184,30 @@ def make_registry(a: AdapterHandles) -> Registry:
 
     transforms["openaiTier"] = _openai_tier
 
+    def _openai_prompt_cache_options(_v: Any, ctx: Ctx) -> Any:
+        """`prompt_cache_options` has two callers: the raw passthrough, which owns
+        `mode`/`ttl`/breakpoint settings, and the unified `cacheDiagnostics`,
+        which owns only the comparison id. Merged here, passthrough LAST, so a
+        caller who sets both keeps both -- and so an explicit
+        `comparison_response_id` in providerOptions still wins over the unified
+        option, which is the direction R5 requires.
+        """
+        passthrough = _undef(get_path(ctx.req, "providerOptions.promptCacheOptions"))
+        asked = _undef(get_path(ctx.req, "cacheDiagnostics"))
+        if not isinstance(asked, Mapping):
+            return passthrough
+        compare = asked.get("compareWith")
+        merged: dict[str, Any] = {
+            # None, not omitted: it is how a first turn opts in without a
+            # comparison.
+            "comparison_response_id": compare if compare is not None else None,
+        }
+        if isinstance(passthrough, Mapping):
+            merged.update(passthrough)
+        return merged
+
+    transforms["openaiPromptCacheOptions"] = _openai_prompt_cache_options
+
     # -- audio ---------------------------------------------------------------
 
     transforms["resolveVoiceOpenAI"] = lambda _v, ctx: _nullish(

@@ -18296,5 +18296,1348 @@
         }
       }
     ]
+  },
+  "anthropic/messages::cache.diagnostics": {
+    "target": "anthropic/messages",
+    "scenario": "cache.diagnostics",
+    "provider": "anthropic",
+    "model": "claude-haiku-4.5",
+    "streaming": false,
+    "recordedAt": "2026-09-29",
+    "raw": {
+      "model": "claude-haiku-4-5-20251001",
+      "id": "msg_011CfYEbog6k51pbsJLjeTRx",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "OK"
+        }
+      ],
+      "container": null,
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "diagnostics": {
+        "cache_miss_reason": {
+          "type": "previous_message_not_found"
+        }
+      }
+    },
+    "parsed": {
+      "latencyMs": 0,
+      "raw": {
+        "model": "claude-haiku-4-5-20251001",
+        "id": "msg_011CfYEbog6k51pbsJLjeTRx",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "OK"
+          }
+        ],
+        "container": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 12,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 4,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "diagnostics": {
+          "cache_miss_reason": {
+            "type": "previous_message_not_found"
+          }
+        }
+      },
+      "id": "msg_011CfYEbog6k51pbsJLjeTRx",
+      "model": "claude-haiku-4-5-20251001",
+      "content": [
+        {
+          "type": "text",
+          "text": "OK"
+        }
+      ],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "text": "OK",
+      "usage": {
+        "inputTokens": 12,
+        "outputTokens": 4,
+        "totalTokens": 16,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0,
+        "serviceTier": "standard",
+        "pricingTier": "standard"
+      },
+      "finishReason": "stop",
+      "cacheDiagnostics": {
+        "status": "comparison_not_found",
+        "raw": {
+          "cache_miss_reason": {
+            "type": "previous_message_not_found"
+          }
+        }
+      }
+    }
+  },
+  "openai/responses::cache.diagnostics": {
+    "target": "openai/responses",
+    "scenario": "cache.diagnostics",
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "api": "responses",
+    "streaming": false,
+    "recordedAt": "2026-09-29",
+    "raw": {
+      "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+      "object": "response",
+      "created_at": 1790707931,
+      "status": "completed",
+      "access_programs": null,
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "completed_at": 1790707932,
+      "error": null,
+      "frequency_penalty": 0,
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 16,
+      "max_tool_calls": null,
+      "model": "gpt-5.6-luna",
+      "moderation": null,
+      "output": [
+        {
+          "id": "msg_057bd074231b3eef006abc08dc62d487d29683cfddb47ed979",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "OK"
+            }
+          ],
+          "phase": "final_answer",
+          "role": "assistant"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "presence_penalty": 0,
+      "previous_response_id": null,
+      "prompt_cache_diagnostics": {
+        "type": "comparison_response_not_found"
+      },
+      "prompt_cache_key": null,
+      "prompt_cache_options": {
+        "comparison_response_id": "resp_000000000000000000000000000000000000000000000000",
+        "mode": "implicit",
+        "ttl": "30m"
+      },
+      "prompt_cache_retention": "24h",
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "medium",
+        "mode": "standard",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "store": true,
+      "temperature": 1,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 0.98,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 11,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 5,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 16
+      },
+      "user": null,
+      "metadata": {}
+    },
+    "parsed": {
+      "latencyMs": 0,
+      "raw": {
+        "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+        "object": "response",
+        "created_at": 1790707931,
+        "status": "completed",
+        "access_programs": null,
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1790707932,
+        "error": null,
+        "frequency_penalty": 0,
+        "incomplete_details": null,
+        "instructions": null,
+        "max_output_tokens": 16,
+        "max_tool_calls": null,
+        "model": "gpt-5.6-luna",
+        "moderation": null,
+        "output": [
+          {
+            "id": "msg_057bd074231b3eef006abc08dc62d487d29683cfddb47ed979",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "OK"
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": null,
+        "prompt_cache_diagnostics": {
+          "type": "comparison_response_not_found"
+        },
+        "prompt_cache_key": null,
+        "prompt_cache_options": {
+          "comparison_response_id": "resp_000000000000000000000000000000000000000000000000",
+          "mode": "implicit",
+          "ttl": "30m"
+        },
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "all_turns",
+          "effort": "medium",
+          "mode": "standard",
+          "summary": null
+        },
+        "safety_identifier": null,
+        "service_tier": "default",
+        "store": true,
+        "temperature": 1,
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 11,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 5,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 16
+        },
+        "user": null,
+        "metadata": {}
+      },
+      "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+      "model": "gpt-5.6-luna",
+      "content": [
+        {
+          "type": "text",
+          "text": "OK",
+          "phase": "final_answer"
+        }
+      ],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "text": "OK",
+      "usage": {
+        "inputTokens": 11,
+        "outputTokens": 5,
+        "totalTokens": 16,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0,
+        "serviceTier": "default",
+        "pricingTier": "standard"
+      },
+      "finishReason": "stop",
+      "cacheDiagnostics": {
+        "status": "comparison_not_found",
+        "raw": {
+          "type": "comparison_response_not_found"
+        }
+      }
+    }
+  },
+  "anthropic/messages::cache.diagnostics.miss": {
+    "target": "anthropic/messages",
+    "scenario": "cache.diagnostics.miss",
+    "provider": "anthropic",
+    "model": "claude-haiku-4.5",
+    "streaming": false,
+    "recordedAt": "2026-09-29",
+    "synthetic": true,
+    "provenance": "Bodies MEASURED on 2026-09-29, not read out of a type: claude-haiku-4-5 on GA /v1/messages and gpt-5.6-luna on /v1/responses, each with a ~10k-token cached prefix. Synthetic only because one recorded cell is ONE request, and a hit or a chosen miss needs a prior request to compare against.",
+    "raw": {
+      "model": "claude-haiku-4-5-20251001",
+      "id": "msg_011CfYEbog6k51pbsJLjeTRx",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "OK"
+        }
+      ],
+      "container": null,
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "diagnostics": {
+        "cache_miss_reason": {
+          "type": "system_changed",
+          "cache_missed_input_tokens": 9197
+        }
+      }
+    },
+    "parsed": {
+      "latencyMs": 0,
+      "raw": {
+        "model": "claude-haiku-4-5-20251001",
+        "id": "msg_011CfYEbog6k51pbsJLjeTRx",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "OK"
+          }
+        ],
+        "container": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 12,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 4,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "diagnostics": {
+          "cache_miss_reason": {
+            "type": "system_changed",
+            "cache_missed_input_tokens": 9197
+          }
+        }
+      },
+      "id": "msg_011CfYEbog6k51pbsJLjeTRx",
+      "model": "claude-haiku-4-5-20251001",
+      "content": [
+        {
+          "type": "text",
+          "text": "OK"
+        }
+      ],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "text": "OK",
+      "usage": {
+        "inputTokens": 12,
+        "outputTokens": 4,
+        "totalTokens": 16,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0,
+        "serviceTier": "standard",
+        "pricingTier": "standard"
+      },
+      "finishReason": "stop",
+      "cacheDiagnostics": {
+        "status": "miss",
+        "reason": "system_changed",
+        "missedTokens": 9197,
+        "raw": {
+          "cache_miss_reason": {
+            "type": "system_changed",
+            "cache_missed_input_tokens": 9197
+          }
+        }
+      }
+    }
+  },
+  "openai/responses::cache.diagnostics.miss": {
+    "target": "openai/responses",
+    "scenario": "cache.diagnostics.miss",
+    "provider": "openai",
+    "model": "gpt-5.4-nano",
+    "api": "responses",
+    "streaming": false,
+    "recordedAt": "2026-09-29",
+    "synthetic": true,
+    "provenance": "Bodies MEASURED on 2026-09-29, not read out of a type: claude-haiku-4-5 on GA /v1/messages and gpt-5.6-luna on /v1/responses, each with a ~10k-token cached prefix. Synthetic only because one recorded cell is ONE request, and a hit or a chosen miss needs a prior request to compare against.",
+    "raw": {
+      "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+      "object": "response",
+      "created_at": 1790707931,
+      "status": "completed",
+      "access_programs": null,
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "completed_at": 1790707932,
+      "error": null,
+      "frequency_penalty": 0,
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 16,
+      "max_tool_calls": null,
+      "model": "gpt-5.6-luna",
+      "moderation": null,
+      "output": [
+        {
+          "id": "msg_057bd074231b3eef006abc08dc62d487d29683cfddb47ed979",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "OK"
+            }
+          ],
+          "phase": "final_answer",
+          "role": "assistant"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "presence_penalty": 0,
+      "previous_response_id": null,
+      "prompt_cache_diagnostics": {
+        "type": "cache_miss",
+        "reason": "input_changed",
+        "cache_missed_tokens": 10052,
+        "comparison_reusable_tokens": 10052
+      },
+      "prompt_cache_key": null,
+      "prompt_cache_options": {
+        "comparison_response_id": "resp_000000000000000000000000000000000000000000000000",
+        "mode": "implicit",
+        "ttl": "30m"
+      },
+      "prompt_cache_retention": "24h",
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "medium",
+        "mode": "standard",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "store": true,
+      "temperature": 1,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 0.98,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 11,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 5,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 16
+      },
+      "user": null,
+      "metadata": {}
+    },
+    "parsed": {
+      "latencyMs": 0,
+      "raw": {
+        "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+        "object": "response",
+        "created_at": 1790707931,
+        "status": "completed",
+        "access_programs": null,
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1790707932,
+        "error": null,
+        "frequency_penalty": 0,
+        "incomplete_details": null,
+        "instructions": null,
+        "max_output_tokens": 16,
+        "max_tool_calls": null,
+        "model": "gpt-5.6-luna",
+        "moderation": null,
+        "output": [
+          {
+            "id": "msg_057bd074231b3eef006abc08dc62d487d29683cfddb47ed979",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "OK"
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": null,
+        "prompt_cache_diagnostics": {
+          "type": "cache_miss",
+          "reason": "input_changed",
+          "cache_missed_tokens": 10052,
+          "comparison_reusable_tokens": 10052
+        },
+        "prompt_cache_key": null,
+        "prompt_cache_options": {
+          "comparison_response_id": "resp_000000000000000000000000000000000000000000000000",
+          "mode": "implicit",
+          "ttl": "30m"
+        },
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "all_turns",
+          "effort": "medium",
+          "mode": "standard",
+          "summary": null
+        },
+        "safety_identifier": null,
+        "service_tier": "default",
+        "store": true,
+        "temperature": 1,
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 11,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 5,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 16
+        },
+        "user": null,
+        "metadata": {}
+      },
+      "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+      "model": "gpt-5.6-luna",
+      "content": [
+        {
+          "type": "text",
+          "text": "OK",
+          "phase": "final_answer"
+        }
+      ],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "text": "OK",
+      "usage": {
+        "inputTokens": 11,
+        "outputTokens": 5,
+        "totalTokens": 16,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0,
+        "serviceTier": "default",
+        "pricingTier": "standard"
+      },
+      "finishReason": "stop",
+      "cacheDiagnostics": {
+        "status": "miss",
+        "reason": "input_changed",
+        "missedTokens": 10052,
+        "reusableTokens": 10052,
+        "raw": {
+          "type": "cache_miss",
+          "reason": "input_changed",
+          "cache_missed_tokens": 10052,
+          "comparison_reusable_tokens": 10052
+        }
+      }
+    }
+  },
+  "openai/responses::cache.diagnostics.hit": {
+    "target": "openai/responses",
+    "scenario": "cache.diagnostics.hit",
+    "provider": "openai",
+    "model": "gpt-5.4-nano",
+    "api": "responses",
+    "streaming": false,
+    "recordedAt": "2026-09-29",
+    "synthetic": true,
+    "provenance": "Bodies MEASURED on 2026-09-29, not read out of a type: claude-haiku-4-5 on GA /v1/messages and gpt-5.6-luna on /v1/responses, each with a ~10k-token cached prefix. Synthetic only because one recorded cell is ONE request, and a hit or a chosen miss needs a prior request to compare against.",
+    "raw": {
+      "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+      "object": "response",
+      "created_at": 1790707931,
+      "status": "completed",
+      "access_programs": null,
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "completed_at": 1790707932,
+      "error": null,
+      "frequency_penalty": 0,
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 16,
+      "max_tool_calls": null,
+      "model": "gpt-5.6-luna",
+      "moderation": null,
+      "output": [
+        {
+          "id": "msg_057bd074231b3eef006abc08dc62d487d29683cfddb47ed979",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "OK"
+            }
+          ],
+          "phase": "final_answer",
+          "role": "assistant"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "presence_penalty": 0,
+      "previous_response_id": null,
+      "prompt_cache_diagnostics": {
+        "type": "cache_hit"
+      },
+      "prompt_cache_key": null,
+      "prompt_cache_options": {
+        "comparison_response_id": "resp_000000000000000000000000000000000000000000000000",
+        "mode": "implicit",
+        "ttl": "30m"
+      },
+      "prompt_cache_retention": "24h",
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "medium",
+        "mode": "standard",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "store": true,
+      "temperature": 1,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 0.98,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 11,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 5,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 16
+      },
+      "user": null,
+      "metadata": {}
+    },
+    "parsed": {
+      "latencyMs": 0,
+      "raw": {
+        "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+        "object": "response",
+        "created_at": 1790707931,
+        "status": "completed",
+        "access_programs": null,
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1790707932,
+        "error": null,
+        "frequency_penalty": 0,
+        "incomplete_details": null,
+        "instructions": null,
+        "max_output_tokens": 16,
+        "max_tool_calls": null,
+        "model": "gpt-5.6-luna",
+        "moderation": null,
+        "output": [
+          {
+            "id": "msg_057bd074231b3eef006abc08dc62d487d29683cfddb47ed979",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "OK"
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": null,
+        "prompt_cache_diagnostics": {
+          "type": "cache_hit"
+        },
+        "prompt_cache_key": null,
+        "prompt_cache_options": {
+          "comparison_response_id": "resp_000000000000000000000000000000000000000000000000",
+          "mode": "implicit",
+          "ttl": "30m"
+        },
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "all_turns",
+          "effort": "medium",
+          "mode": "standard",
+          "summary": null
+        },
+        "safety_identifier": null,
+        "service_tier": "default",
+        "store": true,
+        "temperature": 1,
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 11,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 5,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 16
+        },
+        "user": null,
+        "metadata": {}
+      },
+      "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+      "model": "gpt-5.6-luna",
+      "content": [
+        {
+          "type": "text",
+          "text": "OK",
+          "phase": "final_answer"
+        }
+      ],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "text": "OK",
+      "usage": {
+        "inputTokens": 11,
+        "outputTokens": 5,
+        "totalTokens": 16,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0,
+        "serviceTier": "default",
+        "pricingTier": "standard"
+      },
+      "finishReason": "stop",
+      "cacheDiagnostics": {
+        "status": "hit",
+        "raw": {
+          "type": "cache_hit"
+        }
+      }
+    }
+  },
+  "anthropic/messages::cache.diagnostics.unavailable": {
+    "target": "anthropic/messages",
+    "scenario": "cache.diagnostics.unavailable",
+    "provider": "anthropic",
+    "model": "claude-haiku-4.5",
+    "streaming": false,
+    "recordedAt": "2026-09-29",
+    "synthetic": true,
+    "provenance": "Bodies MEASURED on 2026-09-29, not read out of a type: claude-haiku-4-5 on GA /v1/messages and gpt-5.6-luna on /v1/responses, each with a ~10k-token cached prefix. Synthetic only because one recorded cell is ONE request, and a hit or a chosen miss needs a prior request to compare against.",
+    "raw": {
+      "model": "claude-haiku-4-5-20251001",
+      "id": "msg_011CfYEbog6k51pbsJLjeTRx",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "OK"
+        }
+      ],
+      "container": null,
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "stop_details": null,
+      "usage": {
+        "input_tokens": 12,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 4,
+        "service_tier": "standard",
+        "inference_geo": "not_available"
+      },
+      "diagnostics": {
+        "cache_miss_reason": {
+          "type": "unavailable"
+        }
+      }
+    },
+    "parsed": {
+      "latencyMs": 0,
+      "raw": {
+        "model": "claude-haiku-4-5-20251001",
+        "id": "msg_011CfYEbog6k51pbsJLjeTRx",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "OK"
+          }
+        ],
+        "container": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 12,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 4,
+          "service_tier": "standard",
+          "inference_geo": "not_available"
+        },
+        "diagnostics": {
+          "cache_miss_reason": {
+            "type": "unavailable"
+          }
+        }
+      },
+      "id": "msg_011CfYEbog6k51pbsJLjeTRx",
+      "model": "claude-haiku-4-5-20251001",
+      "content": [
+        {
+          "type": "text",
+          "text": "OK"
+        }
+      ],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "text": "OK",
+      "usage": {
+        "inputTokens": 12,
+        "outputTokens": 4,
+        "totalTokens": 16,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0,
+        "serviceTier": "standard",
+        "pricingTier": "standard"
+      },
+      "finishReason": "stop",
+      "cacheDiagnostics": {
+        "status": "unavailable",
+        "raw": {
+          "cache_miss_reason": {
+            "type": "unavailable"
+          }
+        }
+      }
+    }
+  },
+  "openai/responses::cache.diagnostics.unavailable": {
+    "target": "openai/responses",
+    "scenario": "cache.diagnostics.unavailable",
+    "provider": "openai",
+    "model": "gpt-5.4-nano",
+    "api": "responses",
+    "streaming": false,
+    "recordedAt": "2026-09-29",
+    "synthetic": true,
+    "provenance": "Bodies MEASURED on 2026-09-29, not read out of a type: claude-haiku-4-5 on GA /v1/messages and gpt-5.6-luna on /v1/responses, each with a ~10k-token cached prefix. Synthetic only because one recorded cell is ONE request, and a hit or a chosen miss needs a prior request to compare against.",
+    "raw": {
+      "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+      "object": "response",
+      "created_at": 1790707931,
+      "status": "completed",
+      "access_programs": null,
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "completed_at": 1790707932,
+      "error": null,
+      "frequency_penalty": 0,
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 16,
+      "max_tool_calls": null,
+      "model": "gpt-5.6-luna",
+      "moderation": null,
+      "output": [
+        {
+          "id": "msg_057bd074231b3eef006abc08dc62d487d29683cfddb47ed979",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "OK"
+            }
+          ],
+          "phase": "final_answer",
+          "role": "assistant"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "presence_penalty": 0,
+      "previous_response_id": null,
+      "prompt_cache_diagnostics": {
+        "type": "unavailable"
+      },
+      "prompt_cache_key": null,
+      "prompt_cache_options": {
+        "comparison_response_id": "resp_000000000000000000000000000000000000000000000000",
+        "mode": "implicit",
+        "ttl": "30m"
+      },
+      "prompt_cache_retention": "24h",
+      "reasoning": {
+        "context": "all_turns",
+        "effort": "medium",
+        "mode": "standard",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "store": true,
+      "temperature": 1,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 0.98,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 11,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 5,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 16
+      },
+      "user": null,
+      "metadata": {}
+    },
+    "parsed": {
+      "latencyMs": 0,
+      "raw": {
+        "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+        "object": "response",
+        "created_at": 1790707931,
+        "status": "completed",
+        "access_programs": null,
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1790707932,
+        "error": null,
+        "frequency_penalty": 0,
+        "incomplete_details": null,
+        "instructions": null,
+        "max_output_tokens": 16,
+        "max_tool_calls": null,
+        "model": "gpt-5.6-luna",
+        "moderation": null,
+        "output": [
+          {
+            "id": "msg_057bd074231b3eef006abc08dc62d487d29683cfddb47ed979",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "OK"
+              }
+            ],
+            "phase": "final_answer",
+            "role": "assistant"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": null,
+        "prompt_cache_diagnostics": {
+          "type": "unavailable"
+        },
+        "prompt_cache_key": null,
+        "prompt_cache_options": {
+          "comparison_response_id": "resp_000000000000000000000000000000000000000000000000",
+          "mode": "implicit",
+          "ttl": "30m"
+        },
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "all_turns",
+          "effort": "medium",
+          "mode": "standard",
+          "summary": null
+        },
+        "safety_identifier": null,
+        "service_tier": "default",
+        "store": true,
+        "temperature": 1,
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 11,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 5,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 16
+        },
+        "user": null,
+        "metadata": {}
+      },
+      "id": "resp_057bd074231b3eef006abc08dbdbe087d295c7adf450dc6e81",
+      "model": "gpt-5.6-luna",
+      "content": [
+        {
+          "type": "text",
+          "text": "OK",
+          "phase": "final_answer"
+        }
+      ],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "text": "OK",
+      "usage": {
+        "inputTokens": 11,
+        "outputTokens": 5,
+        "totalTokens": 16,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0,
+        "serviceTier": "default",
+        "pricingTier": "standard"
+      },
+      "finishReason": "stop",
+      "cacheDiagnostics": {
+        "status": "unavailable",
+        "raw": {
+          "type": "unavailable"
+        }
+      }
+    }
   }
 }

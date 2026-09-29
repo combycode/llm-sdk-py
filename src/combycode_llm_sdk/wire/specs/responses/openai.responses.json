@@ -71,6 +71,7 @@
     "finishReason": { "$call": "oaiRespFinish" },
     "citations": { "$call": "oaiRespCitations" },
     "moderation": { "$call": "oaiRespModeration" },
-    "error": { "$call": "oaiRespError" }
+    "error": { "$call": "oaiRespError" },
+    "cacheDiagnostics": { "$call": "oaiRespCacheDiagnostics" }
   }
 }

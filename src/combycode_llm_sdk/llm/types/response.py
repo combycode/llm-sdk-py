@@ -8,7 +8,7 @@ names, and the 47-cell response corpus is frozen against them.
 
 - `CompletionResponse` `{id, model, content, finishReason, usage, text,
   toolCalls, thinking, media, files?, builtinToolCalls?, citations?,
-  moderation?, error?, latencyMs, raw}`
+  moderation?, error?, cacheDiagnostics?, latencyMs, raw}`
 - `FileOutput`      `{id?, name?, mimeType?, data?, url?, source?, ref?}`
 - `Citation`        `{url, title?, text?}`
 - `BuiltinToolCall` `{tool, id?, code?, output?, query?, url?}`
@@ -25,6 +25,8 @@ response type grows by optional fields only): `files`, `builtinToolCalls` and
 from __future__ import annotations
 
 from typing import Any, Literal
+
+from ..cache_diagnostics import CacheDiagnostics
 
 #: `interface CompletionResponse` (response.ts:6).
 CompletionResponse = dict[str, Any]
@@ -95,6 +97,7 @@ def empty_usage() -> Usage:
 
 __all__ = [
     "BuiltinToolCall",
+    "CacheDiagnostics",
     "Citation",
     "CompletionResponse",
     "FileOutput",

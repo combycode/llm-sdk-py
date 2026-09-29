@@ -73,6 +73,7 @@
       }
     },
     {
+      "_note": "One field, two ways in: the raw passthrough (mode/ttl/breakpoints) and the unified `cacheDiagnostics`. They MERGE -- a caller setting both used to lose whichever block ran second. Measured 2026-09-29 on gpt-5.6-luna: the server echoes the option back with its own mode/ttl defaults filled in, and an unknown comparison id answers 200 with `comparison_response_not_found`.",
       "name": "promptCacheOptions",
       "when": {
         "all": [
@@ -80,13 +81,20 @@
             "flavor": "openai"
           },
           {
-            "truthy": "providerOptions.promptCacheOptions"
+            "any": [
+              {
+                "truthy": "providerOptions.promptCacheOptions"
+              },
+              {
+                "defined": "cacheDiagnostics"
+              }
+            ]
           }
         ]
       },
       "to": "prompt_cache_options",
       "template": {
-        "$": "providerOptions.promptCacheOptions"
+        "$call": "openaiPromptCacheOptions"
       }
     },
     {

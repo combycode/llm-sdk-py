@@ -65,6 +65,15 @@
   ],
   "blocks": [
     {
+      "_note": "Measured 2026-09-29 on claude-haiku-4-5 with no beta header: GA accepts this, and an id that does not exist answers 200 with `previous_message_not_found` rather than an error. `previous_message_id: null` is how the first turn opts in -- the field must be EMITTED as null, not omitted, or nothing is diagnosed.",
+      "name": "cacheDiagnostics",
+      "when": { "defined": "cacheDiagnostics" },
+      "to": "diagnostics",
+      "template": {
+        "previous_message_id": { "$": "cacheDiagnostics.compareWith", "$default": null }
+      }
+    },
+    {
       "name": "messages",
       "call": "anthropicMessages",
       "to": "messages"

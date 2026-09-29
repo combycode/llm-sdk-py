@@ -15,7 +15,7 @@ those paths. camelCase here is not a style choice.
   `{model, messages, system?, maxTokens?, temperature?, topP?, topK?, seed?,
     presencePenalty?, frequencyPenalty?, stop?, tools?, toolChoice?,
     structured?, thinking?, cache?, serviceTier?, moderation?,
-    providerOptions?, wireSpec?, audio?, outputModalities?,
+    cacheDiagnostics?, providerOptions?, wireSpec?, audio?, outputModalities?,
     previousResponseId?, timeout?, signal?}`
 
 Three fields carry hard-won provider facts, live-verified 2026-07-28:

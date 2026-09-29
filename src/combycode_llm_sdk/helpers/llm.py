@@ -69,6 +69,7 @@ _OPTION_NAMES = {
     "cache": "cache",
     "service_tier": "serviceTier",
     "moderation": "moderation",
+    "cache_diagnostics": "cacheDiagnostics",
     "provider_options": "providerOptions",
     "audio": "audio",
     "output_modalities": "outputModalities",

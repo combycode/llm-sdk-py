@@ -138,6 +138,24 @@ class ModerationEvent(Event):
     source: str = "native"
 
 
+@dataclass(frozen=True)
+class CacheDiagnosticsEvent(Event):
+    """Why the prompt cache could not reuse an earlier prefix, when
+    `cache_diagnostics=` asked.
+
+    Arrives mid-stream because both providers send it there (Anthropic on
+    `message_start`, before a token is generated; OpenAI in the response
+    envelope), and is also collected onto the streamed final response -- the same
+    parity `file` and `citation` exist to keep.
+
+    `{status, reason?, missedTokens?, reusableTokens?, raw}` -- camelCase inside,
+    because it is the provider-shaped payload rather than a modelled dataclass,
+    and `status`/`reason` are open unions (R1).
+    """
+
+    diagnostics: Mapping[str, Any] = field(default_factory=dict)
+
+
 # ── realtime ────────────────────────────────────────────────────────────────
 #
 # A live session yields these alongside `TextEvent`, which it reuses unchanged:
@@ -258,6 +276,9 @@ _BUILDERS: dict[str, Any] = {
     "builtin_tool_end": lambda r: BuiltinToolEndEvent(
         type="builtin_tool_end", call=BuiltinToolCall.of(r)
     ),
+    "cache_diagnostics": lambda r: CacheDiagnosticsEvent(
+        type="cache_diagnostics", diagnostics=r.get("diagnostics") or {}
+    ),
     "moderation": lambda r: ModerationEvent(
         type="moderation",
         phase=r.get("phase") or "output",
@@ -275,6 +296,7 @@ __all__ = [
     "AudioEvent",
     "BuiltinToolEndEvent",
     "BuiltinToolStartEvent",
+    "CacheDiagnosticsEvent",
     "CitationEvent",
     "DoneEvent",
     "ErrorEvent",

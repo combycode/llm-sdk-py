@@ -21,6 +21,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from ....wire.interpreter import Ctx, Registry
+from ...cache_diagnostics import anthropic_cache_diagnostics
 from .._shared.builtin_tools import unified_builtin_tool
 from .._shared.response_utils import extract_finish_reason
 from .parse_helpers import (
@@ -91,12 +92,20 @@ def _message_delta(_arg: Any, ctx: Ctx) -> list[dict[str, Any]]:
 
 
 def _message_start(_arg: Any, ctx: Ctx) -> list[dict[str, Any]]:
-    """The opening frame carries the prompt-side usage."""
+    """The opening frame carries the prompt-side usage, and the prompt-cache
+    diagnosis when one was asked for -- a fact about the REQUEST, known before a
+    token is generated."""
     msg = _raw(ctx).get("message")
     usage = msg.get("usage") if isinstance(msg, Mapping) else None
-    if not isinstance(usage, Mapping):
-        return []
-    return [{"type": "usage", "usage": anthropic_usage(usage)}]
+    events: list[dict[str, Any]] = []
+    if isinstance(usage, Mapping):
+        events.append({"type": "usage", "usage": anthropic_usage(usage)})
+    diagnostics = anthropic_cache_diagnostics(
+        msg.get("diagnostics") if isinstance(msg, Mapping) else None
+    )
+    if diagnostics is not None:
+        events.append({"type": "cache_diagnostics", "diagnostics": diagnostics})
+    return events
 
 
 def _json_delta(ctx: Ctx) -> None:

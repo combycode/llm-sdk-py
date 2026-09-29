@@ -20,6 +20,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from ....wire.interpreter import Ctx, Registry
+from ...cache_diagnostics import openai_cache_diagnostics
 from ...moderation.native import parse_native_moderation
 from .._shared.response_utils import extract_finish_reason
 from .parse_helpers import (
@@ -111,6 +112,9 @@ def _completed(_arg: Any, ctx: Ctx) -> list[dict[str, Any]]:
                 "source": "native",
             }
         )
+    diagnostics = openai_cache_diagnostics(response.get("prompt_cache_diagnostics"))
+    if diagnostics is not None:
+        events.append({"type": "cache_diagnostics", "diagnostics": diagnostics})
     usage = response.get("usage")
     if isinstance(usage, Mapping):
         events.append({"type": "usage", "usage": openai_responses_usage(usage)})
