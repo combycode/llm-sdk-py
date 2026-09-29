@@ -29,6 +29,7 @@ from collections.abc import AsyncIterator, Awaitable, Callable, Iterator, Mappin
 from dataclasses import dataclass, field
 from typing import Any
 
+from .network.errors import LLMError, NetworkError, classify_error
 from .network.sse import aparse_sse_stream, parse_sse_stream
 from .network.types import HttpRequest, HttpResponse
 
@@ -138,8 +139,8 @@ def as_fetch_stream(transport: Transport) -> Callable[..., Iterator[dict[str, An
 
     def fetch_stream(req: HttpRequest, options: Any = None) -> Iterator[dict[str, Any]]:
         response = transport(_stream_request(req))
-        _refuse_error_stream(response)
-        return parse_sse_stream(response.body)
+        _refuse_error_stream(response, req)
+        return _wrap_stream_failures(parse_sse_stream(response.body), req)
 
     return fetch_stream
 
@@ -151,9 +152,16 @@ def as_async_fetch_stream(
 
     async def frames(req: HttpRequest, options: Any) -> AsyncIterator[dict[str, Any]]:
         response = await transport(_stream_request(req))
-        _refuse_error_stream(response)
-        async for event in aparse_sse_stream(response.body):
-            yield event
+        _refuse_error_stream(response, req)
+        delivered = 0
+        try:
+            async for event in aparse_sse_stream(response.body):
+                delivered += 1
+                yield event
+        except LLMError:
+            raise
+        except Exception as exc:
+            raise _mid_stream_error(exc, req, delivered) from exc
 
     def open_stream(req: HttpRequest, options: Any = None) -> AsyncIterator[dict[str, Any]]:
         # Returned, not awaited: the client writes `async for ... in
@@ -168,15 +176,66 @@ def _stream_request(req: HttpRequest) -> TransportRequest:
     return TransportRequest.from_wire({**req, "stream": True, "responseType": "stream"})
 
 
-def _refuse_error_stream(response: TransportResponse) -> None:
+def _refuse_error_stream(response: TransportResponse, req: HttpRequest) -> None:
     """A failed stream is an error body, not events.
 
     Feeding a 400's JSON to the SSE framer yields nothing at all -- no frames, no
     exception, an empty completion -- so the status is checked before the body is
     ever treated as a stream.
+
+    Raised through the TAXONOMY, not as a bare RuntimeError. A caller branching
+    on `LLMError.kind` saw nothing from a failed stream, and the error body --
+    the part that says WHY -- was discarded along with it. A 401 on a stream now
+    reads the same as a 401 on a buffered call.
     """
-    if response.status >= 400:
-        raise RuntimeError(f"stream request failed ({response.status})")
+    if response.status < 400:
+        return
+    body: Any = None
+    try:
+        raw = response.body
+        if isinstance(raw, (bytes, bytearray)):
+            body = json.loads(bytes(raw).decode("utf-8", "replace"))
+        elif isinstance(raw, str):
+            body = json.loads(raw)
+        elif raw is not None and hasattr(raw, "__iter__"):
+            body = json.loads(b"".join(raw).decode("utf-8", "replace"))
+    except Exception:  # noqa: BLE001 - an unreadable error body must not mask the status
+        body = None
+    raise classify_error(
+        str(req.get("provider") or ""),
+        response.status,
+        body,
+        dict(response.headers or {}),
+        model=str(req.get("model") or ""),
+    )
+
+
+def _mid_stream_error(exc: Exception, req: HttpRequest, delivered: int) -> LLMError:
+    """A connection that drops mid-stream is a network error, and it is NOT
+    retryable: the caller already holds part of the answer, so re-opening would
+    deliver a second, overlapping stream."""
+    return NetworkError(
+        f"Stream failed after {delivered} event(s): {exc}",
+        provider=str(req.get("provider") or ""),
+        model=str(req.get("model") or ""),
+        retryable=False,
+        raw=exc,
+    )
+
+
+def _wrap_stream_failures(
+    events: Iterator[dict[str, Any]], req: HttpRequest
+) -> Iterator[dict[str, Any]]:
+    """The synchronous half of the same rule."""
+    delivered = 0
+    try:
+        for event in events:
+            delivered += 1
+            yield event
+    except LLMError:
+        raise
+    except Exception as exc:
+        raise _mid_stream_error(exc, req, delivered) from exc
 
 
 def _prepare(request: TransportRequest) -> tuple[Any, dict[str, str]]:
