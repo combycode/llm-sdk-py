@@ -73,6 +73,11 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Fixed
 
+- **A request that continues server-side state is no longer replayed by the retry layer.** A body
+  carrying `previous_response_id` or `previous_interaction_id` has the provider append the turn to
+  a conversation it holds, so a retry after a failure that reached it appends a second one into a
+  transcript read back later. Opt back in per request with `approve_unsafe_replay`. A stateless
+  request is unaffected, timeouts included.
 - **A human's approval was discarded when the model re-emitted the same arguments in another key
   order.** `PendingToolCall.matches` compared the arguments as serialised, and resuming re-runs the
   model step, which gives no guarantee of key order. The comparison is canonical now (array order

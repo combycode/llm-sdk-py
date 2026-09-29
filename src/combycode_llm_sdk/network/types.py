@@ -18,7 +18,8 @@ Shapes, as camelCase dicts:
   to a sink. `rawBody` tells the queue NOT to serialise a body that is already
   bytes (a multipart upload).
 - `RequestRetryOverride` `{maxRetries?, totalTimeoutMs?, attemptTimeoutMs?,
-  maxRetryAfterMs?, backoff?}` -- the retry knobs a SINGLE request may override,
+  maxRetryAfterMs?, backoff?, approveUnsafeReplay?}` -- the retry knobs a SINGLE
+  request may override,
   applied over the queue's policy for that request only. Deliberately a subset:
   `perKind` stays queue-level, because one request cannot sensibly redefine which
   error classes are retryable for the queue it shares with everyone else.

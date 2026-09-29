@@ -29,10 +29,12 @@ from combycode_llm_sdk.network.errors import (
     extract_error_message,
     parse_retry_after,
 )
+from combycode_llm_sdk.network.queue_state import is_stateful_request
 from combycode_llm_sdk.network.retry import (
     DEFAULT_RETRY,
     BackoffConfig,
     ErrorRetryConfig,
+    RetryConfig,
     RetryOverride,
     calculate_backoff,
     honored_retry_after_ms,
@@ -360,3 +362,69 @@ class TestRetryAfterOverflowIsARefusal:
     @pytest.mark.parametrize("value", ["-5", "not-a-date", ""])
     def test_a_negative_or_unparseable_value_is_no_instruction(self, value: str) -> None:
         assert parse_retry_after({"retry-after": value}) is None
+
+
+class TestAStatefulRequestIsNotReplayed:
+    """`previous_response_id` / `previous_interaction_id` mean "append to the
+    conversation you are holding".
+
+    A failure that reached the provider may therefore have produced the turn
+    already, and a retry appends a SECOND one into a transcript the caller reads
+    back later, with nothing in the reply to say so. A duplicated HTTP request
+    costs money; a duplicated TURN changes what the model sees next.
+
+    Everything else is untouched: a stateless request still retries, timeouts
+    included, because refusing those would trade a common recovery for a rare
+    one.
+    """
+
+    @staticmethod
+    def _retryable() -> LLMError:
+        return LLMError("boom", kind="server_error", provider="openai", retryable=True)
+
+    def test_a_stateless_request_still_retries(self) -> None:
+        assert should_retry(
+            self._retryable(), 0, RetryConfig(), elapsed_ms=0, replay_safe=True
+        )
+
+    def test_a_stateful_one_does_not(self) -> None:
+        assert not should_retry(
+            self._retryable(), 0, RetryConfig(), elapsed_ms=0, replay_safe=False
+        )
+
+    def test_the_guard_does_not_override_an_already_refused_retry(self) -> None:
+        # It only ever subtracts. A kind that was not retryable stays that way.
+        assert not should_retry(
+            LLMError("nope", kind="auth", provider="openai", retryable=False),
+            0,
+            RetryConfig(),
+            elapsed_ms=0,
+            replay_safe=True,
+        )
+
+
+class TestReadingTheBody:
+    @pytest.mark.parametrize(
+        "body",
+        [
+            {"previous_response_id": "resp_1"},
+            {"previous_interaction_id": "int_1"},
+        ],
+    )
+    def test_both_spellings_count(self, body: dict[str, object]) -> None:
+        assert is_stateful_request(body)
+
+    @pytest.mark.parametrize(
+        "body",
+        [
+            {"model": "m", "input": "hi"},
+            {"previous_response_id": ""},
+            {"previous_response_id": None},
+            None,
+            "raw",
+        ],
+    )
+    def test_everything_else_does_not(self, body: object) -> None:
+        # An empty or absent id continues nothing, and a body that is not a
+        # mapping cannot be read at all.
+        assert not is_stateful_request(body)

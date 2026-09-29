@@ -18,7 +18,7 @@ from __future__ import annotations
 import asyncio
 import time
 import uuid
-from collections.abc import AsyncIterator, Callable
+from collections.abc import AsyncIterator, Callable, Mapping
 from dataclasses import dataclass
 from typing import Any
 
@@ -47,6 +47,19 @@ PRIORITY_LOW = 3
 
 def _now_ms() -> float:
     return time.perf_counter() * 1000
+
+
+def is_stateful_request(body: Any) -> bool:
+    """Whether this body continues a conversation the PROVIDER is holding.
+
+    `previous_response_id` (OpenAI Responses) and `previous_interaction_id`
+    (Google Interactions) both say "append to that". Read off the built body
+    rather than from a provider list: the question is what this request does,
+    which stays the same question when another provider grows the same idea.
+    """
+    if not isinstance(body, Mapping):
+        return False
+    return bool(body.get("previous_response_id")) or bool(body.get("previous_interaction_id"))
 
 
 def _replayable(body: Any) -> bool:
@@ -308,6 +321,12 @@ class QueueState:
             elapsed_ms=_now_ms() - started,
             request_max_retries=_request_max_retries(req),
             replayable_body=_replayable(req.get("body")),
+            # A stateful request is not replayed unless the caller says it is
+            # safe: the turn may already exist on the provider's side.
+            replay_safe=(
+                not is_stateful_request(req.get("body"))
+                or bool((req.get("retry") or {}).get("approveUnsafeReplay"))
+            ),
         )
         self._hooks.emit_sync(
             "onModelError",

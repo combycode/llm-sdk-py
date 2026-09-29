@@ -29,6 +29,7 @@ from typing import Any
 from ..bus.hook_bus import HookBus
 from .errors import LLMError, NetworkError, classify_error
 from .errors import TimeoutError as LLMTimeoutError
+from .queue_state import is_stateful_request
 from .retry import RetryConfig, calculate_backoff, should_retry
 from .types import HttpRequest, HttpResponse
 
@@ -167,6 +168,12 @@ class RequestExecutor:
             elapsed_ms=_now_ms() - started,
             request_max_retries=request_max,
             replayable_body=_replayable(req.get("body")),
+            # A stateful request is not replayed unless the caller says it is
+            # safe: the turn may already exist on the provider's side.
+            replay_safe=(
+                not is_stateful_request(req.get("body"))
+                or bool((req.get("retry") or {}).get("approveUnsafeReplay"))
+            ),
         )
 
         self._hooks.emit_sync(

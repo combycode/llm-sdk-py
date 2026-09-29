@@ -65,6 +65,15 @@ class RetryOverride:
     max_retry_after_ms: float | None = None
     backoff: Mapping[str, Any] | None = None
     per_kind: Mapping[str, Any] | None = None
+    #: Permit retrying a request that continues SERVER-SIDE state.
+    #:
+    #: A request carrying `previous_response_id` or `previous_interaction_id`
+    #: does not stand alone: the provider appends the turn to a conversation it
+    #: holds, so a failure that reached it may have produced that turn already
+    #: and a retry appends a SECOND one. Set this when the call is safe to
+    #: repeat -- the provider said it never landed, or the conversation is
+    #: disposable. A stateless request is unaffected either way.
+    approve_unsafe_replay: bool | None = None
 
 
 @dataclass(frozen=True)
@@ -161,10 +170,11 @@ def should_retry(
     elapsed_ms: float,
     request_max_retries: int | None = None,
     replayable_body: bool = True,
+    replay_safe: bool = True,
 ) -> bool:
     """Whether to make attempt N+1.
 
-    Five independent reasons not to, and every one of them has cost someone a
+    Six independent reasons not to, and every one of them has cost someone a
     production incident:
 
     - the KIND is not retryable (retrying a 401 forever);
@@ -175,7 +185,13 @@ def should_retry(
       first attempt and the second would send an empty one;
     - the server asked for longer than we will wait, which is a refusal rather
       than a delay: parking for hours looks identical to a hang from the
-      caller's side.
+      caller's side;
+    - the request continues SERVER-SIDE state, so a failure that reached the
+      provider may already have produced the turn -- and the retry appends a
+      second one into a transcript the caller reads back later, silently. A
+      duplicated HTTP request costs money; a duplicated TURN changes what the
+      model sees next. The caller opts back in per request when they know it is
+      safe to repeat.
     """
     kind_config = retry.per_kind.get(error.kind)
     retryable = kind_config.retryable if kind_config and kind_config.retryable is not None else error.retryable
@@ -199,6 +215,7 @@ def should_retry(
         and attempt < max_retries
         and elapsed_ms < retry.total_timeout_ms
         and replayable_body
+        and replay_safe
         and not retry_after_too_long
     )
 
