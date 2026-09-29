@@ -66,7 +66,9 @@ PASSING = [
     "tool_optional_parameters",
     "tool_permissions",
     "transcribe_structured",
+    "unavailable_models",
     "unified_names",
+    "upload_file_lifetime",
 ]
 
 #: Examples whose feature is not ported. Each must fail by NAMING what is

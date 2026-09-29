@@ -430,6 +430,44 @@ class ModelCatalog:
             return f"announced shutdown date {shutdown} has passed"
         return None
 
+    def refuse_call(
+        self, provider: str, model: str, today: str | None = None
+    ) -> str | None:
+        """Should a call to this model be refused before it is sent, and why?
+
+        `unavailable_reason` says what the catalog KNOWS. This says what to DO
+        about it, and the difference is one deliberate escape hatch.
+
+        Naming the PROVIDER's own id is treated as an override. That is not a new
+        rule -- `resolve_model_id` already draws the same line and says why: our
+        slug means "give me whatever the catalog calls this", while an id the
+        provider itself accepts is a deliberate choice. Someone who types
+        `imagen-4.0-generate-001` rather than `imagen-4` went looking for that
+        name, and the likeliest reason is a deployment where the endpoint
+        answers. We measured it gone for US; we cannot measure it gone for
+        everyone. The message NAMES the escape, so it is a documented door
+        rather than a hidden one.
+
+        No escape is offered when the slug and the provider id are the same
+        string, and that lines up with when one is WARRANTED: `imagen-4` is
+        entitlement-gated and may answer elsewhere, while `sora-2` shut down on
+        an announced date and answers for nobody.
+        """
+        reason = self.unavailable_reason(provider, model, today)
+        if not reason:
+            return None
+        used_slug = self._key(provider, model) in self._models
+        if not used_slug and self._key(provider, model) in self._alias_index:
+            return None
+        info = self.get(provider, model)
+        provider_id = dict(info).get("providerModelName") if info else None
+        hint = (
+            f' To request it anyway, name the provider own id: "{provider_id}".'
+            if provider_id and provider_id != model
+            else ""
+        )
+        return f"{provider}/{model} is not callable: {reason}.{hint}"
+
     def list(self, provider: str | None = None) -> list[ModelInfo]:
         entries = list(self._models.values())
         chosen = [m for m in entries if m["provider"] == provider] if provider else entries

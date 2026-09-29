@@ -142,10 +142,18 @@ class _SpecFileAdapter:
             request["body"] = built.body
         return request
 
-    def build_upload_request(self, file: FileAttachment, data: bytes) -> dict[str, Any]:
+    def build_upload_request(
+        self, file: FileAttachment, data: bytes, opts: Any = None
+    ) -> dict[str, Any]:
+        lifetime = getattr(opts, "lifetime_seconds", None) if opts is not None else None
+        # Absent, not None: the specs guard on `defined`, and in this interpreter
+        # `None` is JSON null -- a present key -- while a missing one is the
+        # `undefined` the TypeScript passes. A None here sends OpenAI's
+        # `expires_after[anchor]` on every upload that asked for no lifetime.
+        payload: dict[str, Any] = {} if lifetime is None else {"lifetimeSeconds": lifetime}
         return self._request(
             f"{self.name}/files.upload",
-            {},
+            payload,
             MultipartFile(data=data, filename=file.filename, mime_type=file.mime_type),
         )
 
@@ -160,8 +168,10 @@ class _SpecFileAdapter:
 
     # -- operations ----------------------------------------------------------
 
-    def upload(self, file: FileAttachment, fetch: Any) -> FileUploadResult:
-        response = fetch(self.build_upload_request(file, file.to_bytes()))
+    def upload(
+        self, file: FileAttachment, fetch: Any, opts: Any = None
+    ) -> FileUploadResult:
+        response = fetch(self.build_upload_request(file, file.to_bytes(), opts))
         if _status(response) >= 400:
             raise RuntimeError(
                 f"{self.name} file upload failed ({_status(response)}): {_body(response)}"
@@ -169,7 +179,25 @@ class _SpecFileAdapter:
         return self._upload_result(_body(response))
 
     def _upload_result(self, body: Mapping[str, Any]) -> FileUploadResult:
-        return FileUploadResult(remote_id=str(body.get("id") or ""), expires_at=None)
+        """`expires_at` in the shape this provider returns it.
+
+        Not uniform: OpenAI and xAI answer with unix SECONDS, Anthropic with an
+        ISO string, and Google sets its own time regardless of what was asked.
+        Measured 2026-09-29.
+        """
+        raw = body.get("expires_at")
+        expires_at: float | None = None
+        if isinstance(raw, (int, float)) and raw:
+            expires_at = float(raw) * 1000
+        elif isinstance(raw, str) and raw:
+            from datetime import datetime
+
+            try:
+                # 3.11 parses the trailing Z itself, and 3.11 is this package floor.
+                expires_at = datetime.fromisoformat(raw).timestamp() * 1000
+            except ValueError:
+                expires_at = None
+        return FileUploadResult(remote_id=str(body.get("id") or ""), expires_at=expires_at)
 
     def delete(self, remote_id: str, fetch: Any) -> None:
         fetch(self.build_delete_request(remote_id))
@@ -341,7 +369,23 @@ class GoogleFileAdapter(_SpecFileAdapter):
     def build_list_request(self) -> dict[str, Any]:
         return self._request("google/files.list", {})
 
-    def upload(self, file: FileAttachment, fetch: Any) -> FileUploadResult:
+    def upload(
+        self, file: FileAttachment, fetch: Any, opts: Any = None
+    ) -> FileUploadResult:
+        # Google decides how long a file lives: `expiration_time` is marked
+        # "Output only" in its own types, so there is nowhere to put a requested
+        # lifetime. Saying so is the point -- a unified option that quietly does
+        # nothing on one provider is how a caller ends up believing in a cleanup
+        # that never runs. The file still expires; Google sets the time.
+        lifetime = getattr(opts, "lifetime_seconds", None) if opts is not None else None
+        warn = getattr(opts, "warn", None) if opts is not None else None
+        if lifetime is not None and warn is not None:
+            warn(
+                "Google does not accept a file lifetime: expiration_time is set by Google, "
+                f"not by the caller, so the requested {lifetime}s was not sent. The file "
+                "still expires on Google own schedule, reported as expires_at.",
+                {"requestedLifetimeSeconds": lifetime},
+            )
         data = file.to_bytes()
 
         started = fetch(self.build_start_upload_request(file, len(data)))

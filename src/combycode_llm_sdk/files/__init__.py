@@ -27,7 +27,12 @@ from .attachment import (
     UploadStatus,
     UrlContent,
 )
-from .provider_adapter import FileProviderAdapter, FileUploadResult, RemoteFileInfo
+from .provider_adapter import (
+    FileProviderAdapter,
+    FileUploadOptions,
+    FileUploadResult,
+    RemoteFileInfo,
+)
 from .providers import (
     FILE_ADAPTERS,
     AnthropicFileAdapter,
@@ -63,6 +68,7 @@ __all__ = [
     "FileProviderAdapter",
     "FileStrategy",
     "FileStrategyContext",
+    "FileUploadOptions",
     "FileUploadResult",
     "FileUploadState",
     "FilesRegistry",

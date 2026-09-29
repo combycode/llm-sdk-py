@@ -15,6 +15,7 @@ Transposed from `unified-library-ts/src/plugins/files/provider-adapter.ts`.
 
 from __future__ import annotations
 
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from typing import Any, Protocol, runtime_checkable
 
@@ -40,6 +41,30 @@ class RemoteFileInfo:
     #: Epoch milliseconds.
     created_at: float
     expires_at: float | None = None
+
+
+@dataclass(frozen=True)
+class FileUploadOptions:
+    """What the caller asks for at upload time.
+
+    `lifetime_seconds` exists because files do NOT clean themselves up: OpenAI
+    states that everything but `purpose=batch` persists until manually deleted,
+    so an agent attaching a document per turn grows an unbounded pile on the
+    customer account.
+
+    Three of the four providers accept a lifetime and one does not, which is the
+    part worth knowing before using it: Google `expiration_time` is marked
+    "Output only" -- Google decides, and asking changes nothing. An adapter that
+    cannot honour the request says so through `warn` rather than dropping it
+    silently, because a unified option that quietly does nothing on one provider
+    is how a caller ends up believing in a cleanup that never happens.
+    """
+
+    #: Seconds from upload until the provider deletes the file. Sent as given;
+    #: each provider clamps to its own range and reports its own error.
+    lifetime_seconds: int | None = None
+    #: Raised when an adapter cannot honour an option. Supplied by the registry.
+    warn: Callable[[str, Mapping[str, Any] | None], None] | None = None
 
 
 @runtime_checkable
@@ -75,7 +100,9 @@ class FileProviderAdapter(Protocol):
     def supported_types(self) -> tuple[str, ...] | None:
         """MIME types the store accepts, or None for "anything"."""
 
-    def upload(self, file: FileAttachment, fetch: Any) -> FileUploadResult: ...
+    def upload(
+        self, file: FileAttachment, fetch: Any, opts: FileUploadOptions | None = None
+    ) -> FileUploadResult: ...
 
     def delete(self, remote_id: str, fetch: Any) -> None: ...
 

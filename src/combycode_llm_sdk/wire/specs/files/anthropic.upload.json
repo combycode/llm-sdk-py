@@ -6,5 +6,9 @@
     "method": "POST", "bodyKind": "multipart",
     "url": { "$join": [{ "$config": "baseURL" }, "/v1/files"] }
   },
-  "multipart": [{ "name": "file", "file": true }]
+  "_lifetime": "Measured 2026-09-29: `expires_in_seconds` as a plain scalar, 200, and `expires_at` comes back as an ISO string. Omitted when the caller asks for no lifetime, which is the provider default: the file lives until something deletes it.",
+  "multipart": [
+    { "name": "file", "file": true },
+    { "name": "expires_in_seconds", "value": { "$": "lifetimeSeconds" } }
+  ]
 }

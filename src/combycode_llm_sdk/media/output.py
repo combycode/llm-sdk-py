@@ -26,6 +26,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+from ..network.errors import UnsupportedError
 from .registry import media_adapter
 from .stores import FileMediaStore
 from .types import (
@@ -124,12 +125,38 @@ class MediaOutput:
         """Stop any polling loop. Idempotent."""
         self._stop.set()
 
+    def _refuse_if_unavailable(self) -> None:
+        """Refuse a model the catalog has MEASURED as unreachable, before
+        spending a round trip to be told the same thing less usefully.
+
+        Here rather than in the adapter on purpose: the adapter owns the WIRE,
+        and its request shape is recorded in the frozen media corpus and the
+        spec/adapter parity check -- refusing there would rewrite a contract to
+        express a policy. This layer is where the catalog already lives.
+
+        **Before `_route()`, on what the CALLER wrote.** Routing translates our
+        slug into the id the provider answers to, and naming that id outright is
+        the one way through the refusal -- so asking afterwards is asking about
+        a spelling the caller never used, and the refusal never fires for the
+        models it was written for. `google/imagen-4` reached this check already
+        rewritten to `imagen-4.0-generate-001`, which is deliberately allowed.
+
+        Skipped when no catalog is configured: an engine without one is not one
+        that can be sure.
+        """
+        if self._catalog is None or not self._model or not self._provider:
+            return
+        refusal = self._catalog.refuse_call(self._provider, self._model)
+        if refusal:
+            raise UnsupportedError(refusal, provider=self._provider, model=self._model)
+
     # -- generation ----------------------------------------------------------
 
     def generate_image(
         self, *, prompt: str, params: Mapping[str, Any] | None = None
     ) -> list[MediaResult]:
         """One or more images. Always a LIST -- `n` is a provider parameter."""
+        self._refuse_if_unavailable()
         provider, model = self._route()
         adapter = self._adapter(provider, "image_generation")
         raw = adapter.generate_image(prompt, model, self._traced(), params)
@@ -143,6 +170,7 @@ class MediaOutput:
         params: Mapping[str, Any] | None = None,
         mask: Mapping[str, Any] | None = None,
     ) -> list[MediaResult]:
+        self._refuse_if_unavailable()
         provider, model = self._route()
         adapter = self._adapter(provider, "image_editing")
         kwargs: dict[str, Any] = {}
@@ -161,6 +189,7 @@ class MediaOutput:
         provider's own voice name passes through untouched, so knowing the
         catalogue is never a disadvantage.
         """
+        self._refuse_if_unavailable()
         provider, model = self._route()
         adapter = self._adapter(provider, "audio_generation")
         raw = adapter.generate_audio(prompt, model, self._traced(), params)
@@ -171,6 +200,7 @@ class MediaOutput:
     def generate_video(
         self, *, prompt: str, params: Mapping[str, Any] | None = None
     ) -> list[MediaResult]:
+        self._refuse_if_unavailable()
         provider, model = self._route()
         adapter = self._adapter(provider, "video_generation")
         operation = adapter.submit_video(prompt, model, self._traced(), params)

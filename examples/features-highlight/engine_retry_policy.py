@@ -24,6 +24,13 @@ def always_fails(request):
     return TransportResponse(status=500, body={"error": "boom"})
 
 
+def vetoes_the_retry(request):
+    """A server that fails, and says not to try again."""
+    return TransportResponse(
+        status=500, body={"error": "do not come back"}, headers={"x-should-retry": "false"}
+    )
+
+
 def asks_for_a_day(request):
     """A rate-limited server that asks us to wait a full day."""
     return TransportResponse(
@@ -114,9 +121,45 @@ try:
 except LLMError:
     pass
 
+# The server's own veto beats the policy. A 500 normally retries -- that is what
+# `server_error: retryable` means -- but `x-should-retry: false` is the server
+# saying the request will not succeed the second time either. Retrying it doubles
+# a side effect that already landed. The decision is carried on the error as
+# `should_retry`, so a caller holding one can see WHY it stopped rather than
+# inferring it from the attempt count.
+vetoed = Engine(
+    transport=vetoes_the_retry,
+    register_as_default=False,
+    retry={"backoff": FAST, "per_kind": {"server_error": {"retryable": True, "max_retries": 3}}},
+)
+vetoed_retries = 0
+veto_on_error: bool | None = None
+
+
+@vetoed.on_retry
+def _count_vetoed(ctx) -> None:
+    global vetoed_retries
+    vetoed_retries += 1
+
+
+try:
+    vetoed.request(url="https://example.invalid/v1/x", body={}, provider="openai",
+                   model="gpt-5.4-nano")
+except LLMError as exc:
+    veto_on_error = exc.should_retry
+
 check(engine_wide == 3, f"engine-wide retry should be 3, got {engine_wide}")
 check(per_queue == 1, f"per-queue override should win, got {per_queue}")
 check(merged == 2, f"merged backoff should keep max_retries=2, got {merged}")
 check(per_request == 0, f"per-request max_retries=0 must win, got {per_request}")
+check(vetoed_retries == 0, f"x-should-retry:false must stop the retry, got {vetoed_retries}")
+check(veto_on_error is False, f"the error should carry the veto, got {veto_on_error}")
 
-report(engine_wide=engine_wide, per_queue=per_queue, merged=merged, per_request=per_request)
+report(
+    engine_wide=engine_wide,
+    per_queue=per_queue,
+    merged=merged,
+    per_request=per_request,
+    vetoed_retries=vetoed_retries,
+    veto_on_error=veto_on_error,
+)

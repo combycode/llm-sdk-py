@@ -6,5 +6,10 @@
     "method": "POST", "bodyKind": "multipart",
     "url": { "$join": [{ "$config": "baseURL" }, "/v1/files"] }
   },
-  "multipart": [{ "name": "file", "file": true }, { "name": "purpose", "value": "assistants" }]
+  "_lifetime": "Measured 2026-09-29, and the ORDER is load-bearing: `expires_after` placed AFTER the file is refused 400 -- 'expires_after must appear before the file field' -- and placed before it answers 200 with `expires_at` set. Note that `expires_in_seconds`, Anthropic's spelling, is accepted here with a 200 and silently ignored, so a status code alone would not have caught a wrong field name.",
+  "multipart": [
+    { "name": "expires_after", "value": { "$": "lifetimeSeconds" } },
+    { "name": "file", "file": true },
+    { "name": "purpose", "value": "assistants" }
+  ]
 }

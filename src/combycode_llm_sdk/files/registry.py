@@ -37,7 +37,7 @@ from .attachment import (
     PathContent,
     UrlContent,
 )
-from .provider_adapter import FileProviderAdapter, RemoteFileInfo
+from .provider_adapter import FileProviderAdapter, FileUploadOptions, RemoteFileInfo
 from .strategy import (
     FALLBACK_MAX_FILE_SIZE,
     DefaultFileStrategy,
@@ -71,6 +71,7 @@ class FilesRegistry:
         fetch: Any,
         catalog: Any = None,
         strategy: FileStrategy | None = None,
+        upload_lifetime_seconds: int | None = None,
     ) -> None:
         self.hooks = hooks
         #: Every adapter call takes this, so file HTTP rides the same queue,
@@ -78,6 +79,11 @@ class FilesRegistry:
         self.fetch = fetch
         self.catalog = catalog
         self.strategy: FileStrategy = strategy or DefaultFileStrategy()
+        #: Seconds from upload until the provider deletes the file. Off by
+        #: default, which is the providers' own default: an uploaded file lives
+        #: until something deletes it. Google ignores it -- its expiry is not
+        #: settable -- and says so through `onWarning` rather than silently.
+        self.upload_lifetime_seconds = upload_lifetime_seconds
         self._files: dict[str, FileAttachment] = {}
         self._providers: dict[str, FileProviderAdapter] = {}
         self._unsubscribe = hooks.on("onMessageResolve", self._resolve_messages)
@@ -145,8 +151,21 @@ class FilesRegistry:
                 f"Registered: {', '.join(sorted(self._providers)) or 'none'}"
             )
 
+        def adjusted(message: str, details: Mapping[str, Any] | None = None) -> None:
+            self._warn(
+                "request_adjusted",
+                message,
+                {"fileId": file.id, "provider": provider, **dict(details or {})},
+            )
+
         try:
-            result = adapter.upload(file, self.fetch)
+            result = adapter.upload(
+                file,
+                self.fetch,
+                FileUploadOptions(
+                    lifetime_seconds=self.upload_lifetime_seconds, warn=adjusted
+                ),
+            )
         except Exception as exc:
             # Recorded before it is re-raised: a failed upload that leaves no
             # trace looks like one that never happened, and the next call would

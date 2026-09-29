@@ -6,5 +6,11 @@
     "bodyKind": "multipart",
     "url": { "$join": [{ "$config": "baseURL" }, "/v1/files"] }
   },
-  "multipart": [{ "name": "file", "file": true }, { "name": "purpose", "value": "user_data" }]
+  "_lifetime": "Measured 2026-09-29: the nested `expires_after` must be sent as BRACKET fields. Passing it as a JSON string is refused 400, 'Additional properties are not allowed'. `expires_at` comes back as unix SECONDS.",
+  "multipart": [
+    { "name": "file", "file": true },
+    { "name": "purpose", "value": "user_data" },
+    { "name": "expires_after[anchor]", "value": "created_at", "when": { "defined": "lifetimeSeconds" } },
+    { "name": "expires_after[seconds]", "value": { "$": "lifetimeSeconds" } }
+  ]
 }
