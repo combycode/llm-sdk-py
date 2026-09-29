@@ -16,7 +16,7 @@ from collections.abc import Callable, Mapping
 from typing import Any
 
 from ....wire.chat_specs import chat_spec
-from ....wire.interpreter import Registry, build_from_spec, js_json
+from ....wire.interpreter import Registry, build_from_spec
 from ....wire.response_interpreter import build_response
 from ....wire.response_specs import get_response_spec
 from ....wire.stream_interpreter import create_stream_builder
@@ -25,6 +25,7 @@ from ...types.messages import Message
 from ...types.provider import ProviderHttpRequest
 from ...wire_transforms import make_registry
 from .._shared.dropped import NoteSink, note_dropped
+from .._shared.tool_result import split_tool_result
 from .interactions_registry import GOOGLE_INTERACTIONS_REGISTRY
 from .interactions_stream_registry import GOOGLE_INTERACTIONS_STREAM_REGISTRY
 from .parse_helpers import google_interactions_usage
@@ -123,18 +124,30 @@ class GoogleInteractionsAdapter:
                 items.append({"type": "model_output", "content": content_items})
 
         elif role == "tool":
+            # A `function_result` carries a `result` string. Whether this API has a
+            # media slot inside one is not something the pinned SDK says -- it has
+            # no Interactions types at all -- so rather than invent a field name,
+            # the text half goes in `result` and the media half follows as a
+            # `user_input` item, after every result, so no tool call is left
+            # unanswered in between.
+            trailing: list[Mapping[str, Any]] = []
             for p in _as_parts(msg.get("content")):
                 if p.get("type") != "tool_result":
                     continue
-                result = p.get("content")
+                text, media = split_tool_result(p.get("content"))
                 items.append(
                     {
                         "type": "function_result",
                         "name": self.tool_call_names.get(p["id"]) or "",
                         "call_id": p.get("id"),
-                        "result": result if isinstance(result, str) else js_json(result),
+                        "result": text,
                     }
                 )
+                trailing.extend(media)
+            if trailing:
+                content_items = self._user_parts(trailing, notes)
+                if content_items:
+                    items.append({"type": "user_input", "content": content_items})
 
         return items
 

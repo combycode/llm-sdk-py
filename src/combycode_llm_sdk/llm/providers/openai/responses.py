@@ -142,8 +142,24 @@ class OpenAIResponsesAdapter:
         if isinstance(content, str):
             items.append({"role": role, "content": content})
             return
+        parts = self._input_content(content or [], notes)
+        # An item with empty content is rejected, so a message whose every part
+        # was an unsupported kind contributes nothing rather than an empty item.
+        # Which is exactly why the note matters: without it the whole message
+        # would vanish from the request in silence.
+        if parts:
+            items.append({"role": role, "content": parts})
+
+    def _input_content(self, content: Any, notes: NoteSink = None) -> list[Any]:
+        """Content parts in the `input_*` shapes this API reads them back as.
+
+        Shared by user messages and by `function_call_output`, whose `output`
+        takes the same items -- so an image a tool produced is sent as an image
+        rather than as base64 inside the output string, with no second message and
+        no provider-specific shape invented for tools.
+        """
         parts: list[Any] = []
-        for p in content or []:
+        for p in content:
             kind = p.get("type")
             source: Mapping[str, Any] = p.get("source") or {}
             # Measured against the list, not guessed from the branch taken: a
@@ -183,12 +199,7 @@ class OpenAIResponsesAdapter:
                     parts.append({"type": "input_file", "url": source.get("url")})
             if len(parts) == before:
                 note_dropped(notes, "openai", kind)
-        # An item with empty content is rejected, so a message whose every part
-        # was an unsupported kind contributes nothing rather than an empty item.
-        # Which is exactly why the note matters: without it the whole message
-        # would vanish from the request in silence.
-        if parts:
-            items.append({"role": role, "content": parts})
+        return parts
 
     def _append_assistant_items(
         self, items: list[Any], msg: Message, names: dict[str, str]
@@ -287,7 +298,12 @@ class OpenAIResponsesAdapter:
             item: dict[str, Any] = {
                 "type": "function_call_output",
                 "call_id": p.get("id"),
-                "output": content if isinstance(content, str) else js_json(content),
+                # `output` takes a string OR the same input items a user message
+                # carries, so a tool that answered with content parts sends its
+                # image as an image. A string result is unchanged.
+                "output": content
+                if isinstance(content, str)
+                else self._input_content(content or []),
             }
             if name is not None:
                 item["name"] = name

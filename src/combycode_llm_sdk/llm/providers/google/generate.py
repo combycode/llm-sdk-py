@@ -22,9 +22,25 @@ from ....wire.stream_specs import get_stream_spec
 from ...types.provider import ProviderHttpRequest
 from ...wire_transforms import make_registry
 from .._shared.dropped import NoteSink, note_dropped
+from .._shared.tool_result import split_tool_result
 from .parse_helpers import google_usage
 from .response_registry import GOOGLE_RESPONSE_REGISTRY
 from .stream_registry import GOOGLE_STREAM_REGISTRY
+
+
+def _function_response_part(source: Mapping[str, Any]) -> dict[str, Any] | None:
+    """One media part of a `functionResponse`.
+
+    A narrower shape than an ordinary content part: `FunctionResponsePart` holds
+    `inlineData` or `fileData` and nothing else -- no `text`, which is why the
+    textual half of a tool result stays in `response`. `fileData` is documented
+    as Vertex-only, so a source we cannot inline yields nothing rather than a
+    field the Gemini API will reject.
+    """
+    if source.get("type") == "base64":
+        return {"inlineData": {"mimeType": source.get("mimeType"), "data": source.get("data")}}
+    return None
+
 
 #: `interface GoogleAdapterConfig` (generate.ts:22) -- `{apiKey, baseURL?}`.
 GoogleAdapterConfig = dict[str, Any]
@@ -122,19 +138,40 @@ class GoogleAdapter:
                 parts.append(fc_part)
             elif kind == "tool_result":
                 result = p.get("content")
-                parts.append(
-                    {
-                        "functionResponse": {
-                            # `?? ''` -- a result with no matching call still has
-                            # to carry the key, and an absent name is rejected.
-                            "name": self.tool_call_names.get(p["id"]) or "",
-                            "id": p.get("id"),
-                            "response": {"result": result}
-                            if isinstance(result, str)
-                            else result,
-                        }
-                    }
-                )
+                fr: dict[str, Any] = {
+                    # `?? ''` -- a result with no matching call still has
+                    # to carry the key, and an absent name is rejected.
+                    "name": self.tool_call_names.get(p["id"]) or "",
+                    "id": p.get("id"),
+                }
+                if isinstance(result, str):
+                    fr["response"] = {"result": result}
+                else:
+                    # `response` is a JSON object, so media cannot live there; the
+                    # API gives it `functionResponse.parts`. Splitting the two also
+                    # fixes a content-part result being sent AS that object, which
+                    # is not an object at all.
+                    text, media = split_tool_result(result)
+                    fr_parts: list[dict[str, Any]] = []
+                    notes_out: list[str] = []
+                    for m in media:
+                        fp = _function_response_part(m.get("source") or {})
+                        if fp is not None:
+                            fr_parts.append(fp)
+                        else:
+                            # Said out loud rather than dropped: a tool whose media
+                            # could not travel should leave a mark the model can act
+                            # on. `fileData` in a function response is documented
+                            # Vertex-only, so a URL source has nowhere to go here.
+                            notes_out.append(
+                                f"[{m.get('type')} omitted: "
+                                "a function response takes inline bytes]"
+                            )
+                            note_dropped(notes, "google", m.get("type"))
+                    fr["response"] = {"result": "\n".join(x for x in [text, *notes_out] if x)}
+                    if fr_parts:
+                        fr["parts"] = fr_parts
+                parts.append({"functionResponse": fr})
             if len(parts) == before:
                 # Google carries every media kind, so reaching here means the
                 # SOURCE had no form -- a `path` that never resolved, say.

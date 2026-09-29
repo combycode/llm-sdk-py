@@ -37,6 +37,7 @@ from ..approval import (
 from ..bus.hook_bus import HookBus
 from ..llm.output_errors import AgentRunError
 from ..results import Completion, ToolCall, Usage
+from ..wire.interpreter import js_json
 from .history import ConversationHistory
 from .lazy_tools import (
     LazySearchState,
@@ -1269,15 +1270,20 @@ class AgentLoop:
         # can withhold; the first that does decides, so a source-level rule
         # cannot be talked out of by a later one.
         guards = [*self._tool_output_guardrails, *(getattr(found, "output_guardrails", None) or [])]
-        if not guards or not isinstance(content, str):
+        if not guards:
             return None
+        # A guardrail reads TEXT. A tool that answered with content parts used to
+        # skip the check entirely on this side -- and a tool returning media is
+        # precisely the case a rule wants to see -- so the parts are serialised
+        # for the checker, exactly as the TypeScript does. A trip still replaces
+        # the WHOLE result, media included.
         ctx = ToolGuardrailContext(
             tool_name=reported_name,
             arguments=dict(arguments),
             call_id=str(call.id or ""),
             step=step,
             trace=dict(trace),
-            result=content,
+            result=content if isinstance(content, str) else js_json(content),
         )
         for guard in guards:
             name = getattr(guard, "name", "guardrail")

@@ -28,6 +28,7 @@ from ...types.messages import ContentPart
 from ...types.provider import ProviderHttpRequest
 from ...wire_transforms import make_registry
 from .._shared.dropped import NoteSink, note_replaced
+from .._shared.tool_result import split_tool_result
 from .parse_helpers import openai_usage
 from .response_registry import OPENAI_RESPONSE_REGISTRY
 from .stream_registry import OPENAI_STREAM_REGISTRY
@@ -105,16 +106,22 @@ class OpenAIAdapter:
             parts = _as_parts(msg.get("content"))
             results = [p for p in parts if p.get("type") == "tool_result"]
             if results:
-                return [
-                    {
-                        "role": "tool",
-                        "tool_call_id": result.get("id"),
-                        "content": result["content"]
-                        if isinstance(result.get("content"), str)
-                        else js_json(result.get("content")),
-                    }
-                    for result in results
-                ]
+                # A tool message on this API carries TEXT and nothing else --
+                # there is no content-part form for it. So a tool that answered
+                # with media sends the text half here and the media half follows
+                # in a user message, AFTER every tool result, because this API
+                # rejects a request in which a call is still unanswered.
+                out: list[dict[str, Any]] = []
+                trailing: list[Mapping[str, Any]] = []
+                for result in results:
+                    text, media = split_tool_result(result.get("content"))
+                    out.append(
+                        {"role": "tool", "tool_call_id": result.get("id"), "content": text}
+                    )
+                    trailing.extend(media)
+                if trailing:
+                    out.append(self._build_message({"role": "user", "content": trailing}, notes))
+                return out
         return [self._build_message(msg, notes)]
 
     def _build_message(self, msg: Mapping[str, Any], notes: NoteSink = None) -> dict[str, Any]:

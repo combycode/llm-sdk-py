@@ -24,7 +24,7 @@ from typing import Any
 from ....runtime import is_browser
 from ....util.base64 import base64_to_utf8
 from ....wire.chat_specs import chat_spec, is_chat_spec
-from ....wire.interpreter import Registry, build_from_spec, js_json
+from ....wire.interpreter import Registry, build_from_spec
 from ....wire.pins import ANTHROPIC_MESSAGE_PINS, pin_for
 from ....wire.response_interpreter import build_response
 from ....wire.response_specs import get_response_spec
@@ -150,10 +150,21 @@ class AnthropicAdapter:
             }
         if kind == "tool_result":
             content = part.get("content")
+            # `tool_result.content` takes a string OR a block array, and the block
+            # array accepts the same text/image/document blocks a user message
+            # does -- so an image a tool produced needs no separate message and no
+            # re-encoding. A string result still sends the string, unchanged.
+            #
+            # Audio and video have no block form here; the recursion lands on the
+            # `[unsupported: ...]` branch below and the caller is told, which is
+            # the honest outcome -- better a visible gap than base64 billed as
+            # prose.
             return {
                 "type": "tool_result",
                 "tool_use_id": part.get("id"),
-                "content": content if isinstance(content, str) else js_json(content),
+                "content": content
+                if isinstance(content, str)
+                else [self._build_content_part(p, notes) for p in content or []],
             }
         # Anthropic has no block for audio or video, so the part becomes a
         # placeholder -- and the caller is told, because otherwise the model's

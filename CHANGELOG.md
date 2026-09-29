@@ -6,6 +6,29 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ## [Unreleased]
 
+### Fixed
+
+- **A tool that returns media now sends media.** A tool has always been allowed to return content
+  parts and the loop always carried them into the tool result -- then every adapter serialised the
+  list into the provider's text slot. So the documented way to return a screenshot worked in the
+  sense that the request succeeded: the model received a wall of base64 as prose, was billed for it
+  as prose, and could not see the picture. Measured 2026-09-30 on the TypeScript side with a tool
+  returning a solid-colour square and the model asked to name the colour: 0 of 6 targets right
+  before, 6 of 6 after, and two of the six did not say they could not see it, they named a confident
+  wrong colour. Each API has its own slot and they disagree about where, so the result is split into
+  its text half and its media half: Anthropic takes blocks inside `tool_result.content`, OpenAI
+  Responses items inside `function_call_output.output`, Google
+  `functionResponse.parts[].inlineData`; chat-completions and Google Interactions have no slot at
+  all, so the media follows in its own user turn after every tool result -- after, because those
+  APIs reject a request where a call is still unanswered. A string result builds exactly the body it
+  did before. Where a part cannot travel it says so (`[unsupported: audio]` on Anthropic,
+  `[image omitted: ...]` for a URL source on Google, whose function response takes inline bytes
+  only) rather than dropping it.
+- **An output guardrail now sees a tool result that is content parts**, serialised, the way the
+  TypeScript has always shown it. It used to skip the check entirely for a non-string result -- and
+  a tool returning media is precisely the case a rule wants to look at. A trip withholds the whole
+  result, media included.
+
 ### Added
 
 - **Per-call tool guardrails**, both halves. `tool_input_guardrails` validates a call's arguments

@@ -210,3 +210,50 @@ class TestTheInputSide:
         follow_up, _ = run(tool_input_guardrails=[Guard("broken", explode)])
         assert "4111" not in follow_up
         assert "input checker exploded" in follow_up
+
+
+class TestAToolThatAnsweredWithContentParts:
+    """The parts are serialised FOR THE CHECKER, so the rule still applies.
+
+    This side used to skip the output guardrails entirely when a tool returned
+    parts rather than a string -- and a tool returning media is precisely the
+    case a rule wants to see. A trip replaces the whole result, media included.
+    """
+
+    def test_the_guardrail_still_sees_the_output(self) -> None:
+        @tool
+        def shot(who: str) -> list[dict[str, Any]]:
+            """Take a picture of somebody."""
+            return [
+                {"type": "text", "text": SECRET},
+                {
+                    "type": "image",
+                    "source": {"type": "base64", "mimeType": "image/png", "data": "iVBO"},
+                },
+            ]
+
+        seen: list[str] = []
+        guard = Guard("watch", lambda ctx: (seen.append(ctx.result), {"pass": True})[1])
+        run(shot, tool_output_guardrails=[guard])
+        assert len(seen) == 1
+        assert "4111" in seen[0]
+        # Serialised, not the list itself -- a rule written against text works.
+        assert isinstance(seen[0], str)
+        assert "image" in seen[0]
+
+    def test_a_trip_withholds_the_media_too(self) -> None:
+        @tool
+        def shot(who: str) -> list[dict[str, Any]]:
+            """Take a picture of somebody."""
+            return [
+                {"type": "text", "text": SECRET},
+                {
+                    "type": "image",
+                    "source": {"type": "base64", "mimeType": "image/png", "data": "iVBO"},
+                },
+            ]
+
+        follow_up, _ = run(shot, tool_output_guardrails=[block_cards()])
+        assert "4111" not in follow_up
+        assert "iVBO" not in follow_up
+        assert TOOL_OUTPUT_WITHHELD in follow_up
