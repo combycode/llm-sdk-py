@@ -33,9 +33,9 @@ import hmac
 import secrets
 import time
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any, Protocol
-from urllib.parse import urlencode, urlsplit
+from urllib.parse import urlencode, urlsplit, urlunsplit
 
 from ..llm.wire_transforms import make_registry
 from ..wire.interpreter import build_from_spec
@@ -73,6 +73,11 @@ class McpOAuthTokens:
     #: When WE received them, so expiry can be worked out at all: the server
     #: states a lifetime, never a deadline.
     obtained_at: float = field(default_factory=time.time)
+    #: The authorization server these came from, stamped by us on save. Tokens
+    #: whose stamp names a different server are treated as absent -- see
+    #: `issuers_match`. `None` on anything stored before this existed, which is
+    #: used as-is and stamped on the next save.
+    issuer: str | None = None
 
     @property
     def expired(self) -> bool:
@@ -99,6 +104,7 @@ class McpOAuthTokens:
             "refresh_token": self.refresh_token,
             "scope": self.scope,
             "obtained_at": self.obtained_at,
+            "issuer": self.issuer,
         }
 
     @staticmethod
@@ -111,6 +117,7 @@ class McpOAuthTokens:
             refresh_token=str(row["refresh_token"]) if row.get("refresh_token") else None,
             scope=str(row["scope"]) if row.get("scope") else None,
             obtained_at=float(row.get("obtained_at") or time.time()),
+            issuer=str(row["issuer"]) if row.get("issuer") else None,
         )
 
 
@@ -120,6 +127,12 @@ class McpOAuthClientInfo:
 
     client_id: str
     client_secret: str | None = None
+    #: The authorization server this registration belongs to, stamped by us on
+    #: save. Unlike tokens, a MISMATCH here raises rather than re-registering:
+    #: presenting one server's client credentials to another is the thing this
+    #: binding exists to prevent, and doing it quietly would be worse than
+    #: failing.
+    issuer: str | None = None
 
 
 @dataclass(frozen=True)
@@ -203,6 +216,33 @@ def generate_pkce() -> tuple[str, str]:
 def generate_state() -> str:
     """A CSRF state token."""
     return _base64url(secrets.token_bytes(_ENTROPY_BYTES))
+
+
+def issuers_match(a: str, b: str) -> bool:
+    """Compare two authorization-server identifiers for the STORAGE binding,
+    tolerating a single trailing `/` and differences in URL spelling.
+
+    **Deliberately more lenient than `validate_authorization_response_iss`
+    below, and the two must not be swapped.** That one is RFC 9207 section 2.4,
+    where exact string equality IS the defence: leniency is what a mix-up
+    attacker looks for. This one decides whether credentials WE stored belong to
+    the server we are about to talk to, and both official MCP SDKs compare that
+    leniently -- a parsed origin is slash-suffixed while an advertised issuer
+    usually is not, so a strict compare here would discard a valid registration
+    on every other run and re-register for no reason.
+    """
+    if a == b:
+        return True
+    try:
+        parsed_a, parsed_b = urlsplit(a), urlsplit(b)
+        if parsed_a.scheme and parsed_b.scheme:
+            x = urlunsplit(parsed_a._replace(path=parsed_a.path or "/")).lower()
+            y = urlunsplit(parsed_b._replace(path=parsed_b.path or "/")).lower()
+            return x == y
+    except ValueError:
+        pass
+    shorter, longer = sorted((a, b), key=len)
+    return longer == f"{shorter}/"
 
 
 def validate_authorization_response_iss(
@@ -434,7 +474,7 @@ class McpOAuth:
         Returns `"authorized"`, or `"redirect"` when a person has to act -- the
         provider has already been asked to send them.
         """
-        tokens = self._provider.tokens()
+        tokens = self._bound_tokens()
         if tokens and tokens.access_token and not tokens.expired:
             return "authorized"
         if tokens and tokens.refresh_token and self._try_refresh(tokens.refresh_token):
@@ -444,17 +484,17 @@ class McpOAuth:
 
     def auth_header(self) -> dict[str, str]:
         """The bearer header, refreshing first if the token is stale."""
-        tokens = self._provider.tokens()
+        tokens = self._bound_tokens()
         stale = bool(tokens and tokens.access_token and tokens.expired and tokens.refresh_token)
         if stale and tokens and self._try_refresh(str(tokens.refresh_token)):
-            tokens = self._provider.tokens()
+            tokens = self._bound_tokens()
         if tokens and tokens.access_token:
             return {"authorization": f"Bearer {tokens.access_token}"}
         return {}
 
     def reauthorize(self) -> bool:
         """Answer a 401. True when a retry is worth it."""
-        tokens = self._provider.tokens()
+        tokens = self._bound_tokens()
         if tokens and tokens.refresh_token and self._try_refresh(tokens.refresh_token):
             return True
         self._start_redirect()
@@ -493,6 +533,7 @@ class McpOAuth:
             redirect_uri=self._provider.redirect_url,
             resource=self._server_url,
         )
+        tokens.issuer = self._expected_issuer()
         self._provider.save_tokens(tokens)
 
     # -- internal ------------------------------------------------------------
@@ -528,11 +569,17 @@ class McpOAuth:
                 refresh_token=refresh_token,
                 client_id=client.client_id,
                 client_secret=client.client_secret,
+                # RFC 8707: the refresh has to name the resource too. Without it
+                # an authorization server that scopes tokens per resource hands
+                # back one scoped to nothing, and the retry 401s with a token
+                # that looks valid.
+                resource=self._server_url,
             )
             # A server that returns no new refresh token means the old one still
             # stands; dropping it here would make the next refresh impossible.
             if not tokens.refresh_token:
                 tokens.refresh_token = refresh_token
+            tokens.issuer = self._expected_issuer()
             self._provider.save_tokens(tokens)
         except McpSsrfError:
             # Never swallowed: a refresh that failed the guard is an attempted
@@ -548,9 +595,52 @@ class McpOAuth:
             self._metadata = discover_metadata(self._fetch, self._server_url, self._security)
         return self._metadata
 
+    def _expected_issuer(self) -> str:
+        """The authorization server stored credentials are bound to: the URL
+        discovery used, which is the resource server's own origin here.
+
+        NOT the metadata document's `issuer`. Binding to a value the server hands
+        us would let the server choose which stored credentials it receives, which
+        is the whole thing being defended against; the official TypeScript SDK
+        declines it for the same reason and says so in the same place.
+        """
+        parsed = urlsplit(self._server_url)
+        return f"{parsed.scheme}://{parsed.netloc}"
+
+    def _bound_tokens(self) -> McpOAuthTokens | None:
+        """Stored tokens, unless they were minted by a different authorization
+        server.
+
+        Discarded rather than refused, which is the opposite of the client
+        registration below and deliberately so: tokens are disposable, so the
+        honest recovery is to behave as if none were stored and authorize again.
+        An unstamped set is used as-is -- it predates the binding and says nothing
+        about where it came from.
+        """
+        tokens = self._provider.tokens()
+        if tokens is None or tokens.issuer is None:
+            return tokens
+        return tokens if issuers_match(tokens.issuer, self._expected_issuer()) else None
+
     def _ensure_client(self, metadata: AuthServerMetadata) -> McpOAuthClientInfo:
+        issuer = self._expected_issuer()
         existing = self._provider.client_information()
         if existing:
+            # A stamp naming a DIFFERENT server: refuse, loudly. Re-registering
+            # silently would leave the caller with two registrations and no idea
+            # the server moved; presenting the old one is the attack.
+            if existing.issuer is not None and not issuers_match(existing.issuer, issuer):
+                raise ValueError(
+                    f"MCP OAuth: the stored client registration belongs to {existing.issuer} "
+                    f"and will not be presented to {issuer}. Clear the stored client "
+                    "information if the server has moved."
+                )
+            # No stamp: stored before this existed, or by a provider that drops
+            # the field. Used as-is and stamped now, so the NEXT run is bound.
+            if existing.issuer is None:
+                save_existing = getattr(self._provider, "save_client_information", None)
+                if save_existing is not None:
+                    save_existing(replace(existing, issuer=issuer))
             return existing
         if not metadata.registration_endpoint:
             raise ValueError(
@@ -564,6 +654,7 @@ class McpOAuth:
             self._server_url,
             self._security,
         )
+        info = replace(info, issuer=issuer)
         save = getattr(self._provider, "save_client_information", None)
         if save is not None:
             save(info)

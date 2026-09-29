@@ -32,6 +32,12 @@
       "from": "client_secret",
       "to": "client_secret",
       "presence": "truthy"
+    },
+    {
+      "_note": "RFC 8707. The exchange has always sent it and the refresh did not, so an authorization server that scopes tokens per resource handed back a refreshed token scoped to nothing -- and the retry 401s with a token that looks valid.",
+      "from": "resource",
+      "to": "resource",
+      "presence": "truthy"
     }
   ]
 }

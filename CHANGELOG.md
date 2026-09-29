@@ -8,6 +8,11 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Stored MCP OAuth credentials are bound to the authorization server that issued them**
+  (SEP-2352), and a token refresh names its resource (RFC 8707). A client registration bound
+  elsewhere raises; tokens bound elsewhere read as absent. Unstamped credentials are used as-is and
+  stamped on their next save. The binding key is the URL discovery used, not the metadata
+  document's `issuer`, which the server controls.
 - **`thinking={"mode": "between_tools"}`** -- Anthropic's reason-between-tool-calls mode, and a
   gate in front of it. Measured 2026-09-29 across every active Anthropic chat model: exactly one
   accepts it (`claude-sonnet-5.5`) and the other twelve answer 400 by name. Asking for it elsewhere
