@@ -2147,7 +2147,9 @@
           "auto",
           "low",
           "medium",
-          "high"
+          "high",
+          "xhigh",
+          "max"
         ],
         "default": "auto"
       },
@@ -2251,7 +2253,9 @@
           "auto",
           "low",
           "medium",
-          "high"
+          "high",
+          "xhigh",
+          "max"
         ],
         "default": "auto"
       },
@@ -2356,7 +2360,9 @@
           "auto",
           "low",
           "medium",
-          "high"
+          "high",
+          "xhigh",
+          "max"
         ],
         "default": "auto"
       },
@@ -2462,7 +2468,9 @@
           "auto",
           "low",
           "medium",
-          "high"
+          "high",
+          "xhigh",
+          "max"
         ],
         "default": "auto"
       },
@@ -4825,7 +4833,9 @@
           "auto",
           "low",
           "medium",
-          "high"
+          "high",
+          "xhigh",
+          "max"
         ],
         "default": "auto"
       },
@@ -4913,7 +4923,9 @@
           "auto",
           "low",
           "medium",
-          "high"
+          "high",
+          "xhigh",
+          "max"
         ],
         "default": "auto"
       },

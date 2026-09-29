@@ -796,6 +796,7 @@
           "4:3",
           "4:5",
           "5:4",
+          "8:1",
           "9:16",
           "16:9",
           "21:9"
@@ -896,6 +897,7 @@
           "4:3",
           "4:5",
           "5:4",
+          "8:1",
           "9:16",
           "16:9",
           "21:9"
@@ -975,6 +977,7 @@
           "4:3",
           "4:5",
           "5:4",
+          "8:1",
           "9:16",
           "16:9",
           "21:9"
@@ -1080,8 +1083,7 @@
           "Sadachbia",
           "Sadaltager",
           "Sulafat"
-        ],
-        "default": "Kore"
+        ]
       }
     },
     "tokenizer": {
@@ -1177,8 +1179,7 @@
           "Sadachbia",
           "Sadaltager",
           "Sulafat"
-        ],
-        "default": "Kore"
+        ]
       }
     },
     "tokenizer": {
@@ -1270,8 +1271,7 @@
           "Sadachbia",
           "Sadaltager",
           "Sulafat"
-        ],
-        "default": "Kore"
+        ]
       }
     },
     "tokenizer": {
@@ -2031,8 +2031,7 @@
       "resolution": {
         "values": [
           "720p",
-          "1080p",
-          "4k"
+          "1080p"
         ],
         "default": "720p"
       }
@@ -2111,8 +2110,7 @@
       "resolution": {
         "values": [
           "720p",
-          "1080p",
-          "4k"
+          "1080p"
         ],
         "default": "720p"
       }
@@ -2711,6 +2709,7 @@
           "4:3",
           "4:5",
           "5:4",
+          "8:1",
           "9:16",
           "16:9",
           "21:9"
@@ -3478,8 +3477,7 @@
           "Sadachbia",
           "Sadaltager",
           "Sulafat"
-        ],
-        "default": "Kore"
+        ]
       }
     }
   },
@@ -3583,8 +3581,7 @@
           "Sadachbia",
           "Sadaltager",
           "Sulafat"
-        ],
-        "default": "Kore"
+        ]
       }
     }
   },

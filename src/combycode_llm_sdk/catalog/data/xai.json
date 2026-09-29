@@ -383,14 +383,19 @@
           "20:9",
           "1:2",
           "2:1",
+          "21:9",
+          "5:2",
           "auto"
-        ]
+        ],
+        "default": "auto"
       },
       "resolution": {
         "values": [
           "1k",
+          "1.5k",
           "2k"
-        ]
+        ],
+        "default": "1k"
       }
     },
     "mediaOnly": true,
@@ -464,14 +469,19 @@
           "20:9",
           "1:2",
           "2:1",
+          "21:9",
+          "5:2",
           "auto"
-        ]
+        ],
+        "default": "auto"
       },
       "resolution": {
         "values": [
           "1k",
+          "1.5k",
           "2k"
-        ]
+        ],
+        "default": "1k"
       }
     },
     "tokenizer": {
@@ -832,14 +842,19 @@
           "20:9",
           "1:2",
           "2:1",
+          "21:9",
+          "5:2",
           "auto"
-        ]
+        ],
+        "default": "auto"
       },
       "resolution": {
         "values": [
           "1k",
+          "1.5k",
           "2k"
-        ]
+        ],
+        "default": "1k"
       }
     },
     "tokenizer": {
