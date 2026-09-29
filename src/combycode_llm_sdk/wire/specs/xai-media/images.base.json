@@ -5,4 +5,5 @@
     { "from": "prompt", "to": "prompt" },
     { "from": "params.responseFormat", "to": "response_format", "default": "b64_json" },
     { "from": "params.aspectRatio", "to": "aspect_ratio", "presence": "truthy" },
-    { "from": "params.resolution", "to": "resolution", "presence": "truthy" } ] }
+    { "from": "params.resolution", "to": "resolution", "presence": "truthy" },
+    { "from": "params.quality", "to": "quality", "presence": "truthy" } ] }

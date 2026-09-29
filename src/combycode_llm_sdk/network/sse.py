@@ -16,11 +16,6 @@ import re
 from collections.abc import AsyncIterator, Iterator
 from typing import Any
 
-#: A message ends at a blank line, in any of the three line-ending conventions.
-#: Providers do mix them: Anthropic sends `\n\n`, and a proxy in the middle may
-#: rewrite to `\r\n\r\n`.
-_MESSAGE_BOUNDARY = re.compile(r"\n\n|\r\n\r\n|\r\r")
-
 _LINE_BOUNDARY = re.compile(r"\n|\r\n|\r")
 
 
@@ -35,22 +30,71 @@ class _Framer:
     def __init__(self) -> None:
         self._decoder = _IncrementalDecoder()
         self._buffer = ""
+        #: Everything before this index is known to hold no terminator, so a
+        #: chunk never rescans what a previous chunk already scanned.
+        self._scanned = 0
+        #: The previous chunk ended on a CR: a leading LF now is its partner,
+        #: not a blank line. Getting this wrong ends an event one line early.
+        self._pending_lf = False
+        self._lines: list[str] = []
 
     def feed(self, chunk: bytes) -> list[dict[str, Any]]:
-        """Absorb a chunk, return whatever COMPLETE events it finished."""
-        self._buffer += self._decoder.decode(chunk)
-        parts = _MESSAGE_BOUNDARY.split(self._buffer)
-        # The last part is whatever came after the final boundary -- an
-        # incomplete message, kept for the next chunk.
-        self._buffer = parts.pop() if parts else ""
-        return [e for e in (parse_sse_message(p) for p in parts) if e is not None]
+        """Absorb a chunk, return whatever COMPLETE events it finished.
+
+        Line-based rather than block-based. The old version re-split the WHOLE
+        accumulated buffer on every chunk, which is quadratic in the size of one
+        event -- and a base64 partial image is exactly that shape. Its boundary
+        pattern also knew only LF-LF, CRLF-CRLF and CR-CR, so a MIXED terminator
+        was not a boundary at all and two events arrived as one.
+        """
+        text = self._decoder.decode(chunk)
+        if self._pending_lf:
+            text = text.removeprefix("\n")
+            self._pending_lf = False
+        self._buffer += text
+
+        out: list[dict[str, Any]] = []
+        start = 0
+        i = self._scanned
+        while i < len(self._buffer):
+            ch = self._buffer[i]
+            if ch == "\n":
+                out.extend(self._line(self._buffer[start:i]))
+                start = i + 1
+            elif ch == "\r":
+                out.extend(self._line(self._buffer[start:i]))
+                if i + 1 < len(self._buffer):
+                    if self._buffer[i + 1] == "\n":
+                        i += 1
+                else:
+                    self._pending_lf = True
+                start = i + 1
+            i += 1
+        self._buffer = self._buffer[start:]
+        self._scanned = len(self._buffer)
+        return out
+
+    def _line(self, line: str) -> list[dict[str, Any]]:
+        """One decoded line. A blank one ends the message."""
+        if line == "":
+            pending, self._lines = self._lines, []
+            if not pending:
+                return []
+            event = parse_sse_message("\n".join(pending))
+            return [event] if event is not None else []
+        self._lines.append(line)
+        return []
 
     def flush(self) -> list[dict[str, Any]]:
         """A final message with no trailing blank line. Providers do end this way."""
-        if not self._buffer.strip():
+        if self._buffer:
+            self._lines.append(self._buffer)
+            self._buffer = ""
+            self._scanned = 0
+        if not self._lines:
             return []
-        event = parse_sse_message(self._buffer)
-        self._buffer = ""
+        pending, self._lines = self._lines, []
+        event = parse_sse_message("\n".join(pending))
         return [event] if event is not None else []
 
 
@@ -100,7 +144,11 @@ def parse_sse_message(raw: str) -> dict[str, Any] | None:
             # trailing whitespace can be part of a token.
             if has_data:
                 data += "\n"
-            data += line[5:].lstrip()
+            # Exactly ONE leading space, which is what the spec strips.
+            # `lstrip()` ate every one, so a payload that legitimately begins
+            # with whitespace came back changed.
+            raw = line[5:]
+            data += raw.removeprefix(" ")
             has_data = True
         # A line starting with `:` is an SSE comment -- ignored.
 

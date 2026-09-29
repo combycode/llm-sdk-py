@@ -659,7 +659,8 @@
   "xai/grok-4.5": {
     "providerModelName": "grok-4.5",
     "aliases": [
-      "grok-4.5"
+      "grok-4.5",
+      "grok-4.5-latest"
     ],
     "pricing": {
       "inputPerMTok": 2,
@@ -867,6 +868,13 @@
           "2k"
         ],
         "default": "1k"
+      },
+      "quality": {
+        "values": [
+          "low",
+          "medium"
+        ],
+        "default": "medium"
       }
     },
     "tokenizer": {

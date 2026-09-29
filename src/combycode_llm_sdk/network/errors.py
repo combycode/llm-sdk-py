@@ -307,10 +307,14 @@ def parse_retry_after(headers: Mapping[str, str]) -> float | None:
     Both forms are parsed. A skewed client clock can only produce a value the
     caller's cap rejects, never a negative wait -- `_usable` sees to that.
     """
+    # float, not int: `int("1.5")` RAISES, so a fractional instruction was not
+    # merely truncated here -- it was dropped entirely and the server's request
+    # went unheard. Rounding a wait down is the wrong direction; losing it is
+    # worse.
     ms = headers.get("retry-after-ms")
     if ms:
         try:
-            usable = _usable(float(int(ms)))
+            usable = _usable(float(ms))
         except ValueError:
             usable = None
         if usable is not None:
@@ -321,7 +325,7 @@ def parse_retry_after(headers: Mapping[str, str]) -> float | None:
         return None
 
     try:
-        return _usable(int(value) * 1000)
+        return _usable(float(value) * 1000)
     except ValueError:
         pass
 
@@ -333,13 +337,28 @@ def parse_retry_after(headers: Mapping[str, str]) -> float | None:
 
 
 def _usable(ms: float) -> float | None:
-    """A delay is usable only if it is finite and non-negative.
+    """What a parsed `Retry-After` means, in milliseconds.
 
-    Anything else -- a NaN from a malformed header, an infinity, a negative from
-    a skewed clock -- is discarded rather than propagated: a sleep of NaN returns
-    immediately, turning one bad header into a retry storm.
+    Three outcomes, and the middle one used to be missing:
+
+        None        no usable instruction -- a NaN from a malformed header, or a
+                    negative wait, which is nonsense rather than a request.
+        inf         the server asked for longer than a number can hold. This is a
+                    REFUSAL and has to be carried as one.
+        a number    the wait, as asked.
+
+    An overflow used to collapse into None, i.e. "the server said nothing", so
+    the too-long check stayed false and the request was retried on the SHORT
+    exponential backoff. A server asking us to wait essentially forever got a
+    retry almost immediately -- the precise opposite of the instruction. A large
+    but FINITE value already worked: it exceeds `max_retry_after_ms` and is
+    refused on that comparison.
     """
-    return ms if math.isfinite(ms) and ms >= 0 else None
+    if math.isnan(ms) or ms < 0:
+        return None
+    if not math.isfinite(ms):
+        return math.inf
+    return ms
 
 
 def _json(value: Any) -> str:

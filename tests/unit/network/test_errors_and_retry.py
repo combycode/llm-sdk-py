@@ -10,6 +10,7 @@ The precedence cases mirror `examples/features-highlight/engine_retry_policy.py`
 
 from __future__ import annotations
 
+import math
 import time
 
 import pytest
@@ -316,3 +317,46 @@ class TestShouldRetryHeader:
         # guessing better than they are about whether to spend another request.
         error = classify_error("a", 401, {}, {"x-should-retry": "true"})
         assert should_retry(error, 0, DEFAULT_RETRY, elapsed_ms=0) is False
+
+
+class TestRetryAfterFractions:
+    """`int("1.5")` RAISES in Python, so a fractional instruction was not merely
+    truncated here -- it was dropped entirely and the server went unheard."""
+
+    def test_parses_fractional_seconds(self) -> None:
+        assert parse_retry_after({"retry-after": "1.5"}) == 1500
+        assert parse_retry_after({"retry-after": "0.25"}) == 250
+
+    def test_parses_fractional_milliseconds(self) -> None:
+        assert parse_retry_after({"retry-after-ms": "1500.7"}) == pytest.approx(1500.7)
+
+    def test_still_parses_whole_values_exactly_as_before(self) -> None:
+        assert parse_retry_after({"retry-after": "2"}) == 2000
+        assert parse_retry_after({"retry-after-ms": "1500"}) == 1500
+
+
+class TestRetryAfterOverflowIsARefusal:
+    """The dangerous direction. An unrepresentable wait used to collapse into
+    None -- "the server said nothing" -- so the too-long check stayed false and
+    the request went out again on the SHORT exponential backoff."""
+
+    def test_carries_an_unrepresentable_wait_as_infinity(self) -> None:
+        assert parse_retry_after({"retry-after": "1e400"}) == math.inf
+        assert parse_retry_after({"retry-after-ms": "1e400"}) == math.inf
+
+    def test_which_the_cap_then_refuses(self) -> None:
+        value = parse_retry_after({"retry-after": "1e400"})
+        assert value is not None and value > DEFAULT_RETRY.max_retry_after_ms
+
+    def test_a_large_but_finite_wait_already_worked(self) -> None:
+        value = parse_retry_after({"retry-after": "86400"})
+        assert value == 86_400_000
+        assert value > DEFAULT_RETRY.max_retry_after_ms
+
+    def test_an_overflowing_wait_is_not_retried(self) -> None:
+        error = RateLimitError("slow down", retryable=True, retry_after_ms=math.inf)
+        assert should_retry(error, 0, DEFAULT_RETRY, elapsed_ms=0) is False
+
+    @pytest.mark.parametrize("value", ["-5", "not-a-date", ""])
+    def test_a_negative_or_unparseable_value_is_no_instruction(self, value: str) -> None:
+        assert parse_retry_after({"retry-after": value}) is None
