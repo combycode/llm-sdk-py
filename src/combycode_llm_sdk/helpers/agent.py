@@ -68,6 +68,9 @@ class Agent:
         lazy_tools: Any = None,
         before: Sequence[Handler] = (),
         after: Sequence[Handler] = (),
+        tool_input_guardrails: Sequence[Any] = (),
+        tool_output_guardrails: Sequence[Any] = (),
+        tool_output_blocked_message: Any = None,
         tool_name_collision: str = "warn",
         **options: Any,
     ) -> None:
@@ -118,6 +121,9 @@ class Agent:
             lazy_tools=lazy_tools,
             before=before,
             after=after,
+            tool_input_guardrails=tool_input_guardrails,
+            tool_output_guardrails=tool_output_guardrails,
+            tool_output_blocked_message=tool_output_blocked_message,
             tool_name_collision=tool_name_collision,
             options=options,
         )

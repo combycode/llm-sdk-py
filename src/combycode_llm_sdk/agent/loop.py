@@ -19,6 +19,7 @@ reads its `system`-tagged layers when it composes a step.
 
 from __future__ import annotations
 
+import contextlib
 import json
 import time
 import uuid
@@ -113,6 +114,9 @@ class AgentLoop:
         lazy_tools: LazyToolsConfig | None = None,
         before: Sequence[Callable[[Any], Any]] = (),
         after: Sequence[Callable[[Any], Any]] = (),
+        tool_input_guardrails: Sequence[Any] = (),
+        tool_output_guardrails: Sequence[Any] = (),
+        tool_output_blocked_message: Any = None,
         tool_name_collision: str = "warn",
         policy: Any = None,
         approve: Any = None,
@@ -145,6 +149,11 @@ class AgentLoop:
 
         self._before = list(before)
         self._after = list(after)
+        #: Per-CALL guardrails. The message-level ones above halt a run; these
+        #: act on one tool call and leave the run going.
+        self._tool_input_guardrails = list(tool_input_guardrails)
+        self._tool_output_guardrails = list(tool_output_guardrails)
+        self._tool_output_blocked_message = tool_output_blocked_message
 
         self._collision_policy = tool_name_collision
         #: Consulted before every tool call. `None` means every call runs.
@@ -1132,6 +1141,12 @@ class AgentLoop:
             )
             return {"type": "tool_result", "id": call.id, "content": message, "isError": True}
 
+        # BEFORE the permission gate: a call refused on its arguments must not
+        # reach a person to be approved.
+        denied = self._check_tool_input(call, reported_name, arguments, step, trace, reports)
+        if denied is not None:
+            return denied
+
         refusal = self._gate_call(run_id, step, call, reported_name, arguments, reports, trace)
         if refusal is not None:
             return refusal
@@ -1144,6 +1159,16 @@ class AgentLoop:
             # contract every failure goes back to the model as its result.
             content = f"{type(exc).__name__}: {exc}"
             error = content
+
+        # Inspected BEFORE anything keeps it. The tool has already run, so the
+        # only thing left to control is what its output touches: the model's
+        # view, the conversation, and any checkpoint written from them.
+        if error is None:
+            withheld = self._check_tool_output(
+                call, reported_name, arguments, content, step, trace, found
+            )
+            if withheld is not None:
+                content = withheld
 
         latency = _now_ms() - started
         reports.append(
@@ -1175,6 +1200,134 @@ class AgentLoop:
         if error:
             part["isError"] = True
         return part
+
+    def _check_tool_input(
+        self,
+        call: Any,
+        reported_name: str,
+        arguments: Mapping[str, Any],
+        step: int,
+        trace: Mapping[str, Any],
+        reports: list[ToolCallReport],
+    ) -> dict[str, Any] | None:
+        """Validate a call's arguments before it runs. Returns a denial result,
+        or None to proceed.
+
+        A trip denies THIS call -- the model gets the reason as an error result
+        -- and leaves the run going. The message-level guardrails halt; this one
+        does not, because one bad call is not a reason to end a conversation.
+        """
+        if not self._tool_input_guardrails:
+            return None
+        ctx = ToolGuardrailContext(
+            tool_name=reported_name,
+            arguments=dict(arguments),
+            call_id=str(call.id or ""),
+            step=step,
+            trace=dict(trace),
+        )
+        for guard in self._tool_input_guardrails:
+            try:
+                decision = guard.check(ctx)
+            except Exception as exc:  # noqa: BLE001 -- a checker that crashed approved nothing
+                decision = {"pass": False, "reason": f"guardrail failed: {type(exc).__name__}: {exc}"}
+            if _passed(decision):
+                continue
+            reason = _decision_reason(decision) or "refused by a tool-input guardrail"
+            reports.append(
+                ToolCallReport(
+                    call_id=str(call.id or ""),
+                    tool_name=reported_name,
+                    arguments=dict(arguments),
+                    latency_ms=0.0,
+                    error=reason,
+                )
+            )
+            return {"type": "tool_result", "id": call.id, "content": reason, "isError": True}
+        return None
+
+    def _check_tool_output(
+        self,
+        call: Any,
+        reported_name: str,
+        arguments: Mapping[str, Any],
+        content: Any,
+        step: int,
+        trace: Mapping[str, Any],
+        found: Any,
+    ) -> str | None:
+        """Inspect what the tool returned. Returns the replacement text when one
+        withheld it, or None when it passes.
+
+        FAIL CLOSED, twice over. A guardrail that throws is treated as having
+        tripped -- a checker that crashed has approved nothing, and the one time
+        that matters is the one where it crashed ON the output it would have
+        caught. And a message formatter that throws or returns nothing falls back
+        to the default sentence rather than to the output it was deciding about.
+        """
+        # The loop's own first, then the ones the tool brought with it. Either
+        # can withhold; the first that does decides, so a source-level rule
+        # cannot be talked out of by a later one.
+        guards = [*self._tool_output_guardrails, *(getattr(found, "output_guardrails", None) or [])]
+        if not guards or not isinstance(content, str):
+            return None
+        ctx = ToolGuardrailContext(
+            tool_name=reported_name,
+            arguments=dict(arguments),
+            call_id=str(call.id or ""),
+            step=step,
+            trace=dict(trace),
+            result=content,
+        )
+        for guard in guards:
+            name = getattr(guard, "name", "guardrail")
+            try:
+                decision = guard.check(ctx)
+            except Exception as exc:  # noqa: BLE001 -- see the docstring
+                decision = {"pass": False, "reason": f"guardrail failed: {type(exc).__name__}: {exc}"}
+            if _passed(decision):
+                continue
+            replacement = _decision_replacement(decision) or self._blocked_message(name, reported_name, call)
+            self.hooks.emit_sync(
+                "onWarning",
+                {
+                    "source": "agent",
+                    "code": "tool_output_withheld",
+                    "message": (
+                        f"{name} withheld the output of {reported_name}: "
+                        f"{_decision_reason(decision) or 'no reason given'}"
+                    ),
+                    "details": {
+                        "callId": call.id,
+                        "toolName": reported_name,
+                        "guardrail": name,
+                        "step": step,
+                    },
+                },
+            )
+            return replacement
+        return None
+
+    def _blocked_message(self, guardrail_name: str, tool_name: str, call: Any) -> str:
+        """The placeholder a withheld output is replaced by."""
+        configured = self._tool_output_blocked_message
+        if isinstance(configured, str):
+            return configured or TOOL_OUTPUT_WITHHELD
+        if callable(configured):
+            # Fails closed: a formatter that raises gives the default sentence,
+            # never the output it was deciding about.
+            with contextlib.suppress(Exception):
+                resolved = configured(
+                    {
+                        "defaultMessage": TOOL_OUTPUT_WITHHELD,
+                        "guardrailName": guardrail_name,
+                        "toolName": tool_name,
+                        "callId": str(call.id or ""),
+                    }
+                )
+                if isinstance(resolved, str) and resolved:
+                    return resolved
+        return TOOL_OUTPUT_WITHHELD
 
     def _gate_call(
         self,
@@ -1432,6 +1585,60 @@ class _GuardrailStop(Exception):
     def __init__(self, reason: str) -> None:
         super().__init__(reason)
         self.reason = reason
+
+
+#: The data-free placeholder, used when nothing else resolves.
+TOOL_OUTPUT_WITHHELD = "Output withheld by an output guardrail."
+
+
+@dataclass
+class ToolGuardrailContext:
+    """What a per-call guardrail is shown.
+
+    One shape for both sides: `result` is set on the output side and None on the
+    input side, so a rule that reads both is written once. Attributes rather
+    than a dict for the same reason `GuardrailContext` uses them -- a one-line
+    rule should read like one.
+    """
+
+    tool_name: str
+    arguments: Mapping[str, Any] = field(default_factory=dict)
+    call_id: str = ""
+    step: int = 0
+    trace: Mapping[str, Any] = field(default_factory=dict)
+    #: What the tool returned, on the output side only.
+    result: str | None = None
+
+
+def _passed(decision: Any) -> bool:
+    """Whether a guardrail decision says yes.
+
+    Accepts an object with `.pass_`/`.passed` or a mapping with `"pass"`,
+    because `pass` is a keyword here and a Python rule should not have to
+    contort to say the same thing the TypeScript one says.
+    """
+    if isinstance(decision, Mapping):
+        return bool(decision.get("pass"))
+    for attr in ("pass_", "passed"):
+        if hasattr(decision, attr):
+            return bool(getattr(decision, attr))
+    return bool(decision)
+
+
+def _decision_reason(decision: Any) -> str | None:
+    if isinstance(decision, Mapping):
+        reason = decision.get("reason")
+    else:
+        reason = getattr(decision, "reason", None)
+    return str(reason) if isinstance(reason, str) and reason else None
+
+
+def _decision_replacement(decision: Any) -> str | None:
+    if isinstance(decision, Mapping):
+        value = decision.get("replaceWith") or decision.get("replace_with")
+    else:
+        value = getattr(decision, "replace_with", None) or getattr(decision, "replaceWith", None)
+    return str(value) if isinstance(value, str) and value else None
 
 
 @dataclass

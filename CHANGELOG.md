@@ -8,6 +8,15 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Per-call tool guardrails**, both halves. `tool_input_guardrails` validates a call's arguments
+  before it runs -- ahead of the permission gate, so a call refused on its arguments never reaches
+  a person to be approved -- and a trip denies just that call as a tool RESULT, leaving the run
+  going. `tool_output_guardrails` inspects what the tool returned: by then it has ALREADY run, so a
+  trip does not halt anything, it WITHHOLDS the output and puts a placeholder everywhere it would
+  have been kept. Both fail closed: a guardrail that raises counts as tripped, and a
+  `tool_output_blocked_message` formatter that raises falls back to the default sentence rather
+  than to the output it was deciding about. A tool may also carry its own output guardrails, which
+  is how a rule about one MCP server travels with that server's tools.
 - **A stored approval answer is matched canonically.** `PendingToolCall.matches` already compared
   the call id, the tool name AND the arguments -- the binding the TypeScript side was missing --
   but compared the arguments as serialised, so the same call with its keys in another order read as
