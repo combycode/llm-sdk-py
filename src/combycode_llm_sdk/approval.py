@@ -28,13 +28,13 @@ express it.
 
 from __future__ import annotations
 
+import json
 import time
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
 from .results import ToolCall, ToolResult
-from .wire.interpreter import js_json
 
 #: What the model is told when the gate had nobody to ask. It says the call was
 #: not refused on its merits, so the model stops rephrasing and reports upward.
@@ -136,12 +136,31 @@ class PendingToolCall:
         them -- turn 2 synthesises `call_0`, `call_1` again -- so a decision
         keyed on the id would approve a different tool that happened to inherit
         the name. The name and arguments are what make it the same call.
+
+        Arguments are compared CANONICALLY, not as written. Key order is not
+        part of a call: `{"city": "Paris", "unit": "c"}` and
+        `{"unit": "c", "city": "Paris"}` are one invocation, and resuming
+        re-runs the model step, which gives no guarantee of the order it emits
+        them in. Comparing the raw serialisation made that a mismatch -- safe,
+        because nothing unapproved runs, but it discarded a decision a human had
+        already given and asked them again for no reason. Array order is kept:
+        that one IS meaningful.
         """
         return (
             self.call_id == call.id
             and self.tool_name == call.name
-            and js_json(dict(self.arguments)) == js_json(dict(call.arguments or {}))
+            and _canonical(dict(self.arguments)) == _canonical(dict(call.arguments or {}))
         )
+
+
+def _canonical(value: Any) -> str:
+    """A serialisation where the same invocation always produces one string.
+
+    Separate from `js_json`, which must NOT sort: that one builds what goes on
+    the wire, where insertion order is what the provider is shown. This one only
+    ever compares two records to each other.
+    """
+    return json.dumps(value, separators=(",", ":"), sort_keys=True, default=str)
 
 
 Approver = Callable[[ApprovalRequest], "ApprovalDecision | None"]

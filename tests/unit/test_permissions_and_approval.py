@@ -387,3 +387,56 @@ class TestSuspendAndResume:
 
     def test_resuming_an_unknown_call_reports_that_it_did_nothing(self) -> None:
         assert ApprovalGate().resume_with("never_seen", ApprovalDecision("approve")) is False
+
+
+class TestAnAnswerIsBoundToItsInvocation:
+    """The same call, recognised; a different one, not.
+
+    Resuming re-runs the model step, so the call that comes back carries the
+    same id and may carry other arguments. Applying a stored answer to that is
+    consent nobody gave -- and refusing one over a KEY REORDER is the opposite
+    failure: safe, but it throws away a decision a human already made.
+    """
+
+    @staticmethod
+    def _pending(**over: Any) -> PendingToolCall:
+        base: dict[str, Any] = {
+            "call_id": "c1",
+            "tool_name": "delete_file",
+            "arguments": {"path": "/tmp/x", "force": True},
+        }
+        base.update(over)
+        return PendingToolCall(**base)
+
+    def test_the_same_call_matches(self) -> None:
+        record = self._pending()
+        call = ToolCall(id="c1", name="delete_file", arguments={"path": "/tmp/x", "force": True})
+        assert record.matches(call)
+
+    def test_a_key_reorder_is_not_a_different_call(self) -> None:
+        # Nothing guarantees a model re-emits its JSON keys in one order.
+        record = self._pending()
+        call = ToolCall(id="c1", name="delete_file", arguments={"force": True, "path": "/tmp/x"})
+        assert record.matches(call)
+
+    def test_a_changed_argument_is(self) -> None:
+        # THE case: a human approved deleting /tmp/x and the resumed run asks
+        # to delete /.
+        record = self._pending()
+        call = ToolCall(id="c1", name="delete_file", arguments={"path": "/", "force": True})
+        assert not record.matches(call)
+
+    def test_another_tool_under_the_same_id_is(self) -> None:
+        record = self._pending()
+        call = ToolCall(id="c1", name="read_file", arguments={"path": "/tmp/x", "force": True})
+        assert not record.matches(call)
+
+    def test_array_order_still_counts(self) -> None:
+        record = self._pending(arguments={"paths": ["/a", "/b"]})
+        call = ToolCall(id="c1", name="delete_file", arguments={"paths": ["/b", "/a"]})
+        assert not record.matches(call)
+
+    def test_a_nested_key_reorder_is_not_a_change_either(self) -> None:
+        record = self._pending(arguments={"opts": {"x": 1, "y": 2}})
+        call = ToolCall(id="c1", name="delete_file", arguments={"opts": {"y": 2, "x": 1}})
+        assert record.matches(call)

@@ -8,6 +8,10 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **A stored approval answer is matched canonically.** `PendingToolCall.matches` already compared
+  the call id, the tool name AND the arguments -- the binding the TypeScript side was missing --
+  but compared the arguments as serialised, so the same call with its keys in another order read as
+  a different one. Resuming re-runs the model step, which gives no guarantee of key order.
 - **Stored MCP OAuth credentials are bound to the authorization server that issued them**
   (SEP-2352), and a token refresh names its resource (RFC 8707). A client registration bound
   elsewhere raises; tokens bound elsewhere read as absent. Unstamped credentials are used as-is and
@@ -69,6 +73,11 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Fixed
 
+- **A human's approval was discarded when the model re-emitted the same arguments in another key
+  order.** `PendingToolCall.matches` compared the arguments as serialised, and resuming re-runs the
+  model step, which gives no guarantee of key order. The comparison is canonical now (array order
+  still counts, because that one is meaningful). The failure was safe -- nothing unapproved ran --
+  but it asked a person again for a decision they had already given.
 - **A tool call whose arguments did not parse ran with `{}`.** That is a valid call, so a stream
   cut at `{"path": "/et` reached the executor as `delete_files()`. Malformed calls are now marked
   and never executed, still answered so the history stays valid, and reported as
