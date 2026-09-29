@@ -81,6 +81,16 @@ class Part:
     #: Anything the unified part carried that has no field here -- media ids,
     #: provider metadata. Kept rather than dropped: this is a view, not a filter.
     raw: Mapping[str, Any] = field(default_factory=dict)
+    #: LAST on purpose: a new field inserted earlier would shift every
+    #: positional argument after it, and this dataclass is public.
+    #: The model asked for this tool but its arguments did not parse -- usually
+    #: a stream truncated mid-JSON. False in the ordinary case, so existing
+    #: readers are unaffected. A call marked this way is NEVER executed, and
+    #: `arguments` is empty only because nothing could be recovered: an empty
+    #: object is indistinguishable from a deliberate no-argument call, which is
+    #: exactly how a truncated `delete_files({"path": "/et` became
+    #: `delete_files()`.
+    malformed: bool = False
 
     @staticmethod
     def of(raw: Mapping[str, Any]) -> Part:
@@ -91,6 +101,7 @@ class Part:
             id=raw.get("id"),
             name=raw.get("name"),
             arguments=raw.get("arguments"),
+            malformed=bool(raw.get("malformed")),
             raw=raw,
         )
 

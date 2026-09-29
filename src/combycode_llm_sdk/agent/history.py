@@ -263,15 +263,49 @@ class ConversationHistory:
     # -- compaction ----------------------------------------------------------
 
     def truncate(self, keep_last: int) -> list[HistoryEntry]:
-        """Keep the most recent `keep_last`. Returns what was dropped."""
+        """Keep the most recent `keep_last`. Returns what was dropped.
+
+        Never leaves a tool RESULT whose call was cut away. A count-based cut
+        knows nothing about pairs, so it could land between "the model asked"
+        and "the tool answered" and keep only the second half -- and a provider
+        rejects a result that answers nothing exactly as it rejects a call that
+        nothing answered. The orphan goes with the call it belonged to, which
+        makes `keep_last` a ceiling rather than an exact count; the alternative
+        would be inventing the call that was removed.
+        """
         if keep_last >= len(self.entries):
             return []
         cut = len(self.entries) - keep_last
+        while cut < len(self.entries) and self._is_orphaned_result(cut):
+            cut += 1
         removed = self.entries[:cut]
         self.entries = self.entries[cut:]
         self._reindex()
         self.updated_at = _now_ms()
         return removed
+
+    def _is_orphaned_result(self, index: int) -> bool:
+        """Would the entry at `index`, as the first kept one, answer a call that
+        the cut removed?"""
+        content = self.entries[index].message.get("content")
+        if not isinstance(content, Sequence) or isinstance(content, (str, bytes)):
+            return False
+        result_ids = [
+            p.get("id")
+            for p in content
+            if isinstance(p, Mapping) and p.get("type") == "tool_result"
+        ]
+        if not result_ids:
+            return False
+        # Every call that survives lives at or after `index`, and a result always
+        # follows its call -- so a call missing from the kept entries was cut.
+        kept_call_ids = {
+            p.get("id")
+            for entry in self.entries[index:]
+            for p in (entry.message.get("content") or [])
+            if isinstance(p, Mapping) and p.get("type") == "tool_call"
+        }
+        return any(rid not in kept_call_ids for rid in result_ids)
 
     def splice_range(
         self, start: int, stop: int, replacement: Mapping[str, Any]

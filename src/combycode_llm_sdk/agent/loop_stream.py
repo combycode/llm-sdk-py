@@ -60,21 +60,37 @@ class StepState:
 def _parse_accum(entry: ToolCallAccumEntry) -> dict[str, Any]:
     """One accumulated call as a tool_call part.
 
-    Invalid JSON becomes an empty argument object rather than an exception: the
-    model has already been paid for, and a tool that receives `{}` fails with a
-    message the model can read and retry, where a raised parse error ends the
-    run.
+    Unparseable arguments are MARKED, not quietly emptied. The old fallback was
+    an empty argument object, reasoning that the model had already been paid for
+    and a tool receiving `{}` would fail readably. It does not: `{}` is a VALID
+    call, so a stream cut at `{"path": "/et` ran the tool with no arguments at
+    all, and nothing downstream could tell that from a deliberate no-argument
+    call. The call is kept -- dropping it would erase the model's intent -- but
+    the loop refuses to execute it.
+
+    An absent or blank `args` is NOT malformed: that is how a genuine
+    no-argument call arrives.
     """
-    try:
-        parsed = json.loads(entry.args or "{}")
-    except ValueError:
-        parsed = {}
+    raw = entry.args or ""
+    parsed: Any = {}
+    malformed = False
+    if raw.strip():
+        try:
+            parsed = json.loads(raw)
+        except ValueError:
+            malformed = True
+        else:
+            # A bare scalar or list parses but is not an argument object.
+            if not isinstance(parsed, dict):
+                malformed = True
     call: dict[str, Any] = {
         "type": "tool_call",
         "id": entry.id,
         "name": entry.name,
-        "arguments": parsed if isinstance(parsed, dict) else {},
+        "arguments": parsed if isinstance(parsed, dict) and not malformed else {},
     }
+    if malformed:
+        call["malformed"] = True
     if entry.meta:
         call["_meta"] = dict(entry.meta)
     return call
@@ -189,6 +205,7 @@ def build_step_completion(state: StepState, model: str, latency_ms: float) -> Co
             id=call["id"],
             name=call["name"],
             arguments=call.get("arguments") or {},
+            malformed=bool(call.get("malformed")),
             raw={"_meta": call["_meta"]} if "_meta" in call else {},
         )
         for call in state.tool_calls
@@ -198,7 +215,15 @@ def build_step_completion(state: StepState, model: str, latency_ms: float) -> Co
     # A step that asked for tools finished for that reason whatever the provider
     # called it: several report `stop` alongside a tool call, and a loop reading
     # the raw value would end the run with the call unanswered.
-    finish = "tool_use" if calls else state.finish_reason
+    #
+    # Unless one of them cannot be run. A step holding a call we will refuse did
+    # not finish in `tool_use`, and saying so is what lets reflect-and-retry fire
+    # on EVERY provider: only Google's API reports this reason itself, so the
+    # same truncation elsewhere was indistinguishable from a successful turn.
+    if any(c.malformed for c in calls):
+        finish = "malformed_tool_call"
+    else:
+        finish = "tool_use" if calls else state.finish_reason
 
     return Completion(
         text=state.text,

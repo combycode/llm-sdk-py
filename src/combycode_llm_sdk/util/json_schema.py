@@ -2,9 +2,9 @@
 
 Transposed from `unified-library-ts/src/util/json-schema.ts`.
 
-Covers `type`, `required`, `properties`, `items`, `enum`, `const` and
-`additionalProperties`. NOT a Draft 2020-12 implementation: no `$ref`, no
-`allOf`/`anyOf`/`oneOf`, no formats, no numeric bounds.
+Covers `type`, `required`, `properties`, `items`, `enum`, `const`,
+`additionalProperties`, boolean schemas and local `$ref`. NOT a Draft 2020-12
+implementation: no `allOf`/`anyOf`/`oneOf`, no formats, no numeric bounds.
 
 That is a deliberate stopping point rather than an unfinished one. The job here
 is to check what an MCP server returned against the `outputSchema` it published,
@@ -80,9 +80,80 @@ def _same(left: Any, right: Any) -> bool:
     return js_json(left) == js_json(right)
 
 
-def validate_json_schema(schema: Mapping[str, Any], value: Any, path: str = "$") -> list[str]:
+def _resolve_pointer(root: Any, ref: str) -> Any:
+    """A local JSON Pointer (`#`, `#/$defs/Name`) against the starting document.
+
+    Returns `_UNRESOLVED` for anything that does not land on a schema, including
+    `#anchor` forms -- those are names, not pointers, and finding one would mean
+    indexing the whole document.
+    """
+    if not isinstance(root, Mapping):
+        return _UNRESOLVED
+    frag = ref[1:]
+    if frag in ("", "/"):
+        return root
+    if not frag.startswith("/"):
+        return _UNRESOLVED
+    current: Any = root
+    for raw in frag[1:].split("/"):
+        segment = raw.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, Sequence) and not isinstance(current, (str, bytes, Mapping)):
+            try:
+                index = int(segment)
+            except ValueError:
+                return _UNRESOLVED
+            if index < 0 or index >= len(current):
+                return _UNRESOLVED
+            current = current[index]
+            continue
+        if not isinstance(current, Mapping) or segment not in current:
+            return _UNRESOLVED
+        current = current[segment]
+    return current if isinstance(current, (Mapping, bool)) else _UNRESOLVED
+
+
+class _Unresolved:
+    """Distinct from None, which a pointer can legitimately land on."""
+
+
+_UNRESOLVED = _Unresolved()
+
+
+def validate_json_schema(
+    schema: Mapping[str, Any] | bool,
+    value: Any,
+    path: str = "$",
+    _root: Any = _UNRESOLVED,
+    _seen: frozenset[str] = frozenset(),
+) -> list[str]:
     """Every way `value` fails `schema`. An empty list means it passed."""
+    # A schema is an object OR a boolean: `true` accepts every value, `false`
+    # accepts none. Both are spec-valid wherever a schema is expected, and MCP
+    # servers do ship them. The recursion below used to require a Mapping, so a
+    # boolean subschema was SKIPPED -- which made `false`, whose entire meaning
+    # is "nothing is valid here", behave as "everything is".
+    if schema is True:
+        return []
+    if schema is False:
+        return [f"{path}: schema is false, so no value is valid here"]
+    if not isinstance(schema, Mapping):
+        # Neither object nor boolean is not a schema at all. Blaming the value
+        # for that would report the wrong side as broken.
+        return []
+
+    root = schema if isinstance(_root, _Unresolved) else _root
     errors: list[str] = []
+
+    # Only local pointers can be resolved; an external one names a document we
+    # were never given. We do not turn our own limitation into the caller's
+    # rejection, so an unresolvable reference validates as accept. A ref already
+    # on the stack is a recursive schema -- one pass checks this value, and
+    # following it again would not terminate.
+    ref = schema.get("$ref")
+    if isinstance(ref, str) and ref.startswith("#") and ref not in _seen:
+        target = _resolve_pointer(root, ref)
+        if not isinstance(target, _Unresolved):
+            errors.extend(validate_json_schema(target, value, path, root, _seen | {ref}))
 
     declared = schema.get("type")
     if declared is not None:
@@ -113,17 +184,20 @@ def validate_json_schema(schema: Mapping[str, Any], value: Any, path: str = "$")
                 if name not in value:
                     errors.append(f"{path}.{name}: required property missing")
         for name, sub in properties.items():
-            if name in value and isinstance(sub, Mapping):
-                errors.extend(validate_json_schema(sub, value[name], f"{path}.{name}"))
+            if name in value and isinstance(sub, (Mapping, bool)):
+                errors.extend(validate_json_schema(sub, value[name], f"{path}.{name}", root, _seen))
         if schema.get("additionalProperties") is False:
             for name in value:
                 if name not in properties:
                     errors.append(f"{path}.{name}: additional property not allowed")
 
+    # `items` may be a boolean too: `items: false` says the array must be empty.
+    # Requiring a Mapping skipped that silently, reporting a non-empty array as
+    # valid against a schema that forbids every element.
     items = schema.get("items")
-    if isinstance(value, (list, tuple)) and isinstance(items, Mapping):
+    if isinstance(value, (list, tuple)) and isinstance(items, (Mapping, bool)):
         for index, item in enumerate(value):
-            errors.extend(validate_json_schema(items, item, f"{path}[{index}]"))
+            errors.extend(validate_json_schema(items, item, f"{path}[{index}]", root, _seen))
 
     return errors
 

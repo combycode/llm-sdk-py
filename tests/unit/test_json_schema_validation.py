@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import json
 import sys
-from typing import Any
+from typing import Any, ClassVar
 
 sys.path.insert(0, "src")
 
@@ -285,3 +285,104 @@ class TestTheContractHoldsForTaskOnlyTools:
             {"content": [{"type": "text", "text": "warm"}], "structuredContent": {"tempC": 21}}
         )
         assert tool.func(city="Berlin") == "warm"
+
+
+class TestBooleanSchemas:
+    """`true` accepts everything, `false` accepts nothing.
+
+    Both are spec-valid wherever a schema is expected, and MCP servers ship
+    them. The recursion used to require a Mapping, so a boolean subschema was
+    SKIPPED -- and `false`, whose entire meaning is "nothing is valid here",
+    behaved as "everything is". The TypeScript twin crashed instead; this port
+    reported the value as valid, which is the quieter of the two failures.
+    """
+
+    def test_true_accepts_anything(self) -> None:
+        schema = {"type": "object", "properties": {"any": True}}
+        assert validate_json_schema(schema, {"any": 42}) == []
+        assert validate_json_schema(schema, {"any": {"deep": [1]}}) == []
+
+    def test_false_rejects_every_value(self) -> None:
+        errors = validate_json_schema({"type": "object", "properties": {"never": False}}, {"never": 1})
+        assert errors == ["$.never: schema is false, so no value is valid here"]
+
+    def test_an_absent_property_is_fine_even_under_false(self) -> None:
+        assert validate_json_schema({"type": "object", "properties": {"never": False}}, {}) == []
+
+    def test_a_boolean_schema_at_the_top_level(self) -> None:
+        assert validate_json_schema(True, {"anything": 1}) == []
+        assert validate_json_schema(False, 1) == ["$: schema is false, so no value is valid here"]
+
+    def test_items_false_means_the_array_must_be_empty(self) -> None:
+        assert validate_json_schema({"type": "array", "items": False}, []) == []
+        assert validate_json_schema({"type": "array", "items": False}, [1, 2]) == [
+            "$[0]: schema is false, so no value is valid here",
+            "$[1]: schema is false, so no value is valid here",
+        ]
+        assert validate_json_schema({"type": "array", "items": True}, [1, "x"]) == []
+
+
+class TestLocalRef:
+    """`$ref` was not resolved at all, so anything behind one passed unread."""
+
+    SCHEMA: ClassVar[dict[str, Any]] = {
+        "$defs": {"Positive": {"type": "number"}, "Name": {"type": "string"}},
+        "type": "object",
+        "properties": {"n": {"$ref": "#/$defs/Positive"}, "who": {"$ref": "#/$defs/Name"}},
+    }
+
+    def test_validates_through_the_pointer(self) -> None:
+        assert validate_json_schema(self.SCHEMA, {"n": 1, "who": "a"}) == []
+        assert validate_json_schema(self.SCHEMA, {"n": "not a number"}) == [
+            "$.n: expected number, got string"
+        ]
+
+    def test_hash_is_the_document_root_and_arrays_are_indexable(self) -> None:
+        assert validate_json_schema({"type": "number", "$ref": "#"}, 1) == []
+        with_array = {
+            "$defs": {"list": [{"type": "string"}, {"type": "number"}]},
+            "properties": {"second": {"$ref": "#/$defs/list/1"}},
+        }
+        assert validate_json_schema(with_array, {"second": "nope"}) == [
+            "$.second: expected number, got string"
+        ]
+
+    def test_decodes_tilde_escapes(self) -> None:
+        escaped = {
+            "$defs": {"a/b": {"type": "number"}, "c~d": {"type": "string"}},
+            "properties": {"x": {"$ref": "#/$defs/a~1b"}, "y": {"$ref": "#/$defs/c~0d"}},
+        }
+        assert validate_json_schema(escaped, {"x": "no", "y": 1}) == [
+            "$.x: expected number, got string",
+            "$.y: expected string, got number",
+        ]
+
+    def test_a_self_referential_schema_terminates(self) -> None:
+        tree = {
+            "$defs": {
+                "Node": {
+                    "type": "object",
+                    "properties": {"value": {"type": "number"}, "child": {"$ref": "#/$defs/Node"}},
+                }
+            },
+            "$ref": "#/$defs/Node",
+        }
+        assert validate_json_schema(tree, {"value": 1, "child": {"value": 2}}) == []
+        assert validate_json_schema(tree, {"value": "x"}) == ["$.value: expected number, got string"]
+
+    def test_an_unresolvable_reference_accepts(self) -> None:
+        # Our inability to check something must not become the server's
+        # rejection -- the alternative is failing a result we could not read.
+        assert validate_json_schema({"$ref": "#/$defs/Missing"}, 1) == []
+        assert validate_json_schema({"$ref": "https://example.com/s.json"}, 1) == []
+        assert validate_json_schema({"$ref": "#someAnchor"}, 1) == []
+
+    def test_keywords_beside_a_ref_still_apply(self) -> None:
+        schema = {"$defs": {"N": {"type": "number"}}, "$ref": "#/$defs/N", "enum": [1, 2]}
+        assert validate_json_schema(schema, 1) == []
+        assert validate_json_schema(schema, 3) == ["$: value not in enum"]
+        # 3 breaks both, and the point of evaluating siblings is that neither is skipped.
+        assert validate_json_schema(schema, "x") == [
+            "$: expected number, got string",
+            "$: value not in enum",
+        ]

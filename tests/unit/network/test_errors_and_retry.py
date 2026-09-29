@@ -265,3 +265,54 @@ def test_the_defaults_say_something_about_every_kind() -> None:
     missing = [k for k in ERROR_KINDS if k not in DEFAULT_RETRY.per_kind]
     assert missing == []
     assert isinstance(DEFAULT_RETRY.per_kind["rate_limit"], ErrorRetryConfig)
+
+
+class TestUnmappedFourXxAreClientErrors:
+    """A 404 used to be a `server_error`, and so it was re-sent.
+
+    The error's own `retryable` was already False, but that is not what decides:
+    `per_kind["server_error"]` is retryable and the per-kind rule wins. So the
+    wrong KIND, not the flag, is what made a 409 Conflict retry into the same
+    conflict.
+    """
+
+    @pytest.mark.parametrize("status", [404, 405, 409, 422])
+    def test_classifies_as_invalid_request(self, status: int) -> None:
+        error = classify_error("anthropic", status, {"error": {"message": "no"}}, {})
+        assert error.kind == "invalid_request"
+        assert error.retryable is False
+
+    @pytest.mark.parametrize("status", [404, 409, 422])
+    def test_and_is_therefore_not_retried(self, status: int) -> None:
+        error = classify_error("anthropic", status, {"error": {"message": "no"}}, {})
+        assert should_retry(error, 0, DEFAULT_RETRY, elapsed_ms=0) is False
+
+    def test_5xx_is_untouched(self) -> None:
+        error = classify_error("anthropic", 503, {}, {})
+        assert error.kind == "server_error"
+        assert should_retry(error, 0, DEFAULT_RETRY, elapsed_ms=0) is True
+
+
+class TestShouldRetryHeader:
+    """`x-should-retry` -- the one voice that can veto the per-kind policy."""
+
+    def test_is_read_off_the_response(self) -> None:
+        assert classify_error("a", 500, {}, {"x-should-retry": "false"}).should_retry is False
+        assert classify_error("a", 500, {}, {"x-should-retry": "true"}).should_retry is True
+
+    @pytest.mark.parametrize("value", ["1", "yes", "", "TRUE", "maybe"])
+    def test_ignores_anything_but_the_two_exact_tokens(self, value: str) -> None:
+        assert classify_error("a", 500, {}, {"x-should-retry": value}).should_retry is None
+
+    def test_absent_header_leaves_it_unset(self) -> None:
+        assert classify_error("a", 500, {}, {}).should_retry is None
+
+    def test_false_vetoes_a_retry_the_status_would_have_earned(self) -> None:
+        error = classify_error("a", 503, {}, {"x-should-retry": "false"})
+        assert should_retry(error, 0, DEFAULT_RETRY, elapsed_ms=0) is False
+
+    def test_true_only_permits_and_does_not_override_the_operator(self) -> None:
+        # An operator turning a kind off made a cost decision; the server is not
+        # guessing better than they are about whether to spend another request.
+        error = classify_error("a", 401, {}, {"x-should-retry": "true"})
+        assert should_retry(error, 0, DEFAULT_RETRY, elapsed_ms=0) is False

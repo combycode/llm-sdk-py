@@ -179,6 +179,10 @@ def should_retry(
     """
     kind_config = retry.per_kind.get(error.kind)
     retryable = kind_config.retryable if kind_config and kind_config.retryable is not None else error.retryable
+    # A server that sent `x-should-retry: false` has told us something the
+    # status code does not carry, and it is the one voice that can veto.
+    if getattr(error, "should_retry", None) is False:
+        retryable = False
     # Precedence: a per-request override beats the per-kind rule, which beats
     # the queue default. The override is the most specific statement of intent.
     max_retries = request_max_retries

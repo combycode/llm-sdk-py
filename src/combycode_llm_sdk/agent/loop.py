@@ -727,6 +727,65 @@ class AgentLoop:
 
         yield {"type": "done", "response": answer}
 
+    def _repair_unanswered_tool_calls(self) -> None:
+        """Answer any tool call the history never answered.
+
+        The synthetic result says the call was INTERRUPTED rather than claiming
+        it succeeded: the model can see the work did not happen and decide
+        whether to ask again. Dropping the call would also satisfy the providers
+        and would erase the fact it was ever made.
+        """
+        messages = self._history.messages()
+        answered = {
+            part.get("id")
+            for message in messages
+            for part in (message.get("content") or [])
+            if isinstance(part, Mapping) and part.get("type") == "tool_result"
+        }
+
+        orphans: list[dict[str, Any]] = []
+        seen: list[str] = []
+        for message in messages:
+            if message.get("role") != "assistant":
+                continue
+            for part in message.get("content") or []:
+                if not isinstance(part, Mapping) or part.get("type") != "tool_call":
+                    continue
+                call_id = part.get("id")
+                # A duplicate id is answered by the first result; counting it
+                # twice would append a second and create the opposite imbalance.
+                if call_id in answered or call_id in seen:
+                    continue
+                seen.append(str(call_id))
+                orphans.append(
+                    {
+                        "type": "tool_result",
+                        "id": call_id,
+                        "content": (
+                            f"Tool {part.get('name')!r} was never run: the previous turn "
+                            "ended before it could execute."
+                        ),
+                        "isError": True,
+                    }
+                )
+        if not orphans:
+            return
+
+        self._history.append({"role": "tool", "content": orphans})
+        self.hooks.emit_sync(
+            "onWarning",
+            {
+                "source": "agent",
+                "code": "unanswered_tool_calls_repaired",
+                "message": (
+                    f"{len(orphans)} tool call(s) from an interrupted turn had no result "
+                    "and were answered synthetically, because a provider rejects a history "
+                    "that leaves one open."
+                ),
+                "details": {"callIds": list(seen)},
+            },
+        )
+
     def _begin_run(self, input_: Any) -> tuple[str, dict[str, Any]]:
         if self._running:
             raise RuntimeError(
@@ -754,6 +813,18 @@ class AgentLoop:
             "requestId": run_id,
             "conversationId": self.id,
         }
+
+        # Before a single new message goes in. A turn can end between "the model
+        # asked for a tool" and "the tool answered" in several ways -- an early
+        # break, an output guardrail tripping, continue_on_error=False, a pending
+        # approval, a caller who simply stopped -- and each leaves the
+        # assistant's call as the last thing in history.
+        #
+        # Anthropic and OpenAI both REJECT a request whose history holds a tool
+        # call with no result, so the next run died on send, one turn away from
+        # the cause and naming neither. Repairing it in each of the places it can
+        # happen means missing the next one; this is the gate every run passes.
+        self._repair_unanswered_tool_calls()
 
         if input_ is not None:
             for message in _as_messages(input_):
@@ -983,6 +1054,31 @@ class AgentLoop:
     ) -> dict[str, Any]:
         arguments = dict(call.arguments or {})
         name = str(call.name)
+
+        # Refused BEFORE any hook or dispatch. `onToolCallStart` intercepts a
+        # call that is about to happen, and this one never will -- handing it
+        # arguments that are empty only because they failed to parse would
+        # invite a hook to act on a request the model never made.
+        #
+        # It still gets a RESULT: providers require every call in the history to
+        # be answered on the next turn, and the message tells the model what to
+        # fix rather than leaving it to guess why nothing happened.
+        if getattr(call, "malformed", False):
+            message = (
+                f"Tool call arguments for {name!r} were not valid JSON, so the tool was "
+                "not run. Re-issue the call with complete, well-formed arguments."
+            )
+            reports.append(
+                ToolCallReport(
+                    call_id=str(call.id or ""),
+                    tool_name=name,
+                    arguments=arguments,
+                    latency_ms=0.0,
+                    error="malformed_tool_call",
+                )
+            )
+            return {"type": "tool_result", "id": call.id, "content": message, "isError": True}
+
         # The tool that actually ran, not the router that reached it.
         inner = unwrap_lazy_call(name, arguments)
         reported_name = inner or name

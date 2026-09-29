@@ -61,6 +61,7 @@ class LLMError(Exception):
         retry_after_ms: float | None = None,
         raw: Any = None,
         kind: str | None = None,
+        should_retry: bool | None = None,
     ) -> None:
         super().__init__(message)
         self.message = message
@@ -70,6 +71,13 @@ class LLMError(Exception):
         self.retryable = retryable
         self.retry_after_ms = retry_after_ms
         self.raw = raw
+        #: The server's own `x-should-retry`, when it sent one. `False` is
+        #: authoritative -- a server saying "do not retry this" knows something
+        #: the status code does not carry. `True` only PERMITS: it never
+        #: overrides an operator who configured this kind off, because that is a
+        #: cost decision rather than a guess about idempotence. None when the
+        #: header is absent or is not one of the two exact tokens.
+        self.should_retry = should_retry
         if kind is not None:
             self.kind = kind
 
@@ -188,6 +196,34 @@ def classify_error(
     model: str = "",
 ) -> LLMError:
     """Map an HTTP status and a provider error body onto the taxonomy."""
+    error = _classify_by_status(provider, status, body, headers or {}, model)
+    hint = _parse_should_retry(headers or {})
+    if hint is not None:
+        error.should_retry = hint
+    return error
+
+
+def _parse_should_retry(headers: Mapping[str, str]) -> bool | None:
+    """`x-should-retry` as the OpenAI and Anthropic clients send it.
+
+    Only the two exact tokens count; anything else is no instruction at all
+    rather than something to guess at.
+    """
+    raw = headers.get("x-should-retry") or headers.get("X-Should-Retry")
+    if raw == "true":
+        return True
+    if raw == "false":
+        return False
+    return None
+
+
+def _classify_by_status(
+    provider: str,
+    status: int,
+    body: Any,
+    headers: Mapping[str, str],
+    model: str,
+) -> LLMError:
     headers = headers or {}
     message = extract_error_message(body)
 
@@ -222,6 +258,20 @@ def classify_error(
 
     if status in (402, 413):
         return QuotaExceededError(
+            message, provider=provider, model=model, status=status, raw=body
+        )
+
+    # Every other 4xx -- 404, 405, 409, 422 and friends -- used to land here as
+    # a ServerError. Its own `retryable` was correctly False, but that is not
+    # what decides: `per_kind["server_error"]` is retryable and the per-kind rule
+    # wins over the error's flag. So a 404 was re-sent twice, and a 409 Conflict,
+    # a status whose whole meaning is "this already happened", was retried into
+    # the same conflict. The KIND was wrong, not the flag.
+    #
+    # `invalid_request` is already non-retryable, so this needs no new kind --
+    # and adding one would break any caller matching exhaustively on the set.
+    if 400 <= status < 500:
+        return InvalidRequestError(
             message, provider=provider, model=model, status=status, raw=body
         )
 
