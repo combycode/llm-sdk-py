@@ -3443,7 +3443,7 @@
     "family": "sora",
     "version": "2",
     "status": "stable",
-    "active": true,
+    "active": false,
     "mediaParams": {
       "duration": {
         "values": [
@@ -3472,6 +3472,10 @@
       "charsPerTokenDefault": 3.8,
       "countApiAvailable": false,
       "tiktokenEncoding": "o200k_base"
+    },
+    "unavailable": {
+      "since": "2026-09-29",
+      "reason": "The Sora video API shut down on 2026-09-24, the date its own SDK deprecation notice named. /v1/videos answers 404 to both GET and POST. The model id is STILL returned by /v1/models, so a catalog built from a provider listing keeps offering a model nothing serves."
     }
   },
   "openai/sora-2-pro": {
@@ -3530,7 +3534,7 @@
     "family": "sora",
     "version": "2",
     "status": "stable",
-    "active": true,
+    "active": false,
     "mediaParams": {
       "duration": {
         "values": [
@@ -3559,6 +3563,10 @@
       "charsPerTokenDefault": 3.8,
       "countApiAvailable": false,
       "tiktokenEncoding": "o200k_base"
+    },
+    "unavailable": {
+      "since": "2026-09-29",
+      "reason": "The Sora video API shut down on 2026-09-24, the date its own SDK deprecation notice named. /v1/videos answers 404 to both GET and POST. The model id is STILL returned by /v1/models, so a catalog built from a provider listing keeps offering a model nothing serves."
     }
   },
   "openai/text-embedding-3-small": {

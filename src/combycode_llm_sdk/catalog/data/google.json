@@ -1745,7 +1745,11 @@
       "charsPerTokenDefault": 4,
       "countApiAvailable": false
     },
-    "mediaOnly": true
+    "mediaOnly": true,
+    "unavailable": {
+      "since": "2026-09-29",
+      "reason": "Imagen :predict is Enterprise-only. The Developer API answers 404 -- \"is not found for API version v1beta, or is not supported for predict\" -- and both Google SDKs deleted their Developer-API converters. Use a Gemini image model such as gemini-3.1-flash-image, which serves image generation through generateContent."
+    }
   },
   "google/imagen-4-fast": {
     "providerModelName": "imagen-4.0-fast-generate-001",
@@ -1816,7 +1820,11 @@
       "charsPerTokenDefault": 4,
       "countApiAvailable": false
     },
-    "mediaOnly": true
+    "mediaOnly": true,
+    "unavailable": {
+      "since": "2026-09-29",
+      "reason": "Imagen :predict is Enterprise-only. The Developer API answers 404 -- \"is not found for API version v1beta, or is not supported for predict\" -- and both Google SDKs deleted their Developer-API converters. Use a Gemini image model such as gemini-3.1-flash-image, which serves image generation through generateContent."
+    }
   },
   "google/imagen-4-ultra": {
     "providerModelName": "imagen-4.0-ultra-generate-001",
@@ -1893,6 +1901,10 @@
       "strategy": "heuristic",
       "charsPerTokenDefault": 4,
       "countApiAvailable": false
+    },
+    "unavailable": {
+      "since": "2026-09-29",
+      "reason": "Imagen :predict is Enterprise-only. The Developer API answers 404 -- \"is not found for API version v1beta, or is not supported for predict\" -- and both Google SDKs deleted their Developer-API converters. Use a Gemini image model such as gemini-3.1-flash-image, which serves image generation through generateContent."
     }
   },
   "google/veo-2": {

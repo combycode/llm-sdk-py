@@ -17,6 +17,7 @@ writing a key the source did not carry, and testing membership.
 
 from __future__ import annotations
 
+import datetime as _dt
 import json
 import re
 from collections.abc import Iterator, Mapping
@@ -188,6 +189,11 @@ _OPTIONAL_FIELDS = (
     "availability",
     "active",
     "deprecation",
+    # A MEASURED refusal: somebody called this model's endpoint and it was gone.
+    # Different from `deprecation`, which a source ANNOUNCES and which leaves the
+    # model callable until its shutdown date. Models carrying it also ship
+    # `active: False`, which is what keeps them out of select().
+    "unavailable",
 )
 
 _NORMALIZE_SEPARATOR = re.compile(r"(?<=\d)[-.](?=\d)")
@@ -398,6 +404,31 @@ class ModelCatalog:
             return bool(info["stateModelBound"])
         state = _PROVIDER_STATE.get(provider)
         return bool(state["modelBound"]) if state else True
+
+    def unavailable_reason(
+        self, provider: str, model: str, today: str | None = None
+    ) -> str | None:
+        """Why this model cannot be called, or None when nothing says it cannot.
+
+        The point is refusing WITHOUT a round trip, for the cases the catalog is
+        sure about: an endpoint somebody measured as gone, or a shutdown date
+        that has passed. An announced deprecation is NOT one of them -- that
+        model still works until its shutdown.
+        """
+        info = self.get(provider, model)
+        if not info:
+            return None
+        entry = dict(info)
+        unavailable = entry.get("unavailable")
+        if isinstance(unavailable, Mapping):
+            return f"{unavailable.get('reason')} (measured {unavailable.get('since')})"
+        dep = entry.get("deprecation")
+        shutdown = dep.get("shutdownDate") if isinstance(dep, Mapping) else None
+        if isinstance(shutdown, str) and shutdown and shutdown < (
+            today or _dt.datetime.now(tz=_dt.UTC).date().isoformat()
+        ):
+            return f"announced shutdown date {shutdown} has passed"
+        return None
 
     def list(self, provider: str | None = None) -> list[ModelInfo]:
         entries = list(self._models.values())

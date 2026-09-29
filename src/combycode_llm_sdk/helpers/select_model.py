@@ -25,6 +25,7 @@ the parser cannot drift, the drift being the actual bug.
 
 from __future__ import annotations
 
+import datetime as _dt
 import re
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
@@ -96,6 +97,27 @@ class _Criterion:
     key: str
     op: str
     value: str
+
+
+def _past_shutdown(entry: Mapping[str, Any], today: str | None = None) -> bool:
+    """Has this model's announced SHUTDOWN date passed?
+
+    Deliberately `shutdownDate` and not `deprecation.date`: the two mean
+    different things. A `date` says a source announced end-of-life, and the
+    model stays callable until the shutdown -- hiding it would take away
+    something that still works. A `shutdownDate` in the past says it does not.
+
+    Checked at QUERY time rather than baked into `active`, because a catalog
+    exported yesterday cannot know a date passed overnight. Recommending a model
+    that has stopped is worse than returning one fewer candidate: the caller is
+    better off switching model than finding out in production, and a fallback
+    chain is the place to absorb the difference.
+    """
+    dep = entry.get("deprecation")
+    shutdown = dep.get("shutdownDate") if isinstance(dep, Mapping) else None
+    if not isinstance(shutdown, str) or not shutdown:
+        return False
+    return shutdown < (today or _dt.datetime.now(tz=_dt.UTC).date().isoformat())
 
 
 def filter_aliases() -> dict[str, str]:
@@ -305,6 +327,8 @@ def select_models(
             continue
         # Retired models are excluded unless the query asks about `active`.
         if not filters_on_active and entry.get("active") is False:
+            continue
+        if not filters_on_active and _past_shutdown(entry):
             continue
         if all(_matches(model, c, thresholds, tier) for c in criteria):
             candidates.append(model)
