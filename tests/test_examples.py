@@ -34,6 +34,7 @@ PASSING = [
     "openai_compatible_server",
     "agent_context_layers",
     "agent_guardrails_and_sampling",
+    "between_tools_reasoning",
     "cache_diagnostics",
     "checkpoint_persistence",
     "content_moderation",

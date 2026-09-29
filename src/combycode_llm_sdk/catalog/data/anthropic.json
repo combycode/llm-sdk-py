@@ -1078,7 +1078,8 @@
       "automatic": false,
       "effortControl": false,
       "encryptedContent": false,
-      "summaryAvailable": false
+      "summaryAvailable": false,
+      "betweenTools": true
     },
     "type": "chat",
     "inputModalities": [

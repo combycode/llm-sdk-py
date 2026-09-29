@@ -315,6 +315,8 @@ class BaseLLMClient:
         nobody has measured is not evidence that off is impossible.
         """
         thinking = normalized.get("thinking")
+        if isinstance(thinking, Mapping) and thinking.get("mode") == "between_tools":
+            return self._limit_between_tools(normalized)
         if not isinstance(thinking, Mapping) or thinking.get("mode") != "off":
             return None
         entry = self.catalog.get(self.provider, self.model) if self.catalog else None
@@ -325,6 +327,34 @@ class BaseLLMClient:
         return (
             f"{self.provider}/{self.model} cannot switch reasoning off -- "
             "thinking={'mode': 'off'} was dropped and the model will reason as it defaults to."
+        )
+
+    def _limit_between_tools(self, normalized: MutableMapping[str, Any]) -> str | None:
+        """`between_tools` is accepted by almost nothing, so it is sent only where
+        the catalog RECORDS it as accepted.
+
+        The inverse of `canDisable`, which gates on an explicit `False` because
+        almost every model can disable reasoning. Measured 2026-09-29: of the
+        thirteen active Anthropic chat models, one takes `between_tools` and
+        twelve answer `400 "thinking.type.between_tools" is not supported for
+        this model` -- claude-opus-5.5 included. Gating on `False` there would
+        mean twelve annotations and a surprise 400 for every model nobody had
+        got to yet.
+
+        Downgraded rather than refused, which is what Anthropic's own fallback
+        middleware does with this value when it hops to another model: the caller
+        gets a request that works, plus a warning saying what was dropped.
+        """
+        entry = self.catalog.get(self.provider, self.model) if self.catalog else None
+        reasoning = dict(entry).get("reasoning") if entry else None
+        if isinstance(reasoning, Mapping) and reasoning.get("betweenTools") is True:
+            return None
+        normalized.pop("thinking", None)
+        return (
+            f"{self.provider}/{self.model} does not accept "
+            "thinking={'mode': 'between_tools'} -- it was dropped and the model will reason "
+            "as it defaults to. Measured 2026-09-29, anthropic/claude-sonnet-5.5 is the model "
+            "that takes it."
         )
 
     def _note_unsupported_builtins(

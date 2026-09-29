@@ -18,6 +18,13 @@
               "thinking.mode",
               "off"
             ]
+          },
+          {
+            "_note": "`between_tools` is its OWN thinking type, not an adaptive variant -- the two are siblings in ThinkingConfigParam and sending both would be one field with two shapes.",
+            "ne": [
+              "thinking.mode",
+              "between_tools"
+            ]
           }
         ]
       },
@@ -59,6 +66,20 @@
         "effort": {
           "$": "thinking.effort"
         }
+      }
+    },
+    {
+      "_note": "MODEL-GATED, and the gate is the catalog, not this spec: claude-sonnet-5.5 and six models that REFUSE between_tools all pin to messages@4.7, so a spec cannot tell them apart. `LLMClient` drops the mode before the build when the catalog does not record the model as accepting it.",
+      "name": "thinking.betweenTools",
+      "when": {
+        "eq": [
+          "thinking.mode",
+          "between_tools"
+        ]
+      },
+      "to": "thinking",
+      "template": {
+        "type": "between_tools"
       }
     }
   ],

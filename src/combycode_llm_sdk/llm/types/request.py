@@ -91,8 +91,16 @@ ReasoningContext = Literal["auto", "current_turn", "all_turns"]
 ThinkingVisibility = Literal["full", "summary", "hidden"]
 
 #: `type ThinkingConfig` (request.ts:163):
-#: `{mode:'auto'|'on', effort?, visibility?, context?}` or `{mode:'off'}`.
+#: `{mode:'auto'|'on', effort?, visibility?, context?}`, `{mode:'off'}`, or
+#: `{mode:'between_tools', visibility?, context?}`.
 #: `effort` is one of `low`, `medium`, `high`, `max`.
+#:
+#: `between_tools` reasons only BETWEEN tool calls. Anthropic-only and
+#: MODEL-GATED: measured 2026-09-29 across every active Anthropic chat model,
+#: exactly one accepts it -- `claude-sonnet-5.5` -- and the other twelve answer
+#: `400 "thinking.type.between_tools" is not supported for this model`,
+#: `claude-opus-5.5` included. Asking for it elsewhere is DOWNGRADED to that
+#: model's ordinary reasoning and reported as `request_adjusted`.
 ThinkingConfig = dict[str, Any]
 
 #: `type CacheConfig` (request.ts:178): `'auto'`, `'off'`, or

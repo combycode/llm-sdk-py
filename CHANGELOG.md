@@ -8,6 +8,12 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **`thinking={"mode": "between_tools"}`** -- Anthropic's reason-between-tool-calls mode, and a
+  gate in front of it. Measured 2026-09-29 across every active Anthropic chat model: exactly one
+  accepts it (`claude-sonnet-5.5`) and the other twelve answer 400 by name. Asking for it elsewhere
+  drops the mode, sends a request that works, and reports `request_adjusted` naming the model that
+  takes it. Sent only on an explicit `betweenTools: True` in the catalog -- the mirror of
+  `canDisable`, because the support distribution is the mirror too.
 - **Google Interactions hands its thought signature back.** A turn returns a `thought` step
   carrying nothing but a `signature`, and this library dropped it on both paths. Measured
   2026-09-29 on `gemini-3.1-flash-lite`: echoing the step on the next turn is accepted, and
