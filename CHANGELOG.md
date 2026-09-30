@@ -8,6 +8,13 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Fixed
 
+- **A cost calculated at a service tier the catalog does not price now says so** (`onWarning`,
+  `code: "unpriced_tier"`). An unpriced model already reported unknown; an unpriced TIER fell back
+  to the flat rate and returned a confident number computed at the wrong one. A latency tier is
+  bought because it costs more, so the error always ran the same way -- too low, on exactly the
+  requests someone chose to pay extra for. Fires once per model and tier, and only for a model that
+  declares tier pricing at all.
+
 - **A nested agent run now belongs to the run above it.** `delegate()` and `handoff()` started the
   specialist with nothing, so its spans rooted a trace of their own and the two halves of one
   request could not be joined -- correlation being the entire point of a trace id. Worse in one

@@ -247,6 +247,7 @@ class CostCollector:
         if cost is not None:
             self._running_total += cost.total
         self._note_if_unpriced(entry)
+        self._note_if_tier_unpriced(entry, usage.get("pricingTier"))
         # The ENTRY itself, not a `{entry, runningTotal}` wrapper. A
         # subscriber wanting the total reads `engine.cost.running_total`,
         # which is authoritative rather than a snapshot that can drift from
@@ -274,6 +275,52 @@ class CostCollector:
                 "details": {"provider": entry.provider, "model": entry.model},
             },
         )
+
+    def _note_if_tier_unpriced(self, entry: CostEntry, tier: Any) -> None:
+        """The model IS priced, but not at the tier the provider says it billed.
+
+        Quieter than an unpriced model, and the one that lies. An unpriced model
+        reports unknown; an unpriced TIER falls back to the flat rate and hands
+        back a confident number computed at the wrong one. A latency tier is
+        bought because it costs more, so the error always runs the same way:
+        too low, on exactly the requests someone chose to pay extra for.
+        `ultrafast` is the live case -- the Responses API takes it and the
+        catalog does not price it.
+
+        Only when the model declares tier pricing at all. Without a `tiers` map
+        there is nothing to be missing from: that model is flat-priced and the
+        flat rate IS the right answer.
+        """
+        if not tier or tier == "standard" or entry.unpriced:
+            return
+        pricing = self.catalog.get_pricing(entry.provider, entry.model) or {}
+        tiers = pricing.get("tiers") or {}
+        if not tiers or tier in tiers:
+            return
+        key = f"{entry.provider}/{entry.model}@{tier}"
+        if key in self._warned:
+            return
+        self._warned.add(key)
+        self.hooks.emit_sync(
+            "onWarning",
+            {
+                "source": "cost",
+                "code": "unpriced_tier",
+                "message": (
+                    f"{entry.provider}/{entry.model} was billed at service tier "
+                    f'"{tier}", which the catalog does not price -- this cost was '
+                    f"calculated at the standard rate and is therefore too low. "
+                    f"Priced tiers for this model: {', '.join(sorted(tiers))}."
+                ),
+                "details": {
+                    "provider": entry.provider,
+                    "model": entry.model,
+                    "tier": tier,
+                    "priced": sorted(tiers),
+                },
+            },
+        )
+
 
 
 __all__ = ["CostCollector", "CostEntry", "CostSummary", "TokenTotals", "summarize"]
