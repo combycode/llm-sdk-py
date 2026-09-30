@@ -292,6 +292,10 @@ def _oauth_request(
         "provider": "mcp",
         "model": "oauth",
         "responseType": "json",
+        # The token endpoint is the one request carrying a client secret and a
+        # refresh token. A cross-origin redirect would hand both to whoever set
+        # `Location`.
+        "redirect": "same-origin",
     }
     if getattr(built, "no_body", False):
         return request

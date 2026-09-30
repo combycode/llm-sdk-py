@@ -3188,12 +3188,12 @@
       },
       {
         "type": "tool_call_delta",
-        "id": "",
+        "id": "call_4816852",
         "arguments": "{\"city\":\"Paris\"}"
       },
       {
         "type": "tool_call_end",
-        "id": ""
+        "id": "call_4816852"
       },
       {
         "type": "usage",

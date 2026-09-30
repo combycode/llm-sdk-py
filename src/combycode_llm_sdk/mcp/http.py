@@ -439,6 +439,12 @@ class HttpTransport(BaseJsonRpcTransport):
             "provider": "mcp",
             "model": self._name,
             "responseType": response_type,
+            # A redirect here is a credential-leak primitive: the bearer token,
+            # the session header and the JSON-RPC body were all configured for
+            # THIS endpoint. 301/302/303 additionally turn the POST into a
+            # body-less GET, dropping the message. Same rule the official MCP
+            # SDK applies.
+            "redirect": "same-origin",
             # SECONDS on this library's public surface, MILLISECONDS on the
             # wire. Passing the seconds straight through made `timeout=120` mean
             # 120ms, so every request to a real server timed out before it had

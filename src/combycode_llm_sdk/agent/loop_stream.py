@@ -57,6 +57,36 @@ class StepState:
     citations: dict[str, Citation] = field(default_factory=dict)
 
 
+def _accum_for(state: Any, call_id: str) -> Any:
+    """Which accumulating tool call a delta or an end belongs to.
+
+    By ID whenever there is one -- that is what the id is for, and with parallel
+    calls in flight it is the only thing that can be right.
+
+    When the event carries no id the answer is the MOST RECENTLY STARTED call,
+    not the first. A stream delivers a call's deltas after its start, so "most
+    recent" is the only reading that holds for more than one call. This used to
+    take the first entry, which with two parallel Google function calls appended
+    the second call's arguments to the first: `read_file` ended up with
+    `{"path":"/a"}{"path":"/b"}` (unparseable, so refused as malformed) and
+    `delete_file` ended up with NOTHING -- an empty args string, which is
+    deliberately read as a genuine no-argument call, so it EXECUTED with `{}`.
+    Exactly the failure `_parse_accum` exists to prevent, through another door.
+
+    An id we have never seen is treated the same way: either the provider does
+    not echo ids on deltas, or a start was missed, and the most recent call is
+    the best available answer in both cases.
+    """
+    if call_id:
+        found = state.accum.get(call_id)
+        if found is not None:
+            return found
+    last = None
+    for entry in state.accum.values():
+        last = entry
+    return last
+
+
 def _parse_accum(entry: ToolCallAccumEntry) -> dict[str, Any]:
     """One accumulated call as a tool_call part.
 
@@ -127,22 +157,17 @@ def accumulate_stream_event(event: Mapping[str, Any], state: StepState) -> Agent
         return None
 
     if kind == "tool_call_delta":
-        # Falling back to the first open entry is not tidiness: several providers
-        # send argument deltas with no id at all, and dropping those silently
-        # produces a tool call with empty arguments and no error anywhere.
-        entry = state.accum.get(str(event.get("id") or ""))
-        if entry is None:
-            entry = next(iter(state.accum.values()), None)
+        entry = _accum_for(state, str(event.get("id") or ""))
         if entry is not None:
             entry.args += str(event.get("arguments") or "")
         return None
 
     if kind == "tool_call_end":
-        entry = state.accum.get(str(event.get("id") or "")) if event.get("id") else None
-        if entry is None:
-            done = {c["id"] for c in state.tool_calls}
-            entry = next((a for a in state.accum.values() if a.id not in done), None)
-        if entry is not None:
+        entry = _accum_for(state, str(event.get("id") or ""))
+        # De-duped on the ENTRY's own id, not the event's: an end with no id
+        # resolves to an entry that may already have been pushed, and pushing it
+        # twice runs the tool twice.
+        if entry is not None and not any(c["id"] == entry.id for c in state.tool_calls):
             state.tool_calls.append(_parse_accum(entry))
         return None
 

@@ -8,6 +8,28 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Fixed
 
+- **Two streamed tool calls no longer merge into one.** Same fault as the TypeScript, in the same
+  two places: the accumulator routed an unmatched delta to the FIRST call in flight, and Google's
+  stream registry emitted `id: ""` on every delta and end while holding `functionCall.id`. With two
+  parallel function calls the second call's arguments were appended to the first, and the second was
+  left with an empty arguments string -- which is deliberately read as a genuine no-argument call, so
+  it executed with `{}` instead of being refused. An unmatched event now resolves to the most
+  recently started call, and an end de-dupes on the entry's own id so a repeated one cannot run the
+  tool twice.
+
+### Security
+
+- **An MCP redirect is followed only within the endpoint's own origin.** Same rule as the
+  TypeScript, fixing the OPPOSITE symptom: httpx does not follow redirects by default, so this side
+  never had the credential leak -- but it also never made the PERMITTED follow, so a legitimate
+  same-origin `307` (a trailing-slash normalisation) simply failed. The MCP transport and its OAuth
+  flow now follow a redirect when the method survives (`307`/`308`, or any redirect of a `GET`), the
+  origin does not change (or upgrades `http` to `https` on default ports), and the target introduces
+  no userinfo of its own; at most three hops. The new `TransportRequest.redirect` defaults to
+  `"follow"`, so provider calls are untouched.
+
+### Fixed
+
 - **Reasoning effort now reaches the wire on OpenAI and xAI, and `max` stops failing.** Three
   measured faults behind one field, all three shared with the TypeScript side. `effort: "max"` was
   passed through raw on both OpenAI surfaces and neither provider has it -- measured 2026-09-30, both

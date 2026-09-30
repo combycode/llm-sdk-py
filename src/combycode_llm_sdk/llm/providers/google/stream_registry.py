@@ -179,9 +179,17 @@ def _tool_call(ctx: Ctx) -> None:
     fc = p.get("functionCall")
     if not isinstance(fc, Mapping):
         return
+    # The SAME id on all three events. The delta and the end used to carry "",
+    # which left the accumulator to guess which call they belonged to -- and with
+    # two function calls in one response it guessed the FIRST, so the second
+    # call's arguments were appended to the first and the second got none. Google
+    # sends `functionCall.id` on every part, so there is nothing to guess; the
+    # `or ""` remains only for a part that genuinely has none, where the
+    # accumulator falls back to the most recent call.
+    call_id = fc.get("id") or ""
     started: dict[str, Any] = {
         "type": "tool_call_start",
-        "id": fc.get("id") or "",
+        "id": call_id,
         "name": fc.get("name"),
     }
     if p.get("thoughtSignature"):
@@ -191,9 +199,9 @@ def _tool_call(ctx: Ctx) -> None:
         # js_json, not json.dumps: JSON.stringify puts no space after `:` or `,`,
         # and this string IS the emitted `arguments`.
         out["events"].append(
-            {"type": "tool_call_delta", "id": "", "arguments": js_json(fc["args"])}
+            {"type": "tool_call_delta", "id": call_id, "arguments": js_json(fc["args"])}
         )
-    out["events"].append({"type": "tool_call_end", "id": ""})
+    out["events"].append({"type": "tool_call_end", "id": call_id})
 
 
 def _web_search(ctx: Ctx) -> None:

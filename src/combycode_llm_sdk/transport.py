@@ -32,6 +32,7 @@ from typing import Any
 from .network.errors import LLMError, NetworkError, classify_error
 from .network.sse import aparse_sse_stream, parse_sse_stream
 from .network.types import HttpRequest, HttpResponse
+from .util.http import follow_same_origin
 
 #: Generous by design: a long reasoning completion legitimately takes minutes,
 #: and a transport that times out under the model is worse than no timeout.
@@ -58,6 +59,12 @@ class TransportRequest:
     response_type: str = "json"
     #: The body is already bytes and must not be serialised again.
     raw_body: bool = False
+    #: How far a redirect may take this request. `"follow"` is the transport's own
+    #: default behaviour; `"same-origin"` follows only a redirect that keeps both
+    #: the origin and the method -- see `util.http.follow_same_origin`. Set by the
+    #: MCP transport and its OAuth flow, whose credentials were configured for one
+    #: endpoint.
+    redirect: str = "follow"
 
     @staticmethod
     def from_wire(req: Mapping[str, Any]) -> TransportRequest:
@@ -72,6 +79,7 @@ class TransportRequest:
             model=req.get("model") or "",
             response_type=req.get("responseType") or "json",
             raw_body=bool(req.get("rawBody")),
+            redirect=str(req.get("redirect") or "follow"),
         )
 
 
@@ -256,6 +264,29 @@ def _timeout_s(request: TransportRequest) -> float | None:
     return request.timeout / 1000 if request.timeout else None
 
 
+#: How many same-origin redirects one request may follow.
+#:
+#: Small on purpose: the redirects this rule permits are normalisations -- a
+#: trailing slash, an http-to-https upgrade -- and a legitimate endpoint needs one
+#: or two, never five. A longer budget only buys patience for a loop.
+MAX_SAME_ORIGIN_REDIRECTS = 3
+
+
+def _redirect_target(request: TransportRequest, status: int, headers: Mapping[str, str]) -> str | None:
+    """The url to send this request to next, or None to stop.
+
+    httpx does not follow redirects by default, which is the safe half already --
+    the unsafe half is a bearer token sent to another origin, and that cannot
+    happen here. What it also means is that a LEGITIMATE same-origin 307 (a
+    trailing-slash normalisation) was not followed either and the caller just saw
+    the 307. This follows exactly the ones `follow_same_origin` permits.
+    """
+    if request.redirect != "same-origin":
+        return None
+    location = headers.get("location") or headers.get("Location")
+    return follow_same_origin(request.url, request.method, status, location)
+
+
 def http_transport(client: Any = None) -> Transport:
     """The default synchronous transport, over httpx2.
 
@@ -277,13 +308,19 @@ def http_transport(client: Any = None) -> Transport:
             return TransportResponse(
                 status=res.status_code, headers=dict(res.headers), body=_closing(res)
             )
-        res = http.request(
-            request.method,
-            request.url,
-            headers=headers,
-            content=body,
-            timeout=_timeout_s(request),
-        )
+        url = request.url
+        for _hop in range(MAX_SAME_ORIGIN_REDIRECTS + 1):
+            res = http.request(
+                request.method,
+                url,
+                headers=headers,
+                content=body,
+                timeout=_timeout_s(request),
+            )
+            nxt = _redirect_target(request, res.status_code, dict(res.headers))
+            if nxt is None:
+                break
+            url = nxt
         return TransportResponse(
             status=res.status_code, headers=dict(res.headers), body=_decode(res, request)
         )
@@ -310,13 +347,19 @@ def ahttp_transport(client: Any = None) -> AsyncTransport:
             return TransportResponse(
                 status=res.status_code, headers=dict(res.headers), body=_aclosing(res)
             )
-        res = await http.request(
-            request.method,
-            request.url,
-            headers=headers,
-            content=body,
-            timeout=_timeout_s(request),
-        )
+        url = request.url
+        for _hop in range(MAX_SAME_ORIGIN_REDIRECTS + 1):
+            res = await http.request(
+                request.method,
+                url,
+                headers=headers,
+                content=body,
+                timeout=_timeout_s(request),
+            )
+            nxt = _redirect_target(request, res.status_code, dict(res.headers))
+            if nxt is None:
+                break
+            url = nxt
         return TransportResponse(
             status=res.status_code, headers=dict(res.headers), body=_decode(res, request)
         )
