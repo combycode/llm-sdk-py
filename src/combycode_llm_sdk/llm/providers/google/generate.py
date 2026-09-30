@@ -48,6 +48,33 @@ GoogleAdapterConfig = dict[str, Any]
 _DEFAULT_BASE_URL = "https://generativelanguage.googleapis.com"
 
 
+#: What a video part claims to be when its source did not say. A guess, and a
+#: deliberate one: `url` and `file` sources carry no mime type in this library,
+#: Google will not accept `media_processing` without a video one, and it treats
+#: the value as a hint rather than a strict claim -- a YouTube link declared
+#: `video/mp4` is accepted and understood.
+_DEFAULT_VIDEO_MIME = "video/mp4"
+
+
+def _media_processing(processing: Any) -> str | None:
+    """`processing` -> generateContent's `Part.mediaProcessing` enum.
+
+    This surface has two values and nothing else: STATIC (fixed-rate frame
+    extraction, every frame in context) or AGENTIC (the model navigates). The
+    object form's `fps` and offsets belong to Interactions and have nowhere to
+    go here -- so the MODE is taken and the sampling is dropped, which is worth
+    knowing: a 30-second window of a two-hour video is a request only the
+    Interactions surface can honour.
+    """
+    if processing is None:
+        return None
+    if isinstance(processing, str):
+        return {"agentic": "AGENTIC", "static": "STATIC"}.get(processing)
+    if isinstance(processing, Mapping) and processing.get("type") == "static":
+        return "STATIC"
+    return None
+
+
 class GoogleAdapter:
     """`class GoogleAdapter implements ProviderAdapter` (generate.ts:45)."""
 
@@ -122,7 +149,11 @@ class GoogleAdapter:
             if kind == "text":
                 parts.append({"text": p.get("text")})
             elif kind in ("image", "audio", "video", "document"):
-                self._append_media(parts, p.get("source") or {})
+                self._append_media(
+                    parts,
+                    p.get("source") or {},
+                    p.get("providerOptions") if kind == "video" else None,
+                )
             elif kind == "tool_call":
                 self.tool_call_names[p["id"]] = p["name"]
                 fc_part: dict[str, Any] = {
@@ -180,27 +211,51 @@ class GoogleAdapter:
         return {"role": role, "parts": parts}
 
     @staticmethod
-    def _append_media(parts: list[Any], source: Mapping[str, Any]) -> None:
+    def _append_media(
+        parts: list[Any],
+        source: Mapping[str, Any],
+        provider_options: Mapping[str, Any] | None = None,
+    ) -> None:
         kind = source.get("type")
+        part: dict[str, Any] | None = None
         if kind == "base64":
-            parts.append(
-                {"inlineData": {"mimeType": source.get("mimeType"), "data": source.get("data")}}
-            )
+            part = {"inlineData": {"mimeType": source.get("mimeType"), "data": source.get("data")}}
         elif kind == "url":
-            parts.append(
-                {
-                    "fileData": {
-                        "fileUri": source.get("url"),
-                        "mimeType": "application/octet-stream",
-                    }
+            part = {
+                "fileData": {
+                    "fileUri": source.get("url"),
+                    "mimeType": "application/octet-stream",
                 }
-            )
+            }
         elif kind == "provider_ref":
-            parts.append(
-                {"fileData": {"fileUri": source.get("refId"), "mimeType": source.get("mimeType")}}
-            )
+            part = {
+                "fileData": {"fileUri": source.get("refId"), "mimeType": source.get("mimeType")}
+            }
         elif kind == "file":
-            parts.append({"fileData": {"fileUri": source.get("fileId")}})
+            part = {"fileData": {"fileUri": source.get("fileId")}}
+        if part is None:
+            return
+        # generateContent takes the MODE only -- a screaming-snake enum on the
+        # part itself; the object form's sampling has no home here.
+        #
+        # It also refuses the enum unless the SAME part carries a video mime
+        # type. Measured 2026-09-30: `media_processing` with no mime is
+        # `400 mime_type must be set when media_processing is specified`, and
+        # with our `application/octet-stream` default it is `400
+        # media_processing can only be set on video parts`. A `url` or `file`
+        # source carries no mime type at all, so one is supplied here -- only
+        # for a video that actually asked for processing, leaving every
+        # existing request byte-identical.
+        mode = _media_processing((provider_options or {}).get("processing"))
+        if mode:
+            part["mediaProcessing"] = mode
+            for key in ("fileData", "inlineData"):
+                holder = part.get(key)
+                if isinstance(holder, dict) and not str(holder.get("mimeType") or "").startswith(
+                    "video/"
+                ):
+                    holder["mimeType"] = _DEFAULT_VIDEO_MIME
+        parts.append(part)
 
     def parse_response(self, raw: Any, latency_ms: float) -> dict[str, Any]:
         """Spec-driven; see `wire/specs/responses/google.generate.json`."""

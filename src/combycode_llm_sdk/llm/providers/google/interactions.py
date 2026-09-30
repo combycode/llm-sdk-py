@@ -36,6 +36,32 @@ GoogleInteractionsAdapterConfig = dict[str, Any]
 _DEFAULT_BASE_URL = "https://generativelanguage.googleapis.com"
 
 
+def _interactions_processing(processing: Any) -> str | dict[str, Any] | None:
+    """`processing` -> the Interactions video input's own shape.
+
+    Two forms reach the wire unchanged: the bare mode (`"static"`/`"agentic"`)
+    and the object, whose keys are snake_case there (`start_offset`,
+    `end_offset`) while ours are camelCase. Omitted keys stay omitted rather
+    than becoming nulls -- `fps` absent means "your default", `fps: None` is a
+    value the server has to reject.
+    """
+    if processing is None:
+        return None
+    if isinstance(processing, str):
+        return processing
+    if not isinstance(processing, Mapping) or processing.get("type") != "static":
+        return None
+    out: dict[str, Any] = {"type": "static"}
+    fps = processing.get("fps")
+    if isinstance(fps, (int, float)) and not isinstance(fps, bool):
+        out["fps"] = fps
+    if processing.get("startOffset"):
+        out["start_offset"] = processing["startOffset"]
+    if processing.get("endOffset"):
+        out["end_offset"] = processing["endOffset"]
+    return out
+
+
 class GoogleInteractionsAdapter:
     """`class GoogleInteractionsAdapter implements ProviderAdapter` (interactions.ts:44)."""
 
@@ -182,7 +208,19 @@ class GoogleInteractionsAdapter:
                     }
                 )
             elif kind == "video" and source.get("type") == "url":
-                parts.append({"type": "video", "uri": source.get("url")})
+                video: dict[str, Any] = {"type": "video", "uri": source.get("url")}
+                # Interactions takes the RICH form: a mode, or `static` with
+                # the sampling spelled out. Offsets travel snake_case there,
+                # which is why this cannot just forward what generateContent
+                # takes.
+                options = p.get("providerOptions") or {}
+                processing = _interactions_processing(options.get("processing"))
+                if processing is not None:
+                    video["processing"] = processing
+                name = options.get("name")
+                if isinstance(name, str) and name:
+                    video["name"] = name
+                parts.append(video)
             else:
                 # Covers both an unknown kind and a known one arriving in a form
                 # this API has no field for -- audio by url, video by base64.

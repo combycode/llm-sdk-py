@@ -8,6 +8,23 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Choose how Google reads a video.** New per-video `providerOptions.processing` --
+  `'agentic'` (the model navigates), `'static'` (fixed frame rate, every frame in context), or
+  `{ type: 'static', fps, startOffset, endOffset }`. On a long video this is cost, not style: the
+  offsets are how a question about 30 seconds of a two-hour recording costs what 30 seconds should.
+  Mapped per surface, because the two Google surfaces are NOT the same shape: `generateContent`
+  takes `Part.mediaProcessing`, a two-value screaming-snake enum, so the object form is honoured on
+  Interactions (`start_offset`/`end_offset`) and reduced to plain `STATIC` there. Interactions also
+  takes a per-video `name`. Live-measured 2026-09-30, which caught a defect in the first cut:
+  `mediaProcessing` is refused unless the SAME part carries a video mime type, and our `url` and
+  `file` sources carry none -- so a video that asks for processing now gets one, and only then,
+  leaving every request that did not ask byte-identical. `'agentic'` is gated per model by the
+  provider (`400 Agentic video processing is not enabled for this model` on
+  `gemini-3.1-flash-lite`); that gate is deliberately not encoded here, since a hard-coded model
+  list goes stale and the provider's message is already precise.
+
+### Added
+
 - **Refuse an oversized image instead of letting Anthropic shrink it silently.** An image over the
   model's maximum is downsized by default and nothing says so -- the model reasons over dimensions
   the caller never chose. New per-image `providerOptions.transformations.oversized_image`
