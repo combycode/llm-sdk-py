@@ -69,7 +69,16 @@ from typing import Any, Literal
 #:   option overrides it.
 #: - OpenAI (responses + chat-completions): `moderationPolicy` (sent alongside
 #:   the `moderation` request field), `promptCacheOptions`
-#:   (`prompt_cache_options`), `reasoningMode` (`'standard'` or `'pro'`, the
+#:   (`prompt_cache_options`, gpt-5.6+ -- an older model refuses the whole
+#:   object with `400 prompt_cache_options is not supported on this model`,
+#:   measured 2026-09-30). Its `prewarm: True` writes the prompt cache and
+#:   generates NOTHING, so the response comes back `status: "completed"` with
+#:   an empty `output[]`; that parses to an ordinary empty result
+#:   (`finishReason: "stop"`, no content), never a failure. Measured on
+#:   `gpt-5.6-terra`: the prewarm call returned 0 output items and 0 cached
+#:   tokens, and the next call on the same 4177-token prompt read 4174 from
+#:   cache, the prompt carrying a per-run nonce so the hit can only have come
+#:   from the prewarm. Also `reasoningMode` (`'standard'` or `'pro'`, the
 #:   `reasoning.mode` field on Responses).
 #: - Google (generate): `responseModalities` (overrides
 #:   `generationConfig.responseModalities`, winning over the modality implied by

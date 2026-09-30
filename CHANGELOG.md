@@ -8,6 +8,22 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **`promptCacheOptions.prewarm`: write the prompt cache without generating anything.** Typed as
+  the new `PromptCacheOptions` (`prewarm`, `mode`, `ttl`, `comparison_response_id`), forwarded
+  verbatim as before. Live-measured 2026-09-30 on `gpt-5.6-terra`: the prewarm call returns 0
+  output items and 0 cached tokens, and the next call on the same 4177-token prompt reads 4174 of
+  them from cache -- the prompt carried a per-run nonce, so that hit can only have come from the
+  prewarm. Worth paying for only when the prefix will be reused: the prewarm is billed for the
+  input it writes. A prewarm response has an EMPTY `output[]`, and this library reports it as an
+  ordinary empty result (`finishReason: 'stop'`, no content, no `error`) rather than a failure --
+  now pinned by a test, since an empty output is exactly the shape a finish-reason extractor gets
+  wrong. Also measured: `prompt_cache_options` as a whole is refused on a pre-5.6 model with
+  `400 prompt_cache_options is not supported on this model`, so gpt-5.6+ is a hard requirement and
+  not advice. `ttl` stays an open union -- OpenAI's own wording is that `30m` is *currently* the
+  only supported value.
+
+### Added
+
 - **Web search image results are asked for, and kept.** `web_search_call.results` is not returned
   unless the request carries `include: ["web_search_call.results"]` -- so setting
   `search_content_types: ['image']` on its own produced a search that found images and a response
