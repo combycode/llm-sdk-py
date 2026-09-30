@@ -8,6 +8,20 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Video: ask for silence, and choose the voices.** xAI's video models generate an audio track by
+  default, so the useful thing to say is "don't" -- and `false` is exactly the value a truthy
+  presence gate throws away, which is why `params.generateAudio` maps with `presence: 'defined'`.
+  `params.referenceAudios` (`[{ voiceId: 'ara' }]`, at most three) conditions the generated speech
+  on xAI voice-catalog presets; an entry with no voice id is dropped rather than sent, because the
+  wire shape's `source` is a protobuf oneof and an empty entry is a request the server must reject.
+  Both live-measured against `grok-imagine-video-1.5` on 2026-09-30. `generateAudio` is a unified
+  param rather than an xAI escape hatch because Veo has the same concept -- though it is NOT sent
+  to Google, which accepts it only in Vertex / Gemini Enterprise mode and refuses it on the
+  Developer API this library speaks. `last_frame` and `keyframes` are deliberately held: they are
+  in xAI's proto but not its changelog.
+
+### Added
+
 - **Anthropic Workspaces are selectable.** A credential that can act on more than one Workspace has
   to name the one it means. Omitting `anthropic-workspace-id` does not fail -- it charges the
   DEFAULT Workspace, and Workspace is where spend, rate limits and retention are accounted, so the

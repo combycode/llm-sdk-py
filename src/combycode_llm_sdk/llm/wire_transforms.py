@@ -288,6 +288,29 @@ def make_registry(a: AdapterHandles) -> Registry:
     transforms["xaiSourceVideoRef"] = lambda _v, ctx: xai_video_ref(
         get_path(ctx.req, "sourceVideo")
     )
+
+    def _xai_reference_audios(_v: Any, ctx: Ctx) -> list[dict[str, str]] | None:
+        """`[{voiceId}]` -> `[{voice_id}]`, xAI's AudioUrlContent.
+
+        Entries without a voice id are dropped rather than sent as `{}`: the
+        proto's `source` is a oneof, so an empty entry is a request the server
+        has to reject, and asking it to is worse than sending one fewer voice.
+        None when nothing usable survives, so the field is absent rather than
+        an empty list.
+        """
+        raw = get_path(ctx.req, "params.referenceAudios")
+        if not isinstance(raw, list):
+            return None
+        out = [
+            {"voice_id": entry["voiceId"]}
+            for entry in raw
+            if isinstance(entry, Mapping)
+            and isinstance(entry.get("voiceId"), str)
+            and entry["voiceId"]
+        ]
+        return out or None
+
+    transforms["xaiReferenceAudios"] = _xai_reference_audios
     #: OpenRouter sends the source image as a data URL inside a chat part.
     transforms["openrouterDataUrl"] = lambda _v, ctx: to_data_url(
         normalize_image_source(get_path(ctx.req, "sourceImage"))

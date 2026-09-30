@@ -5,6 +5,11 @@
     { "from": "prompt", "to": "prompt" },
     { "from": "params.duration", "to": "duration", "presence": "truthy" },
     { "from": "params.aspectRatio", "to": "aspect_ratio", "presence": "truthy" },
-    { "from": "params.resolution", "to": "resolution", "presence": "truthy" } ],
+    { "from": "params.resolution", "to": "resolution", "presence": "truthy" },
+    { "_note": "presence 'defined', NOT 'truthy': the whole point of the flag is sending FALSE for a silent video, and a truthy gate would drop exactly that. xAI defaults it to true.",
+      "from": "params.generateAudio", "to": "generate_audio" } ],
   "blocks": [{ "name": "image", "when": { "truthy": "sourceImage" }, "to": "image",
-               "template": { "$call": "xaiSourceImageRef" } }] }
+               "template": { "$call": "xaiSourceImageRef" } },
+             { "_note": "AudioUrlContent[] -- voice-catalog preset ids, grok-imagine-video-1.5 only. The transform returns undefined when no entry carries a voice id, so the field is absent rather than an empty array.",
+               "name": "reference_audios", "to": "reference_audios",
+               "template": { "$call": "xaiReferenceAudios" } }] }
