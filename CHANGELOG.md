@@ -8,6 +8,26 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Web search image results are asked for, and kept.** `web_search_call.results` is not returned
+  unless the request carries `include: ["web_search_call.results"]` -- so setting
+  `search_content_types: ['image']` on its own produced a search that found images and a response
+  that contained none, which reads as "no images found" rather than as a missing parameter.
+  Measured 2026-09-30 by sending the same request both ways: with the include, results; without it,
+  none. The adapter now derives the include from the tool, and
+  `response.builtinToolCalls[].results` carries them -- the four documented image fields renamed to
+  camelCase, every other key (a real result also carries `type`) passed through rather than
+  dropped. `builtinToolCalls[].sources` carries the URLs a search drew on, which were parsed off
+  the wire and discarded before.
+
+- **Typed shapes for the hosted search/fetch params**, exported for editor help over the existing
+  verbatim passthrough, the way `McpToolParams` already worked: `WebSearchToolParams`
+  (`external_web_access` for cache-only, `search_content_types`, `image_settings`,
+  `search_context_size`, `filters`, `user_location`) and `WebFetchToolParams` /
+  `WebFetchUrlSources` (Anthropic `url_sources`: which of user input, your tools' results and the
+  provider's own results contribute fetchable URLs, each `all` / `none` / `only` / `except`).
+
+### Added
+
 - **Video: ask for silence, and choose the voices.** xAI's video models generate an audio track by
   default, so the useful thing to say is "don't" -- and `false` is exactly the value a truthy
   presence gate throws away, which is why `params.generateAudio` maps with `presence: 'defined'`.

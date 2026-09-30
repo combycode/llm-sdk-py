@@ -257,7 +257,11 @@
       },
       "to": "reasoning",
       "template": {
-        "effort": { "$table": "reasoningEffort", "$key": "thinking.effort", "$default": "medium" },
+        "effort": {
+          "$table": "reasoningEffort",
+          "$key": "thinking.effort",
+          "$default": "medium"
+        },
         "summary": {
           "$when": {
             "ne": [
@@ -287,6 +291,14 @@
             "$": "thinking.context"
           }
         }
+      }
+    },
+    {
+      "_note": "web_search_call.results is omitted from the response unless the request asks for it. Derived from the tools rather than exposed as a knob: a caller who asked for image results has already said what they want, and the two halves arriving separately is how you get a search that found images and a response without them.",
+      "name": "include",
+      "to": "include",
+      "template": {
+        "$call": "openaiResponsesInclude"
       }
     }
   ],

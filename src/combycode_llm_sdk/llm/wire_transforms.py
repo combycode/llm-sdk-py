@@ -281,6 +281,32 @@ def make_registry(a: AdapterHandles) -> Registry:
         get_path(ctx.req, "turnComplete") is not False
     )
 
+    def _openai_responses_include(_v: Any, ctx: Ctx) -> list[str] | None:
+        """`include` on a Responses request: payload the API omits unless asked.
+
+        Today that is image search results. `web_search_call.results` is NOT
+        returned by default -- asking for `search_content_types: ['image']`
+        alone gets a search that found images and a response that does not
+        contain them (measured 2026-09-30, with and without the include). So
+        it is derived here rather than left to the caller: someone who asked
+        for images has already said what they want.
+
+        None when nothing needs including, so the field is absent rather than
+        an empty list.
+        """
+        tools = get_path(ctx.req, "tools")
+        if not isinstance(tools, list):
+            return None
+        for tool in tools:
+            if _is_function_tool_value(tool) or get_path(tool, "type") != "web_search":
+                continue
+            kinds = get_path(tool, "params.search_content_types")
+            if isinstance(kinds, list) and "image" in kinds:
+                return ["web_search_call.results"]
+        return None
+
+    transforms["openaiResponsesInclude"] = _openai_responses_include
+
     #: xAI media refs, reusing the library's own normalisers.
     transforms["xaiSourceImageRef"] = lambda _v, ctx: xai_image_ref(
         normalize_image_source(get_path(ctx.req, "sourceImage"))

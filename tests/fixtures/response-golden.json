@@ -10215,12 +10215,31 @@
         {
           "tool": "web_search",
           "id": "ws_bf784544-38b1-9772-a60f-fa66c94acd9a_call-4e19883d-26ac-4dd8-932f-8462955dede5-0",
-          "query": "current population of Reykjavik Iceland"
+          "query": "current population of Reykjavik Iceland",
+          "sources": [
+            "https://www.statice.is/publications/news-archive/inhabitants/population-in-the-2nd-quarter-2026/",
+            "https://worldpopulationreview.com/cities/iceland/reykjavik",
+            "https://px.hagstofa.is/pxen/pxweb/en/Ibuar/Ibuar__mannfjoldi__2_byggdir__sveitarfelog/MAN10001.px",
+            "https://worldpopulationreview.com/cities/iceland",
+            "https://www.icelandreview.com/news/iceland-population-grows-second-quarter-2026/",
+            "https://population-hub.com/en/is/population-of-reykjavik-12010.html",
+            "https://www.geodatos.net/en/population/iceland",
+            "https://www.citypopulation.de/en/iceland/reykjavik/",
+            "https://en.m.wikipedia.org/api/rest_v1/page/mobile-html/Reykjav%C3%ADk",
+            "https://www.iceland.org/population"
+          ]
         },
         {
           "tool": "web_search",
           "id": "ws_bf784544-38b1-9772-a60f-fa66c94acd9a_call-4e19883d-26ac-4dd8-932f-8462955dede5-1",
-          "query": "Reykjavik population 2024 OR 2025 OR 2026"
+          "query": "Reykjavik population 2024 OR 2025 OR 2026",
+          "sources": [
+            "https://www.statice.is/publications/news-archive/inhabitants/population-in-reykjavik-by-districts-2025",
+            "https://snl.no/Islands_befolkning",
+            "https://www.statice.is/publications/news-archive/inhabitants/population-by-urban-nuclei-and-localites-2025/",
+            "https://px.hagstofa.is/pxen/pxweb/en/Ibuar/Ibuar__mannfjoldi__2_byggdir__sveitarfelog/MAN10001.px",
+            "https://sv.wikipedia.org/wiki/Reykjav%C3%ADk"
+          ]
         }
       ],
       "latencyMs": 0,

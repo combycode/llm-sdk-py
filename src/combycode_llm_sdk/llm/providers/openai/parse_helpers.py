@@ -121,6 +121,48 @@ def _search_action_payload(item: Mapping[str, Any]) -> dict[str, str]:
     return out
 
 
+def _search_sources(item: Mapping[str, Any]) -> list[str] | None:
+    """The URLs a search drew on: `action.sources[] = {type:'url', url}`."""
+    action = item.get("action")
+    sources = action.get("sources") if isinstance(action, Mapping) else None
+    if not isinstance(sources, list):
+        return None
+    urls = [
+        entry["url"]
+        for entry in sources
+        if isinstance(entry, Mapping) and isinstance(entry.get("url"), str) and entry["url"]
+    ]
+    return urls or None
+
+
+#: The four documented image-result fields, renamed to the library's camelCase.
+_RESULT_RENAME = {
+    "image_url": "imageUrl",
+    "source_website_url": "sourceWebsiteUrl",
+    "thumbnail_url": "thumbnailUrl",
+    "caption": "caption",
+}
+
+
+def _search_results(item: Mapping[str, Any]) -> list[dict[str, Any]] | None:
+    """`web_search_call.results[]`, present only when the request included them.
+
+    Every other key is carried through untouched. Normalising only what is
+    documented and dropping the rest would lose whatever OpenAI adds next, and
+    this list exists precisely because the payload is richer than our type --
+    measured 2026-09-30, a real result also carries `type`.
+    """
+    raw = item.get("results")
+    if not isinstance(raw, list):
+        return None
+    out = [
+        {_RESULT_RENAME.get(str(key), str(key)): value for key, value in entry.items()}
+        for entry in raw
+        if isinstance(entry, Mapping)
+    ]
+    return out or None
+
+
 _RESPONSES_BUILTIN_ITEMS = frozenset({"web_search_call", "code_interpreter_call"})
 
 
@@ -143,6 +185,12 @@ def builtin_call_from_responses_item(item: Mapping[str, Any]) -> dict[str, Any] 
             call["query"] = payload["query"]
         if payload.get("url"):
             call["url"] = payload["url"]
+        sources = _search_sources(item)
+        if sources:
+            call["sources"] = sources
+        results = _search_results(item)
+        if results:
+            call["results"] = results
     return call
 
 
