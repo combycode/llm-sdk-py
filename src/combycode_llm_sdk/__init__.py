@@ -52,6 +52,9 @@ from .agent.layers import write_lazy_tools_protocol as write_lazy_tools_protocol
 from .agent.reflect_retry import ReflectAndRetry as ReflectAndRetry
 from .agent.tool_key import describe_tool as describe_tool
 from .agent.tool_key import tool_key as tool_key
+from .agent.tool_run import ToolRunContext as ToolRunContext
+from .agent.tool_run import current_tool_run as current_tool_run
+from .agent.tool_run import nested_run_options as nested_run_options
 from .approval import ApprovalDecision as ApprovalDecision
 from .approval import ApprovalGate as ApprovalGate
 from .approval import ApprovalRequest as ApprovalRequest

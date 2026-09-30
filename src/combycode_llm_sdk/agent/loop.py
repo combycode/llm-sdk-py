@@ -62,6 +62,7 @@ from .reports import (
     add_usage,
 )
 from .tool_key import describe_tool, tool_key
+from .tool_run import ToolRunContext, tool_run
 
 #: How many tool-followup rounds one run may take.
 #:
@@ -193,6 +194,8 @@ class AgentLoop:
 
         self._running = False
         self._stop_requested = False
+        #: A caller's stop, inherited by a nested run. See `_stopping`.
+        self._stop_when: Callable[[], bool] | None = None
         self._reports: list[AgentRunReport] = []
 
         self.hooks.emit_sync(
@@ -260,6 +263,19 @@ class AgentLoop:
         it mid-write is how a half-applied side effect happens.
         """
         self._stop_requested = True
+
+    def _stopping(self) -> bool:
+        """This run's own stop, OR the one it inherited from the run above it.
+
+        A nested run has to honour both: a sub-agent whose caller gave up is
+        answering a question nobody will read, and the parent cannot reach into
+        the child's flag. `stop_when` is how the caller's answer travels --
+        checked rather than fired, because cancellation on this side is
+        cooperative by design (see `stop`).
+        """
+        if self._stop_requested:
+            return True
+        return bool(self._stop_when and self._stop_when())
 
     # -- tools ---------------------------------------------------------------
 
@@ -366,7 +382,8 @@ class AgentLoop:
         last step's -- a caller billing on `result.usage` after a three-step run
         would otherwise be told about a third of it.
         """
-        run_id, trace = self._begin_run(input_)
+        stop_when = options.pop("stop_when", None)
+        run_id, trace = self._begin_run(input_, options.get("ctx"), stop_when)
 
         steps: list[StepReport] = []
         total_usage = Usage()
@@ -385,7 +402,7 @@ class AgentLoop:
 
         try:
             while True:
-                if self._stop_requested:
+                if self._stopping():
                     reason = "stopped"
                     break
 
@@ -485,7 +502,7 @@ class AgentLoop:
                         "response": last,
                         "hasToolCalls": bool(calls),
                         "toolCalls": list(calls),
-                        "willContinue": bool(calls) and not self._stop_requested,
+                        "willContinue": bool(calls) and not self._stopping(),
                         "trace": trace,
                     },
                 )
@@ -578,7 +595,8 @@ class AgentLoop:
         streamed the text still needs it, because the deltas carry no usage and
         no cost.
         """
-        run_id, trace = self._begin_run(input_)
+        stop_when = options.pop("stop_when", None)
+        run_id, trace = self._begin_run(input_, options.get("ctx"), stop_when)
 
         steps: list[StepReport] = []
         total_usage = Usage()
@@ -597,7 +615,7 @@ class AgentLoop:
 
         try:
             while True:
-                if self._stop_requested:
+                if self._stopping():
                     reason = "stopped"
                     break
 
@@ -657,7 +675,7 @@ class AgentLoop:
                         "response": last,
                         "hasToolCalls": bool(calls),
                         "toolCalls": list(calls),
-                        "willContinue": bool(calls) and not self._stop_requested,
+                        "willContinue": bool(calls) and not self._stopping(),
                         "trace": trace,
                     },
                 )
@@ -796,7 +814,12 @@ class AgentLoop:
             },
         )
 
-    def _begin_run(self, input_: Any) -> tuple[str, dict[str, Any]]:
+    def _begin_run(
+        self,
+        input_: Any,
+        caller_ctx: Mapping[str, Any] | None = None,
+        stop_when: Callable[[], bool] | None = None,
+    ) -> tuple[str, dict[str, Any]]:
         if self._running:
             raise RuntimeError(
                 "this agent is already running. One AgentLoop drives one conversation; "
@@ -805,6 +828,7 @@ class AgentLoop:
             )
         self._running = True
         self._stop_requested = False
+        self._stop_when = stop_when
         # Per RUN, not per agent.
         self._lazy_state.searches = 0
         if self._reflect:
@@ -818,11 +842,24 @@ class AgentLoop:
                 self._history.system = fresh
 
         run_id = f"run_{uuid.uuid4().hex[:12]}"
+        # A caller's trace wins, and it has to win HERE rather than only at the
+        # step: `_step_options` already let a caller's ctx through to the LLM
+        # calls, so those joined the caller's trace while the run that made them
+        # -- onRunStart, every tool call -- sat in a second, unrelated one. That
+        # is the same split the TypeScript side measured against a live collector.
+        #
+        # sessionId and requestId are resolved TOGETHER for the same reason: a
+        # caller supplying one of them and not the other is how one run ends up
+        # reported as two.
+        caller = dict(caller_ctx or {})
         trace = {
-            "sessionId": self.id,
-            "requestId": run_id,
+            "sessionId": caller.get("sessionId") or self.id,
+            "requestId": caller.get("requestId") or run_id,
             "conversationId": self.id,
         }
+        if caller.get("traceparent"):
+            # The span this run hangs under, when the caller runs inside one.
+            trace["traceparent"] = caller["traceparent"]
 
         # Before a single new message goes in. A turn can end between "the model
         # asked for a tool" and "the tool answered" in several ways -- an early
@@ -1152,8 +1189,20 @@ class AgentLoop:
         if refusal is not None:
             return refusal
 
+        # What the tool can learn about the call it is serving -- the run's trace
+        # and whether a stop has been asked for. A ContextVar rather than an
+        # argument because a tool here is a plain function whose signature IS the
+        # model's parameter list; see `agent/tool_run.py`.
+        run_ctx = ToolRunContext(
+            tool_name=reported_name,
+            call_id=str(call.id or ""),
+            step=step,
+            trace=dict(trace),
+            is_stopping=self._stopping,
+        )
         try:
-            value = _with_timeout(lambda: found.func(**arguments), self._tool_timeout, found)
+            with tool_run(run_ctx):
+                value = _with_timeout(lambda: found.func(**arguments), self._tool_timeout, found)
             content = _as_content(value)
             error: str | None = None
         except Exception as exc:  # noqa: BLE001 -- a tool body may raise anything, and by
@@ -1704,12 +1753,17 @@ def _with_timeout(call: Callable[[], Any], timeout: float, tool: Any) -> Any:
     stop. The loop stops WAITING; the body runs to completion in the background.
     """
     import asyncio
+    import contextvars
     import inspect
 
     if tool.is_async:
         return asyncio.run(asyncio.wait_for(_await_call(call), timeout))
     with ThreadPoolExecutor(max_workers=1) as pool:
-        future = pool.submit(call)
+        # A worker thread starts with an EMPTY context, so the tool would not see
+        # `current_tool_run()` -- and a delegating tool would silently fall back
+        # to inheriting nothing, which is the bug this exists to fix. Copying the
+        # caller's context is what carries it across the thread boundary.
+        future = pool.submit(contextvars.copy_context().run, call)
         value = future.result(timeout=timeout)
     if inspect.isawaitable(value):
         return asyncio.run(_await_value(value))

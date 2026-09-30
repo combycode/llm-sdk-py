@@ -10,6 +10,18 @@ replied or what the reply cost.
 Only the TASK crosses. The specialist starts from its own system prompt and an
 empty turn -- that is the point of a specialist, and also the thing that
 surprises a caller who expected the conversation to travel with the task.
+
+What DOES cross is the run it belongs to. A nested run used to be started with
+nothing, so its spans rooted a trace of their own and the two halves of one
+request could not be joined -- correlation being the entire point of a trace id.
+`nested_run_options()` reads the call in progress and hands the trace down; write
+your own agent-as-tool wrapper and it is the one line to copy, because a wrapper
+written without it keeps the old behaviour in silence.
+
+Deliberately NOT inherited: anything about tool selection. A specialist is a
+different agent with its own tools, so a parent's choice among ITS tools means
+nothing to it -- the official agents SDK excludes the same fields from nested
+inheritance for the same reason.
 """
 
 from __future__ import annotations
@@ -17,6 +29,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Any
 
+from ..agent.tool_run import nested_run_options
 from ..wire.interpreter import js_json
 from .tool import Tool
 
@@ -60,7 +73,9 @@ def delegate(name: str, description: str, agent: Any) -> Tool:
     The returned tool stays callable directly -- `ask(task="...")` -- so the
     delegation can be tested without a model in the loop.
     """
-    return _tool_for(name, description, lambda task: agent.complete(task).text)
+    return _tool_for(
+        name, description, lambda task: agent.complete(task, **nested_run_options()).text
+    )
 
 
 def handoff(
@@ -79,7 +94,9 @@ def handoff(
     """
 
     def run(task: str) -> str:
-        answer = agent.complete(input_filter(task) if input_filter else task)
+        answer = agent.complete(
+            input_filter(task) if input_filter else task, **nested_run_options()
+        )
         usage = answer.usage
         return js_json(
             {

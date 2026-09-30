@@ -8,6 +8,27 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Fixed
 
+- **A nested agent run now belongs to the run above it.** `delegate()` and `handoff()` started the
+  specialist with nothing, so its spans rooted a trace of their own and the two halves of one
+  request could not be joined -- correlation being the entire point of a trace id. Worse in one
+  specific way: `_step_options` already let a caller's `ctx` reach the LLM calls, so those joined
+  the caller's trace while the RUN that made them (`onRunStart`, every tool call) sat in a second,
+  unrelated one. A caller's trace is now resolved in `_begin_run` too, with `sessionId` and
+  `requestId` taken together because supplying one without the other is how one run is reported as
+  two, and `traceparent` carried when given. `conversationId` is deliberately not inherited -- it
+  is how an Observer tells one agent's completions from another's, and a specialist has its own
+  history.
+- **A tool can see the call it is serving**, through the new `current_tool_run()`: the tool name,
+  call id, step, the run's trace, and whether a stop has been asked for. A ContextVar rather than an
+  argument, because a tool here is a plain function whose signature IS the model's parameter list --
+  and copied across the worker thread the timeout runs it on, which a pool otherwise starts with an
+  empty context. `nested_run_options()` turns it into the options a nested run wants; it is exported
+  because a hand-written agent-as-tool wrapper is the common case and one written without it keeps
+  the old behaviour in silence.
+  Cancellation stays COOPERATIVE here, unlike the TypeScript's abort signal: Python cannot kill a
+  running worker, and pretending otherwise would leak a half-applied side effect while reporting a
+  clean stop. So a long tool ASKS (`current_tool_run().is_stopping()`), and a sub-agent given the
+  same stops at its next step boundary -- the guarantee the parent already gives itself.
 - **A tool that returns media now sends media.** A tool has always been allowed to return content
   parts and the loop always carried them into the tool result -- then every adapter serialised the
   list into the provider's text slot. So the documented way to return a screenshot worked in the
