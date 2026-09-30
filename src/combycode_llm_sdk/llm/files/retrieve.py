@@ -34,7 +34,9 @@ from ..providers.anthropic.constants import ANTHROPIC_API_VERSION
 from ..wire_transforms import make_registry
 
 #: `interface RetrieveContext` (retrieve.ts:21) --
-#: `{provider, apiKey, fetch, baseURL?}`.
+#: `{provider, apiKey, fetch, baseURL?, workspaceId?}`. `workspaceId` is
+#: Anthropic-only: the Workspace to read the file from, sent as
+#: `anthropic-workspace-id` and omitted when absent.
 RetrieveContext = dict[str, Any]
 
 #: `interface RetrievedFile` (retrieve.ts:30) --
@@ -122,6 +124,7 @@ def _build_file_request(
             "baseURL": ctx.get("baseURL") or _DEFAULT_BASE[ctx["provider"]],
             "apiKey": ctx["apiKey"],
             "apiVersion": ANTHROPIC_API_VERSION,
+            "workspaceId": ctx.get("workspaceId"),
         },
     )
     # The body is dropped, not forwarded: every one of these specs is a GET, and

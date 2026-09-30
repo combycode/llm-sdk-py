@@ -450,6 +450,12 @@ def make_registry(a: AdapterHandles) -> Registry:
 
     predicates["hasUserProfileId"] = has_user_profile_id
 
+    def has_workspace_id(ctx: Ctx) -> bool:
+        v = get_path(ctx.req, "providerOptions.workspaceId")
+        return isinstance(v, str) and len(v) > 0
+
+    predicates["hasWorkspaceId"] = has_workspace_id
+
     #: image_config ships only when the adapter's helper produced something.
     predicates["openrouterHasImageConfig"] = lambda ctx: (
         len(_nullish(a["openrouter_media"].image_config(get_path(ctx.req, "params")), {})) > 0

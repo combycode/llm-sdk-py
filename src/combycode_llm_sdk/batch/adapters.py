@@ -104,11 +104,21 @@ class AnthropicBatchAdapter:
     #: Only Google, whose batch endpoint is model-scoped.
     needs_model: ClassVar[bool] = False
 
-    def __init__(self, api_key: str, base_url: str = "https://api.anthropic.com") -> None:
+    def __init__(
+        self,
+        api_key: str,
+        base_url: str = "https://api.anthropic.com",
+        workspace_id: str | None = None,
+    ) -> None:
+        # `workspaceId` selects the Workspace a batch is billed and
+        # rate-limited against. Carried on every call, not only the
+        # submission: a batch is polled many times, and a header on the
+        # submit alone would send the polls to the default Workspace.
         self._config = {
             "apiKey": api_key,
             "baseURL": base_url,
             "apiVersion": ANTHROPIC_API_VERSION,
+            "workspaceId": workspace_id,
         }
 
     #: Anthropic's own words for a job's state, in ours.

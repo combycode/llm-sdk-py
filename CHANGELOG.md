@@ -8,6 +8,17 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Anthropic Workspaces are selectable.** A credential that can act on more than one Workspace has
+  to name the one it means. Omitting `anthropic-workspace-id` does not fail -- it charges the
+  DEFAULT Workspace, and Workspace is where spend, rate limits and retention are accounted, so the
+  mistake is first visible on a bill. New `providerOptions["workspaceId"]` for completions, plus a
+  `workspaceId` in `AnthropicAdapter`'s config as a client-wide default that a request overrides.
+  Sent on every Anthropic request, not only completions: `AnthropicFileAdapter`,
+  `AnthropicBatchAdapter`, the token counter and `list_models_live` each take a `workspace_id`, and
+  retrieving a file a turn produced picks up the client's, since the file lives in the Workspace
+  that turn was billed to. (`files.content` needed the header spelled out: unlike the other file
+  calls it does not extend `files.base`.) Omitted from the request entirely when unset.
+
 - **A safety block that explains itself is no longer flattened to its message.** OpenAI's
   `misalignment_policy_violation` (2026-09) arrives with `error.misalignment`: `detailedExplanation`
   says what about this turn looked wrong, `errorType` classifies it, and `steer.message` is a

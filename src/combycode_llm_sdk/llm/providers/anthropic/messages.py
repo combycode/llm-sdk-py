@@ -45,7 +45,11 @@ from .parse_helpers import (
 from .response_registry import ANTHROPIC_RESPONSE_REGISTRY
 from .stream_registry import ANTHROPIC_STREAM_REGISTRY
 
-#: `interface AnthropicAdapterConfig` (messages.ts:35) -- `{apiKey, baseURL?}`.
+#: `interface AnthropicAdapterConfig` (messages.ts:35) --
+#: `{apiKey, baseURL?, workspaceId?}`. `workspaceId` is the Workspace this
+#: client acts in, sent as `anthropic-workspace-id`; only a credential
+#: spanning several Workspaces needs it, and
+#: `providerOptions.workspaceId` overrides it for one request.
 AnthropicAdapterConfig = dict[str, Any]
 
 _DEFAULT_BASE_URL = "https://api.anthropic.com"
@@ -59,6 +63,7 @@ class AnthropicAdapter:
     def __init__(self, config: AnthropicAdapterConfig) -> None:
         self.api_key: str = config["apiKey"]
         self._base_url: str | None = config.get("baseURL")
+        self.workspace_id: str | None = config.get("workspaceId")
         # Named code the spec cannot express as data -- message and content
         # assembly. Built once, carrying only this adapter, since only Anthropic
         # rules run.
@@ -75,6 +80,11 @@ class AnthropicAdapter:
         # calls); harmless to omit elsewhere. See `runtime.is_browser`.
         if is_browser():
             headers["anthropic-dangerous-direct-browser-access"] = "true"
+        # The client-wide default. A per-request `providerOptions.workspaceId`
+        # lands in the spec envelope, and the client spreads those AFTER these,
+        # so the request wins -- the order a caller would expect.
+        if self.workspace_id:
+            headers["anthropic-workspace-id"] = self.workspace_id
         return headers
 
     def base_url(self) -> str:

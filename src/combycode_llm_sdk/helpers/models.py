@@ -164,7 +164,11 @@ def _openrouter_entry(row: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def _fetch_body(
-    provider: str, api_key: str | None, engine: Any, refresh: bool
+    provider: str,
+    api_key: str | None,
+    engine: Any,
+    refresh: bool,
+    workspace_id: str | None = None,
 ) -> Mapping[str, Any]:
     from ..llm.providers.anthropic.constants import ANTHROPIC_API_VERSION
     from ..llm.wire_transforms import make_registry
@@ -190,7 +194,11 @@ def _fetch_body(
         make_registry({}),
         provider,
         None,
-        {"apiKey": key, "apiVersion": ANTHROPIC_API_VERSION},
+        {
+            "apiKey": key,
+            "apiVersion": ANTHROPIC_API_VERSION,
+            "workspaceId": workspace_id,
+        },
     )
     request: dict[str, Any] = {
         "url": built.url,

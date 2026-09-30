@@ -5,7 +5,9 @@
     "headers": [
       { "name": "x-api-key", "value": { "$config": "apiKey" } },
       { "name": "anthropic-version", "value": { "$config": "apiVersion" } },
-      { "name": "content-type", "value": "application/json" }
+      { "name": "content-type", "value": "application/json" },
+      { "_note": "Selects the Workspace this request is billed and rate-limited against. Omitted entirely when the client was given no workspace id, which is the ordinary single-Workspace credential. Only a credential spanning several Workspaces needs it -- and one that omits it there does not fail, it charges the default Workspace silently.",
+        "name": "anthropic-workspace-id", "value": { "$config": "workspaceId" } }
     ]
   }
 }

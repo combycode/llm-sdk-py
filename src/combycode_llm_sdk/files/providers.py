@@ -101,15 +101,25 @@ class _SpecFileAdapter:
     supported_types: tuple[str, ...] | None = None
     default_base_url = ""
 
-    def __init__(self, api_key: str, base_url: str | None = None) -> None:
+    def __init__(
+        self, api_key: str, base_url: str | None = None, workspace_id: str | None = None
+    ) -> None:
         self._api_key = api_key
         self._base_url = base_url or self.default_base_url
+        #: Anthropic only: the Workspace this client acts in, sent as
+        #: `anthropic-workspace-id`. Omitted from the request when None,
+        #: and ignored by every other provider's specs.
+        self._workspace_id = workspace_id
         self._registry = make_registry({})
 
     # -- request building ----------------------------------------------------
 
     def _config(self) -> dict[str, Any]:
-        return {"baseURL": self._base_url, "apiKey": self._api_key}
+        return {
+            "baseURL": self._base_url,
+            "apiKey": self._api_key,
+            "workspaceId": self._workspace_id,
+        }
 
     def _request(
         self, spec_id: str, payload: Mapping[str, Any], file: MultipartFile | None = None
@@ -288,6 +298,7 @@ class AnthropicFileAdapter(_SpecFileAdapter):
             "baseURL": self._base_url,
             "apiKey": self._api_key,
             "apiVersion": ANTHROPIC_API_VERSION,
+            "workspaceId": self._workspace_id,
         }
 
     def _info(self, row: Mapping[str, Any]) -> RemoteFileInfo:

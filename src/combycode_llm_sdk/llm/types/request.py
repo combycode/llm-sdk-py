@@ -56,7 +56,17 @@ from typing import Any, Literal
 #: it is ignored, not an error.
 #:
 #: - Anthropic: `userProfileId` -- forwarded as the `anthropic-user-profile-id`
-#:   header; needs the account-level `user-profiles` beta.
+#:   header; needs the account-level `user-profiles` beta. `workspaceId` --
+#:   forwarded as `anthropic-workspace-id`, e.g.
+#:   `wrkspc_011CZkZaBF1tNoB5wlCeusgy`. Only a credential that can act on more
+#:   than one Workspace needs it; one scoped to a single Workspace may omit it,
+#:   and if sent it must match. Worth setting because Workspace is where spend,
+#:   rate limits and retention are accounted: a multi-Workspace key that omits
+#:   it does not fail, it charges the default Workspace silently. The other
+#:   Anthropic surfaces -- files, batches, token counting, model listing -- take
+#:   a `workspace_id` on their own config instead, having no providerOptions of
+#:   their own; an `AnthropicAdapter` built directly takes one too, and this
+#:   option overrides it.
 #: - OpenAI (responses + chat-completions): `moderationPolicy` (sent alongside
 #:   the `moderation` request field), `promptCacheOptions`
 #:   (`prompt_cache_options`), `reasoningMode` (`'standard'` or `'pro'`, the

@@ -218,10 +218,20 @@ class CountApiCounter:
         "xai": ("xai/count.tokenize", "token_ids"),
     }
 
-    def __init__(self, fetch: Any, api_key: str, catalog: ModelCatalog | None = None) -> None:
+    def __init__(
+        self,
+        fetch: Any,
+        api_key: str,
+        catalog: ModelCatalog | None = None,
+        workspace_id: str | None = None,
+    ) -> None:
         self.fetch = fetch
         self.api_key = api_key
         self.catalog = catalog
+        #: Anthropic only. Counting is not billed, but a multi-Workspace
+        #: credential is still refused when it names a Workspace it may not act
+        #: on -- so this has to match the one the completion will use.
+        self.workspace_id = workspace_id
 
     def supports(self, provider: str) -> bool:
         return provider in self.ENDPOINTS
@@ -242,6 +252,7 @@ class CountApiCounter:
         config: dict[str, Any] = {"apiKey": self.api_key, "baseURL": _base_url(provider)}
         if provider == "anthropic":
             config["apiVersion"] = ANTHROPIC_API_VERSION
+            config["workspaceId"] = self.workspace_id
 
         built = build_from_spec(
             utility_spec(spec_id), payload, make_registry({}), provider, None, config

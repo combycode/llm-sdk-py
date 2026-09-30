@@ -41,6 +41,13 @@
         "value": "application/binary"
       },
       {
+        "_note": "files.content stands alone rather than extending files.base, so it needs this header of its own. A file a turn produced lives in the Workspace that turn was billed to; omitted when the client was given none.",
+        "name": "anthropic-workspace-id",
+        "value": {
+          "$config": "workspaceId"
+        }
+      },
+      {
         "name": "anthropic-dangerous-direct-browser-access",
         "value": "true",
         "_note": "Only in a browser, where the download is otherwise blocked by CORS. Harmless on Node and Bun, but not sent there — the header names an exception, and an exception nobody needs should not be asked for.",

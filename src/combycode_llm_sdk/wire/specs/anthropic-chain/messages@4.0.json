@@ -331,6 +331,16 @@
         "value": {
           "$": "providerOptions.userProfileId"
         }
+      },
+      {
+        "_note": "Selects the Workspace this request is billed and rate-limited against. Only needed for a credential spanning several Workspaces. The client also sends a configured default in authHeaders(); this one is spread after it, so a per-request value wins.",
+        "name": "anthropic-workspace-id",
+        "when": {
+          "pred": "hasWorkspaceId"
+        },
+        "value": {
+          "$": "providerOptions.workspaceId"
+        }
       }
     ],
     "path": {

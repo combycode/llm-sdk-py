@@ -291,6 +291,11 @@ class BaseLLMClient:
             "apiKey": self._api_key,
             "fetch": self._fetch,
             "baseURL": self._adapter.base_url(),
+            # A file produced by a turn lives in the Workspace that turn was
+            # billed to, so retrieving it has to name the same one. None for
+            # every provider with no such notion, and for an Anthropic client
+            # that was given none.
+            "workspaceId": getattr(self._adapter, "workspace_id", None),
         }
 
     # -- request assembly ----------------------------------------------------
