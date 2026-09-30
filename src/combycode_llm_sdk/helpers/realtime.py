@@ -23,7 +23,7 @@ thing is `createRealtime` and the events arrive through `session.on(...)`.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from typing import Any, Self
 
 from ..events import Event, UsageEvent
@@ -43,8 +43,11 @@ class Realtime:
         api_key: str | None = None,
         provider: str | None = None,
         modalities: Sequence[str] | None = None,
-        voice: str | None = None,
+        voice: Any = None,
         instructions: str | None = None,
+        translation: Mapping[str, Any] | None = None,
+        affective_dialog: bool | None = None,
+        input_transcription: Mapping[str, Any] | None = None,
         engine: Any = None,
         base_url: str | None = None,
         connect: Any = None,
@@ -88,11 +91,17 @@ class Realtime:
         self.provider = provider_name
         self.model = send_model
         self._adapter = factory(api_key=key, base_url=base_url)
+        from ..llm.audio.voices import is_owned_voice, resolve_voice
+
         self._config = SessionConfig(
             model=send_model,
             modalities=modalities_of(modalities),
-            voice=voice,
+            voice=resolve_voice(provider_name, voice),
+            voice_owned=is_owned_voice(voice),
             instructions=instructions,
+            translation=translation,
+            affective_dialog=affective_dialog,
+            input_transcription=input_transcription,
         )
         self._connect = connect
         self._timeout = timeout

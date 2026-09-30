@@ -59,13 +59,24 @@
                     "truthy": "voice"
                   },
                   "$value": {
-                    "voiceConfig": {
-                      "prebuiltVoiceConfig": {
-                        "voiceName": {
-                          "$": "voice"
-                        }
-                      }
-                    }
+                    "$call": "googleLiveVoiceConfig"
+                  }
+                },
+                "translationConfig": {
+                  "_note": "Only sent when a target language was named. An empty translationConfig would be asking to translate into nothing. Without this field the catalogued gemini-3.5-live-translate could be connected to and never actually asked to translate.",
+                  "$when": {
+                    "truthy": "translation.targetLanguageCode"
+                  },
+                  "$value": {
+                    "$call": "googleLiveTranslation"
+                  }
+                },
+                "enableAffectiveDialog": {
+                  "$when": {
+                    "defined": "affectiveDialog"
+                  },
+                  "$value": {
+                    "$": "affectiveDialog"
                   }
                 }
               },
@@ -81,6 +92,17 @@
                       }
                     }
                   ]
+                }
+              },
+              "inputAudioTranscription": {
+                "_note": "How the session transcribes what it HEARS, as opposed to what it says. Absent unless asked: an empty object is not a request.",
+                "$when": {
+                  "truthy": "inputTranscription.mode"
+                },
+                "$value": {
+                  "mode": {
+                    "$": "inputTranscription.mode"
+                  }
                 }
               }
             }

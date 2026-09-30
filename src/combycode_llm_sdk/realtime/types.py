@@ -27,17 +27,45 @@ class SessionConfig:
     #: Default `("text",)`. Some models are audio-native and answer in audio
     #: whatever is asked -- and Gemini Live REFUSES a text-only session outright.
     modalities: tuple[Modality, ...] = ("text",)
+    #: Already resolved: an alias mapped, an owned id unwrapped.
     voice: str | None = None
+    #: Whether `voice` is an id the caller OWNS rather than a catalog name.
+    #: Decides which wire field carries it, the same split as TTS.
+    voice_owned: bool = False
     instructions: str | None = None
+    #: Live translation (Google). `echo_target_language` decides whether speech
+    #: already in the target language is parroted back or left alone.
+    translation: Mapping[str, Any] | None = None
+    #: Detect the speaker's emotion and adapt the reply (Google).
+    affective_dialog: bool | None = None
+    #: How to transcribe what the session HEARS (Google).
+    input_transcription: Mapping[str, Any] | None = None
 
     def as_input(self) -> dict[str, Any]:
         """The camelCase shape the wire specs read."""
-        return {
+        out: dict[str, Any] = {
             "model": self.model,
             "modalities": list(self.modalities),
             "voice": self.voice,
+            "voiceOwned": self.voice_owned,
             "instructions": self.instructions,
         }
+        # Absent rather than None: a null translationConfig is a request to
+        # translate into nothing, and `defined` gates read a present null as set.
+        if self.translation:
+            out["translation"] = {
+                "targetLanguageCode": self.translation.get("targetLanguageCode"),
+                **(
+                    {"echoTargetLanguage": self.translation["echoTargetLanguage"]}
+                    if self.translation.get("echoTargetLanguage") is not None
+                    else {}
+                ),
+            }
+        if self.affective_dialog is not None:
+            out["affectiveDialog"] = self.affective_dialog
+        if self.input_transcription:
+            out["inputTranscription"] = dict(self.input_transcription)
+        return out
 
 
 @dataclass(frozen=True)

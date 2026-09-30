@@ -8,6 +8,22 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **A live translator we shipped and could not ask to translate.**
+  `gemini-3.5-live-translate` has been in the catalog, connectable, and useless: the Live setup
+  frame carried modalities, a prebuilt voice and a system instruction and nothing else, so there
+  was no way to name the language to translate INTO. `createRealtime` now takes `translation`
+  (`targetLanguageCode`, `echoTargetLanguage`), `affectiveDialog`, and `inputTranscription.mode`,
+  and a Live voice may be one the caller owns -- the same split as TTS.
+  Proved by streaming the same English sentence into two sessions (2026-09-30), which is the only
+  way to tell, since a bogus target language ALSO returns `setupComplete`: with no
+  `translationConfig` the output transcription came back **empty**, and with
+  `targetLanguageCode: 'es'` it came back *"Buenos dias. La reunion se ha"* -- the difference
+  between no output at all and Spanish. `echoTargetLanguage: false` (stay quiet when the target
+  language is already being spoken, rather than parroting it) is sent whenever the caller mentions
+  it: it is the useful value and the one a truthy gate would have eaten.
+
+### Added
+
 - **A voice you own, and conversations between several of them.** `params.voice` on TTS widens from
   `string` to `string | { id }` -- additively, so a string means exactly what it always meant and
   the request it builds is byte-for-byte the one it built before. The object form is for custom

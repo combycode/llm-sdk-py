@@ -451,6 +451,41 @@ def make_registry(a: AdapterHandles) -> Registry:
 
     transforms["googleTtsParts"] = _google_tts_parts
 
+    def _google_live_voice_config(_v: Any, ctx: Ctx) -> dict[str, Any]:
+        """A Live session's `speechConfig`.
+
+        Same ownership split as TTS: a catalog name keeps
+        `prebuiltVoiceConfig.voiceName`, a voice the caller owns takes the flat
+        `voice`. `voiceOwned` is decided by the helper, so the branch here is a
+        lookup rather than a second copy of the rule.
+        """
+        voice = get_path(ctx.req, "voice")
+        if get_path(ctx.req, "voiceOwned"):
+            return {"voiceConfig": {"voice": voice}}
+        return {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": voice}}}
+
+    transforms["googleLiveVoiceConfig"] = _google_live_voice_config
+
+    def _google_live_translation(_v: Any, ctx: Ctx) -> dict[str, Any]:
+        """Live translation config.
+
+        Proven end to end 2026-09-30 by streaming the same English audio twice:
+        with no translationConfig the output transcription was EMPTY, with
+        `targetLanguageCode: "es"` it was "Buenos dias. La reunion se ha". The
+        difference between no output at all and Spanish.
+
+        `echoTargetLanguage` is only sent when the caller said something about
+        it -- its default is the server's to choose, and `False` is a meaningful
+        value that a truthy gate would eat.
+        """
+        translation = get_path(ctx.req, "translation") or {}
+        out: dict[str, Any] = {"targetLanguageCode": translation.get("targetLanguageCode")}
+        if translation.get("echoTargetLanguage") is not None:
+            out["echoTargetLanguage"] = translation["echoTargetLanguage"]
+        return out
+
+    transforms["googleLiveTranslation"] = _google_live_translation
+
     # -- the variant rule a pattern cannot express (FINDING) -----------------
     #: Version arithmetic: family-then-version ids compared against 4.6.
     #: This is the one variant that resists being data, and it is exactly the
