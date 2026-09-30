@@ -50,6 +50,10 @@ from .audio.voices import resolve_voice
 from .moderation.native import build_native_moderation
 from .providers.google.tiers import google_request_tier
 from .providers.openai.tiers import openai_tier_decision
+from .providers.xai.reasoning import (
+    xai_takes_reasoning_effort,
+    xai_uses_effort_as_agent_count,
+)
 from .providers.xai.tiers import xai_request_tier
 from .types.schema_utils import ensure_additional_properties, strict_support
 
@@ -456,10 +460,18 @@ def make_registry(a: AdapterHandles) -> Registry:
         resolve_voice("google", _undef(get_path(ctx.req, "audio.voice")))
     )
 
-    #: Only the multi-agent grok uses reasoning.effort (as an agent count).
-    predicates["xaiMultiAgent"] = lambda ctx: "multi-agent" in js_string(
-        get_path(ctx.req, "model")
-    )
+    #: Does this xAI model take `reasoning` AT ALL?
+    #:
+    #: Was `"multi-agent" in model`, on the belief that only that model used the
+    #: field -- so the overlay deleted `reasoning` for every other xAI model while
+    #: the catalog advertised effort control for grok-4.5/4.6. The catalog promised
+    #: a control the request never carried. Measured per model in
+    #: `providers/xai/reasoning.py`, because grok-4.20 REFUSES the parameter by
+    #: name while the numerically lower 4.3/4.5/4.6 honour it, which rules out any
+    #: rule shaped like a version comparison.
+    predicates["xaiTakesReasoning"] = lambda ctx: xai_takes_reasoning_effort(
+        js_string(get_path(ctx.req, "model"))
+    ) or xai_uses_effort_as_agent_count(js_string(get_path(ctx.req, "model")))
 
     def wants_native_moderation(ctx: Ctx) -> bool:
         mod = get_path(ctx.req, "moderation")

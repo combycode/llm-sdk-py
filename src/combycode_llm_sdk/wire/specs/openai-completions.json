@@ -7,7 +7,16 @@
     "xai",
     "openrouter"
   ],
-  "tables": {},
+  "tables": {
+    "reasoningEffort": {
+      "_note": "Our vocabulary -> theirs. `max` means 'the most this model will do' and is MAPPED, never sent: measured 2026-09-30, both OpenAI and xAI answer 400 to `effort: \"max\"`, and OpenAI names the value in the message. Their ladder tops out at xhigh, so that is what max means here -- Google's table maps it to `high` for the same reason, its own ladder ending there.",
+      "low": "low",
+      "medium": "medium",
+      "high": "high",
+      "max": "xhigh",
+      "xhigh": "xhigh"
+    }
+  },
   "fields": [
     {
       "from": "model",
@@ -221,13 +230,9 @@
           }
         ]
       },
-      "to": "reasoning",
-      "template": {
-        "effort": {
-          "$": "thinking.effort",
-          "$default": "medium"
-        }
-      }
+      "_note": "chat-completions takes `reasoning_effort`, a top-level STRING. This block used to build `reasoning: {effort}` -- the RESPONSES shape -- and OpenAI answers 400 `Unknown parameter: 'reasoning'` to it (measured 2026-09-30), so asking for thinking on this surface failed every time. xAI hid the same bug behind an overlay that deleted the field outright.",
+      "to": "reasoning_effort",
+      "template": { "$table": "reasoningEffort", "$key": "thinking.effort", "$default": "medium" }
     },
     {
       "name": "structured",
@@ -263,8 +268,9 @@
         },
         {
           "op": "delete",
-          "from": "reasoning",
-          "_note": "xAI reasoning is a model variant, not a parameter"
+          "from": "reasoning_effort",
+          "when": { "not": { "pred": "xaiTakesReasoning" } },
+          "_note": "The note here used to read 'xAI reasoning is a model variant, not a parameter' and the delete was unconditional. Measured 2026-09-30 on /v1/chat/completions: grok-4.6 honours `reasoning_effort` (low 927/728 -> xhigh 7043/18081 reasoning tokens, ranges disjoint), so the claim was wrong for the 4.3+ line. grok-4.20 refuses the parameter by name on this surface too, which is what the predicate still deletes for."
         }
       ]
     },
@@ -284,6 +290,12 @@
           "op": "mergeFrom",
           "from": "providerOptions.openrouter",
           "_note": "routing options merged into the body root"
+        },
+        {
+          "op": "rename",
+          "from": "reasoning_effort",
+          "to": "reasoning.effort",
+          "_note": "OpenRouter keeps the OBJECT form. Probed 2026-09-30 on openai/gpt-5.4-nano: it accepts `reasoning: {effort}` AND `reasoning_effort`, and honours both -- but the object is the shape OpenRouter documents, and the only one that can also carry its own `max_tokens` and `exclude`. The base spec moved to `reasoning_effort` because OpenAI chat-completions answers 400 `Unknown parameter: 'reasoning'`; that is an OpenAI fact, not an OpenRouter one, so the shape is restored here rather than imposed on a third provider."
         }
       ]
     }

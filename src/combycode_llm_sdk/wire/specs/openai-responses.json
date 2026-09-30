@@ -11,6 +11,14 @@
     "summaryByVisibility": {
       "full": "auto",
       "summary": "concise"
+    },
+    "reasoningEffort": {
+      "_note": "Our vocabulary -> theirs. `max` means 'the most this model will do' and is MAPPED, never sent: measured 2026-09-30, OpenAI and xAI both answer 400 to `effort: \"max\"` -- OpenAI names the value (\"Unsupported value: 'max' is not supported\"). Their ladder tops out at xhigh, so max means xhigh here; Google's table maps it to `high` because its own ladder ends there. A model that does not take xhigh answers 400 naming the value, the same honest outcome an access-controlled service tier gets.",
+      "low": "low",
+      "medium": "medium",
+      "high": "high",
+      "max": "xhigh",
+      "xhigh": "xhigh"
     }
   },
   "fields": [
@@ -249,10 +257,7 @@
       },
       "to": "reasoning",
       "template": {
-        "effort": {
-          "$": "thinking.effort",
-          "$default": "medium"
-        },
+        "effort": { "$table": "reasoningEffort", "$key": "thinking.effort", "$default": "medium" },
         "summary": {
           "$when": {
             "ne": [
@@ -297,7 +302,7 @@
           "from": "reasoning",
           "when": {
             "not": {
-              "pred": "xaiMultiAgent"
+              "pred": "xaiTakesReasoning"
             }
           }
         },

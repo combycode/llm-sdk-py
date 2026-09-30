@@ -236,9 +236,15 @@
       "videoGeneration": false
     },
     "reasoning": {
-      "supported": false,
-      "automatic": false,
-      "effortControl": false,
+      "supported": true,
+      "automatic": true,
+      "effortControl": true,
+      "effortValues": [
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
       "encryptedContent": false,
       "summaryAvailable": false
     },
@@ -408,7 +414,8 @@
   "xai/grok-imagine-image-quality": {
     "providerModelName": "grok-imagine-image-quality",
     "aliases": [
-      "grok-imagine-image-quality"
+      "grok-imagine-image-quality",
+      "grok-imagine-image-pro"
     ],
     "pricing": {
       "perUnit": {
@@ -920,9 +927,15 @@
       "videoGeneration": false
     },
     "reasoning": {
-      "supported": false,
-      "automatic": false,
-      "effortControl": false,
+      "supported": true,
+      "automatic": true,
+      "effortControl": true,
+      "effortValues": [
+        "low",
+        "medium",
+        "high",
+        "xhigh"
+      ],
       "encryptedContent": false,
       "summaryAvailable": false
     },

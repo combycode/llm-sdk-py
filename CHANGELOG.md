@@ -8,6 +8,25 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Fixed
 
+- **Reasoning effort now reaches the wire on OpenAI and xAI, and `max` stops failing.** Three
+  measured faults behind one field, all three shared with the TypeScript side. `effort: "max"` was
+  passed through raw on both OpenAI surfaces and neither provider has it -- measured 2026-09-30, both
+  answer 400, OpenAI naming the value -- so the documented way to ask for maximum thinking was a
+  guaranteed failed request; it now maps to the top rung of each ladder (`xhigh` here, as Google's
+  table has always mapped it to `high`, its own ladder ending there). On chat-completions the spec
+  built `reasoning: {effort}`, the RESPONSES shape, which OpenAI rejects by name
+  (`400 Unknown parameter: 'reasoning'`); it now sends `reasoning_effort`, the top-level string that
+  API takes, while OpenRouter keeps the object form it documents. And the xAI overlay dropped
+  `reasoning` for every model whose id lacked `multi-agent`, although the catalog advertised
+  `effortControl` with `xhigh` for grok-4.5/4.6. Measured per model: grok-4.6 x6.8, grok-4.5 x36.6,
+  grok-4.3 x7.4 on Responses and grok-4.6 x10 on chat-completions, ranges disjoint in each; the whole
+  grok-4.20 line answers `400 "does not support parameter reasoningEffort"` and is still omitted,
+  which is why this is an explicit table and not a version comparison -- 4.20 refuses the field while
+  the numerically lower 4.3 honours it.
+- **Catalog: `grok-4.3` and `grok-4.7` were recorded as having no reasoning support at all**, while
+  the older 4.5 and 4.6 were recorded as having effort control. Measured 2026-09-30: both accept
+  `low|medium|high|xhigh`, and 4.3 honours the difference x7.4. Corrected.
+
 - **A cost calculated at a service tier the catalog does not price now says so** (`onWarning`,
   `code: "unpriced_tier"`). An unpriced model already reported unknown; an unpriced TIER fell back
   to the flat rate and returned a confident number computed at the wrong one. A latency tier is
