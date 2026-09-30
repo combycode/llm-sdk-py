@@ -323,6 +323,10 @@
         },
         "translationConfig": {
           "$": "providerOptions.translationConfig"
+        },
+        "audioTranscriptionConfig": {
+          "_note": "Honoured on the DEDICATED transcription model and inert elsewhere -- measured 2026-09-30: on gemini-3.5-transcribe, SMART removed every disfluency while VERBATIM kept all four; on gemini-3.1-flash-lite both were indistinguishable from two runs of no config at all.",
+          "$": "providerOptions.audioTranscriptionConfig"
         }
       }
     },

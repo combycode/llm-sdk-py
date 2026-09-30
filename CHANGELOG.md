@@ -6,6 +6,27 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ## [Unreleased]
 
+### Fixed
+
+- **A Google transcription came back empty.** `gemini-3.5-transcribe` does not answer with
+  `parts[].text` -- it answers with `parts[].audioTranscription.text`, and this library read only
+  the former. So a successful, billed transcription returned an EMPTY string: nothing errored, the
+  caller simply got nothing. Measured 2026-09-30, and fixed in the shared part parser, so it holds
+  for `complete()` as well as `transcribe()`.
+
+### Added
+
+- **`transcribe({ mode })`: keep the speech as spoken, or clean it up.** `'VERBATIM'` keeps every
+  "um", false start and repeated word; `'SMART'` returns the same speech as readable prose. Google
+  only, and only on a model that implements it -- which is the reason this row required a probe
+  before any design. Measured 2026-09-30 on deliberately disfluent audio: on
+  `gemini-3.5-transcribe` SMART removed all four fillers and the false start while VERBATIM kept
+  them, and two runs of the same config were byte-identical, so the difference is signal. On
+  `gemini-3.1-flash-lite` the two modes were indistinguishable from two runs of no config at all --
+  the field is type-validated there (an invalid value is a 400 naming the enum) and does nothing.
+  So it is sent as asked rather than gated on a model list, and documented as honoured only where
+  it is honoured. `SMART` cannot be combined with timestamps or diarization.
+
 ### Added
 
 - **Choose how Google reads a video.** New per-video `providerOptions.processing` --

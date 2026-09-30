@@ -186,6 +186,7 @@ def transcribe(
     timestamps: str | None = None,
     diarization: bool = False,
     prompt: str | None = None,
+    mode: str | None = None,
     mime_type: str | None = None,
     engine: Any = None,
     transport: Any = None,
@@ -230,6 +231,7 @@ def transcribe(
             audio=audio,
             api_key=key,
             prompt=prompt,
+            mode=mode,
             engine=engine,
             transport=transport,
             requested=_structured_asked_for(languages, keywords, timestamps, diarization),
@@ -368,6 +370,7 @@ def _via_completion(
     audio: Any,
     api_key: str,
     prompt: str | None,
+    mode: str | None = None,
     engine: Any,
     transport: Any,
     requested: Sequence[str],
@@ -398,6 +401,12 @@ def _via_completion(
         )
 
     options: dict[str, Any] = {"api_key": api_key, "max_tokens": 1024}
+    # Honoured on a DEDICATED transcription model and inert elsewhere --
+    # measured 2026-09-30: on `gemini-3.5-transcribe`, SMART removed every
+    # disfluency while VERBATIM kept all four; on `gemini-3.1-flash-lite`
+    # both were indistinguishable from two runs of no config at all.
+    if mode:
+        options["provider_options"] = {"audioTranscriptionConfig": {"mode": mode}}
     if engine is not None:
         options["engine"] = engine
     if transport is not None:

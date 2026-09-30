@@ -85,8 +85,17 @@ _FINISH = GOOGLE_FINISH
 
 
 def _text_part(_arg: Any, ctx: Ctx) -> dict[str, Any] | None:
-    """`text is not None`, not truthiness: an empty string is still a text part."""
+    """`text is not None`, not truthiness: an empty string is still a text part.
+
+    A dedicated transcription model does not answer with `text` at all. It
+    answers with `audioTranscription: {text}`, and reading only `text` meant
+    `gemini-3.5-transcribe` returned an EMPTY transcript through this library
+    -- a successful, billed request with nothing in it. Measured 2026-09-30.
+    """
     p = _part(ctx)
+    transcription = p.get("audioTranscription")
+    if isinstance(transcription, Mapping) and isinstance(transcription.get("text"), str):
+        return {"type": "text", "text": transcription["text"]}
     if p.get("text") is None or p.get("thought"):
         return None
     return {"type": "text", "text": p.get("text")}
