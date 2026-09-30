@@ -46,7 +46,7 @@ from ..util.source_image import (
     xai_video_ref,
 )
 from ..wire.interpreter import MISSING, Ctx, Registry, get_path, is_obj, js_string, js_truthy
-from .audio.voices import resolve_voice
+from .audio.voices import is_owned_voice, resolve_voice
 from .moderation.native import build_native_moderation
 from .providers.google.tiers import google_request_tier
 from .providers.openai.tiers import openai_tier_decision
@@ -381,6 +381,75 @@ def make_registry(a: AdapterHandles) -> Registry:
     transforms["googleTtsVoice"] = lambda _v, ctx: _nullish(
         resolve_voice("google", _undef(get_path(ctx.req, "params.voice"))), "Kore"
     )
+
+    def _google_voice_for(voice: Any) -> dict[str, Any]:
+        """One voice, on whichever field Google validates its kind against."""
+        if is_owned_voice(voice):
+            return {"voice": resolve_voice("google", voice)}
+        return {
+            "prebuiltVoiceConfig": {"voiceName": _nullish(resolve_voice("google", voice), "Kore")}
+        }
+
+    def _google_speech_config(_v: Any, ctx: Ctx) -> dict[str, Any]:
+        """The whole `speechConfig`: its two shapes are not variations of one another.
+
+        * one voice -> `voiceConfig`, and WHICH field depends on ownership: a
+          catalog name keeps `prebuiltVoiceConfig.voiceName` exactly as before,
+          while a `{"id": ...}` takes the flat `voice`.
+        * several -> `multiSpeakerVoiceConfig.speakerVoiceConfigs[]`.
+
+        Speakers win when both are given: asking for a cast and a single voice
+        is a contradiction, and the cast is the more specific request.
+        """
+        speakers = get_path(ctx.req, "params.speakers")
+        if isinstance(speakers, list) and speakers:
+            return {
+                "multiSpeakerVoiceConfig": {
+                    "speakerVoiceConfigs": [
+                        {
+                            "speaker": sp["name"],
+                            "voiceConfig": _google_voice_for(sp.get("voice")),
+                        }
+                        for sp in speakers
+                        if isinstance(sp, Mapping)
+                        and isinstance(sp.get("name"), str)
+                        and sp["name"]
+                    ]
+                }
+            }
+        return {"voiceConfig": _google_voice_for(_undef(get_path(ctx.req, "params.voice")))}
+
+    transforms["googleSpeechConfig"] = _google_speech_config
+
+    def _google_tts_parts(_v: Any, ctx: Ctx) -> list[dict[str, Any]]:
+        """The `contents` parts for TTS.
+
+        With `segments`, each becomes its own part carrying `speechMetadata`.
+        That is not a stylistic choice -- measured 2026-09-30, a multi-speaker
+        request is refused unless EVERY text part names its speaker:
+        *"Multi-speaker generation requests must specify speech_metadata.speaker
+        for each text part in the contents."* So the two halves are one feature
+        and both are built from the same `segments`.
+        """
+        segments = get_path(ctx.req, "params.segments")
+        if not isinstance(segments, list) or not segments:
+            return [{"parts": [{"text": get_path(ctx.req, "input")}]}]
+        parts: list[dict[str, Any]] = []
+        for seg in segments:
+            if not isinstance(seg, Mapping) or not isinstance(seg.get("text"), str):
+                continue
+            meta: dict[str, Any] = {}
+            if isinstance(seg.get("speaker"), str) and seg["speaker"]:
+                meta["speaker"] = seg["speaker"]
+            if isinstance(seg.get("style"), str) and seg["style"]:
+                meta["style"] = seg["style"]
+            part: dict[str, Any] = {"text": seg["text"]}
+            if meta:
+                part["speechMetadata"] = meta
+            parts.append(part)
+        return [{"parts": parts}]
+
+    transforms["googleTtsParts"] = _google_tts_parts
 
     # -- the variant rule a pattern cannot express (FINDING) -----------------
     #: Version arithmetic: family-then-version ids compared against 4.6.

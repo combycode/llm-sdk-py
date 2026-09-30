@@ -6,6 +6,27 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ## [Unreleased]
 
+### Added
+
+- **A voice you own, and conversations between several of them.** `params.voice` on TTS widens from
+  `string` to `string | { id }` -- additively, so a string means exactly what it always meant and
+  the request it builds is byte-for-byte the one it built before. The object form is for custom
+  voices, whose ids (`voice_...`) are issued at creation and are not names anyone could guess.
+  Measured 2026-09-30: a catalog name keeps `prebuiltVoiceConfig.voiceName`, while a `{ id }` takes
+  the flat `voiceConfig.voice` -- the field Google validates custom ids against (a bogus one
+  returns `404 The voice was not found or the caller does not have permission to access it`).
+  New `params.speakers` + `params.segments` give multi-speaker TTS: a cast, and a script where each
+  line names its speaker and may carry its own `style` ("brisk", "hesitant"). Both halves are built
+  from the same `segments` because the provider requires them together -- a `multiSpeakerVoiceConfig`
+  without `speechMetadata.speaker` on EVERY text part is refused outright, so there is no way to
+  supply one and forget the other. A cast wins over a single `voice`, that combination being a
+  contradiction. Verified end to end against the live API, multi-speaker included.
+
+  Voice **CRUD** (create / get / list / delete a custom voice) is deliberately NOT part of this.
+  The endpoint is reachable with an ordinary key, so the gap is a design one rather than an access
+  one: voice management deserves a provider-neutral resource, not one shaped around a single
+  vendor, and that design is still open. A custom voice id works end to end here once you have one.
+
 ### Fixed
 
 - **A Google transcription came back empty.** `gemini-3.5-transcribe` does not answer with

@@ -1,17 +1,25 @@
 {
   "id": "google/gemini-tts@generateContent",
   "extends": "google/media.generateContent",
-  "_note": "Gemini TTS: same endpoint, AUDIO modality plus a speechConfig. The text field is `input`, not `prompt`.",
+  "_note": "Gemini TTS: same endpoint, AUDIO modality plus a speechConfig. The text field is `input`, not `prompt`. Both blocks are transform-driven because the two halves of multi-speaker are ONE feature: measured 2026-09-30, a multiSpeakerVoiceConfig without speech_metadata.speaker on every text part is refused outright.",
   "blocks": [
-    { "name": "contents", "to": "contents", "template": [{ "parts": [{ "text": { "$": "input" } }] }] },
+    {
+      "name": "contents",
+      "to": "contents",
+      "template": {
+        "$call": "googleTtsParts"
+      }
+    },
     {
       "name": "generationConfig.audio",
       "to": "generationConfig",
       "merge": true,
       "template": {
-        "responseModalities": ["AUDIO"],
+        "responseModalities": [
+          "AUDIO"
+        ],
         "speechConfig": {
-          "voiceConfig": { "prebuiltVoiceConfig": { "voiceName": { "$call": "googleTtsVoice" } } }
+          "$call": "googleSpeechConfig"
         }
       }
     }
