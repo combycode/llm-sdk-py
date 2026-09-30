@@ -74,7 +74,7 @@ dev = [
 [tool.hatch.version]
 # Read from the package rather than restated here: two copies of a version
 # number stay equal only until someone bumps one of them.
-path = "src/combycode_llm_sdk/__init__.py"
+path = "src/combycode_llm_sdk/version.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/combycode_llm_sdk"]

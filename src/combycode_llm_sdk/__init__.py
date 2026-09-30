@@ -19,11 +19,6 @@ meaning something else. Stream events reach callers through `LLM.stream` and
 
 from __future__ import annotations
 
-#: The distribution's version. This literal is the ONLY place it is written:
-#: `pyproject.toml` declares the version dynamic and hatchling reads it from
-#: here, so the package and the wheel cannot disagree about what they are.
-__version__ = "0.1.1"
-
 from .agent.history import ConversationHistory as ConversationHistory
 from .agent.history import HistoryEntry as HistoryEntry
 from .agent.layers import LAYER_AGENTLOOP_CONTEXT as LAYER_AGENTLOOP_CONTEXT
@@ -231,5 +226,11 @@ from .transcription import TranscriptionResult as TranscriptionResult
 from .transcription import transcribe as transcribe
 from .transport import TransportResponse as TransportResponse
 from .util.json_schema import validate_json_schema as validate_json_schema
+
+#: The distribution's version. Re-exported from `version.py`, which holds the
+#: only literal: code deep in the package (the MCP client's `clientInfo`) needs
+#: it too, and importing the package root from there would be a cycle.
+from .version import SDK_VERSION as SDK_VERSION
+from .version import __version__ as __version__
 
 

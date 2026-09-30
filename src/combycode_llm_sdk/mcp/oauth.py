@@ -30,6 +30,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import hmac
+import re
 import secrets
 import time
 from collections.abc import Mapping, Sequence
@@ -216,6 +217,55 @@ def generate_pkce() -> tuple[str, str]:
 def generate_state() -> str:
     """A CSRF state token."""
     return _base64url(secrets.token_bytes(_ENTROPY_BYTES))
+
+
+#: The parameters of a `WWW-Authenticate: Bearer ...` challenge, lower-cased.
+BearerChallenge = dict[str, str]
+
+_BEARER = re.compile(r"(?:^|,)\s*Bearer\b\s*(.*)$", re.IGNORECASE | re.DOTALL)
+_PARAM = re.compile(r'([A-Za-z0-9_-]+)\s*=\s*(?:"([^"]*)"|([^\s,]+))')
+
+
+def parse_bearer_challenge(header: str | None) -> BearerChallenge | None:
+    """Parse a `WWW-Authenticate` header's Bearer parameters.
+
+    Forgiving about shape and strict about nothing: the header is a hint that
+    decides whether to re-authorize, never a credential. Values may be quoted
+    or bare, and a scheme other than Bearer yields nothing.
+
+    None when there is no Bearer challenge at all, which reads differently from
+    a challenge carrying no parameters.
+    """
+    if not header:
+        return None
+    match = _BEARER.search(header)
+    if match is None:
+        return None
+    out: BearerChallenge = {}
+    for param in _PARAM.finditer(match.group(1) or ""):
+        out[param.group(1).lower()] = param.group(2) if param.group(2) is not None else param.group(3)
+    return out
+
+
+def union_scopes(previous: str | None, nxt: str | None) -> str | None:
+    """Merge two space-delimited scope strings, keeping order and dropping repeats.
+
+    SEP-2350: a step-up re-authorization asks for the union of what was already
+    requested and what the server just challenged for. Asking for the challenged
+    scope ALONE is the failure this prevents -- the new grant replaces the old
+    one, so escalating one operation silently revokes what another relied on.
+    """
+    if not previous:
+        return nxt
+    if not nxt:
+        return previous
+    merged = previous.split()
+    seen = set(merged)
+    for scope in nxt.split():
+        if scope not in seen:
+            seen.add(scope)
+            merged.append(scope)
+    return " ".join(merged)
 
 
 def issuers_match(a: str, b: str) -> bool:
@@ -496,12 +546,37 @@ class McpOAuth:
             return {"authorization": f"Bearer {tokens.access_token}"}
         return {}
 
-    def reauthorize(self) -> bool:
-        """Answer a 401. True when a retry is worth it."""
+    def reauthorize(self, challenged_scope: str | None = None) -> bool:
+        """Get back in after the server refused the token we hold.
+
+        `challenged_scope` is set when the refusal was a SEP-2350 step-up -- a
+        403 saying the token is valid but not broad enough. That case skips the
+        refresh entirely: a refresh token mints another token with the SAME
+        scope, which is the scope just rejected, so it can only fail again.
+
+        The scope asked for is the UNION of everything previously requested,
+        what the stored token was actually granted, and what the server now
+        demands. Asking for the challenged scope alone is the failure SEP-2350
+        describes: the new grant replaces the old one, so escalating one
+        operation silently drops the permissions another depends on. The granted
+        scope must come from the TOKEN, because `client_metadata.scope` is
+        whatever this process was configured with -- after a restart that is the
+        only record of what the user actually consented to.
+
+        True when a retry is worth it.
+        """
         tokens = self._bound_tokens()
-        if tokens and tokens.refresh_token and self._try_refresh(tokens.refresh_token):
+        if (
+            challenged_scope is None
+            and tokens
+            and tokens.refresh_token
+            and self._try_refresh(tokens.refresh_token)
+        ):
             return True
-        self._start_redirect()
+        granted = union_scopes(
+            self._provider.client_metadata.scope, tokens.scope if tokens else None
+        )
+        self._start_redirect(union_scopes(granted, challenged_scope) if challenged_scope else None)
         return False
 
     def finish(self, code: str, returned_state: str, iss: str | None = None) -> None:
@@ -542,7 +617,9 @@ class McpOAuth:
 
     # -- internal ------------------------------------------------------------
 
-    def _start_redirect(self) -> None:
+    def _start_redirect(self, scope: str | None = None) -> None:
+        """`scope` overrides the configured one for a step-up, where the union
+        of old and newly challenged scopes is what must be asked for."""
         metadata = self._ensure_metadata()
         client = self._ensure_client(metadata)
         verifier, challenge = generate_pkce()
@@ -557,7 +634,7 @@ class McpOAuth:
                 client_id=client.client_id,
                 redirect_uri=self._provider.redirect_url,
                 code_challenge=challenge,
-                scope=self._provider.client_metadata.scope,
+                scope=scope or self._provider.client_metadata.scope,
                 state=state,
                 resource=self._server_url,
             )

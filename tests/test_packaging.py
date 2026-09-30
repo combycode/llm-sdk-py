@@ -95,7 +95,8 @@ def test_dunder_version_is_the_distribution_version() -> None:
     """`__version__` and the installed metadata are the same string.
 
     They are one literal today -- pyproject declares the version dynamic and
-    hatchling reads it from `__init__.py` -- and this is what keeps that true.
+    hatchling reads it from `version.py`, which the package re-exports -- and
+    this is what keeps that true.
     A refactor that reintroduces a second copy passes every other test in the
     suite and ships a wheel whose metadata disagrees with the module.
     """

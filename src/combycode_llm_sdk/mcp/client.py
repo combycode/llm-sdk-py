@@ -39,6 +39,7 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any, Self
 
+from ..version import SDK_VERSION
 from .errors import McpError, McpErrorCode
 from .input_required import (
     InputRequiredRetry,
@@ -67,8 +68,11 @@ from .subscriptions import (
 )
 from .transport import IncomingHandlers, McpTransport
 
-#: How this client identifies itself when a server asks.
-DEFAULT_CLIENT_INFO = {"name": "combycode-llm-sdk", "version": "0"}
+#: How this client identifies itself when a server asks. The version was `"0"`,
+#: hard-coded, for every release -- so every MCP server this library ever spoke
+#: to was told a version that does not exist, and nothing anywhere could
+#: notice. It is read from `version.py` now, which the wheel is also built from.
+DEFAULT_CLIENT_INFO = {"name": "combycode-llm-sdk", "version": SDK_VERSION}
 
 #: How long `close()` waits for the keep-alive thread to unwind. Short: it is
 #: either sitting in an interruptible wait or inside one ping, and a caller
@@ -183,6 +187,12 @@ class McpClient:
                 on_notification=self._handle_notification,
             )
         )
+        # The transport is what SEES the 404 that says the session is gone, and
+        # this is what knows how to hand-shake a new one. Installed before
+        # anything is sent, so even the handshake's own retry path has it.
+        install = getattr(self._transport, "set_on_session_lost", None)
+        if install is not None:
+            install(self._recover_session)
         self._transport.start()
 
         mode = self._options.protocol_mode or "auto"
@@ -261,6 +271,29 @@ class McpClient:
         self.close()
 
     # -- negotiation ---------------------------------------------------------
+
+    def _recover_session(self) -> bool:
+        """Re-establish a session the server no longer holds, keeping the era.
+
+        A stateful server answers 404 to a session id it has forgotten -- it
+        restarted, evicted the session, or let it expire -- and every later
+        request fails the same way until someone hand-shakes again. Re-running
+        the FULL negotiation would be wrong twice over: it re-probes a version
+        question already settled with this server, and in the modern era there
+        is no session to rebuild in the first place.
+
+        Returns whether the caller's request is worth replaying. False rather
+        than raising: the original 404 is the better error to surface, and a
+        recovery that failed should not replace it with its own.
+        """
+        if self.era != "handshake":
+            return False
+        try:
+            self._handshake()
+        except Exception:  # noqa: BLE001 -- see the docstring: whatever went
+            # wrong here, the 404 is what the caller needs to see.
+            return False
+        return True
 
     def _handshake(self) -> None:
         """The pre-2026 path: `initialize`, then `notifications/initialized`.

@@ -29,6 +29,7 @@ Transposed from `unified-library-ts/src/plugins/mcp/transport-http.ts`.
 
 from __future__ import annotations
 
+import inspect
 import json
 import re
 import threading
@@ -39,6 +40,7 @@ from ..llm.wire_transforms import make_registry
 from ..network.errors import LLMError
 from ..wire.interpreter import build_from_spec
 from .errors import McpError, McpErrorCode
+from .oauth import parse_bearer_challenge
 from .transport import BaseJsonRpcTransport, OnStreamEnd, OnStreamOpen
 from .wire_rules import mcp_spec, mcp_wire_registry
 
@@ -115,6 +117,55 @@ def pick_response(content_type: str, text: str, request_id: int) -> dict[str, An
     return None
 
 
+def _reauthorized(callback: Callable[..., bool] | None, scope: str | None) -> bool:
+    """Ask the caller to re-authorize, passing the scope only if it wants one.
+
+    The scope is new; the callback is not. A handler written before step-up
+    existed is `def on_unauthorized() -> bool`, and Python -- unlike JavaScript,
+    where a surplus argument is simply ignored -- raises TypeError for it. So
+    the arity is inspected rather than assumed, and an existing handler keeps
+    working untouched.
+
+    Inspection can fail on a callable that has no introspectable signature (a
+    builtin, some C extensions); that is treated as "takes nothing", which is
+    the safe reading -- the worst case is a step-up that re-authorizes without
+    the widened scope, rather than one that raises.
+    """
+    if callback is None:
+        return False
+    try:
+        takes_arg = bool(inspect.signature(callback).parameters)
+    except (TypeError, ValueError):
+        takes_arg = False
+    return callback(scope) if takes_arg else callback()
+
+
+def _reauth_trigger(status: int, www_authenticate: str | None) -> dict[str, str | None] | None:
+    """Should this response send us back through authorization, and asking for what?
+
+    Two refusals mean "re-authorize", and they mean different things:
+
+    * **401** -- the token is missing, expired or rejected. A refresh may fix
+      it, and the scope does not change.
+    * **403 with ``error="insufficient_scope"``** (SEP-2350) -- the token is
+      perfectly valid and simply not broad enough. A refresh is useless here: it
+      mints another token with the scope that was just refused. What is needed
+      is a new grant covering the scope the server named, UNIONED with what is
+      already held, which is why the scope travels back with the answer.
+
+    Any other 403 is a real authorization failure -- the caller may not do this
+    whatever token they hold -- and re-authorizing would only loop.
+    """
+    if status == 401:
+        return {}
+    if status != 403:
+        return None
+    challenge = parse_bearer_challenge(www_authenticate)
+    if challenge is None or challenge.get("error") != "insufficient_scope":
+        return None
+    return {"scope": challenge.get("scope")}
+
+
 class HttpTransport(BaseJsonRpcTransport):
     """One MCP server, reached over Streamable HTTP."""
 
@@ -129,7 +180,7 @@ class HttpTransport(BaseJsonRpcTransport):
         timeout: float = DEFAULT_TIMEOUT_SECONDS,
         queue_name: str | None = None,
         auth_headers: Callable[[], Mapping[str, str]] | None = None,
-        on_unauthorized: Callable[[], bool] | None = None,
+        on_unauthorized: Callable[..., bool] | None = None,
     ) -> None:
         super().__init__()
         self._url = url
@@ -141,6 +192,13 @@ class HttpTransport(BaseJsonRpcTransport):
         self._queue_name = queue_name
         self._auth_headers = auth_headers
         self._on_unauthorized = on_unauthorized
+        #: Re-establish a session the server says it no longer holds. Installed
+        #: by the client, which is what knows how to `initialize`; None until
+        #: then, so a transport nobody wired up behaves exactly as before.
+        self._on_session_lost: Callable[[], bool] | None = None
+        #: Guards the recursion: re-initializing goes back through this
+        #: transport, and a 404 on THAT must not start another recovery.
+        self._recovering = False
 
         self._session_id: str | None = None
         self._protocol_version: str | None = None
@@ -167,6 +225,10 @@ class HttpTransport(BaseJsonRpcTransport):
 
     def set_era(self, era: str) -> None:
         self._era = era
+
+    def set_on_session_lost(self, recover: Callable[[], bool]) -> None:
+        """Install the callback that rebuilds a session the server has dropped."""
+        self._on_session_lost = recover
 
     @property
     def session_id(self) -> str | None:
@@ -211,9 +273,34 @@ class HttpTransport(BaseJsonRpcTransport):
 
         status, headers, text = self._post("mcp/http.request", call)
 
-        # A 401 is answered once, after the caller has had a chance to re-auth.
-        if status == 401 and self._on_unauthorized is not None and self._on_unauthorized():
+        # A 401, or a 403 step-up, is answered ONCE after the caller has had a
+        # chance to re-authorize.
+        trigger = _reauth_trigger(status, headers.get("www-authenticate"))
+        if trigger is not None and _reauthorized(self._on_unauthorized, trigger.get("scope")):
             status, headers, text = self._post("mcp/http.request", call)
+
+        # A 404 while we HOLD a session id means the server no longer has that
+        # session: it restarted, evicted it, or let it expire. Re-initialize
+        # once and replay the call.
+        #
+        # Only when a session id is held -- a 404 without one is an ordinary
+        # wrong URL, and re-initializing against it would turn one clear error
+        # into a confusing pair. The id is dropped BEFORE recovering so the new
+        # handshake does not present the dead one.
+        if (
+            status == 404
+            and self._session_id is not None
+            and self._on_session_lost is not None
+            and not self._recovering
+        ):
+            self._session_id = None
+            self._recovering = True
+            try:
+                recovered = self._on_session_lost()
+            finally:
+                self._recovering = False
+            if recovered:
+                status, headers, text = self._post("mcp/http.request", call)
 
         if status >= 400:
             # A 4xx MAY still carry a JSON-RPC error, and for negotiation it is

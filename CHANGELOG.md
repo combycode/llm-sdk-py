@@ -6,7 +6,36 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ## [Unreleased]
 
+### Added
+
+- **A 403 `insufficient_scope` now re-authorizes, asking for the union of scopes** (SEP-2350). Same
+  as the TypeScript: only a 401 was handled, so a "valid but too narrow" token could never be
+  widened. A step-up skips the refresh, which would mint the scope just refused, and asks for the
+  union of the configured, the granted and the challenged scopes -- the granted one read from the
+  token, because after a restart it is the only record of what was consented to. Any other 403 stays
+  an error. Retried once. New `parse_bearer_challenge` and `union_scopes` in `mcp.oauth`.
+  An existing `on_unauthorized` handler keeps working untouched: its arity is inspected, because a
+  handler written before step-up takes no argument and Python -- unlike JavaScript, where a
+  surplus argument is ignored -- raises TypeError when handed one.
+
 ### Fixed
+
+- **A session the server has forgotten is now rebuilt instead of ending the connection.** A stateful
+  MCP server answers `404` to a session id it no longer holds -- it restarted, evicted the session,
+  or let it expire. That became `CONNECTION_CLOSED`, and because the id is held for the life of the
+  transport, EVERY later request failed the same way: one server restart permanently broke a
+  connected client. A 404 while a session id is held now drops that id, re-runs the handshake once
+  and replays the request -- only the handshake, whose version question is already settled with
+  this server, and only in the handshake era, since the modern wire has no session to rebuild. A
+  404 with no session id held is left alone, being an ordinary wrong URL, and a recovery that itself
+  404s does not start another. When recovery fails the original 404 is what surfaces.
+
+- **The MCP client told every server it was version `"0"`.** Hard-coded in `DEFAULT_CLIENT_INFO`
+  since the first release, so server-side logs and compatibility shims attributed our traffic to a
+  client that does not exist. It now reports the real version. The literal moved to a new
+  `combycode_llm_sdk.version` module -- re-exported as `__version__` and `SDK_VERSION`, and what
+  hatchling now builds the wheel's version from -- because code inside the package needed to read
+  it and importing the package root from there would be a cycle. Still exactly one literal.
 
 - **Two streamed tool calls no longer merge into one.** Same fault as the TypeScript, in the same
   two places: the accumulator routed an unmatched delta to the FIRST call in flight, and Google's
