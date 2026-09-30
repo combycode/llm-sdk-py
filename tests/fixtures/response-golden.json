@@ -20093,5 +20093,224 @@
         }
       }
     }
+  },
+  "openai/responses::error.misalignment": {
+    "target": "openai/responses",
+    "scenario": "error.misalignment",
+    "provider": "openai",
+    "model": "gpt-5.4-nano",
+    "api": "responses",
+    "streaming": false,
+    "recordedAt": "2026-09-30",
+    "synthetic": true,
+    "provenance": "openai-ts 7.4.0 `ResponseError.misalignment` + the `misalignment_policy_violation` code member, both added 2026-09. `error_type` is documented as open (\"clients must accept additional values\"). TYPE-DERIVED, not measured: provoking a real safety block to record one is neither reliable nor something to automate.",
+    "raw": {
+      "id": "resp_096b442ec1d76e0d006a8c27cc098087d2bebaa8d01f837298",
+      "object": "response",
+      "created_at": 1787570124,
+      "status": "failed",
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "completed_at": 1787570124,
+      "error": {
+        "code": "misalignment_policy_violation",
+        "message": "Blocked by the safety systems.",
+        "misalignment": {
+          "detailed_explanation": "The requested action would have sent private file contents to an external address.",
+          "error_type": "potentially_unintended_data_transfer",
+          "steer": {
+            "message": "Confirm the recipient with the user before sending anything."
+          }
+        }
+      },
+      "frequency_penalty": 0,
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 16,
+      "max_tool_calls": null,
+      "model": "gpt-5.4-nano-2026-03-17",
+      "moderation": null,
+      "output": [],
+      "parallel_tool_calls": true,
+      "presence_penalty": 0,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "prompt_cache_retention": "24h",
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "none",
+        "mode": "standard",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "store": true,
+      "temperature": 1,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      },
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 0.98,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 11,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 5,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 16
+      },
+      "user": null,
+      "metadata": {}
+    },
+    "parsed": {
+      "latencyMs": 0,
+      "raw": {
+        "id": "resp_096b442ec1d76e0d006a8c27cc098087d2bebaa8d01f837298",
+        "object": "response",
+        "created_at": 1787570124,
+        "status": "failed",
+        "background": false,
+        "billing": {
+          "payer": "developer"
+        },
+        "completed_at": 1787570124,
+        "error": {
+          "code": "misalignment_policy_violation",
+          "message": "Blocked by the safety systems.",
+          "misalignment": {
+            "detailed_explanation": "The requested action would have sent private file contents to an external address.",
+            "error_type": "potentially_unintended_data_transfer",
+            "steer": {
+              "message": "Confirm the recipient with the user before sending anything."
+            }
+          }
+        },
+        "frequency_penalty": 0,
+        "incomplete_details": null,
+        "instructions": null,
+        "max_output_tokens": 16,
+        "max_tool_calls": null,
+        "model": "gpt-5.4-nano-2026-03-17",
+        "moderation": null,
+        "output": [],
+        "parallel_tool_calls": true,
+        "presence_penalty": 0,
+        "previous_response_id": null,
+        "prompt_cache_key": null,
+        "prompt_cache_retention": "24h",
+        "reasoning": {
+          "context": "current_turn",
+          "effort": "none",
+          "mode": "standard",
+          "summary": null
+        },
+        "safety_identifier": null,
+        "service_tier": "default",
+        "store": true,
+        "temperature": 1,
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "tool_choice": "auto",
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "input_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "output_tokens": 0,
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            },
+            "total_tokens": 0
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 0.98,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 11,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 5,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 16
+        },
+        "user": null,
+        "metadata": {}
+      },
+      "id": "resp_096b442ec1d76e0d006a8c27cc098087d2bebaa8d01f837298",
+      "model": "gpt-5.4-nano-2026-03-17",
+      "content": [],
+      "toolCalls": [],
+      "media": [],
+      "thinking": null,
+      "text": "",
+      "usage": {
+        "inputTokens": 11,
+        "outputTokens": 5,
+        "totalTokens": 16,
+        "cachedTokens": 0,
+        "cacheWriteTokens": 0,
+        "reasoningTokens": 0,
+        "serviceTier": "default",
+        "pricingTier": "standard"
+      },
+      "finishReason": "error",
+      "error": {
+        "code": "misalignment_policy_violation",
+        "message": "Blocked by the safety systems.",
+        "misalignment": {
+          "detailedExplanation": "The requested action would have sent private file contents to an external address.",
+          "errorType": "potentially_unintended_data_transfer",
+          "steer": {
+            "message": "Confirm the recipient with the user before sending anything."
+          }
+        }
+      }
+    }
   }
 }

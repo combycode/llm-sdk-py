@@ -247,19 +247,68 @@ def _finish(_arg: Any, ctx: Ctx) -> str:
     )
 
 
+def openai_misalignment(value: Any) -> dict[str, Any] | None:
+    """What a safety block said about itself, if it said anything.
+
+    OpenAI added this in 2026-09 beside the `misalignment_policy_violation`
+    code. `message` only reports that the turn was blocked; this reports what
+    about it looked wrong and, when the provider offers one, a continuation to
+    send instead.
+
+    `error_type` is passed through whatever it is -- the provider documents
+    four values and says in as many words that clients must accept more, so
+    validating against the four would drop exactly the ones worth knowing
+    about.
+
+    None rather than an empty dict when nothing usable arrived:
+    `misalignment: {}` would read as "a safety system explained itself" when
+    none did.
+    """
+    if not isinstance(value, Mapping):
+        return None
+    out: dict[str, Any] = {}
+    explanation = value.get("detailed_explanation")
+    if isinstance(explanation, str):
+        out["detailedExplanation"] = explanation
+    error_type = value.get("error_type")
+    if isinstance(error_type, str):
+        out["errorType"] = error_type
+    steer = value.get("steer")
+    message = steer.get("message") if isinstance(steer, Mapping) else None
+    if isinstance(message, str):
+        out["steer"] = {"message": message}
+    return out or None
+
+
 def _error(_arg: Any, ctx: Ctx) -> dict[str, Any] | None:
     """A Responses call can fail INSIDE a 200, so there is no exception to catch
-    and this is the only signal the caller gets."""
+    and this is the only signal the caller gets.
+
+    A numeric `code` counts. The field was read only when it was already a
+    string, so a number was dropped and the caller saw a failure with no code
+    at all -- and OpenAI does send both, which is why openai-py 3.14 began
+    coercing it with `str(code)`. `bool` is excluded on purpose: it is an `int`
+    in Python, and `"True"` is not a code.
+
+    `misalignment` is kept because `steer.message` is a continuation the caller
+    can act on -- without it, all an agent learns is that it was stopped.
+    """
     e = _raw(ctx).get("error")
     if not isinstance(e, Mapping):
         return None
     if e.get("code") is None and e.get("message") is None:
         return None
     out: dict[str, Any] = {}
-    if isinstance(e.get("code"), str):
-        out["code"] = e["code"]
+    code = e.get("code")
+    if isinstance(code, str):
+        out["code"] = code
+    elif isinstance(code, int) and not isinstance(code, bool):
+        out["code"] = str(code)
     if isinstance(e.get("message"), str):
         out["message"] = e["message"]
+    misalignment = openai_misalignment(e.get("misalignment"))
+    if misalignment is not None:
+        out["misalignment"] = misalignment
     return out or None
 
 
