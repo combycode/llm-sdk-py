@@ -8,6 +8,19 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Refuse an oversized image instead of letting Anthropic shrink it silently.** An image over the
+  model's maximum is downsized by default and nothing says so -- the model reasons over dimensions
+  the caller never chose. New per-image `providerOptions.transformations.oversized_image`
+  (`'downsize' | 'error'`) on an image content part. Measured 2026-09-30: a 4000x4000 image sent
+  with `'error'` is refused with *"image dimensions 4000x4000 exceed the maximum image size of a
+  model named on this request and would be downsized to 1092x1092"* -- 7% of the pixels sent --
+  while the same image without the field is accepted and shrunk. Per-IMAGE deliberately, via the
+  new `ImagePartProviderOptions`: one oversized screenshot should not change how every other image
+  in the conversation is handled. Omitted when unset, and an empty object is not sent, matching
+  Anthropic's documented "equivalent to omitting the field".
+
+### Added
+
 - **`promptCacheOptions.prewarm`: write the prompt cache without generating anything.** Typed as
   the new `PromptCacheOptions` (`prewarm`, `mode`, `ttl`, `comparison_response_id`), forwarded
   verbatim as before. Live-measured 2026-09-30 on `gpt-5.6-terra`: the prewarm call returns 0

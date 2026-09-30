@@ -148,7 +148,7 @@ class AnthropicAdapter:
         if kind == "text":
             return {"type": "text", "text": part.get("text")}
         if kind == "image":
-            return self._build_image(part.get("source") or {})
+            return self._build_image(part.get("source") or {}, part.get("providerOptions"))
         if kind == "document":
             return self._build_document(part)
         if kind == "tool_call":
@@ -183,24 +183,33 @@ class AnthropicAdapter:
         return {"type": "text", "text": f"[unsupported: {kind}]"}
 
     @staticmethod
-    def _build_image(source: Mapping[str, Any]) -> dict[str, Any]:
+    def _build_image(
+        source: Mapping[str, Any], provider_options: Mapping[str, Any] | None = None
+    ) -> dict[str, Any]:
         kind = source.get("type")
         if kind == "base64":
-            return {
-                "type": "image",
-                "source": {
-                    "type": "base64",
-                    "media_type": source.get("mimeType"),
-                    "data": source.get("data"),
-                },
+            built: dict[str, Any] = {
+                "type": "base64",
+                "media_type": source.get("mimeType"),
+                "data": source.get("data"),
             }
-        if kind == "url":
-            return {"type": "image", "source": {"type": "url", "url": source.get("url")}}
-        if kind == "provider_ref":
-            return {"type": "image", "source": {"type": "file", "file_id": source.get("refId")}}
-        if kind == "file":
-            return {"type": "image", "source": {"type": "file", "file_id": source.get("fileId")}}
-        return {"type": "image", "source": {}}
+        elif kind == "url":
+            built = {"type": "url", "url": source.get("url")}
+        elif kind == "provider_ref":
+            built = {"type": "file", "file_id": source.get("refId")}
+        elif kind == "file":
+            built = {"type": "file", "file_id": source.get("fileId")}
+        else:
+            built = {}
+        block: dict[str, Any] = {"type": "image", "source": built}
+        # Per-image, and only when asked for: the server's default is to
+        # downsize an oversized image silently, and restating that default on
+        # every block would freeze it into requests that never chose it. An
+        # empty object is documented as equivalent to omitting the field.
+        transformations = (provider_options or {}).get("transformations")
+        if isinstance(transformations, Mapping) and transformations:
+            block["transformations"] = dict(transformations)
+        return block
 
     @staticmethod
     def _build_document(part: ContentPart) -> dict[str, Any]:
