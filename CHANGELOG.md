@@ -8,6 +8,29 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Changing how hard a stored conversation thinks, from this turn on.** `thinking.effort`
+  applies to the request it is on and nothing else, so there was no way to tell a conversation the
+  server is holding to think less from here. New `ConfigurationUpdatePart`
+  (`{ type: 'configuration_update', reasoning: { effort } }`) is accepted as message content and
+  emitted as its own top-level Responses input item, BEFORE the message it travels with -- the API
+  applies an update to SUBSEQUENT responses, so one placed after the message it was meant to
+  govern governs the next one instead, a change that takes effect a turn late with nothing
+  reporting it. Also parsed back out of `response.output` into the same part, so a replayed
+  transcript keeps its configuration instead of silently reverting the effort.
+  Measured on `gpt-5.6-luna` on 2026-10-01, three runs per arm, setting the effort in turn 1 and
+  naming nothing in turn 2: via this item 0/0/0 reasoning tokens, via `thinking.effort`
+  244/189/172, with no configuration at all 155/129/198. The option does not persist; the item
+  does. Support is narrow -- `gpt-5.6-sol` and `gpt-5.6-luna` accept it, while `gpt-5.4`,
+  `gpt-5.4-nano` and `gpt-5.5` answer 400 naming the item type.
+  `effort` takes the unified ladder plus `none` and `minimal`, which this item accepts and the
+  unified ladder does not yet carry -- `none` is the value that demonstrates the feature, so a part
+  that could not say it would ship the feature without its clearest use. `max` is mapped to
+  `xhigh` exactly as everywhere else, so the word means one thing across the surface.
+  Three measured corrections to the official SDK's types, which this one does not repeat:
+  `reasoning` is required, `reasoning.effort` is required, and `effort: null` is refused.
+
+### Added
+
 - **Nowhere to put a correction made while a run was suspended.** A run stops at an approval
   gate; while the person is deciding, the user adds "use staging, not prod". `AgentLoop` now has
   `add_input()`, `pending_input` and `clear_pending_input()`: staged input is admitted into history

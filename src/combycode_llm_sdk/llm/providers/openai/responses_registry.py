@@ -169,6 +169,28 @@ def _program_result(_arg: Any, ctx: Ctx) -> dict[str, Any]:
     return out
 
 
+def _configuration_update(_arg: Any, ctx: Ctx) -> dict[str, Any] | None:
+    """A stored configuration update, if one ever arrives in `response.output`.
+
+    Measured 2026-10-01 it does NOT: four turns that set one on `gpt-5.6-sol`
+    and `gpt-5.6-luna` returned `output: [message]` every time, and the item was
+    found only through `GET /v1/conversations/{id}/items`. It is parsed anyway
+    because OpenAI's own types put it in the output union, and the cost of being
+    wrong runs one way: dropping a configuration item from history silently
+    reverts the effort on the next turn, which is a change in how much the model
+    thinks with nothing to point at.
+    """
+    item = _item(ctx)
+    reasoning = item.get("reasoning") or {}
+    effort = reasoning.get("effort") if isinstance(reasoning, Mapping) else None
+    if not isinstance(effort, str):
+        return None
+    out: dict[str, Any] = {"type": "configuration_update", "reasoning": {"effort": effort}}
+    if isinstance(item.get("id"), str):
+        out["id"] = item["id"]
+    return out
+
+
 def _image(_arg: Any, ctx: Ctx) -> dict[str, Any] | None:
     item = _item(ctx)
     data = item.get("result")
@@ -337,6 +359,7 @@ OPENAI_RESPONSES_REGISTRY = Registry(
         "oaiRespToolCall": _tool_call,
         "oaiRespProgram": _program,
         "oaiRespProgramResult": _program_result,
+        "oaiRespConfigurationUpdate": _configuration_update,
         "oaiRespImage": _image,
         "oaiRespFallbackTextPart": _fallback_text_part,
         "oaiRespText": _text,

@@ -49,6 +49,10 @@
         },
         "program": { "emit": "content", "as": { "$call": "oaiRespProgram" } },
         "program_output": { "emit": "content", "as": { "$call": "oaiRespProgramResult" } },
+        "configuration_update": {
+          "emit": "content",
+          "as": { "$call": "oaiRespConfigurationUpdate" }
+        },
         "image_generation_call": {
           "emit": ["content", "media"],
           "as": { "$call": "oaiRespImage" }

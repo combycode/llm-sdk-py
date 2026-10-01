@@ -40,6 +40,7 @@ from .parse_helpers import (
     from_wire_caller,
     openai_responses_usage,
 )
+from .reasoning_effort import to_openai_reasoning_effort
 from .responses_registry import OPENAI_RESPONSES_REGISTRY
 from .responses_stream_registry import OPENAI_RESPONSES_STREAM_REGISTRY
 
@@ -126,6 +127,27 @@ class OpenAIResponsesAdapter:
         items: list[Any] = []
         role = msg.get("role")
 
+        # A configuration update is its own top-level item rather than content, and
+        # it goes FIRST. The API applies it to subsequent responses, so an update
+        # placed after the message it was meant to govern governs the next one
+        # instead -- and the caller sees their effort change take effect a turn
+        # late, which nothing reports.
+        #
+        # `id` is deliberately not echoed: it names the STORED item (`cnfu_...`),
+        # and sending it back claims to update an item that already exists. Unlike
+        # `program_output`, nothing requires the round trip.
+        content = msg.get("content")
+        if not isinstance(content, str):
+            for part in content or []:
+                if part.get("type") == "configuration_update":
+                    effort = (part.get("reasoning") or {}).get("effort")
+                    items.append(
+                        {
+                            "type": "configuration_update",
+                            "reasoning": {"effort": to_openai_reasoning_effort(effort)},
+                        }
+                    )
+
         if role in ("user", "system"):
             self._append_user_items(items, msg, role, notes)
         elif role == "assistant":
@@ -161,6 +183,13 @@ class OpenAIResponsesAdapter:
         parts: list[Any] = []
         for p in content:
             kind = p.get("type")
+            # Carried as its own top-level item by `build_input_items`, not as
+            # content. Skipped BEFORE the drop-note, or every request carrying one
+            # also carried a warning saying it had been sent without it -- which
+            # would be the opposite of true, and the kind of warning that teaches
+            # a reader to stop believing the others.
+            if kind == "configuration_update":
+                continue
             source: Mapping[str, Any] = p.get("source") or {}
             # Measured against the list, not guessed from the branch taken: a
             # kind can be known and still produce nothing when its SOURCE has no

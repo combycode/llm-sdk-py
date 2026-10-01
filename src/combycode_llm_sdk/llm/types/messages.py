@@ -28,6 +28,17 @@ The shapes, field for field with the TypeScript:
 - `ToolResultPart`  `{type:'tool_result', id, content, isError?, namespace?, caller?}`
 - `ProgramCallPart` `{type:'program_call', id, code, fingerprint, _meta?}`
 - `ProgramResultPart` `{type:'program_result', id, result, status?, _meta?}`
+- `ConfigurationUpdatePart` `{type:'configuration_update', reasoning:{effort}, id?}`
+  The configuration a STORED conversation runs under, from this point on.
+  OpenAI Responses only (`gpt-5.6-sol`, `gpt-5.6-luna`; every other model
+  answers 400). It exists because the top-level effort option applies to ITS
+  request and nothing else -- measured 2026-10-01 on `gpt-5.6-luna`, three
+  runs each, setting the effort in turn 1 and naming nothing in turn 2: via
+  this item 0/0/0 reasoning tokens, via the option 244/189/172, with no
+  configuration at all 155/129/198. `reasoning` and `reasoning.effort` are
+  both REQUIRED and `effort: null` is refused, all three contrary to the
+  official SDK's types. `effort` admits `none` and `minimal` on top of the
+  unified ladder, because `none` is the value that proves the item works.
 - `ImageOutputPart` `{type:'image_output', mediaId, mimeType, revisedPrompt?, width?, height?, _data?}`
 - `AudioOutputPart` `{type:'audio_output', mediaId, mimeType, durationMs?, sampleRate?, _data?}`
 - `VideoOutputPart` `{type:'video_output', mediaId, mimeType, durationMs?, width?, height?, _data?}`
