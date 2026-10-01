@@ -38,6 +38,13 @@ from ..bus.hook_bus import HookBus
 from ..llm.output_errors import AgentRunError
 from ..results import Completion, ToolCall, Usage
 from ..wire.interpreter import js_json
+from .fallback import (
+    FallbackNotice,
+    FallbackRun,
+    client_chain,
+    complete_with_fallback,
+    stream_with_fallback,
+)
 from .history import ConversationHistory
 from .lazy_tools import (
     LazySearchState,
@@ -125,11 +132,21 @@ class AgentLoop:
         checkpoint: Any = None,
         metadata: Mapping[str, Any] | None = None,
         options: Mapping[str, Any] | None = None,
+        fallback_clients: Sequence[Any] | None = None,
+        fallback_on: Sequence[str] | None = None,
     ) -> None:
         if client is None:
             raise ValueError("AgentLoop: a client is required")
 
         self.client = client
+        #: The primary plus its backups, in order. One entry when none were
+        #: given, so every step takes the same path whether or not fallback is
+        #: configured.
+        #:
+        #: `self.model` still reports the PRIMARY, as it must: it is read before
+        #: any request is made. Each step's report and span name whoever served.
+        self._client_chain = client_chain(client, fallback_clients)
+        self._fallback_on = tuple(fallback_on) if fallback_on is not None else None
         self.hooks = hooks if hooks is not None else HookBus()
         self.label = label
         self.source = source
@@ -456,8 +473,10 @@ class AgentLoop:
                 self._run_guardrails(self._before, self._input_guard_ctx(step_count, trace))
 
                 step_start = _now_ms()
-                last = self.client.complete(
-                    self._history.messages(), **self._step_options(options, trace)
+                last, served_by = complete_with_fallback(
+                    self._step_fallback(),
+                    self._history.messages(),
+                    dict(self._step_options(options, trace)),
                 )
                 step_latency = _now_ms() - step_start
                 total_llm_ms += step_latency
@@ -519,9 +538,14 @@ class AgentLoop:
                     self._reflect.record_success()
 
                 calls = self._tool_calls_of(last)
+                # Stamped with WHO SERVED, not with the primary. Provenance is
+                # model-bound: a stateful continuation is only valid against the
+                # model that issued the state, so recording the primary on a turn
+                # a backup produced would have the next step offer the backup's
+                # server state to the primary.
                 self._history.append(
                     self._assistant_message(last, calls),
-                    model=self.model,
+                    model=getattr(served_by, "model", self.model),
                     usage=last.usage,
                     latency_ms=step_latency,
                 )
@@ -672,8 +696,16 @@ class AgentLoop:
 
                 step_start = _now_ms()
                 state = StepState()
-                for event in self.client.stream(
-                    self._history.messages(), self._step_options(options, trace)
+                # Who served is read back AFTER the stream, not assumed: a step
+                # the backup answered must be stamped with the backup's model, or
+                # the report and the span both name a model that produced none of
+                # this.
+                stream_served_by: list[Any] = [self.client]
+                for event in stream_with_fallback(
+                    self._step_fallback(),
+                    self._history.messages(),
+                    dict(self._step_options(options, trace)),
+                    stream_served_by,
                 ):
                     forward = accumulate_stream_event(event, state)
                     if forward is not None:
@@ -685,7 +717,9 @@ class AgentLoop:
                 finalize_unended_tool_calls(state)
 
                 step_latency = _now_ms() - step_start
-                last = build_step_completion(state, self.model, step_latency)
+                last = build_step_completion(
+                    state, getattr(stream_served_by[0], "model", self.model), step_latency
+                )
                 total_llm_ms += step_latency
                 total_usage = add_usage(total_usage, last.usage)
                 for cite in last.citations:
@@ -694,7 +728,7 @@ class AgentLoop:
                 calls = self._tool_calls_of(last)
                 self._history.append(
                     self._assistant_message(last, calls),
-                    model=self.model,
+                    model=getattr(stream_served_by[0], "model", self.model),
                     usage=last.usage,
                     latency_ms=step_latency,
                 )
@@ -1091,6 +1125,35 @@ class AgentLoop:
             return [p for p in response.tool_calls if p.type == "tool_call" and p.name]
         return [p for p in response.tool_calls if p.type == "tool_call" and p.name]
 
+    def _step_fallback(self) -> FallbackRun:
+        """The chain a step runs against, with the warning wired to this bus.
+
+        Built per step rather than once, so a consumer reading `onWarning` can
+        tell WHICH step fell over -- one warning per run would have been enough
+        to notice the fallback and not enough to find it.
+        """
+
+        def warn(notice: FallbackNotice) -> None:
+            self.hooks.emit_sync(
+                "onWarning",
+                {
+                    "source": "agent",
+                    "code": "model_fallback",
+                    "message": (
+                        f'Model "{notice.from_model}" failed '
+                        f"({notice.kind or 'error'}: {notice.message}); "
+                        f'falling back to "{notice.to_model}".'
+                    ),
+                    "details": {
+                        "from": notice.from_model,
+                        "to": notice.to_model,
+                        "kind": notice.kind,
+                    },
+                },
+            )
+
+        return FallbackRun(chain=self._client_chain, kinds=self._fallback_on, on_fallback=warn)
+
     @staticmethod
     def _assistant_message(response: Completion, calls: Sequence[Any]) -> dict[str, Any]:
         content: list[dict[str, Any]] = []
@@ -1443,7 +1506,16 @@ class AgentLoop:
         if self._policy is None:
             return None
 
-        decision = self._policy.check("agent", {"kind": "tool", "toolName": reported_name}, "execute")
+        # The arguments of THIS call travel with the target, so a rule can
+        # depend on them -- "a transfer over 1000 needs a human" rather than
+        # "every transfer does". A policy that saw only the tool name had to
+        # choose between asking about every call and asking about none, and a
+        # gate that fires on every call is one people learn to click through.
+        decision = self._policy.check(
+            "agent",
+            {"kind": "tool", "toolName": reported_name, "arguments": dict(arguments or {})},
+            "execute",
+        )
         if getattr(decision, "ask", False):
             return self._await_approval(run_id, step, call, reported_name, arguments, reports, trace,
                                         getattr(decision, "reason", None))

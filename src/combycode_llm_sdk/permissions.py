@@ -120,6 +120,27 @@ def any_of_kind(*kinds: str) -> TargetMatcher:
     return lambda target: target.get("kind") in wanted
 
 
+def with_args(key: str, predicate: Callable[[Any], bool]) -> TargetMatcher:
+    """A rule about one of the call's ARGUMENTS.
+
+    `with_args("amount", lambda v: float(v) > 1000)` reads as the rule it is, and
+    cannot be the version that throws when the arguments are not there.
+
+    A target carries `arguments` only when the decision is about an actual call.
+    A pre-flight capability check has none, and the safe reading of "no
+    arguments" is "this rule has nothing to say" -- so it does not match, rather
+    than raising on a path that had nothing to offer it.
+    """
+
+    def matcher(target: PermissionTarget) -> bool:
+        args = target.get("arguments")
+        if not isinstance(args, Mapping) or key not in args:
+            return False
+        return predicate(args[key])
+
+    return matcher
+
+
 # -- the policy --------------------------------------------------------------
 
 

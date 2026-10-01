@@ -8,6 +8,56 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Approval that depends on what the call actually asks for.** A permission target now carries
+  the `arguments` of the call being decided, and `with_args(key, predicate)` is the matcher for
+  them: `with_args("amount", lambda v: float(v) > 1000)`. Before this a rule about `transfer` had two
+  settings -- ask about every transfer, or ask about none -- and neither is the rule anyone wants.
+  A gate that fires on every call is one people learn to click through, which is worse than no
+  gate because it looks like one.
+  The arguments live on the POLICY rather than in a `require_confirmation` callback on each tool
+  (where the upstream SDK puts it), because "over 1000 needs a human" is a policy statement and
+  belongs beside "deploy needs approval" -- the answer to *what requires approval here* should be
+  readable in one place, not by reading every tool. It is safe to do only because an approval is
+  already bound to the invocation it was granted for (tool name + argument digest), so a resumed
+  run whose model came back with other arguments is refused rather than executed under the old
+  answer; without that binding, consent for `{amount: 5}` could have authorised `{amount: 5000}`.
+  `arguments` is ABSENT on a decision made before any call exists -- a pre-flight capability
+  check, a catalog lookup -- so a matcher that reads it must tolerate that or it throws on those
+  paths and takes the run down with it. `with_args` is the version that handles it: an absent
+  argument means "this rule has nothing to say", so it does not match. It tests the key's
+  PRESENCE, not its truthiness, because `amount: 0` is an argument and "0 is under the line"
+  should be a decision rather than a silence, and the value reaches the predicate untouched.
+
+### Added
+
+- **A rate limit on step 7 no longer throws away the first six.** `AgentLoop` takes
+  `fallback_clients` (and `fallback_on`): backup clients tried in order when a step's request fails
+  in a way another model could survive. `route()` already did this for a one-shot call; a run is
+  where it matters, because a failure mid-run discarded every step and every tool call already
+  paid for, and the only recourse was to start again.
+  Four rules. Each client is tried ONCE per step -- retrying one is the network engine's job, and
+  doing it here too would retry a single failure twice over at two layers. Only a classified
+  failure another model could survive moves on (`route()`'s set, so the two surfaces agree on what
+  "retryable" means); auth, a malformed request, a content filter or an over-long prompt
+  propagates immediately rather than being offered to every backup in turn. A STREAMED step stops
+  being able to fall over at its first event -- the consumer has already rendered half an answer,
+  and a backup would start a different one mid-sentence, splicing two models into one turn. And
+  every step starts from the primary again, because a rate limit is transient and a run that fell
+  over once should not spend the rest of its life on the backup.
+  When every client fails, the LAST one's error is raised: the provider's own message is the
+  useful half. Each hand-off emits `onWarning` with code `model_fallback` and
+  `details: { from, to, kind }`, per step, because a silent fallback is a latency and cost change
+  nobody can see.
+  `loop.model` still reports the primary -- it is read before any request is made -- but each
+  step's history entry and span name whoever served. That is not cosmetic: provenance is
+  model-bound, so a stateful continuation is only valid against the model that issued the state,
+  and recording the primary on a turn the backup produced would have the next step offer the
+  backup's server state to the primary. `AgentLoop.restore` takes the backups too, for the same
+  reason it takes the client: a snapshot carries neither, and losing them would resume a run less
+  resilient than the one it continues.
+
+### Added
+
 - **Changing how hard a stored conversation thinks, from this turn on.** `thinking.effort`
   applies to the request it is on and nothing else, so there was no way to tell a conversation the
   server is holding to think less from here. New `ConfigurationUpdatePart`

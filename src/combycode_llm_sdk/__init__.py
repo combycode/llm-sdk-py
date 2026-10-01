@@ -19,6 +19,14 @@ meaning something else. Stream events reach callers through `LLM.stream` and
 
 from __future__ import annotations
 
+# Explicit re-export form: this module IS the public surface, so a name that
+# arrives here is being published, not merely imported.
+from .agent.fallback import DEFAULT_AGENT_FALLBACK_KINDS as DEFAULT_AGENT_FALLBACK_KINDS
+from .agent.fallback import FallbackNotice as FallbackNotice
+from .agent.fallback import FallbackRun as FallbackRun
+from .agent.fallback import client_chain as client_chain
+from .agent.fallback import complete_with_fallback as complete_with_fallback
+from .agent.fallback import stream_with_fallback as stream_with_fallback
 from .agent.history import ConversationHistory as ConversationHistory
 from .agent.history import HistoryEntry as HistoryEntry
 from .agent.layers import LAYER_AGENTLOOP_CONTEXT as LAYER_AGENTLOOP_CONTEXT
@@ -41,9 +49,6 @@ from .agent.layers import PRIORITY_MEMORY as PRIORITY_MEMORY
 from .agent.layers import write_agentloop_context as write_agentloop_context
 from .agent.layers import write_agentloop_system as write_agentloop_system
 from .agent.layers import write_lazy_tools_protocol as write_lazy_tools_protocol
-
-# Explicit re-export form: this module IS the public surface, so a name that
-# arrives here is being published, not merely imported.
 from .agent.reflect_retry import ReflectAndRetry as ReflectAndRetry
 from .agent.tool_key import describe_tool as describe_tool
 from .agent.tool_key import tool_key as tool_key
@@ -187,6 +192,7 @@ from .network.errors import LLMError as LLMError
 from .network.retry import RetryOverride as RetryOverride
 from .permissions import PermissionPolicy as PermissionPolicy
 from .permissions import Rule as Rule
+from .permissions import with_args as with_args
 from .persistence import FilePersistence as FilePersistence
 from .persistence import MemoryPersistence as MemoryPersistence
 from .persistence import Persistence as Persistence
