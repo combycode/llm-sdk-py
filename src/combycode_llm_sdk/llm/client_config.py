@@ -4,12 +4,25 @@ Transposed from `unified-library-ts/src/llm/client-config.ts`.
 
 `LLMClientConfig` is a camelCase dict, as everywhere else in this port:
 
-`{provider, model, apiKey, system?, baseURL?, sessionId?, hooks?, fetch?,
+`{provider, model, apiKey, system?, baseURL?, dataResidency?, sessionId?, hooks?, fetch?,
   fetchStream?, adapter?, queueName?, configName?, cacheName?, cacheKeyFn?,
   api?, mode?, batchable?, priority?, catalog?, checkResponseShapes?}`
 
 Required and immutable: `provider`, `model`, `apiKey`.
 
+- `dataResidency` is OpenAI-only: `"global" | "us" | "eu" | "ae"`, resolving to
+  `api.openai.com` and `{region}.api.openai.com`, so a caller names a region
+  instead of writing a host by hand. A project provisioned for one region must
+  use that region's host, and the wrong choice fails loudly rather than leaking:
+  measured 2026-10-01 from an unrestricted project, `us.` answers "Attempted to
+  access resource with incorrect regional hostname" and `eu.` answers "This
+  endpoint is only accessible by projects with geography restrictions enabled".
+  **Mutually exclusive with `baseURL`** -- setting both RAISES rather than picking
+  a winner, because they are two different answers to "which host" and honouring
+  one would silently discard a configuration the caller wrote. Setting it on any
+  other provider also raises: none of them has regional hosts, and ignoring it
+  would let a caller believe their data was pinned to a region when the option
+  did nothing at all. See `llm/providers/openai/data_residency.py`.
 - `sessionId` is the trace session id. `create_llm` passes `engine.session_id`; a
   standalone client mints its own. It flows onto every RequestContext this client
   builds.

@@ -20,6 +20,7 @@ from typing import TYPE_CHECKING, Any, cast
 from ..types.request_context import RequestContext
 from ..util.json_schema import validate_json_schema
 from .output_errors import InvalidFinalOutputError
+from .providers.openai.data_residency import resolve_data_residency
 from .types.messages import Message
 from .types.provider import ApiType, ProviderAdapter, ProviderName
 
@@ -265,9 +266,32 @@ def resolve_adapter(config: Mapping[str, Any], api: ApiType) -> ProviderAdapter:
         raise ValueError("LLMClient: adapter or AdapterFactory must be supplied")
     if callable(adapter) and not _is_adapter_instance(adapter):
         factory: Callable[..., ProviderAdapter] = adapter
-        return factory(config["provider"], config["apiKey"], api, config.get("baseURL"))
+        return factory(config["provider"], config["apiKey"], api, _resolve_base_url(config))
     built: ProviderAdapter = adapter
     return built
+
+
+def _resolve_base_url(config: Mapping[str, Any]) -> str | None:
+    """The host this client calls: a named OpenAI region, or the caller's own `baseURL`.
+
+    Resolved HERE rather than in the adapter, because it is the one place every
+    adapter is built -- and because `dataResidency` is a client-construction
+    choice. It is checked even for a non-OpenAI provider: a `dataResidency` on an
+    Anthropic client is a mistake worth reporting, and silently ignoring it would
+    let someone believe their data was pinned to a region when the option did
+    nothing.
+    """
+    residency = config.get("dataResidency")
+    if residency is None:
+        base: str | None = config.get("baseURL")
+        return base
+    provider = config.get("provider")
+    if provider != "openai":
+        raise ValueError(
+            f"dataResidency is an OpenAI option; {provider} has no regional hosts. "
+            "Set `baseURL` if that provider offers a regional endpoint of its own."
+        )
+    return resolve_data_residency(residency, config.get("baseURL"))
 
 
 def _is_adapter_instance(value: Any) -> bool:

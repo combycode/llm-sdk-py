@@ -20,6 +20,16 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **`dataResidency` pins OpenAI traffic to a region by name** -- `"global" | "us" | "eu" | "ae"`,
+  resolving to `api.openai.com` and `{region}.api.openai.com`, instead of hand-writing the host in
+  `baseURL`. The wrong region fails loudly: measured from an unrestricted project, `us.` answers
+  `Attempted to access resource with incorrect regional hostname` and `eu.` answers `This endpoint
+  is only accessible by projects with geography restrictions enabled`. A region alongside `baseURL`,
+  a region that is not one of the four, and a region on any non-OpenAI provider all RAISE rather
+  than resolving to something the caller did not ask for -- a typo like `"EU"` falling through to the
+  default host would send EU-resident data to the global endpoint, which is the one failure the
+  option exists to prevent.
+
 - **`tool_call_delta` on the agent stream** -- the model's tool-call arguments as they arrive.
   The fragments used to reach the loop and die there: accumulated into the call's argument buffer
   and dropped, so a UI had no way to show a long argument list forming and `tool_call_start` only
