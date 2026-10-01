@@ -23,6 +23,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from ..events import AudioEvent, Event, RealtimeErrorEvent, TextEvent, TurnEndEvent, UsageEvent
+from ..llm.join_url import ws_url
 from ..llm.wire_transforms import make_registry
 from ..results import Usage
 from ..util.base64 import base64_to_bytes
@@ -84,13 +85,33 @@ class OpenAIRealtimeAdapter:
         self._api_key = api_key
         self._base_url = base_url or self.default_base_url
 
-    def _config(self) -> dict[str, Any]:
-        return {"baseURL": self._base_url, "apiKey": self._api_key}
+    def _config(self, config: SessionConfig | None = None) -> dict[str, Any]:
+        """The spec's config. `config` is given only when a URL is needed.
+
+        The URL is composed HERE rather than in the spec, which is the one place
+        this library prefers to describe the wire -- because the composition is
+        not expressible as a `$join`. An Azure-style base carries its own query
+        (`?api-version=...`), so `model` has to MERGE into it: joined textually it
+        would read as one parameter called `api-version` whose value ends in
+        `?model=...`. The spec records the shape in its `_urlNote`.
+
+        Until now `base_url` was accepted by this adapter, handed to the spec, and
+        never read by it -- so a caller who configured one got silence and the
+        default host. The Google adapter below has always honoured its own.
+        """
+        built: dict[str, Any] = {"apiKey": self._api_key}
+        if config is not None:
+            built["url"] = ws_url(self._base_url, "/v1/realtime", {"model": config.model})
+        return built
 
     def build_connect_request(self, config: SessionConfig) -> WsRequest:
         """The socket descriptor, built without opening anything."""
         built = build_connection(
-            service_spec(self.spec_id), "connect", config.as_input(), _REGISTRY, self._config()
+            service_spec(self.spec_id),
+            "connect",
+            config.as_input(),
+            _REGISTRY,
+            self._config(config),
         )
         return WsRequest(
             url=built.url,

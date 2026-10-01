@@ -415,6 +415,54 @@ class TestTheResultCache:
             mcp.client.list_tools()
             assert asked.count("tools/list") == 1
 
+    def test_hints_from_a_later_revision_are_honoured_and_reported(self) -> None:
+        """A 2025-11-25 server sending `ttlMs` is using a later revision's words.
+
+        They are HONOURED -- ignoring them would silently disable a cache the
+        operator opted into, against a server that asked for it in as many words,
+        and honouring an extra field a server volunteered risks nothing (unlike
+        SENDING a method the era lacks, which is why keep-alive `ping` is
+        suppressed on a modern session). The non-conformance is reported instead,
+        once per session.
+        """
+        hooks = HookBus()
+        warnings: list[dict[str, Any]] = []
+        hooks.on("onWarning", lambda w: warnings.append(dict(w)))
+        with connect("caching", cache_results=True, hooks=hooks) as mcp:
+            mcp.invalidate_cache()
+            mcp.client.list_tools()
+            mcp.client.list_tools()
+
+            hinted = [w for w in warnings if w.get("code") == "mcp_hint_before_era"]
+            # Reported...
+            assert len(hinted) == 1, "once per session, not once per call"
+            assert hinted[0]["details"]["era"] == "handshake"
+            # ...and still honoured: the second list did not go back to the wire.
+            # (Asserted through `invalidate_cache` rather than a spy, so this test
+            # does not depend on patching the transport.)
+            asked: list[str] = []
+            original = mcp.client.transport.request
+
+            def spy(method: str, params: Any = None) -> Any:
+                asked.append(method)
+                return original(method, params)
+
+            mcp.client.transport.request = spy  # type: ignore[method-assign]
+            mcp.client.list_tools()
+            assert asked.count("tools/list") == 0, "served from the cache the hint asked for"
+
+    def test_a_server_that_sends_no_hints_is_not_warned_about(self) -> None:
+        # The warning is about a server using a LATER revision's vocabulary. A
+        # 2025-11-25 server that sends no hints is doing nothing unusual, and a
+        # warning on every such session would make the channel worthless.
+        hooks = HookBus()
+        warnings: list[dict[str, Any]] = []
+        hooks.on("onWarning", lambda w: warnings.append(dict(w)))
+        with connect("normal", cache_results=True, hooks=hooks) as mcp:
+            mcp.invalidate_cache()
+            mcp.client.list_tools()
+            assert [w for w in warnings if w.get("code") == "mcp_hint_before_era"] == []
+
     def test_invalidating_sends_the_next_list_back_to_the_wire(self) -> None:
         with connect("caching", cache_results=True) as mcp:
             asked: list[str] = []

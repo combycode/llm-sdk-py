@@ -119,6 +119,7 @@ class AgentLoop:
         cache: Any = None,
         max_steps: int | None = None,
         tool_timeout: float = DEFAULT_TOOL_TIMEOUT,
+        model_timeout: float | None = None,
         parallel_tool_calls: bool = True,
         reflect_and_retry: ReflectAndRetry | None = None,
         lazy_tools: LazyToolsConfig | None = None,
@@ -172,6 +173,17 @@ class AgentLoop:
 
         self._max_steps = max_steps if max_steps and max_steps > 0 else DEFAULT_MAX_STEPS
         self._tool_timeout = tool_timeout
+        #: Default timeout for each MODEL call in a run, in seconds.
+        #:
+        #: `tool_timeout` already bounded the tool half of a step; the model half
+        #: was bounded only by whatever the client was configured with, so on a
+        #: long run one slow step could hold the whole run open past any deadline
+        #: the caller thought they had set.
+        #:
+        #: Applied per STEP, not per run. A run-wide budget is a different thing
+        #: and the caller already has it. A per-call `timeout` still wins, and the
+        #: timeout surfaces as the existing timeout error rather than a new class.
+        self._model_timeout = model_timeout
         self._parallel = parallel_tool_calls
 
         self._before = list(before)
@@ -703,7 +715,7 @@ class AgentLoop:
                 self._run_guardrails(self._before, self._input_guard_ctx(step_count, trace))
 
                 step_start = _now_ms()
-                state = StepState()
+                state = StepState(step=step_count)
                 # Who served is read back AFTER the stream, not assumed: a step
                 # the backup answered must be stamped with the backup's model, or
                 # the report and the span both name a model that produced none of
@@ -982,6 +994,9 @@ class AgentLoop:
             ("top_p", self._top_p),
             ("thinking", self._thinking),
             ("cache", self._cache),
+            # The caller's per-call value wins: `model_timeout` is the run's
+            # DEFAULT for a step, not a cap on what one call may ask for.
+            ("timeout", self._model_timeout),
         ):
             if value is not None and step.get(key) is None:
                 step[key] = value

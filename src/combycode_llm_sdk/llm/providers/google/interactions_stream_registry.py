@@ -109,10 +109,14 @@ def _completed(ctx: Ctx) -> None:
     _close_open_call(out)
     interaction = raw.get("interaction")
     interaction = interaction if isinstance(interaction, Mapping) else {}
+    # `interaction.usage`, and nothing else. There used to be a fallback to
+    # `metadata.total_usage`; google 2.25 deleted `StreamMetadata{total_usage}` from
+    # every event type, and the wire agrees -- measured 2026-10-01 by streaming a
+    # real interaction with each read removed in turn: without the fallback usage
+    # still arrives, and with ONLY the fallback no usage event fires at all. A
+    # branch that provably never executes is a line that misdescribes the wire to
+    # whoever reads it next.
     usage = interaction.get("usage")
-    if not isinstance(usage, Mapping):
-        metadata = raw.get("metadata")
-        usage = metadata.get("total_usage") if isinstance(metadata, Mapping) else None
     if isinstance(usage, Mapping):
         out["events"].append({"type": "usage", "usage": google_interactions_usage(usage)})
     # `queued` is NOT terminal (google 2.13): the interaction is still to run, so

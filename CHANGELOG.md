@@ -6,6 +6,84 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ## [Unreleased]
 
+### Changed
+
+- **A pre-2026 MCP server sending `ttlMs` / `cacheScope` is honoured, and now says so.** Those
+  hints arrived with protocol 2026-07-28, so a 2025-11-25 session sending them is describing itself
+  with a later revision's vocabulary. They are still honoured -- ignoring them would silently
+  disable a cache the caller explicitly opted into, against a server that asked for it in as many
+  words, while honouring an extra field a server volunteered risks nothing. (The opposite trade
+  from keep-alive `ping`, which IS suppressed on a 2026-07-28 session: *sending* a method the era
+  no longer has can be rejected.) The non-conformance now reaches the caller as one `onWarning`
+  (`code: 'mcp_hint_before_era'`) per session -- once, because a cached list would otherwise warn
+  on every call.
+
+### Added
+
+- **`tool_call_delta` on the agent stream** -- the model's tool-call arguments as they arrive.
+  The fragments used to reach the loop and die there: accumulated into the call's argument buffer
+  and dropped, so a UI had no way to show a long argument list forming and `tool_call_start` only
+  fires once it is complete. They are now forwarded AS WELL AS accumulated -- a second reader, not
+  a handover, because the loop still needs the whole string to parse at the end of the call.
+  `arguments` is a raw JSON fragment (render it, do not act on it; `tool_call_start` still carries
+  the complete parsed arguments), `callId` is the accumulator's id rather than the event's because
+  several providers omit the id on later fragments, and `step` is the step the fragments belong to.
+  Absent on providers that stream a call whole and on every step that calls no tools, so a consumer
+  with a default branch needs no change.
+
+### Fixed
+
+- **`temperature` was a guaranteed 400 on most of Anthropic's line.** Models on wire era
+  `anthropic/messages@4.7` -- `claude-opus-4.8` and every Claude 5.x -- answer
+  `400 "temperature is deprecated for this model"` to each of `temperature`, `top_p` and `top_k`,
+  while every `@4.6` model still accepts all three (measured 2026-10-01; the boundary is exactly the
+  spec era). `top_k` had already been removed there for this reason; `temperature` and `top_p` had
+  not, so an ordinary `temperature: 0.3` FAILED the request on the newest models. They now join
+  `top_k` in that era's `removeFields`.
+  Anthropic also refuses `temperature` and `top_p` in the same request on the models that take
+  either (`400 ... cannot both be specified for this model. Please use only one.`). Set both and
+  `topP` is dropped, `temperature` is sent, and you are told -- a request that works beats one that
+  fails over a combination that is ordinary everywhere else.
+  **Every drop is now reported** as `onWarning` with code `request_adjusted`, naming what was left
+  out and why. `removeFields` deletes a field silently, which is how `top_k` behaved from the Opus
+  4.7 release until now: a caller who set it got default sampling and no way to find out. The note
+  distinguishes a field the model rejects from one this library dropped to avoid the pair 400 --
+  saying the model rejects a field it accepts would teach a reader to distrust the other warnings.
+- **An Azure-style base URL broke every request path.** `base_url() + path` put the path inside the
+  base's query VALUE: `https://x.openai.azure.com/openai?api-version=2026-05-01` + `/v1/responses`
+  became `...?api-version=2026-05-01/v1/responses`, so the request reached the base path with a
+  nonsense version and the error came back about the version, not the URL. New `join_url` puts the
+  path before the query, collapses a doubled slash, and drops a fragment that was never sent anyway.
+- **The OpenAI realtime adapter accepted a `base_url` and ignored it.** It was read from config,
+  handed to the wire spec, and the spec never looked at it -- so a caller who configured a host got
+  silence and `api.openai.com`. (Google's realtime adapter has always honoured its own.) It now
+  composes the socket URL with a new `ws_url`, which switches the scheme, joins the path before the
+  query, and MERGES `model` into a base query rather than starting a second `?`.
+
+### Changed
+
+- The Google Interactions stream no longer falls back to `metadata.total_usage`. google 2.25 deleted
+  `StreamMetadata{total_usage}` from every event type, and the wire agrees: measured 2026-10-01 by
+  streaming a real interaction with each read removed in turn -- without the fallback usage still
+  arrives, with ONLY the fallback no usage event fires at all. A branch that provably never executes
+  misdescribes the wire to whoever reads it next.
+- Hosted MCP `connector_id` is documented as deprecated for models released after 1 September 2026,
+  in favour of `server_url` / `tunnel_id`. Nothing is removed: measured 2026-10-01 on `gpt-5.6-sol`,
+  `connector_id` with `authorization` answers 200, so it is still honoured and not ours to withdraw.
+  The one-of-three rule and `tunnel_id`'s `^tunnel_[a-z0-9]{32}$` pattern are now documented too --
+  every pairing is refused by name, and a well-formed `tunnel_id` reaches the point of dialling the
+  tunnel.
+
+### Added
+
+- **`AgentLoop(model_timeout=...)`** -- a default timeout for each MODEL call in a run.
+  `toolTimeout` already bounded the tool half of a step; the model half was bounded only by whatever
+  the client carried, so one slow step could hold a long run open past any deadline the caller
+  thought they had set. Applied per STEP, not per run (a run-wide budget is an `AbortSignal` the
+  caller already has), and a per-call `timeout` still wins. No new error type: it
+  surfaces as the `LLMError{kind:'timeout'}` the network layer already raises, because a second
+  class for a condition we already report would make every consumer learn both.
+
 ### Fixed
 
 - **A generated image from xAI was labelled `image/png` with JPEG inside it.** The parser read the

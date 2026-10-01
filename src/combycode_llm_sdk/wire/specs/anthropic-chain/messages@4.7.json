@@ -1,8 +1,10 @@
 {
   "id": "anthropic/messages@4.7",
   "extends": "anthropic/messages@4.6",
-  "_note": "top_k deprecated: models from 4.7 reject it with a 400.",
+  "_note": "Sampling parameters are deprecated from 4.7 and REFUSED, not ignored. `top_k` was already known; `temperature` and `top_p` were not, and were still being sent. Measured 2026-10-01: each of the three answers 400 '`<field>` is deprecated for this model' on every 4.7-era model (claude-opus-4.8, claude-opus-5, claude-sonnet-5, claude-sonnet-5.5, claude-opus-5.5), while every 4.6-era model accepts all three (claude-sonnet-4.6, claude-haiku-4.5) -- so the boundary is exactly this spec era. anthropic-py 1.0 dropping the three from its method signatures is the same fact told from the SDK side. Removed here rather than gated in the client because a field no model on this era accepts is a property of the era; the client reports the drop as `request_adjusted` so it is not silent.",
   "removeFields": [
+    "temperature",
+    "top_p",
     "top_k"
   ]
 }

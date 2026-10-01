@@ -17,6 +17,7 @@ for it:
     slow      delays every response past a short timeout
     erroring  `tools/call` answers with `isError`, which is not an exception
     modern    speaks the 2026-07-28 wire: `server/discover`, no handshake
+    modern-caching  the modern wire AND the `ttlMs` hints, which are native there
     stubborn  ignores EOF on stdin, so closing the pipe does not end it
     listless  connects fine and then refuses `tools/list`
     caching   sends the 2026 `ttlMs` hint on `tools/list`
@@ -259,7 +260,7 @@ def handle(message: dict[str, Any]) -> None:
     params = message.get("params") or {}
 
     if method == "server/discover":
-        if MODE != "modern":
+        if MODE not in ("modern", "modern-caching"):
             fail(request_id, METHOD_NOT_FOUND, "server/discover is not supported")
             return
         reply(
@@ -304,7 +305,7 @@ def handle(message: dict[str, Any]) -> None:
             else:
                 reply(request_id, {"tools": TOOLS[3:]})
             return
-        if MODE == "caching":
+        if MODE in ("caching", "modern-caching"):
             reply(request_id, {"tools": TOOLS, "ttlMs": 60000, "cacheScope": "private"})
             return
         reply(

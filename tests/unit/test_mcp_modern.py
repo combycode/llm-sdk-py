@@ -387,6 +387,46 @@ class TestListening:
         assert modern.client._subscriptions == {}
 
 
+class TestCacheHintsBelongToThisEra:
+    def test_a_modern_session_is_not_warned_about_its_own_fields(self) -> None:
+        """`ttlMs` / `cacheScope` arrived with 2026-07-28, so here they are native.
+
+        The pre-era warning exists for a 2025-11-25 server using a later
+        revision's vocabulary; firing it on a session where the fields BELONG
+        would be a warning about nothing, and a channel that cries wolf is one
+        people filter.
+        """
+        from combycode_llm_sdk.hooks import HookBus
+
+        hooks = HookBus()
+        warnings: list[dict[str, Any]] = []
+        hooks.on("onWarning", lambda w: warnings.append(dict(w)))
+        # `modern-caching` is the modern wire AND the hints -- without a server that
+        # actually sends them this test passes for the wrong reason, because there is
+        # nothing to warn about either way.
+        with connect("modern-caching", cache_results=True, hooks=hooks) as mcp:
+            mcp.invalidate_cache()
+            mcp.client.list_tools()
+            assert [w for w in warnings if w.get("code") == "mcp_hint_before_era"] == []
+
+    def test_the_hints_are_still_honoured_there(self) -> None:
+        # Guard against the guard: if the fixture stopped sending hints, the test
+        # above would pass by having nothing to warn about.
+        with connect("modern-caching", cache_results=True) as mcp:
+            mcp.invalidate_cache()
+            mcp.client.list_tools()
+            asked: list[str] = []
+            original = mcp.client.transport.request
+
+            def spy(method: str, params: Any = None) -> Any:
+                asked.append(method)
+                return original(method, params)
+
+            mcp.client.transport.request = spy  # type: ignore[method-assign]
+            mcp.client.list_tools()
+            assert asked.count("tools/list") == 0
+
+
 class TestListenInvalidatesTheCache:
     def test_a_change_event_drops_the_list_it_invalidates(self) -> None:
         # Dropped BEFORE `on_event` runs, so a handler that immediately re-lists

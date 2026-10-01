@@ -43,6 +43,11 @@ class ToolCallAccumEntry:
 class StepState:
     """Everything one streaming step accumulates."""
 
+    #: Which step this state belongs to. Needed so an event forwarded from inside
+    #: the accumulator can be stamped like the ones the loop yields itself -- a
+    #: stream event without a step number cannot be correlated with the step that
+    #: produced it.
+    step: int = 0
     text: str = ""
     #: Narration, kept apart from `text` so the step's ANSWER excludes it. The
     #: buffered path applies the same rule through `final_answer_text`.
@@ -160,7 +165,17 @@ def accumulate_stream_event(event: Mapping[str, Any], state: StepState) -> Agent
         entry = _accum_for(state, str(event.get("id") or ""))
         if entry is not None:
             entry.args += str(event.get("arguments") or "")
-        return None
+        # Forwarded as well as accumulated. The loop still needs the whole string
+        # to parse at `tool_call_end`, so this is not a handover -- it is a second
+        # reader. A UI that wants to show the arguments forming had no way to see
+        # them: the fragments arrived here and died, and `tool_call_start` only
+        # fires once they are complete.
+        return {
+            "type": "tool_call_delta",
+            "step": state.step,
+            "callId": entry.id if entry is not None else str(event.get("id") or ""),
+            "arguments": str(event.get("arguments") or ""),
+        }
 
     if kind == "tool_call_end":
         entry = _accum_for(state, str(event.get("id") or ""))

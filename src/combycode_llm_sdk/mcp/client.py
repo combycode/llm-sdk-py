@@ -136,6 +136,8 @@ class McpClient:
         self._options = options or McpClientOptions()
         self._server_info: dict[str, Any] | None = None
         self._negotiated_version = MCP_LATEST_HANDSHAKE_VERSION
+        #: Said once per session: a cached list would otherwise warn on every call.
+        self._warned_pre_era_hints = False
         self._discovery: dict[str, Any] | None = None
         self._cache = McpResultCache() if self._options.cache_results else None
         self._subscriptions: dict[str | int, McpSubscription] = {}
@@ -470,11 +472,16 @@ class McpClient:
             page = result.get(field_name) if isinstance(result, Mapping) else None
             if isinstance(page, Sequence) and not isinstance(page, (str, bytes)):
                 out.extend(dict(item) for item in page if isinstance(item, Mapping))
-            if isinstance(result, Mapping):
-                hint = result.get("ttlMs")
+            # Read THROUGH `_era_hints`, not off `result`: that is where the
+            # pre-era warning lives, and reading around it would leave the helper's
+            # return value unused here -- so a change to what it returns would stop
+            # affecting this path without any test noticing.
+            hints = self._era_hints(result)
+            if hints is not None:
+                hint = hints.get("ttlMs")
                 if isinstance(hint, (int, float)) and not isinstance(hint, bool):
                     ttl_ms = float(hint) if ttl_ms is None else min(ttl_ms, float(hint))
-                scope = scope or result.get("cacheScope")
+                scope = scope or hints.get("cacheScope")
             next_cursor = result.get("nextCursor") if isinstance(result, Mapping) else None
             if not next_cursor or next_cursor == cursor:
                 if self._cache is not None:
@@ -566,7 +573,7 @@ class McpClient:
             return []
         out = [dict(c) for c in contents if isinstance(c, Mapping)]
         if self._cache is not None and isinstance(result, Mapping):
-            self._cache.set(cache_key, out, result)
+            self._cache.set(cache_key, out, self._era_hints(result) or {})
         return out
 
     def subscribe_resource(self, uri: str) -> None:
@@ -908,6 +915,58 @@ class McpClient:
                 f"unsupported server request: {method}", code=McpErrorCode.METHOD_NOT_FOUND
             )
         return handler(method, params)
+
+    def _era_hints(self, result: Any) -> Mapping[str, Any] | None:
+        """The server's cache hints, HONOURED on any era -- and reported when the era
+        does not define them.
+
+        `ttlMs` and `cacheScope` arrived with the modern wire (2026-07-28), so a
+        2025-11-25 session that sends them is using a later revision's vocabulary.
+        The row that prompted this asked for them to be ignored there, for
+        consistency with the dual-era rule. They are not, because the two mistakes
+        do not cost the same:
+
+        - ignoring them silently disables a cache the operator explicitly opted into
+          (`cache_results=True`), against a server that asked for it in as many
+          words;
+        - honouring an extra field a server volunteered risks nothing. Contrast
+          keep-alive `ping`, which IS suppressed on a modern session -- SENDING a
+          method the era lacks can be rejected, which is a different hazard.
+
+        So the non-conformance is reported rather than acted on, once per session
+        (a per-call warning on a cached list is noise), and the operator decides
+        whether their server is doing something they want. Silence was the only
+        outcome worth avoiding.
+        """
+        if not isinstance(result, Mapping):
+            return None
+        ttl = result.get("ttlMs")
+        carries = (
+            isinstance(ttl, (int, float)) and not isinstance(ttl, bool)
+        ) or result.get("cacheScope") is not None
+        if carries and self.era != "modern" and not self._warned_pre_era_hints:
+            self._warned_pre_era_hints = True
+            self._emit(
+                "onWarning",
+                {
+                    # `plugin`, not a new WarningSource member: MCP lives in the
+                    # plugin layer, and widening a public union for one warning
+                    # costs every consumer a case to consider.
+                    "source": "plugin",
+                    "code": "mcp_hint_before_era",
+                    "message": (
+                        f"MCP server on protocol {self._negotiated_version} sent cache "
+                        f"hints (ttlMs / cacheScope), which arrived with 2026-07-28. "
+                        f"They are being honoured, but the server is describing itself "
+                        f"with a later revision's vocabulary."
+                    ),
+                    "details": {
+                        "protocolVersion": self._negotiated_version,
+                        "era": self.era,
+                    },
+                },
+            )
+        return result
 
     def _emit(self, name: str, payload: Mapping[str, Any]) -> None:
         hooks = self._options.hooks

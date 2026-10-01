@@ -48,6 +48,7 @@ from .client_internal import (
     resolve_adapter,
     resolve_api,
 )
+from .join_url import join_url
 from .moderation.runner import moderation_model, resolve_moderation_mode
 from .moderation.types import MODERATION_DEFAULT_INTERVAL, MODERATION_DEFAULT_STRATEGY
 from .response_shape import ResponseShapeChecker, load_response_shapes
@@ -405,6 +406,77 @@ class BaseLLMClient:
             if note not in req.notes:
                 req.notes.append(note)
 
+    def _would_limit_sampling_pair(self, normalized: Mapping[str, Any]) -> bool:
+        """Whether `_limit_sampling_pair` would fire on this request.
+
+        Read BEFORE the rule mutates anything, so the note plumbing can tell a
+        `topP` this library dropped on purpose from one the provider does not
+        accept -- the two need different sentences, and the second would be a lie
+        about a model that takes the field perfectly well.
+        """
+        return (
+            self.provider == "anthropic"
+            and normalized.get("temperature") is not None
+            and normalized.get("topP") is not None
+        )
+
+    def _limit_sampling_pair(self, normalized: MutableMapping[str, Any]) -> str | None:
+        """Anthropic refuses `temperature` and `top_p` TOGETHER on the models that
+        accept either.
+
+        Measured 2026-10-01 on claude-sonnet-4.6 and claude-haiku-4.5:
+        `400 'temperature' and 'top_p' cannot both be specified for this model.
+        Please use only one.` Sending both is a guaranteed failed request, so one
+        goes.
+
+        `topP` is the one dropped: `temperature` is the option callers reach for,
+        it is what `AgentLoop` exposes as a run default, and Anthropic's own
+        guidance is "use only one". Dropping the one the caller is less likely to
+        have meant, loudly, beats failing the request.
+        """
+        if not self._would_limit_sampling_pair(normalized):
+            return None
+        normalized.pop("topP", None)
+        return (
+            "anthropic refuses temperature and topP in the same request, so topP "
+            f"was dropped and temperature ({normalized.get('temperature')}) was "
+            "sent. Set one or the other."
+        )
+
+    def _note_dropped_sampling(
+        self, asked: Mapping[str, Any], req: ProviderHttpRequest
+    ) -> str | None:
+        """A sampling option the caller set that the spec did not send.
+
+        `removeFields` deletes a field from a spec era wholesale, which is the
+        right model for "no model on this era accepts it" -- but it deletes it
+        SILENTLY, so a caller who set `temperature` on claude-opus-5.5 got default
+        sampling and no way to know. `top_k` has behaved that way since 4.7
+        shipped.
+
+        Compared against what the CALLER asked for, captured before anything could
+        mutate it. One note naming all of them, because three warnings about one
+        decision read as three problems.
+        """
+        body = req.body if isinstance(req.body, Mapping) else None
+        if body is None:
+            return None
+        dropped = [
+            ours
+            for ours, wire in (("temperature", "temperature"), ("topP", "top_p"), ("topK", "top_k"))
+            if asked.get(ours) is not None and body.get(wire) is None
+        ]
+        if not dropped:
+            return None
+        plural = "them" if len(dropped) > 1 else "it"
+        verb = "were" if len(dropped) > 1 else "was"
+        return (
+            f"{', '.join(dropped)} {verb} not sent: {self.provider}/{self.model} does not "
+            f"accept {plural}, so the model sampled as it defaults to. Anthropic deprecated "
+            "sampling parameters from the claude-opus-4.8 generation onward and REFUSES them "
+            "with a 400, which is why they are dropped rather than forwarded."
+        )
+
     def _note_unsupported_cache_diagnostics(
         self, normalized: Mapping[str, Any], req: ProviderHttpRequest
     ) -> None:
@@ -597,9 +669,32 @@ class BaseLLMClient:
         """
         self._apply_server_state(normalized, options)
         thinking_note = self._limit_thinking(normalized)
+        # What the caller asked for, before any adjustment can take it away.
+        asked = {k: normalized.get(k) for k in ("temperature", "topP", "topK")}
+        pair_would_fire = self._would_limit_sampling_pair(normalized)
+        # Before the build: this one DROPS a field, so it has to happen while the
+        # request is still ours to change.
+        pair_note = self._limit_sampling_pair(normalized)
         provider_req = self._adapter.build_request(normalized)
         if thinking_note:
             provider_req.notes = [*(provider_req.notes or []), thinking_note]
+        # The pair note is true only if `temperature` actually travelled. On an era
+        # that drops both, "topP was dropped so temperature could be sent" would
+        # describe a trade that did not happen -- the era note covers it, naming
+        # both fields.
+        body = provider_req.body if isinstance(provider_req.body, Mapping) else {}
+        pair_applied = pair_note is not None and body.get("temperature") is not None
+        if pair_applied and pair_note:
+            provider_req.notes = [*(provider_req.notes or []), pair_note]
+        # When the pair rule is what removed `topP`, it is excluded here: the pair
+        # note already explains it, and "the model does not accept topP" would be
+        # false about a model that takes it alone.
+        sampling_asked = dict(asked)
+        if pair_applied and pair_would_fire:
+            sampling_asked["topP"] = None
+        sampling_note = self._note_dropped_sampling(sampling_asked, provider_req)
+        if sampling_note:
+            provider_req.notes = [*(provider_req.notes or []), sampling_note]
         self._note_unsupported_builtins(normalized, provider_req)
         self._note_unsupported_cache_diagnostics(normalized, provider_req)
         self._report_build_notes(provider_req, ctx)
@@ -629,7 +724,14 @@ class BaseLLMClient:
         *,
         stream: bool = False,
     ) -> HttpRequest:
-        url = self._adapter.base_url() + (provider_req.path or self._adapter.completion_path())
+        # `base + path` is correct for a base that is only a host, which every base
+        # we SHIP is. It breaks on the one shape callers configure by hand: an
+        # Azure-style endpoint carrying `?api-version=...`, where the path lands
+        # inside the query VALUE and the error that comes back is about the
+        # version, not the URL.
+        url = join_url(
+            self._adapter.base_url(), provider_req.path or self._adapter.completion_path()
+        )
         req: HttpRequest = {
             "url": url,
             "headers": {**self._adapter.auth_headers(), **(provider_req.headers or {})},
@@ -755,9 +857,32 @@ class BaseLLMClient:
         self, normalized: dict[str, Any], ctx: RequestContext
     ) -> tuple[ProviderHttpRequest, HttpRequest]:
         thinking_note = self._limit_thinking(normalized)
+        # What the caller asked for, before any adjustment can take it away.
+        asked = {k: normalized.get(k) for k in ("temperature", "topP", "topK")}
+        pair_would_fire = self._would_limit_sampling_pair(normalized)
+        # Before the build: this one DROPS a field, so it has to happen while the
+        # request is still ours to change.
+        pair_note = self._limit_sampling_pair(normalized)
         provider_req = self._adapter.build_request(normalized)
         if thinking_note:
             provider_req.notes = [*(provider_req.notes or []), thinking_note]
+        # The pair note is true only if `temperature` actually travelled. On an era
+        # that drops both, "topP was dropped so temperature could be sent" would
+        # describe a trade that did not happen -- the era note covers it, naming
+        # both fields.
+        body = provider_req.body if isinstance(provider_req.body, Mapping) else {}
+        pair_applied = pair_note is not None and body.get("temperature") is not None
+        if pair_applied and pair_note:
+            provider_req.notes = [*(provider_req.notes or []), pair_note]
+        # When the pair rule is what removed `topP`, it is excluded here: the pair
+        # note already explains it, and "the model does not accept topP" would be
+        # false about a model that takes it alone.
+        sampling_asked = dict(asked)
+        if pair_applied and pair_would_fire:
+            sampling_asked["topP"] = None
+        sampling_note = self._note_dropped_sampling(sampling_asked, provider_req)
+        if sampling_note:
+            provider_req.notes = [*(provider_req.notes or []), sampling_note]
         self._note_unsupported_builtins(normalized, provider_req)
         self._note_unsupported_cache_diagnostics(normalized, provider_req)
         self._report_build_notes(provider_req, ctx)

@@ -6,7 +6,8 @@
   "tables": {},
   "operations": {
     "connect": {
-      "url": { "$join": ["wss://api.openai.com/v1/realtime?model=", { "$": "model" }] },
+      "_urlNote": "wss://{base}/v1/realtime?model={model}, with {base} the adapter's configured host (default api.openai.com) switched to wss. Composed in TS rather than $join-ed here: an Azure-style base carries its own query, so `model` must MERGE into it -- joined textually it would read as one parameter called api-version whose value ends in ?model=.",
+      "url": { "$config": "url" },
       "protocols": ["realtime", { "$join": ["openai-insecure-api-key.", { "$config": "apiKey" }] }]
     },
     "open": {

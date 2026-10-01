@@ -82,9 +82,44 @@ class TestToolCalls:
         assert state.tool_calls == [
             {"type": "tool_call", "id": "c1", "name": "search", "arguments": {"q": "berlin"}}
         ]
-        # Tool calls are not forwarded as they arrive: the loop announces them
-        # once it knows the whole call, with its arguments.
-        assert out == []
+        # The DELTAS are forwarded; start and end are not.
+        #
+        # Deltas used to die here: accumulated and dropped, so a UI had no way to
+        # show arguments forming, and `tool_call_start` only fires once they are
+        # complete. They are now forwarded as well as accumulated -- a second
+        # reader, not a handover, since the loop still needs the whole string to
+        # parse at `tool_call_end`. Start and end stay unforwarded because the LOOP
+        # announces its own versions, stamped with the step and the resolved tool
+        # name; forwarding these too would deliver each one twice.
+        assert out == [
+            {"type": "tool_call_delta", "step": 0, "callId": "c1", "arguments": '{"q":'},
+            {"type": "tool_call_delta", "step": 0, "callId": "c1", "arguments": '"berlin"}'},
+        ]
+
+    def test_a_forwarded_delta_uses_the_accumulators_id(self) -> None:
+        # A provider may omit the id on later deltas. The forwarded event must
+        # carry the id a consumer can correlate with `tool_call_start` -- the
+        # accumulator's, not the blank one.
+        _, out = _fold(
+            [
+                {"type": "tool_call_start", "id": "c1", "name": "search"},
+                {"type": "tool_call_delta", "arguments": '{"a":1}'},
+            ]
+        )
+        assert out == [
+            {"type": "tool_call_delta", "step": 0, "callId": "c1", "arguments": '{"a":1}'}
+        ]
+
+    def test_a_forwarded_delta_carries_the_states_step(self) -> None:
+        # A stream event with no step cannot be correlated with the step that
+        # produced it, which is why StepState now carries its own number. Step 0
+        # cannot prove the wiring -- it is also the default.
+        state = StepState(step=4)
+        accumulate_stream_event({"type": "tool_call_start", "id": "c1", "name": "s"}, state)
+        out = accumulate_stream_event(
+            {"type": "tool_call_delta", "id": "c1", "arguments": "x"}, state
+        )
+        assert out is not None and out["step"] == 4
 
     def test_a_delta_with_no_id_still_lands(self) -> None:
         # Several providers send argument deltas carrying no id at all, and
@@ -365,6 +400,33 @@ class TestTheWholeRun:
         tool_turn = loop.history.at(2)
         assert tool_turn is not None
         assert "sunny in Berlin" in str(tool_turn.message["content"])
+
+    def test_forwarded_deltas_carry_the_step_they_came_from(self) -> None:
+        """Two tool-calling steps, because step 0 cannot prove the wiring.
+
+        `StepState()` defaults to `step=0`, so on the first step a loop that
+        forgot to pass the number looks identical. Only a second tool-calling step
+        distinguishes them.
+        """
+        second_call = [
+            {"type": "tool_call_start", "id": "c2", "name": "get_weather"},
+            {"type": "tool_call_delta", "id": "c2", "arguments": '{"city":"Paris"}'},
+            {"type": "tool_call_end", "id": "c2"},
+            {"type": "done", "finishReason": "tool_use"},
+        ]
+        client = StreamingClient(ASKS_FOR_A_TOOL, second_call, ANSWERS)
+        loop = AgentLoop(client, tools=[get_weather])
+        steps = [
+            e["step"] for e in loop.stream("go") if e["type"] == "tool_call_delta"
+        ]
+        assert steps == [0, 1]
+
+    def test_a_run_with_no_tools_forwards_no_deltas(self) -> None:
+        # A consumer that does not want these needs no change: they are absent
+        # unless a provider actually streams fragments.
+        client = StreamingClient(ANSWERS)
+        kinds = [e["type"] for e in AgentLoop(client).stream("hi")]
+        assert "tool_call_delta" not in kinds
 
     def test_a_run_with_no_tools_is_one_step(self) -> None:
         client = StreamingClient(ANSWERS)
