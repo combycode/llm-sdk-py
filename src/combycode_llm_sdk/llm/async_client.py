@@ -176,7 +176,11 @@ class AsyncLLMClient(BaseLLMClient):
         while True:
             res = await self.complete(messages, {**options, "structured": structured})
             try:
-                return parse_structured(res.get("text") or "")
+                return parse_structured(
+                    res.get("text") or "",
+                    schema,
+                    validate=bool(structured.get("validate")),
+                )
             except InvalidFinalOutputError as err:
                 if attempt >= repair_attempts:
                     raise

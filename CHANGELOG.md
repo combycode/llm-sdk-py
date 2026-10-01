@@ -8,6 +8,35 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Checking against the schema, and telling the MODEL what was wrong.** Two opt-in checks:
+  `structured["validate"]` on a structured result, and `validate_tool_arguments` on an agent's tool
+  calls.
+  `structured["validate"]` runs the parsed result through the schema instead of trusting that the
+  provider enforced it -- for a surface with no strict mode, a model ignoring the schema under
+  load, or a `required` the provider treats as advisory. A failure raises the SAME
+  `InvalidFinalOutputError` as a parse failure, so one `repairAttempts` budget covers both and the
+  re-prompt carries the errors: a value that parsed and was wrong is exactly the case re-prompting
+  helps with, and a separate error type would have left the budget covering malformed JSON and not
+  that. Every error is reported with its path, because one error per round trip is a round trip
+  per mistake. A Standard Schema still validates through its own `validate` regardless of the
+  flag, since it carries refinements the provider never saw.
+  `validate_tool_arguments` checks a tool call against that tool's own `parameters` before running
+  it. On a failure the tool is NOT executed and the errors go back as the tool's RESULT, phrased
+  as an instruction ("Call the tool again with arguments matching its schema") -- a result rather
+  than an exception because the model asked for something its own schema forbids, which it can fix
+  on the next step, and ending the run would discard every step before it; phrased as an
+  instruction because a bare validator message reads as an internal error and models answer those
+  by apologising instead of re-calling. The bound is `max_steps`, the loop's existing one, rather
+  than a second budget to tune that would give the same answer, and each refusal emits
+  `onWarning` with code `tool_arguments_invalid` so a model that never gets it right is visible. A
+  builtin tool has no `parameters` and is left alone.
+  Both are off by default for an honest reason rather than caution: the bundled validator covers
+  the common JSON Schema keywords and not all of Draft 2020-12 (no `allOf`/`anyOf`, no formats),
+  so always-on it would reject values that are valid under a schema it cannot fully read, and
+  disagree with the provider that had just enforced it.
+
+### Added
+
 - **Approval that depends on what the call actually asks for.** A permission target now carries
   the `arguments` of the call being decided, and `with_args(key, predicate)` is the matcher for
   them: `with_args("amount", lambda v: float(v) > 1000)`. Before this a rule about `transfer` had two

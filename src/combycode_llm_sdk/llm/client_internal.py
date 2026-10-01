@@ -18,6 +18,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, cast
 
 from ..types.request_context import RequestContext
+from ..util.json_schema import validate_json_schema
 from .output_errors import InvalidFinalOutputError
 from .types.messages import Message
 from .types.provider import ApiType, ProviderAdapter, ProviderName
@@ -150,19 +151,43 @@ _FENCE_OPEN = re.compile(r"^```(?:json)?\s*", re.IGNORECASE)
 _FENCE_CLOSE = re.compile(r"```\s*$", re.IGNORECASE)
 
 
-def parse_structured(text: str) -> Any:
+def parse_structured(
+    text: str, schema: Any = None, *, validate: bool = False
+) -> Any:
     """Strip leading/trailing markdown fences and parse.
 
     Exported so AgentLoop and the helper layer share the same parsing rules.
+
+    `validate` checks the parsed value against `schema` instead of trusting that
+    the provider enforced it. Opt-in, and the reason is the honest one: the
+    bundled validator covers the common JSON Schema keywords, not all of Draft
+    2020-12 (no `allOf`/`anyOf`, no formats), so always-on it would reject values
+    that are valid under a schema it cannot fully read -- and disagree with the
+    provider that had just enforced it.
+
+    Worth turning on where the provider's enforcement is weaker than the schema:
+    a surface with no strict mode, a model ignoring the schema under load, a
+    `required` the provider treats as advisory.
     """
     stripped = _FENCE_CLOSE.sub("", _FENCE_OPEN.sub("", text.strip())).strip()
     try:
-        return json.loads(stripped)
+        parsed = json.loads(stripped)
     except (ValueError, TypeError) as cause:
         # Typed, differentiated failure -- callers can catch
         # `InvalidFinalOutputError` and inspect `.raw_text`, instead of catching
         # a bare JSONDecodeError.
         raise InvalidFinalOutputError(text, cause) from cause
+    if validate and schema is not None:
+        errors = validate_json_schema(schema, parsed)
+        if errors:
+            # The SAME error as a parse failure, so one `repairAttempts` budget
+            # covers both: a value that parsed and was wrong is the case
+            # re-prompting helps with, and a separate type here would have left
+            # the budget covering malformed JSON and not this. Every error is
+            # listed, because the message is what the model is re-prompted with
+            # and one error at a time costs a round trip per mistake.
+            raise InvalidFinalOutputError(text, ValueError("; ".join(errors)))
+    return parsed
 
 
 @dataclass(frozen=True)

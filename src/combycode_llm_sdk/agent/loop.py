@@ -37,6 +37,7 @@ from ..approval import (
 from ..bus.hook_bus import HookBus
 from ..llm.output_errors import AgentRunError
 from ..results import Completion, ToolCall, Usage
+from ..util.json_schema import validate_json_schema
 from ..wire.interpreter import js_json
 from .fallback import (
     FallbackNotice,
@@ -134,6 +135,7 @@ class AgentLoop:
         options: Mapping[str, Any] | None = None,
         fallback_clients: Sequence[Any] | None = None,
         fallback_on: Sequence[str] | None = None,
+        validate_tool_arguments: bool = False,
     ) -> None:
         if client is None:
             raise ValueError("AgentLoop: a client is required")
@@ -147,6 +149,12 @@ class AgentLoop:
         #: any request is made. Each step's report and span name whoever served.
         self._client_chain = client_chain(client, fallback_clients)
         self._fallback_on = tuple(fallback_on) if fallback_on is not None else None
+        #: Opt-in: check a tool call's arguments against the tool's own schema
+        #: before running it. Off by default because the bundled validator reads
+        #: the common JSON Schema keywords and not all of Draft 2020-12 -- on by
+        #: default it would refuse calls that are valid under a schema it cannot
+        #: fully read.
+        self._validate_tool_arguments = validate_tool_arguments
         self.hooks = hooks if hooks is not None else HookBus()
         self.label = label
         self.source = source
@@ -1503,6 +1511,47 @@ class AgentLoop:
         the model can work around, and raising would end a run over one tool the
         operator happened to forbid.
         """
+        # The model's arguments against the schema it was given. A failure is a
+        # tool RESULT carrying the errors, not an exception: the model asked for
+        # something its own schema forbids, which it can fix on the next step, and
+        # ending the run would discard every step before it. The bound is
+        # `max_steps`, the loop's existing one -- a second retry budget would be a
+        # second number to tune and the same answer.
+        if self._validate_tool_arguments:
+            schema = self._argument_schema(reported_name)
+            if schema is not None:
+                errors = validate_json_schema(schema, dict(arguments or {}))
+                if errors:
+                    self.hooks.emit_sync(
+                        "onWarning",
+                        {
+                            "source": "agent",
+                            "code": "tool_arguments_invalid",
+                            "message": (
+                                f'Tool "{reported_name}" was called with arguments its '
+                                f"schema rejects: {'; '.join(errors)}. The errors were "
+                                f"returned to the model."
+                            ),
+                            "details": {
+                                "toolName": reported_name,
+                                "callId": call.id,
+                                "errors": list(errors),
+                            },
+                        },
+                    )
+                    return self._refuse(
+                        call,
+                        reported_name,
+                        arguments,
+                        reports,
+                        # Addressed to the MODEL, so it says what to DO rather than
+                        # only what went wrong. A bare validator message reads as an
+                        # internal error, and models answer those by apologising
+                        # instead of re-calling the tool.
+                        f'Invalid arguments for "{reported_name}": {"; ".join(errors)}. '
+                        f"Call the tool again with arguments matching its schema.",
+                    )
+
         if self._policy is None:
             return None
 
@@ -1590,6 +1639,22 @@ class AgentLoop:
             )
         )
         return part
+
+    def _argument_schema(self, reported_name: str) -> Any:
+        """The registered tool's own parameter schema, or None.
+
+        None for a BUILTIN tool, which carries no parameters at all -- reading a
+        schema off `{"type": "web_search"}` would refuse a tool that is perfectly
+        well formed.
+        """
+        tool = self._tools.get(reported_name)
+        definition = getattr(tool, "definition", None) if tool is not None else None
+        if not isinstance(definition, Mapping):
+            return None
+        kind = definition.get("type")
+        if kind is not None and kind != "function":
+            return None
+        return definition.get("parameters")
 
     def _refuse(
         self,

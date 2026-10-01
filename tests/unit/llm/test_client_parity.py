@@ -307,6 +307,40 @@ class StructuredThatGivesUp(Scenario):
         return ("no raise",)
 
 
+class StructuredThatFailsValidation(Scenario):
+    """`structured["validate"]` has to reach the parse on BOTH cores.
+
+    The value parses and is wrong -- `n` is required and missing -- which is
+    exactly the case `repairAttempts` helps with, and the reason a validation
+    failure raises the same error as a parse failure. A core that dropped the flag
+    would return the bad object instead of repairing, and only a parity scenario
+    notices that one of the two did.
+    """
+
+    SCHEMA: ClassVar[dict[str, Any]] = {
+        "type": "object",
+        "properties": {"n": {"type": "number"}},
+        "required": ["n"],
+    }
+
+    def body(self, call: int) -> Any:
+        return {"text": '{"other": 1}' if call == 0 else '{"n": 7}'}
+
+    def sync(self, client: LLMClient) -> Any:
+        return client.structured_complete(
+            "go",
+            self.SCHEMA,
+            {"structured": {"schema": self.SCHEMA, "validate": True, "repairAttempts": 1}},
+        )
+
+    async def run_async(self, client: AsyncLLMClient) -> Any:
+        return await client.structured_complete(
+            "go",
+            self.SCHEMA,
+            {"structured": {"schema": self.SCHEMA, "validate": True, "repairAttempts": 1}},
+        )
+
+
 class Stream(Scenario):
     EVENTS: ClassVar[list[dict[str, Any]]] = [
         {"type": "text", "text": "Hel"},
@@ -397,6 +431,7 @@ SCENARIOS = {
     "complete_build_notes": CompleteWithBuildNotes(),
     "structured_repair": StructuredWithRepair(),
     "structured_gives_up": StructuredThatGivesUp(),
+    "structured_fails_validation": StructuredThatFailsValidation(),
     "stream": Stream(),
     "stream_empty": StreamThatYieldsNothing(),
     "assistant_message": AssistantMessage(),
@@ -406,7 +441,7 @@ SCENARIOS = {
 
 def test_it_is_actually_checking_something() -> None:
     # A scenario map that silently emptied would make every case below vacuous.
-    assert len(SCENARIOS) >= 9
+    assert len(SCENARIOS) >= 10
 
 
 @pytest.mark.parametrize("name", sorted(SCENARIOS))
