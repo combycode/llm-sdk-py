@@ -14,6 +14,18 @@ because the request specs address them by those names:
   authorization?, headers?, require_approval?, allowed_tools?,
   server_description?, ...}`. Exactly one of `server_url`, `connector_id` or
   `tunnel_id` identifies the server, and OpenAI enforces that.
+- `ImageGenerationToolParams` the typed shape for an `image_generation`
+  builtin's `params`, forwarded verbatim and spread BESIDE `type` (xAI reads
+  `action` as a sibling; nested under a `params` key it would be an unknown
+  field and silently absent rather than refused):
+  `{action?: 'auto'|'generate'|'edit', output_format?, quality?, size?,
+  background?, ...}`. Supported on openai and xai, measured live 2026-10-01
+  through this library. xAI's `action` is validated rather than inert --
+  `'paint'` is a 400 naming the three values -- and `'edit'` with nothing to
+  edit returns no image at all, which is a 200 with a text-only answer.
+  On `mimeType`: OpenAI reports `output_format` and reports it accurately,
+  while xAI reports none and returns JPEG, so the parser prefers the declared
+  format, falls back to the image's own magic bytes, and only then to PNG.
 - `ToolChoice`   `'auto' | 'none' | 'required' | {name}`
 """
 

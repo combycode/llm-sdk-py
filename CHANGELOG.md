@@ -6,6 +6,35 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ## [Unreleased]
 
+### Fixed
+
+- **A generated image from xAI was labelled `image/png` with JPEG inside it.** The parser read the
+  item's `output_format` and defaulted to PNG. OpenAI reports that field and reports it accurately;
+  xAI's `image_generation` chat tool reports NONE and returns JPEG (measured 2026-10-01), so every
+  image it generated carried the wrong `mimeType`. A file written from that label gets the wrong
+  extension, and a strict validator downstream -- Google Veo compares a declared mime against the
+  bytes -- answers 400. The parser now prefers the declared format, falls back to the image's own
+  magic bytes, and only then to PNG. The same correction already existed one layer over for xAI's
+  image API; this path had been left out of it. A provider that DOES declare a format is still
+  believed even when the bytes disagree: second-guessing one that answered would only move the
+  question to which of two wrong answers to trust.
+- **`image_generation` was supported and the catalog said otherwise.** The tool was in no provider's
+  builtin list -- including OpenAI's, where it has worked all along -- so
+  `catalog.supports_builtin_tool(provider, model, "image_generation")` answered `false` about a tool
+  that works, and a caller gating on the catalog refused itself. Now listed for **openai** and
+  **xai**, measured live on 2026-10-01 through this library (`gpt-5.6-sol`, `gpt-5.4-nano`,
+  `grok-4.6`, `grok-4.5`, `grok-4.3` each returned an image on `response.media`), and deliberately
+  NOT for anthropic/google/openrouter, where nobody measured one.
+
+### Added
+
+- The `image_generation` builtin is documented in `llm/types/tools.py` -- editor help for the `image_generation` builtin's verbatim
+  `params`: xAI's `action` (`'auto' | 'generate' | 'edit'`, validated rather than inert --
+  `'paint'` is a 400 naming the three) and OpenAI's `output_format` / `quality` / `size` /
+  `background`. No new parsing was needed: xAI's REST output item is OpenAI's
+  `image_generation_call` with the same keys, not the `{__type:'image_generation_result'}` envelope
+  its gRPC surface uses.
+
 ### Added
 
 - **Checking against the schema, and telling the MODEL what was wrong.** Two opt-in checks:

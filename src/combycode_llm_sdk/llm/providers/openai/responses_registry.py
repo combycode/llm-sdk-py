@@ -15,6 +15,8 @@ import json
 from collections.abc import Mapping
 from typing import Any
 
+from ....util.base64 import base64_to_bytes
+from ....util.image_mime import sniff_image_mime
 from ....wire.interpreter import Ctx, Registry
 from ...cache_diagnostics import openai_cache_diagnostics
 from ...moderation.native import parse_native_moderation
@@ -197,7 +199,18 @@ def _image(_arg: Any, ctx: Ctx) -> dict[str, Any] | None:
     if not data:
         return None
     fmt = item.get("output_format")
-    mime = "image/jpeg" if fmt == "jpeg" else "image/webp" if fmt == "webp" else "image/png"
+    declared = {"jpeg": "image/jpeg", "webp": "image/webp", "png": "image/png"}.get(
+        fmt if isinstance(fmt, str) else ""
+    )
+    # The provider's own word first; its BYTES second; PNG only when neither says.
+    # The default alone was wrong for xAI, which returns JPEG from the
+    # `image_generation` chat tool and no `output_format` at all (measured
+    # 2026-10-01) -- so every generated image came back labeled `image/png` with
+    # JPEG inside it. A caller writing the file gets the wrong extension, and a
+    # strict validator downstream (Google Veo compares the declared mime against
+    # the bytes) answers 400. The same correction already existed one layer over,
+    # for xAI's image API; this path had been left out of it.
+    mime = declared or sniff_image_mime(base64_to_bytes(str(data)[:16])) or "image/png"
     return {
         "type": "image_output",
         "mediaId": "",
