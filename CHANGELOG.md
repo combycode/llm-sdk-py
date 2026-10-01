@@ -8,6 +8,19 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Two things a trace could not tell you about an agent run.** `execute_tool` spans now carry
+  `gen_ai.agent.name`, not just an opaque `gen_ai.agent.id` -- a backend was grouping tool calls by
+  id while the `invoke_agent` spans beside them were named, leaving the join to the reader. And the
+  agent span now reports `gen_ai.usage.input_tokens` / `output_tokens` for the whole invocation:
+  usage was on each chat span and in process-wide counters, neither of which answers "what did THIS
+  run spend" -- the question someone reading one trace is actually asking. A FAILED run reports its
+  spend too, which is when it matters most. The name is read off the run's own span rather than
+  threaded through `ToolCallStartContext`, because widening a public hook shape for telemetry's
+  benefit alone is the worse trade; the per-run total is dropped as it is reported, so a long-lived
+  process does not accumulate one entry per run it ever served.
+
+### Added
+
 - **A live translator we shipped and could not ask to translate.**
   `gemini-3.5-live-translate` has been in the catalog, connectable, and useless: the Live setup
   frame carried modalities, a prebuilt voice and a system instruction and nothing else, so there

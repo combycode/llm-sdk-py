@@ -434,6 +434,9 @@ class TelemetryAdapter:
         self.spans: list[Span] = []
         self._open: dict[str, Span] = {}
         self._span_handlers: list[Callable[[Span], Any]] = []
+        #: Tokens the current agent run has spent, reported on its span and then
+        #: reset. A pair rather than a dict: there is one run open at a time.
+        self._run_usage: list[int] = [0, 0]
         self._unsubscribe: Callable[[], None] | None = None
 
     # -- wiring --------------------------------------------------------------
@@ -494,6 +497,49 @@ class TelemetryAdapter:
                 out[key] = value
         return out
 
+    def _enriched(
+        self, camel: str, kind: str, attributes: Mapping[str, Any]
+    ) -> Mapping[str, Any]:
+        """Two attributes a trace could not otherwise carry.
+
+        `gen_ai.agent.name` on a tool span: the span already carried
+        `gen_ai.agent.id` and no name, so a backend grouped tool calls under an
+        opaque id while the agent spans beside them were named. Read off the
+        open agent span rather than threaded through the tool hook's context,
+        which would widen a public shape for telemetry's benefit alone.
+
+        Per-run token usage on the agent span: usage went onto each llm span
+        and into process totals, neither of which answers "what did THIS run
+        spend" -- the question someone reading one trace is asking.
+        """
+        if kind == "tool" and camel.endswith("Start"):
+            agent = self._open.get("agent")
+            label = agent.attributes.get("label") if agent else None
+            if isinstance(label, str) and label:
+                return {**attributes, "gen_ai.agent.name": label}
+            return attributes
+
+        if kind == "llm":
+            usage = attributes.get("response")
+            usage = usage.get("usage") if isinstance(usage, Mapping) else None
+            if isinstance(usage, Mapping):
+                self._run_usage[0] += int(usage.get("inputTokens") or 0)
+                self._run_usage[1] += int(usage.get("outputTokens") or 0)
+            return attributes
+
+        if kind == "agent" and not camel.endswith("Start"):
+            tokens_in, tokens_out = self._run_usage
+            # Reset as it is reported, so a long-lived process does not carry
+            # one run's tokens into the next.
+            self._run_usage = [0, 0]
+            if tokens_in or tokens_out:
+                return {
+                    **attributes,
+                    "gen_ai.usage.input_tokens": tokens_in,
+                    "gen_ai.usage.output_tokens": tokens_out,
+                }
+        return attributes
+
     def _span_for(self, name: str, attributes: Mapping[str, Any]) -> None:
         """Open, close, or complete a span for this event.
 
@@ -508,6 +554,7 @@ class TelemetryAdapter:
             return
 
         now = time.time() * 1000
+        attributes = self._enriched(camel, kind, attributes)
         if camel.endswith("Start"):
             self._open[kind] = Span(
                 name=camel,
