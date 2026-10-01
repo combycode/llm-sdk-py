@@ -8,6 +8,22 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Nowhere to put a correction made while a run was suspended.** A run stops at an approval
+  gate; while the person is deciding, the user adds "use staging, not prod". `AgentLoop` now has
+  `add_input()`, `pending_input` and `clear_pending_input()`: staged input is admitted into history
+  immediately before the next run's first model call, AFTER that run's own input, and it travels
+  in the snapshot (the snapshot's `pendingInput`).
+  Both halves are the point. Appending the correction by hand lands it BEFORE
+  `_repair_unanswered_tool_calls()`, the gate every run passes through, so the model read the new
+  instruction and then a tool result -- an instruction that arrives ahead of the thing it
+  corrects is not read as one. And a message held only in the caller's variable is lost if the
+  process restarts between the gate and the resume, which is the whole reason the gate is
+  durable: a dropped approval can be asked for again, a sentence typed once is gone.
+  `add_input()` refuses while a run is in flight, because that run's input was already admitted
+  and staging would silently reach the next one.
+
+### Added
+
 - **Two things a trace could not tell you about an agent run.** `execute_tool` spans now carry
   `gen_ai.agent.name`, not just an opaque `gen_ai.agent.id` -- a backend was grouping tool calls by
   id while the `invoke_agent` spans beside them were named, leaving the join to the reader. And the

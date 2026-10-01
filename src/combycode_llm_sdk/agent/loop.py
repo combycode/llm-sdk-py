@@ -171,6 +171,8 @@ class AgentLoop:
         #: Caller-owned scratch space, carried through dump/restore.
         self._metadata: dict[str, Any] = dict(metadata or {})
         self._pending_tool_calls: list[PendingToolCall] = []
+        #: Input staged by `add_input`, waiting for the next model call.
+        self._pending_input: list[dict[str, Any]] = []
         self._reflect = ReflectAndRetryPolicy(reflect_and_retry) if reflect_and_retry else None
 
         self._lazy_config = lazy_tools or LazyToolsConfig()
@@ -239,6 +241,37 @@ class AgentLoop:
     def pending_approvals(self) -> Sequence[PendingToolCall]:
         """Calls suspended awaiting a decision, for a resume after a restart."""
         return tuple(self._pending_tool_calls)
+
+    def add_input(self, input_: Any) -> None:
+        """Stage input for admission immediately before the next model call.
+
+        The case it exists for: a run suspends at an approval gate, and while
+        the human is deciding the user adds something -- "use staging, not
+        prod". There was nowhere to put it. Appending to history directly lands
+        it BEFORE the repair of the unanswered tool call that every run passes
+        through, so the model read the correction and then a tool result, in
+        that order; and it was lost if the process restarted between the gate
+        and the resume. Staged input rides in the snapshot and is admitted
+        last, where a correction belongs.
+
+        Calls preserve insertion order. Admission clears the staging.
+        """
+        if self._running:
+            raise RuntimeError(
+                "a run is in flight, and its input was admitted when it started -- "
+                "staging now would reach the NEXT run, not this one. Stage input "
+                "before the run, or after it ends."
+            )
+        self._pending_input.extend(_as_messages(input_))
+
+    @property
+    def pending_input(self) -> Sequence[Mapping[str, Any]]:
+        """Input staged for the next model call, in the order it was added."""
+        return tuple(self._pending_input)
+
+    def clear_pending_input(self) -> None:
+        """Discard staged input -- the user thought better of it."""
+        self._pending_input = []
 
     @property
     def reports(self) -> Sequence[AgentRunReport]:
@@ -876,6 +909,13 @@ class AgentLoop:
         if input_ is not None:
             for message in _as_messages(input_):
                 self._history.append(message)
+
+        # Staged input goes in LAST, after the run's own. A correction made while
+        # the run was suspended ("use staging, not prod") has to sit after the
+        # message it corrects to be read as one. Cleared on admission: it is the
+        # transcript now, and a second run must not say it again.
+        while self._pending_input:
+            self._history.append(self._pending_input.pop(0))
 
         self.hooks.emit_sync(
             "onRunStart",
@@ -1526,6 +1566,13 @@ class AgentLoop:
                 if self._pending_tool_calls
                 else {}
             ),
+            # Same reasoning: absent rather than empty, so a snapshot that staged
+            # nothing does not look like one whose staging was consumed.
+            **(
+                {"pendingInput": [dict(m) for m in self._pending_input]}
+                if self._pending_input
+                else {}
+            ),
         }
 
     @classmethod
@@ -1575,6 +1622,10 @@ class AgentLoop:
             )
             for row in snapshot.get("pendingToolCalls") or ()
         ]
+        # Restored for the same reason, and it matters more: the staged message
+        # exists NOWHERE else. A dropped approval can be asked for again; a
+        # correction the user typed once is simply gone.
+        agent._pending_input = [dict(m) for m in snapshot.get("pendingInput") or ()]
         saved = {str(name) for name in snapshot.get("toolNames") or ()}
         current = set(agent.tool_names())
         for name in sorted(saved - current):
