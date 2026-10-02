@@ -48,6 +48,7 @@ from ..util.source_image import (
 from ..wire.interpreter import MISSING, Ctx, Registry, get_path, is_obj, js_string, js_truthy
 from .audio.voices import is_owned_voice, resolve_voice
 from .moderation.native import build_native_moderation
+from .providers.anthropic.container import to_wire_container
 from .providers.google.tiers import google_request_tier
 from .providers.openai.tiers import openai_tier_decision
 from .providers.xai.reasoning import (
@@ -128,6 +129,19 @@ def make_registry(a: AdapterHandles) -> Registry:
         )
 
     transforms["anthropicToolSchema"] = anthropic_tool_schema
+
+    def anthropic_container_request(_v: Any, ctx: Ctx) -> Any:
+        """Anthropic: the code-execution container a caller asked for, snake_cased.
+
+        A named transform because the spec cannot rename `skillId` to `skill_id`,
+        and because only the keys the caller actually set may travel -- an empty
+        `skills: []` would be asking for something they did not ask for.
+        """
+        options = ctx.req.get("providerOptions") or {}
+        container = options.get("container") or {}
+        return to_wire_container(container)
+
+    transforms["anthropicContainerRequest"] = anthropic_container_request
 
     def openai_tool_params(tool: Any, ctx: Ctx) -> Any:
         """OpenAI chat-completions: same rule, different field."""

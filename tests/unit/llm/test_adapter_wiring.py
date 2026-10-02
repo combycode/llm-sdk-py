@@ -36,6 +36,7 @@ from combycode_llm_sdk.llm.providers.openrouter.responses import OpenRouterRespo
 from combycode_llm_sdk.llm.providers.xai.completions import XAIAdapter
 from combycode_llm_sdk.llm.providers.xai.responses import XAIResponsesAdapter
 from combycode_llm_sdk.wire.chat_specs import is_chat_spec
+from tests.golden_waivers import without_waived
 
 CORPUS: dict[str, Any] = json.loads(
     (Path(__file__).resolve().parents[2] / "fixtures" / "response-golden.json").read_text(
@@ -87,7 +88,7 @@ def test_it_is_actually_checking_something() -> None:
 def test_parse_response_reaches_the_right_spec(cell_id: str, cell: dict[str, Any]) -> None:
     adapter = ADAPTERS[cell["target"]]
     built = adapter.parse_response(cell["raw"], 0)
-    assert json.loads(json.dumps(built)) == cell["parsed"]
+    assert without_waived(cell_id, json.loads(json.dumps(built))) == cell["parsed"]
 
 
 @pytest.mark.parametrize(("cell_id", "cell"), STREAMED, ids=[c for c, _ in STREAMED])
@@ -99,7 +100,7 @@ def test_create_stream_parser_reaches_the_right_spec(
     events: list[Any] = []
     for event in cell["raw"]:
         events.extend(parse(event))
-    assert json.loads(json.dumps(events)) == cell["parsed"]
+    assert without_waived(cell_id, json.loads(json.dumps(events))) == cell["parsed"]
 
 
 class TestRequestSideRouting:

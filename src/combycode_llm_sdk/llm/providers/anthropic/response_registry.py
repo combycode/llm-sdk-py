@@ -19,6 +19,7 @@ from ...cache_diagnostics import anthropic_cache_diagnostics
 from .._shared.builtin_tools import unified_builtin_tool
 from .._shared.citations import extract_citations
 from .._shared.response_utils import extract_finish_reason
+from .container import container_from_wire
 from .parse_helpers import (
     anthropic_billed_tier,
     anthropic_usage,
@@ -113,6 +114,12 @@ def _cache_diagnostics(_arg: Any, ctx: Ctx) -> dict[str, Any] | None:
     return anthropic_cache_diagnostics(_raw(ctx).get("diagnostics"))
 
 
+def _container(_arg: Any, ctx: Ctx) -> Any:
+    """The code-execution container this turn ran in, or nothing when it ran no
+    code -- `container: null` is the normal answer then, not a problem."""
+    return container_from_wire(_raw(ctx).get("container"))
+
+
 def _attach_tool_output(ctx: Ctx) -> None:
     """Attach a tool result's stdout to the call it belongs to."""
     b = _block(ctx)
@@ -137,6 +144,7 @@ ANTHROPIC_RESPONSE_REGISTRY = Registry(
         "anthropicFinish": _finish,
         "anthropicCitations": _citations,
         "anthropicCacheDiagnostics": _cache_diagnostics,
+        "anthropicContainer": _container,
     },
     effects={"anthropicAttachToolOutput": _attach_tool_output},
 )

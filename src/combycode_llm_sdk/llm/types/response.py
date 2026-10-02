@@ -8,10 +8,17 @@ names, and the 47-cell response corpus is frozen against them.
 
 - `CompletionResponse` `{id, model, content, finishReason, usage, text,
   toolCalls, thinking, media, files?, builtinToolCalls?, citations?,
-  moderation?, error?, cacheDiagnostics?, latencyMs, raw}`
+  moderation?, error?, cacheDiagnostics?, container?, latencyMs, raw}`
 - `FileOutput`      `{id?, name?, mimeType?, data?, url?, source?, ref?}`
 - `Citation`        `{url, title?, text?}`
-- `BuiltinToolCall` `{tool, id?, code?, output?, query?, url?}`
+- `BuiltinToolCall` `{tool, id?, code?, output?, query?, url?, callId?,
+  environment?}` -- `callId` / `environment` are `shell`-only
+- `ContainerInfo`   `{id, expiresAt, skills?}` -- Anthropic: the code-execution
+  container this turn ran in, when one was created. Its `id` goes back as
+  `providerOptions["container"]["id"]` to reuse it; `skills` carries the loaded
+  skills with versions RESOLVED (`"latest"` becomes the version that ran).
+  Absent when the turn ran no code, because no container existed. See
+  `llm/providers/anthropic/container.py`
 - `Usage`           `{inputTokens, outputTokens, totalTokens, cachedTokens,
   cacheWriteTokens, reasoningTokens, audioInputTokens?, audioOutputTokens?,
   serviceTier?, pricingTier?}`

@@ -1,21 +1,39 @@
 {
   "id": "anthropic/messages.response",
   "_note": "Transposed from AnthropicAdapter.parseResponse, block type for block type. Proven against every recorded anthropic/messages cell in response-golden.json: the spec output must equal the parser output exactly, so this file is checked against real provider bodies rather than against anyone's reading of them.",
-
   "accumulators": {
-    "content": { "kind": "array" },
-    "toolCalls": { "kind": "array" },
-    "media": { "kind": "array" },
-    "files": { "kind": "array", "omitEmpty": true },
-    "builtinToolCalls": { "kind": "array", "omitEmpty": true },
-    "thinking": { "kind": "scalar", "default": null }
+    "content": {
+      "kind": "array"
+    },
+    "toolCalls": {
+      "kind": "array"
+    },
+    "media": {
+      "kind": "array"
+    },
+    "files": {
+      "kind": "array",
+      "omitEmpty": true
+    },
+    "builtinToolCalls": {
+      "kind": "array",
+      "omitEmpty": true
+    },
+    "thinking": {
+      "kind": "scalar",
+      "default": null
+    }
   },
-
   "fields": [
-    { "to": "id", "from": "raw.id" },
-    { "to": "model", "from": "raw.model" }
+    {
+      "to": "id",
+      "from": "raw.id"
+    },
+    {
+      "to": "model",
+      "from": "raw.model"
+    }
   ],
-
   "collect": [
     {
       "from": "raw.content",
@@ -23,26 +41,44 @@
       "cases": {
         "text": {
           "emit": "content",
-          "as": { "type": "text", "text": { "$": "@text" } }
+          "as": {
+            "type": "text",
+            "text": {
+              "$": "@text"
+            }
+          }
         },
         "thinking": {
           "emit": "thinking",
           "mode": "scalar",
-          "as": { "$": "@thinking" }
+          "as": {
+            "$": "@thinking"
+          }
         },
         "tool_use": {
           "_note": "One object into BOTH accumulators, not two equal ones.",
-          "emit": ["content", "toolCalls"],
+          "emit": [
+            "content",
+            "toolCalls"
+          ],
           "as": {
             "type": "tool_call",
-            "id": { "$": "@id" },
-            "name": { "$": "@name" },
-            "arguments": { "$": "@input" }
+            "id": {
+              "$": "@id"
+            },
+            "name": {
+              "$": "@name"
+            },
+            "arguments": {
+              "$": "@input"
+            }
           }
         },
         "server_tool_use": {
           "emit": "builtinToolCalls",
-          "as": { "$call": "anthropicBuiltinCall" }
+          "as": {
+            "$call": "anthropicBuiltinCall"
+          }
         }
       },
       "default": [
@@ -54,17 +90,31 @@
           "_note": "One code-execution result block can carry several output files, hence concat.",
           "emit": "files",
           "mode": "concat",
-          "as": { "$call": "anthropicCodeExecFiles" }
+          "as": {
+            "$call": "anthropicCodeExecFiles"
+          }
         }
       ]
     }
   ],
-
   "derive": {
-    "text": { "$call": "anthropicText" },
-    "usage": { "$call": "anthropicUsageFull" },
-    "finishReason": { "$call": "anthropicFinish" },
-    "citations": { "$call": "anthropicCitations" },
-    "cacheDiagnostics": { "$call": "anthropicCacheDiagnostics" }
+    "text": {
+      "$call": "anthropicText"
+    },
+    "usage": {
+      "$call": "anthropicUsageFull"
+    },
+    "finishReason": {
+      "$call": "anthropicFinish"
+    },
+    "citations": {
+      "$call": "anthropicCitations"
+    },
+    "cacheDiagnostics": {
+      "$call": "anthropicCacheDiagnostics"
+    },
+    "container": {
+      "$call": "anthropicContainer"
+    }
   }
 }

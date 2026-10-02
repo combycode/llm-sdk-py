@@ -24,6 +24,7 @@ from ....wire.interpreter import Ctx, Registry
 from ...cache_diagnostics import anthropic_cache_diagnostics
 from .._shared.builtin_tools import unified_builtin_tool
 from .._shared.response_utils import extract_finish_reason
+from .container import container_from_wire
 from .parse_helpers import (
     anthropic_usage,
     builtin_input_payload,
@@ -82,12 +83,17 @@ def _message_delta(_arg: Any, ctx: Ctx) -> list[dict[str, Any]]:
         events.append({"type": "usage", "usage": anthropic_usage(usage)})
     sr = _delta(ctx).get("stop_reason")
     if isinstance(sr, str) and sr:
-        events.append(
-            {
-                "type": "done",
-                "finishReason": extract_finish_reason(sr == "tool_use", sr, _FINISH),
-            }
-        )
+        # The container rides this frame, not the opening one: `message_start`
+        # sends `container: null` even when a container is created, and only
+        # `message_delta.delta.container` has it.
+        done: dict[str, Any] = {
+            "type": "done",
+            "finishReason": extract_finish_reason(sr == "tool_use", sr, _FINISH),
+        }
+        container = container_from_wire(_delta(ctx).get("container"))
+        if container is not None:
+            done["container"] = container
+        events.append(done)
     return events
 
 

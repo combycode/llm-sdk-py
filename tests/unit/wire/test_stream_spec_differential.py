@@ -31,6 +31,7 @@ from combycode_llm_sdk.llm.providers.xai.stream_registry import XAI_STREAM_REGIS
 from combycode_llm_sdk.wire.interpreter import Registry
 from combycode_llm_sdk.wire.stream_interpreter import create_stream_builder
 from combycode_llm_sdk.wire.stream_specs import STREAM_SPECS, get_stream_spec, stream_spec_id
+from tests.golden_waivers import without_waived
 
 CORPUS: dict[str, Any] = json.loads(
     (Path(__file__).resolve().parents[2] / "fixtures" / "response-golden.json").read_text(
@@ -83,4 +84,4 @@ def test_every_wired_registry_has_a_spec() -> None:
 
 @pytest.mark.parametrize(("cell_id", "cell"), STREAMED, ids=[c for c, _ in STREAMED])
 def test_emits_what_typescript_emitted(cell_id: str, cell: dict[str, Any]) -> None:
-    assert replay(cell) == cell["parsed"]
+    assert without_waived(cell_id, replay(cell)) == cell["parsed"]

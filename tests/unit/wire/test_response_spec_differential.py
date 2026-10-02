@@ -43,6 +43,7 @@ from combycode_llm_sdk.wire.response_specs import (
     get_response_spec,
     response_spec_id,
 )
+from tests.golden_waivers import without_waived
 
 CORPUS: dict[str, Any] = json.loads(
     (Path(__file__).resolve().parents[2] / "fixtures" / "response-golden.json").read_text(
@@ -102,7 +103,7 @@ def test_every_wired_registry_has_a_spec() -> None:
 
 @pytest.mark.parametrize(("cell_id", "cell"), BUFFERED, ids=[c for c, _ in BUFFERED])
 def test_builds_what_typescript_built(cell_id: str, cell: dict[str, Any]) -> None:
-    assert build(cell) == cell["parsed"]
+    assert without_waived(cell_id, build(cell)) == cell["parsed"]
 
 
 def test_shares_one_object_between_content_and_tool_calls() -> None:

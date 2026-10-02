@@ -961,6 +961,7 @@ class StreamAccumulator:
         self.citations_by_url: dict[str, Any] = {}
         self.cache_diagnostics: dict[str, Any] | None = None
         self.signatures: Any = None
+        self.container: Any = None
 
     def absorb(self, event: Mapping[str, Any], merge: Any) -> None:
         kind = event.get("type")
@@ -976,6 +977,11 @@ class StreamAccumulator:
             # it: the terminal frame is where it rides out.
             if event.get("signatures"):
                 self.signatures = event["signatures"]
+            # Same reason as `files` and `citations`: a streamed turn must answer
+            # what complete() answers, and the container id is the one thing a
+            # caller needs in order to reuse the container next time.
+            if event.get("container"):
+                self.container = event["container"]
         elif kind == "file":
             # Hosted-tool output file (a code-execution artifact) -- collected
             # for the final response so streamed `files` matches complete().
@@ -1033,6 +1039,8 @@ class StreamAccumulator:
             response["cacheDiagnostics"] = self.cache_diagnostics
         if self.signatures:
             response["signatures"] = self.signatures
+        if self.container:
+            response["container"] = self.container
         response["latencyMs"] = latency_ms
         response["raw"] = None
         return response

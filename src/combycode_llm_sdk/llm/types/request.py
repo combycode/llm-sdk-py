@@ -55,6 +55,14 @@ from typing import Any, Literal
 #: here and the dict stays open. Sending a key to a provider that does not read
 #: it is ignored, not an error.
 #:
+#: - Anthropic: `container` -- the code-execution container this turn should use:
+#:   `{"id": "..."}` from an earlier response's `container["id"]` to reuse a warm
+#:   one, and/or `{"skills": [{"type": "anthropic", "skillId": "xlsx",
+#:   "version": "latest"}]}` to load skills into it. GA -- measured 2026-10-02
+#:   with no beta header, and a skill that does not exist is a `400 Unknown
+#:   Anthropic skill` rather than a silent ignore. The container appears on
+#:   `response["container"]` once a turn actually runs code; a turn that runs none
+#:   reports no container, because none was created.
 #: - Anthropic: `userProfileId` -- forwarded as the `anthropic-user-profile-id`
 #:   header; needs the account-level `user-profiles` beta. `workspaceId` --
 #:   forwarded as `anthropic-workspace-id`, e.g.

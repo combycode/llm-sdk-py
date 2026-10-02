@@ -20,6 +20,18 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **Anthropic's code-execution container is now yours to reuse, with skills.**
+  `providerOptions["container"]` takes `{"id"?, "skills"?}`: an `id` from an earlier response
+  reuses a warm container (measured: about five minutes of life), and `skills` loads Anthropic or
+  custom skills into it. The container a turn ran in is reported on `response["container"]` (`id`,
+  `expiresAt`, and the skills with versions RESOLVED -- `"latest"` comes back as the version that
+  actually ran), and it reaches a streamed turn on the `done` event and the streamed response, so
+  streaming no longer costs you the id. Before this, we sent no container and dropped the one the
+  response carried, so neither reuse nor skills were reachable at all. A malformed skill ref raises
+  before the request leaves, naming the field: sending it would make the provider complain about a
+  key the caller never wrote, and dropping it would load nothing while they believed otherwise. GA
+  -- no beta header; an unknown skill is the provider's own 400.
+
 - **The `shell` builtin tool, with live progress and an end to its silent dead end.** OpenAI and xAI
   both serve a shell tool and we passed it straight to the wire without understanding it, so
   enabling it returned `text: ""`, `finishReason: "stop"`, no tool calls and no warning -- a request
