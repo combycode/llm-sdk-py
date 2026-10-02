@@ -38,7 +38,22 @@ event shapes below are not free to drift:
   began executing server-side. Informational progress: unlike `tool_call_*` (a
   function call the CLIENT must run), the provider runs these itself, so there is
   nothing to execute or return.
-- `{type:'builtin_tool_end', tool, id?, code?, output?, query?, url?}`
+- `{type:'builtin_tool_delta', tool, id?, code?, output?}` -- a hosted builtin
+  made incremental progress: the model is still composing what it will run, or the
+  provider is streaming back what it produced. `code` is a fragment of the input
+  (OpenAI's shell streams the command text a few characters at a time); `output` is
+  a fragment of stdout/stderr as the provider's container produces it. Both are
+  fragments to APPEND, exactly like `text`; the complete values arrive again on
+  `builtin_tool_end`, so a consumer that only wants the result can ignore these.
+  Measured 2026-10-02: OpenAI emits `response.shell_call_command.{added,delta,done}`
+  for any shell call and `response.shell_call_output_content.{delta,done}` only when
+  the tool runs in a container. xAI sends its commands as one JSON arguments string
+  instead (`response.shell_call_arguments.*`), which is not a fragment of anything a
+  caller would display, so nothing is emitted for it -- its item already carries the
+  finished commands.
+- `{type:'builtin_tool_end', tool, id?, code?, output?, query?, url?, callId?,
+  environment?}` -- `callId` / `environment` are shell-only and ride along so a
+  streamed turn reports what a buffered one does.
 - `{type:'moderation', phase:'input'|'output', result, source:'native'|'emulated'}`
 """
 

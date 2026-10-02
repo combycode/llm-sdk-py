@@ -8,7 +8,24 @@ because the request specs address them by those names:
 - `FunctionTool` `{type?:'function', name, description, parameters, strict?,
   cache?, allowedCallers?, outputSchema?}`
 - `BuiltinTool`  `{type: 'image_generation'|'web_search'|'web_fetch'|
-  'code_interpreter'|'file_search'|'mcp'|'programmatic_tool_calling', params?}`
+  'code_interpreter'|'file_search'|'mcp'|'programmatic_tool_calling'|'shell',
+  params?}`
+
+`shell` (OpenAI + xAI Responses) is the one builtin that is only provider-RUN
+when `params['environment']` is a container:
+
+- `{'environment': {'type': 'container_auto'}}` -- OpenAI runs the commands in a
+  container it provisions and streams stdout/stderr back. Measured 2026-10-02 the
+  request is rewritten to `container_reference` carrying the `container_id` it
+  chose.
+- `{'environment': {'type': 'local'}}` or omitted -- the model only ASKS; whoever
+  called has to run the commands and feed the output back. The turn ends after the
+  request, so `text` is empty by design and the commands are in
+  `builtinToolCalls[].code`. A `shell_awaiting_caller` warning says so, because an
+  empty answer with `finishReason: 'stop'` otherwise looks like success.
+
+xAI REQUIRES `environment` (a 422 names the missing field) and accepts only
+`local`, so a shell call on xAI is always the second case.
 - `McpToolParams` the typed shape for an `mcp` builtin's `params`, forwarded
   verbatim: `{server_label, server_url?, connector_id?, tunnel_id?,
   authorization?, headers?, require_approval?, allowed_tools?,

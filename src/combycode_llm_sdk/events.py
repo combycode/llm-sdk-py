@@ -126,6 +126,23 @@ class BuiltinToolStartEvent(Event):
 
 
 @dataclass(frozen=True)
+class BuiltinToolDeltaEvent(Event):
+    """A hosted builtin tool made incremental progress.
+
+    `code` is a fragment of the input (OpenAI's shell streams the command text a
+    few characters at a time); `output` is a fragment of stdout/stderr as the
+    provider's container produces it. Both are fragments to APPEND -- the complete
+    values arrive again on `builtin_tool_end`, so a consumer that only wants the
+    result can ignore these.
+    """
+
+    tool: str = ""
+    id: str | None = None
+    code: str | None = None
+    output: str | None = None
+
+
+@dataclass(frozen=True)
 class BuiltinToolEndEvent(Event):
     call: BuiltinToolCall = field(default_factory=lambda: BuiltinToolCall(tool=""))
 
@@ -273,6 +290,13 @@ _BUILDERS: dict[str, Any] = {
     "builtin_tool_start": lambda r: BuiltinToolStartEvent(
         type="builtin_tool_start", tool=r.get("tool") or "", id=r.get("id")
     ),
+    "builtin_tool_delta": lambda r: BuiltinToolDeltaEvent(
+        type="builtin_tool_delta",
+        tool=r.get("tool") or "",
+        id=r.get("id"),
+        code=r.get("code"),
+        output=r.get("output"),
+    ),
     "builtin_tool_end": lambda r: BuiltinToolEndEvent(
         type="builtin_tool_end", call=BuiltinToolCall.of(r)
     ),
@@ -294,6 +318,7 @@ KNOWN_EVENT_TYPES: frozenset[str] = frozenset(_BUILDERS)
 __all__ = [
     "KNOWN_EVENT_TYPES",
     "AudioEvent",
+    "BuiltinToolDeltaEvent",
     "BuiltinToolEndEvent",
     "BuiltinToolStartEvent",
     "CacheDiagnosticsEvent",

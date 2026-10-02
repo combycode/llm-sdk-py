@@ -105,6 +105,7 @@ class AsyncLLMClient(BaseLLMClient):
         latency_ms = now_ms() - start
 
         result = self._attach_build_notes(self._finish(response, latency_ms), provider_req)
+        self._report_shell_awaiting(result, ctx)
 
         # Emulated inline moderation (non-OpenAI providers, or forced). Native
         # results are already on `result['moderation']` from the adapter.
@@ -257,7 +258,7 @@ class AsyncLLMClient(BaseLLMClient):
         await self.hooks.emit(
             "onCompletion",
             self._completion_ctx(
-                acc.to_response(self.model, now_ms() - start),
+                self._report_shell_awaiting(acc.to_response(self.model, now_ms() - start), ctx),
                 self._request_stats(normalized),
                 provider_req.body,
                 None,

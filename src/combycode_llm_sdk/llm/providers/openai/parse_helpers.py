@@ -163,7 +163,79 @@ def _search_results(item: Mapping[str, Any]) -> list[dict[str, Any]] | None:
     return out or None
 
 
-_RESPONSES_BUILTIN_ITEMS = frozenset({"web_search_call", "code_interpreter_call"})
+_RESPONSES_BUILTIN_ITEMS = frozenset(
+    {
+        "web_search_call",
+        "code_interpreter_call",
+        "shell_call",
+        # Mapped so a BUFFERED container shell still reports its output;
+        # `merge_shell_calls` then folds it into the call it belongs to, so a caller
+        # sees one tool call rather than two halves. The streamed path does the same
+        # join via its `openShell` state.
+        "shell_call_output",
+    }
+)
+
+
+def shell_environment_name(item: Mapping[str, Any]) -> str:
+    """`environment` as the provider reports it on a `shell_call`.
+
+    Measured 2026-10-02: OpenAI sends `null` for a local call and rewrites
+    `container_auto` into `{"type": "container_reference", "container_id": ...}`;
+    xAI omits the field entirely and only ever runs locally. All three absences
+    mean the same thing -- nobody ran these commands yet -- so they normalise to
+    `"local"`.
+    """
+    env = item.get("environment")
+    kind = env.get("type") if isinstance(env, Mapping) else None
+    return kind if isinstance(kind, str) else "local"
+
+
+def shell_awaits_caller(item: Mapping[str, Any]) -> bool:
+    """True when the provider is WAITING on the caller to run these commands.
+
+    The whole reason this is a named predicate: the turn ends normally with empty
+    text, so without asking this question a caller cannot tell a finished answer
+    from a request for work.
+    """
+    return item.get("type") == "shell_call" and shell_environment_name(item) == "local"
+
+
+def shell_commands(item: Mapping[str, Any]) -> str:
+    """The commands a `shell_call` item asks for, as one newline-joined block.
+
+    One item can carry several commands (measured: `["echo one", "ls /nonexistent"]`)
+    and they run in order, so they read as a small script and are joined like one.
+    """
+    action = item.get("action")
+    commands = action.get("commands") if isinstance(action, Mapping) else None
+    if not isinstance(commands, list):
+        return ""
+    return "\n".join(c for c in commands if isinstance(c, str))
+
+
+def shell_output_text(item: Mapping[str, Any]) -> str:
+    """stdout and stderr of a `shell_call_output` item, in command order.
+
+    Each entry is one command's `{outcome, stdout, stderr}`. stderr follows stdout
+    for the same command rather than being dropped: a failing command's only output
+    is usually on stderr, and `builtin_tool_end.output` is a caller's whole view of
+    what happened. The exit code is NOT folded into this string -- it would have to
+    be invented as text inside something callers read as program output, and it
+    stays available on the raw item.
+    """
+    chunks = item.get("output")
+    if not isinstance(chunks, list):
+        return ""
+    parts: list[str] = []
+    for chunk in chunks:
+        if not isinstance(chunk, Mapping):
+            continue
+        for key in ("stdout", "stderr"):
+            value = chunk.get(key)
+            if isinstance(value, str) and value:
+                parts.append(value)
+    return "".join(parts)
 
 
 def builtin_call_from_responses_item(item: Mapping[str, Any]) -> dict[str, Any] | None:
@@ -179,6 +251,21 @@ def builtin_call_from_responses_item(item: Mapping[str, Any]) -> dict[str, Any] 
         output = _code_output_from_responses_item(item)
         if output:
             call["output"] = output
+    elif kind == "shell_call":
+        commands = shell_commands(item)
+        if commands:
+            call["code"] = commands
+        call["environment"] = shell_environment_name(item)
+        # `call_id` (not the item `id`) is what the matching `shell_call_output`
+        # item points back to, so it is what a merge has to key on.
+        if isinstance(item.get("call_id"), str):
+            call["callId"] = item["call_id"]
+    elif kind == "shell_call_output":
+        output = shell_output_text(item)
+        if output:
+            call["output"] = output
+        if isinstance(item.get("call_id"), str):
+            call["callId"] = item["call_id"]
     elif kind == "web_search_call":
         payload = _search_action_payload(item)
         if payload.get("query"):

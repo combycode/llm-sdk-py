@@ -53,6 +53,7 @@ from .moderation.runner import moderation_model, resolve_moderation_mode
 from .moderation.types import MODERATION_DEFAULT_INTERVAL, MODERATION_DEFAULT_STRATEGY
 from .response_shape import ResponseShapeChecker, load_response_shapes
 from .server_state import resolve_server_state
+from .shell_calls import merge_shell_calls, shell_awaiting_note
 from .types.messages import Message
 from .types.provider import ProviderHttpRequest
 from .types.response import empty_usage
@@ -532,6 +533,33 @@ class BaseLLMClient:
             ]
         return result
 
+    def _report_shell_awaiting(
+        self, result: dict[str, Any], ctx: RequestContext
+    ) -> dict[str, Any]:
+        """One warning when the model asked the CALLER to run shell commands.
+
+        Emitted from here rather than from the adapter for the same reason every
+        other note is: the adapter decides what happened, the client owns the hooks.
+        Put on the result as well as on the hook, for the reason
+        `_attach_build_notes` gives -- a caller holding only the result must not have
+        to have subscribed to learn that their turn is waiting on them.
+        """
+        note = shell_awaiting_note(result.get("builtinToolCalls"))
+        if note is None:
+            return result
+        details: dict[str, Any] = {"provider": self.provider, "model": self.model}
+        warning: dict[str, Any] = {
+            "source": "llm",
+            "code": "shell_awaiting_caller",
+            "message": note,
+            "details": details,
+        }
+        result["warnings"] = [*result.get("warnings", []), warning]
+        # The hook carries `ctx` as every other warning does; the copy on the result
+        # does not, because a caller reading it already holds the call it came from.
+        self.hooks.emit_sync("onWarning", {**warning, "details": {**details, "ctx": ctx}})
+        return result
+
     def _report_build_notes(self, req: ProviderHttpRequest, ctx: RequestContext) -> None:
         """Anything the spec left out on purpose reaches the caller as a warning.
 
@@ -805,6 +833,11 @@ class BaseLLMClient:
         if self._shape_checker:
             self._shape_checker.check_response(response.get("body"))
         parsed: dict[str, Any] = self._adapter.parse_response(response.get("body"), latency_ms)
+        # A container-run shell reports commands and output as two items, which the
+        # per-item mapping cannot join; done here, where the whole list exists, so a
+        # buffered turn reports the one call a streamed turn reports.
+        if parsed.get("builtinToolCalls"):
+            parsed["builtinToolCalls"] = merge_shell_calls(parsed["builtinToolCalls"])
         return parsed
 
     def _completion_ctx(
@@ -956,7 +989,11 @@ class StreamAccumulator:
             # complete()) -- collected on END, which carries the full payload
             # (code/output/query).
             call: dict[str, Any] = {"tool": event.get("tool")}
-            for key in ("id", "code", "output", "query", "url"):
+            # `callId` / `environment` ride along for the same reason the rest do:
+            # `builtinToolCalls` is assembled from these events when streaming, so
+            # leaving them off would mean the same turn told you where its commands
+            # ran only if you did not stream it.
+            for key in ("id", "code", "output", "query", "url", "callId", "environment"):
                 if event.get(key):
                     call[key] = event[key]
             self.builtin_tool_calls.append(call)

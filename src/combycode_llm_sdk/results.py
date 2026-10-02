@@ -278,6 +278,15 @@ class BuiltinToolCall:
     output: str | None = None
     query: str | None = None
     url: str | None = None
+    #: `shell` only: the model's own call id, which a `shell_call_output` has to
+    #: reference when the caller answers a local call. Distinct from `id`, the id
+    #: of the output ITEM.
+    call_id: str | None = None
+    #: `shell` only: `"local"` when the model only ASKED and the caller must run
+    #: the commands, or `"container_reference"` / `"container_auto"` when the
+    #: provider ran them itself. The difference between a finished call and a
+    #: request waiting on you, so it decides whether `output` can ever arrive.
+    environment: str | None = None
 
     @staticmethod
     def of(raw: Mapping[str, Any]) -> BuiltinToolCall:
@@ -288,6 +297,9 @@ class BuiltinToolCall:
             output=raw.get("output"),
             query=raw.get("query"),
             url=raw.get("url"),
+            # camelCase on the wire, snake_case in the public API -- as everywhere.
+            call_id=raw.get("callId"),
+            environment=raw.get("environment"),
         )
 
 

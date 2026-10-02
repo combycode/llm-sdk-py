@@ -20,6 +20,22 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 
 ### Added
 
+- **The `shell` builtin tool, with live progress and an end to its silent dead end.** OpenAI and xAI
+  both serve a shell tool and we passed it straight to the wire without understanding it, so
+  enabling it returned `text: ""`, `finishReason: "stop"`, no tool calls and no warning -- a request
+  to run `echo hello` presented as a finished, successful answer. Now: `{"type": "shell"}` is a
+  declared builtin; a container-run call (`params["environment"] = {"type": "container_auto"}`)
+  reports one tool call with its commands AND its output, where the wire sends two linked items; a
+  new `builtin_tool_delta` stream event (`BuiltinToolDeltaEvent`) carries the command text as the
+  model composes it and stdout/stderr as the container produces it; and a LOCAL call -- the model
+  asking the caller to run something -- reports its commands on `builtinToolCalls[].code` with a
+  `shell_awaiting_caller` warning, on the hook AND on the result, naming the commands and the
+  `callId` to answer. `BuiltinToolCall` gains `call_id` and `environment` (`"local"` means it is
+  waiting on you), both also carried on `builtin_tool_end` so a streamed turn reports what a
+  buffered one does. xAI is included but narrower: measured 2026-10-02 it requires `environment` and
+  accepts only `local`, and it names its stream events `response.shell_call_arguments.*`, sending one
+  JSON string rather than command fragments -- so nothing is invented as progress there.
+
 - **`dataResidency` pins OpenAI traffic to a region by name** -- `"global" | "us" | "eu" | "ae"`,
   resolving to `api.openai.com` and `{region}.api.openai.com`, instead of hand-writing the host in
   `baseURL`. The wrong region fails loudly: measured from an unrestricted project, `us.` answers

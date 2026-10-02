@@ -27,6 +27,10 @@ from .parse_helpers import (
     builtin_call_from_responses_item,
     files_from_responses_output_item,
     openai_responses_usage,
+    shell_awaits_caller,
+    shell_commands,
+    shell_environment_name,
+    shell_output_text,
 )
 
 
@@ -46,9 +50,15 @@ def _item(ctx: Ctx) -> Mapping[str, Any]:
 
 
 def _end_payload(call: Mapping[str, Any]) -> dict[str, Any]:
-    """The code, query or url a hosted tool ran, carried on its end event."""
+    """The code, query or url a hosted tool ran, carried on its end event.
+
+    `callId` / `environment` are shell-only and ride along for parity: the streamed
+    `builtinToolCalls` is assembled from these events, so leaving them off would
+    mean the same turn told you where its commands ran only if you did not stream
+    it.
+    """
     out: dict[str, Any] = {}
-    for key in ("id", "code", "output", "query", "url"):
+    for key in ("id", "code", "output", "query", "url", "callId", "environment"):
         if call.get(key):
             out[key] = call[key]
     return out
@@ -152,7 +162,14 @@ def _item_added(ctx: Ctx) -> None:
         out["events"].append(
             {"type": "media_start", "mediaType": "image", "mimeType": "image/png"}
         )
-    builtin = builtin_call_from_responses_item(item)
+    # `shell_call_output` is the SECOND item of one shell invocation, so it maps to
+    # a builtin call but must not announce a second start -- measured: doing so
+    # reported `starts=2 ends=1` for a single `echo`.
+    builtin = (
+        None
+        if item.get("type") == "shell_call_output"
+        else builtin_call_from_responses_item(item)
+    )
     if builtin:
         started: dict[str, Any] = {"type": "builtin_tool_start", "tool": builtin["tool"]}
         if builtin.get("id"):
@@ -165,11 +182,38 @@ def _item_done(ctx: Ctx) -> None:
     raw = _raw(ctx)
     item = _item(ctx)
 
-    builtin = builtin_call_from_responses_item(item)
-    if builtin:
-        out["events"].append(
-            {"type": "builtin_tool_end", "tool": builtin["tool"], **_end_payload(builtin)}
-        )
+    # A shell call is the one builtin whose result may arrive in a LATER item, so it
+    # cannot simply end here. Three cases, all measured 2026-10-02:
+    #   local      -> no output item will ever come; end now, with the commands.
+    #   container  -> hold the call; the `shell_call_output` item below ends it.
+    #   the output -> end the held call, now carrying stdout/stderr.
+    if item.get("type") == "shell_call" and not shell_awaits_caller(item):
+        held: dict[str, Any] = {
+            "code": shell_commands(item),
+            "environment": shell_environment_name(item),
+        }
+        if isinstance(item.get("id"), str):
+            held["id"] = item["id"]
+        if isinstance(item.get("call_id"), str):
+            held["callId"] = item["call_id"]
+        out["openShell"] = held
+    elif item.get("type") == "shell_call_output":
+        waiting = out.get("openShell") or {}
+        out["openShell"] = None
+        output = shell_output_text(item)
+        ended: dict[str, Any] = {"type": "builtin_tool_end", "tool": "shell"}
+        for key in ("id", "code", "callId", "environment"):
+            if waiting.get(key):
+                ended[key] = waiting[key]
+        if output:
+            ended["output"] = output
+        out["events"].append(ended)
+    else:
+        builtin = builtin_call_from_responses_item(item)
+        if builtin:
+            out["events"].append(
+                {"type": "builtin_tool_end", "tool": builtin["tool"], **_end_payload(builtin)}
+            )
     if item.get("type") == "function_call":
         out["events"].append({"type": "tool_call_end", "id": item.get("call_id") or ""})
     if item.get("type") == "image_generation_call":
@@ -186,6 +230,46 @@ def _item_done(ctx: Ctx) -> None:
             out["events"].append(event)
 
 
+def _shell_command_delta(ctx: Ctx) -> None:
+    """The command text OpenAI streams while the model composes it.
+
+    Per `command_index`, because one shell call can ask for several commands; the
+    index is not forwarded because `code` is a fragment to append and the commands
+    read as one script, exactly as `builtin_tool_end.code` joins them. `.added`
+    carries `command: ""` and `.done` repeats the finished command, so only `.delta`
+    becomes an event -- forwarding `.done` as well would duplicate every command in
+    a consumer that appends what it is given.
+    """
+    delta = _raw(ctx).get("delta")
+    if isinstance(delta, str) and delta:
+        _out(ctx)["events"].append(
+            {"type": "builtin_tool_delta", "tool": "shell", "code": delta}
+        )
+
+
+def _shell_output_delta(ctx: Ctx) -> None:
+    """stdout/stderr as the provider's container produces it.
+
+    `delta` is a MAPPING here (`{"stdout": ...}` or `{"stderr": ...}`), not a string
+    -- measured, and the one shape in this group that is not a plain delta. Both
+    streams become `output` rather than being split: they interleave in the order the
+    command wrote them, which is the order a reader needs.
+    """
+    delta = _raw(ctx).get("delta")
+    if not isinstance(delta, Mapping):
+        return
+    text = "".join(
+        value
+        for key in ("stdout", "stderr")
+        for value in [delta.get(key)]
+        if isinstance(value, str) and value
+    )
+    if text:
+        _out(ctx)["events"].append(
+            {"type": "builtin_tool_delta", "tool": "shell", "output": text}
+        )
+
+
 OPENAI_RESPONSES_STREAM_REGISTRY = Registry(
     transforms={
         "oaiRespStreamCitation": _citation,
@@ -196,6 +280,8 @@ OPENAI_RESPONSES_STREAM_REGISTRY = Registry(
     effects={
         "oaiRespStreamItemAdded": _item_added,
         "oaiRespStreamItemDone": _item_done,
+        "oaiRespStreamShellCommandDelta": _shell_command_delta,
+        "oaiRespStreamShellOutputDelta": _shell_output_delta,
     },
 )
 

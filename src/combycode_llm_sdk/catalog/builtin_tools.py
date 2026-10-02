@@ -34,9 +34,13 @@ from __future__ import annotations
 
 PROVIDER_BUILTIN_TOOLS: dict[str, tuple[str, ...]] = {
     "anthropic": ("web_search", "web_fetch", "code_interpreter"),
-    "openai": ("web_search", "code_interpreter", "image_generation"),
+    "openai": ("web_search", "code_interpreter", "image_generation", "shell"),
     "google": ("web_search", "web_fetch", "code_interpreter"),
-    "xai": ("web_search", "code_interpreter", "image_generation"),
+    # `shell` on xAI is real but narrower: measured 2026-10-02 it REQUIRES
+    # `environment` (422 `missing field environment`) and rejects a container
+    # (`only 'local' shell environment type is supported`), so the model can only
+    # ever ask the caller to run the commands.
+    "xai": ("web_search", "code_interpreter", "image_generation", "shell"),
     "openrouter": ("web_search",),
 }
 
