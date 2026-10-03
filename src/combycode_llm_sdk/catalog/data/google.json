@@ -2212,7 +2212,11 @@
       "charsPerTokenDefault": 4,
       "countApiAvailable": false
     },
-    "mediaOnly": true
+    "mediaOnly": true,
+    "deprecation": {
+      "date": "2026-10-22",
+      "source": "litellm"
+    }
   },
   "google/veo-3.1-fast": {
     "providerModelName": "veo-3.1-fast-generate-preview",
@@ -2292,7 +2296,11 @@
       "charsPerTokenDefault": 4,
       "countApiAvailable": false
     },
-    "mediaOnly": true
+    "mediaOnly": true,
+    "deprecation": {
+      "date": "2026-10-22",
+      "source": "litellm"
+    }
   },
   "google/veo-3.1-lite": {
     "providerModelName": "veo-3.1-lite-generate-preview",
@@ -2370,6 +2378,10 @@
       "strategy": "heuristic",
       "charsPerTokenDefault": 4,
       "countApiAvailable": false
+    },
+    "deprecation": {
+      "date": "2026-10-22",
+      "source": "litellm"
     }
   },
   "google/lyria-3-clip": {
@@ -2525,6 +2537,10 @@
       "strategy": "count_api",
       "charsPerTokenDefault": 4,
       "countApiAvailable": true
+    },
+    "deprecation": {
+      "date": "2026-07-28",
+      "source": "litellm"
     }
   },
   "google/gemini-robotics-er-1.5": {
@@ -3027,8 +3043,8 @@
     ],
     "pricing": {
       "inputPerMTok": 1,
-      "outputPerMTok": 10,
-      "cacheReadPerMTok": 0.2,
+      "outputPerMTok": 5,
+      "cacheReadPerMTok": 0.1,
       "tiers": {
         "batch": {
           "inputPerMTok": 1,
@@ -3089,7 +3105,7 @@
     ],
     "pricing": {
       "inputPerMTok": 1,
-      "outputPerMTok": 10
+      "outputPerMTok": 5
     },
     "preferredApi": "generate",
     "supportedApis": [

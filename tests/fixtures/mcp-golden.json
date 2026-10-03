@@ -1,6 +1,6 @@
 {
   "_doc": "What the MCP Streamable-HTTP transport sent, captured through an injected fetch. Regenerate ONLY with --force and only when the wire genuinely changed.",
-  "frozenAtCommit": "0ff3ed67656c744810535605ad6b7e6c2169afdc",
+  "frozenAtCommit": "7aad4bda7dd75a37f00c9a9b3240fa4499012c57",
   "counts": {
     "cases": 19,
     "requests": 23
@@ -19,6 +19,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -36,6 +37,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -60,6 +62,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -73,6 +76,7 @@
       "method": "DELETE",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -91,6 +95,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -106,6 +111,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -124,6 +130,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -137,6 +144,7 @@
       "method": "DELETE",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -148,6 +156,7 @@
       "method": "GET",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "signal": "__signal",
       "url": "https://mcp.example.com/mcp"
     },
@@ -159,6 +168,7 @@
       "method": "GET",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "signal": "__signal",
       "url": "https://mcp.example.com/mcp"
     },
@@ -171,6 +181,7 @@
       "method": "GET",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "signal": "__signal",
       "url": "https://mcp.example.com/mcp"
     },
@@ -189,6 +200,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -214,6 +226,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -236,6 +249,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -258,6 +272,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -281,6 +296,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -299,6 +315,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -317,6 +334,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -329,6 +347,7 @@
       "method": "DELETE",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -345,6 +364,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "text",
       "url": "https://mcp.example.com/mcp"
     },
@@ -368,6 +388,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "signal": "__signal",
       "url": "https://mcp.example.com/mcp"
     },
@@ -391,6 +412,7 @@
       "method": "POST",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "signal": "__signal",
       "url": "https://mcp.example.com/mcp"
     },
@@ -404,6 +426,7 @@
       "method": "GET",
       "model": "example",
       "provider": "mcp",
+      "redirect": "same-origin",
       "signal": "__signal",
       "url": "https://mcp.example.com/mcp"
     }

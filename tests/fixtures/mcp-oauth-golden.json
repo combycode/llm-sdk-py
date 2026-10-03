@@ -1,6 +1,6 @@
 {
   "_doc": "What the MCP OAuth flow sent, captured through an injected fetch. Regenerate ONLY with --force and only when the wire genuinely changed.",
-  "frozenAtCommit": "0ff3ed67656c744810535605ad6b7e6c2169afdc",
+  "frozenAtCommit": "7aad4bda7dd75a37f00c9a9b3240fa4499012c57",
   "counts": {
     "cases": 10,
     "requests": 11
@@ -13,6 +13,7 @@
       "method": "GET",
       "model": "oauth",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "json",
       "url": "https://mcp.example.com/.well-known/oauth-authorization-server"
     },
@@ -23,6 +24,7 @@
       "method": "GET",
       "model": "oauth",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "json",
       "url": "https://mcp.example.com/.well-known/oauth-authorization-server"
     },
@@ -33,6 +35,7 @@
       "method": "GET",
       "model": "oauth",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "json",
       "url": "https://mcp.example.com/.well-known/openid-configuration"
     },
@@ -51,6 +54,7 @@
       "method": "POST",
       "model": "oauth",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "json",
       "url": "https://mcp.example.com/oauth/register"
     },
@@ -69,6 +73,7 @@
       "method": "POST",
       "model": "oauth",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "json",
       "url": "https://mcp.example.com/oauth/register"
     },
@@ -81,6 +86,7 @@
       "method": "POST",
       "model": "oauth",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "json",
       "url": "https://auth.example.com/oauth/token"
     },
@@ -93,6 +99,7 @@
       "method": "POST",
       "model": "oauth",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "json",
       "url": "https://auth.example.com/oauth/token"
     },
@@ -105,6 +112,7 @@
       "method": "POST",
       "model": "oauth",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "json",
       "url": "https://auth.example.com/oauth/token"
     },
@@ -117,6 +125,7 @@
       "method": "POST",
       "model": "oauth",
       "provider": "mcp",
+      "redirect": "same-origin",
       "responseType": "json",
       "url": "https://auth.example.com/oauth/token"
     },

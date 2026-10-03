@@ -952,5 +952,78 @@
     "status": "stable",
     "active": true,
     "wireSpec": "openai/responses"
+  },
+  "xai/grok-imagine-video-lite-1.5": {
+    "providerModelName": "grok-imagine-video-1.5-lite",
+    "aliases": [
+      "grok-imagine-video-1.5-lite"
+    ],
+    "pricing": {
+      "perUnit": {
+        "480p": 0.01,
+        "720p": 0.02,
+        "1080p": 0.03
+      }
+    },
+    "preferredApi": "responses",
+    "supportedApis": [
+      "responses",
+      "completions"
+    ],
+    "capabilities": {
+      "toolUse": false,
+      "streaming": true,
+      "structuredOutput": false,
+      "vision": true,
+      "audio": false,
+      "video": false,
+      "imageGeneration": false,
+      "audioGeneration": false,
+      "videoGeneration": true
+    },
+    "reasoning": {
+      "supported": false,
+      "automatic": false,
+      "effortControl": false,
+      "encryptedContent": false,
+      "summaryAvailable": false
+    },
+    "type": "video",
+    "inputModalities": [
+      "text",
+      "image"
+    ],
+    "outputModalities": [
+      "video"
+    ],
+    "family": "grok-imagine-video-lite",
+    "version": "1.5",
+    "status": "preview",
+    "active": false,
+    "mediaParams": {
+      "duration": {
+        "min": 1,
+        "max": 15,
+        "default": 8
+      },
+      "aspectRatio": {
+        "values": [
+          "1:1",
+          "16:9",
+          "9:16",
+          "4:3",
+          "3:4",
+          "3:2",
+          "2:3"
+        ]
+      },
+      "resolution": {
+        "values": [
+          "480p",
+          "720p",
+          "1080p"
+        ]
+      }
+    }
   }
 }
