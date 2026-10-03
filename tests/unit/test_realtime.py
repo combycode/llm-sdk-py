@@ -16,6 +16,7 @@ frame that is not JSON.
 from __future__ import annotations
 
 import json
+import queue
 import threading
 from pathlib import Path
 from typing import Any
@@ -31,7 +32,9 @@ from combycode_llm_sdk.events import (
 )
 from combycode_llm_sdk.helpers.realtime import Realtime
 from combycode_llm_sdk.realtime import (
+    Frame,
     GoogleRealtimeAdapter,
+    GoogleRealtimeSession,
     OpenAIRealtimeAdapter,
     RealtimeConnection,
     SessionConfig,
@@ -582,3 +585,68 @@ class TestTheSmallPieces:
                 model="openai/gpt-realtime",
                 engine=Engine(register_as_default=False),
             )
+
+
+class TestGoogleLiveTurnCompleteAloneNoLongerEndsTheTurn:
+    """`interactionStatus` is sent ALONGSIDE `turnComplete`, and `IN_PROGRESS`
+    means "more model output may follow". Acting on `turnComplete` therefore cut
+    responses short as soon as Google started sending the field -- which this port
+    was doing until 2026-10-03, after the TypeScript side had already been fixed.
+
+    Mirrors `unified-library-ts/tests/unit/llm/realtime.test.ts`, which in turn
+    mirrors `_is_interaction_complete` in google-py's live.py -- including the part
+    the enum docs alone get wrong: `REQUIRES_ACTION` is documented as "deprecated,
+    use IDLE", but upstream completes ONLY on `IDLE`.
+    """
+
+    @staticmethod
+    def turn_ends(server_content: dict[str, Any]) -> bool:
+        """Did the SESSION end the turn? Driven through `on_frame`, not through the
+        predicate, so a call site reverted to reading `turnComplete` directly fails
+        here rather than passing on the predicate's own tests."""
+
+        class Stub:
+            """The least a `BaseSession` needs: somewhere to register a frame
+            callback. Nothing is sent, so no socket is involved."""
+
+            def on_frame(self, _cb: Any) -> None:
+                return None
+
+        session = GoogleRealtimeSession(
+            Stub(), SessionConfig(model="m"), GoogleRealtimeAdapter(api_key="k")
+        )
+        session.on_frame(Frame(binary=json.dumps({"serverContent": server_content}).encode()))
+        # `emit` is synchronous into the queue, so draining it now sees everything
+        # this one frame produced.
+        kinds: list[str] = []
+        while True:
+            try:
+                kinds.append(getattr(session._events.get_nowait(), "type", ""))
+            except queue.Empty:
+                break
+        return "turn_end" in kinds
+
+    def test_it_holds_the_turn_open_while_the_server_is_still_working(self) -> None:
+        assert self.turn_ends({"turnComplete": True, "interactionStatus": "IN_PROGRESS"}) is False
+
+    def test_it_ends_the_turn_on_idle(self) -> None:
+        assert self.turn_ends({"turnComplete": True, "interactionStatus": "IDLE"}) is True
+
+    def test_it_does_not_end_on_the_deprecated_requires_action(self) -> None:
+        # Upstream does not, however the enum docs read.
+        assert self.turn_ends({"turnComplete": True, "interactionStatus": "REQUIRES_ACTION"}) is False
+
+    def test_it_falls_back_to_turn_complete_when_the_status_is_absent(self) -> None:
+        # Every server that predates the field, which must keep working unchanged.
+        assert self.turn_ends({"turnComplete": True}) is True
+        assert (
+            self.turn_ends(
+                {"turnComplete": True, "interactionStatus": "INTERACTION_STATUS_UNSPECIFIED"}
+            )
+            is True
+        )
+        assert self.turn_ends({"turnComplete": False}) is False
+
+    def test_an_idle_with_no_turn_complete_still_ends_the_turn(self) -> None:
+        # Upstream keys on the status once it is present, not on the pair.
+        assert self.turn_ends({"interactionStatus": "IDLE"}) is True

@@ -194,6 +194,35 @@ GOOGLE_WS_BASE = "wss://generativelanguage.googleapis.com"
 GOOGLE_API_VERSION = "v1beta"
 
 
+def _is_interaction_complete(content: Mapping[str, Any]) -> bool:
+    """Has the turn actually ended?
+
+    Transposed from `is_interaction_complete` in
+    `unified-library-ts/src/llm/providers/google/realtime.ts`.
+
+    `turnComplete` alone does not say so any more. `interactionStatus` is sent
+    alongside it, and `IN_PROGRESS` means the server is still working -- "more
+    model output may follow". Ending the turn on `turnComplete` therefore cut
+    responses short as soon as Google started sending the field, which is exactly
+    what this port was doing until now.
+
+    This mirrors `_is_interaction_complete` in google-py's live.py, including the
+    part that is easy to get wrong from the enum docs alone: `REQUIRES_ACTION` is
+    documented as "deprecated, use IDLE", but upstream completes the turn ONLY on
+    `IDLE`, so a deprecated value does not end it either. A server that sends no
+    status at all, or `UNSPECIFIED`, falls back to `turnComplete` -- which is every
+    server that predates the field.
+    """
+    status = content.get("interactionStatus")
+    if (
+        isinstance(status, str)
+        and status
+        and status != "INTERACTION_STATUS_UNSPECIFIED"
+    ):
+        return status == "IDLE"
+    return bool(content.get("turnComplete"))
+
+
 def google_usage(raw: Mapping[str, Any]) -> Usage:
     output = raw.get("responseTokenCount")
     if output is None:
@@ -292,7 +321,7 @@ class GoogleRealtimeSession(BaseSession):
             if not isinstance(part, Mapping):
                 continue
             self.emit(self._part_event(part))
-        if content.get("turnComplete"):
+        if _is_interaction_complete(content):
             self.emit(TurnEndEvent(type="turn_end"))
 
     @staticmethod

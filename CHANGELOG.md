@@ -70,6 +70,15 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
   with a default branch needs no change.
 
 ### Fixed
+- **Google Live cut responses short.** `turnComplete` no longer ends the turn on its own: Google
+  sends `interactionStatus` alongside it, and `IN_PROGRESS` means more model output may follow, so
+  acting on `turnComplete` truncated every answer as soon as that field started arriving. Now
+  transposed from the TypeScript fix (and through it from `_is_interaction_complete` in google-py's
+  `live.py`), including the part the enum docs get wrong: `REQUIRES_ACTION` is documented as
+  "deprecated, use IDLE" but upstream completes the turn ONLY on `IDLE`, so it does not end one
+  either. A server that sends no status, or `UNSPECIFIED`, keeps its old `turnComplete` behaviour.
+  Found 2026-10-03 by diffing the two ports' changelogs during release readiness -- TypeScript had
+  been fixed in this cycle and the Python half was missed.
 
 - **`temperature` was a guaranteed 400 on most of Anthropic's line.** Models on wire era
   `anthropic/messages@4.7` -- `claude-opus-4.8` and every Claude 5.x -- answer
