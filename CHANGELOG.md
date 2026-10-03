@@ -70,6 +70,14 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
   with a default branch needs no change.
 
 ### Fixed
+- **A streamed run the consumer walked away from was reported as an error.** `break` out of the
+  `for` closes the generator where it stands, raising `GeneratorExit` at the `yield` -- and the
+  settle path catches `BaseException`, which it is a subclass of. So the run was recorded with
+  `reason="error"` and fired **`onRunError`**: an ordinary UI that stops reading when the user
+  navigates away looked like a failing agent, and alerting hangs off that hook. It is now
+  `reason="aborted"` settling through `onRunComplete`, matching the TypeScript `RunEndReason` --
+  the run is over and is reported as over, it simply did not end on its own terms. Found 2026-10-03
+  by diffing the two ports' changelogs during release readiness.
 - **Google Live cut responses short.** `turnComplete` no longer ends the turn on its own: Google
   sends `interactionStatus` alongside it, and `IN_PROGRESS` means more model output may follow, so
   acting on `turnComplete` truncated every answer as soon as that field started arriving. Now

@@ -811,6 +811,23 @@ class AgentLoop:
         except _GuardrailStop as stop:
             reason = "guardrail"
             guardrail_reason = str(stop.reason)
+        except GeneratorExit:
+            # The consumer stopped reading -- a `break` out of the `for`, which
+            # closes this generator where it stands. The run IS over and is
+            # reported as over; it simply did not end on its own terms. Caught
+            # BEFORE `BaseException`, which it is a subclass of: without this it
+            # was recorded as an `error`, so every walked-away stream fired
+            # `onRunError` -- and alerting hangs off that hook. The TypeScript
+            # side calls this `aborted` (`RunEndReason`), so the two ports now
+            # agree about what an abandoned run is.
+            reason = "aborted"
+            # Re-raised for protocol conformance, not for observable behaviour:
+            # PEP 342 says a generator should let `GeneratorExit` propagate, and
+            # mutation testing confirms no test can tell the difference today
+            # (CPython accepts a swallow that then returns). It stops mattering
+            # the moment anything yields after the settle below, which is exactly
+            # when a swallow would become a RuntimeError.
+            raised = GeneratorExit()
         except BaseException as exc:  # noqa: BLE001 -- recorded, then re-raised below
             reason = "error"
             error_message = f"{type(exc).__name__}: {exc}"

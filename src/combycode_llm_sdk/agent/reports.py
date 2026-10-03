@@ -68,7 +68,11 @@ class AgentRunReport:
     started_at: float
     completed_at: float
     total_ms: float
-    #: `done` | `stopped` | `error` | `guardrail` | `max_steps`
+    #: `done` | `stopped` | `error` | `guardrail` | `max_steps` | `aborted`
+    #:
+    #: `aborted` is a STREAMED run the consumer stopped reading. It is over and
+    #: reported as over -- it just did not end on its own terms -- so it settles
+    #: through `onRunComplete`, not `onRunError`.
     reason: str
     user_message: Any
     final_text: str
