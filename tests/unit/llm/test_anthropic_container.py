@@ -50,7 +50,7 @@ def body_for(provider_options: dict[str, Any]) -> dict[str, Any]:
             "providerOptions": provider_options,
         }
     )
-    body = req.body if hasattr(req, "body") else req.get("body")
+    body = req.body
     return dict(body or {})
 
 

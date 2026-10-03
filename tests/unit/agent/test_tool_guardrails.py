@@ -233,7 +233,11 @@ class TestAToolThatAnsweredWithContentParts:
             ]
 
         seen: list[str] = []
-        guard = Guard("watch", lambda ctx: (seen.append(ctx.result), {"pass": True})[1])
+        def watch(ctx: Any) -> dict[str, Any]:
+            seen.append(ctx.result)
+            return {"pass": True}
+
+        guard = Guard("watch", watch)
         run(shot, tool_output_guardrails=[guard])
         assert len(seen) == 1
         assert "4111" in seen[0]

@@ -121,6 +121,10 @@ class TestTheTransportFollowsOnlyWhatTheRuleAllows:
         from combycode_llm_sdk.transport import http_transport
 
         client, calls = self.client(steps)
+        # `client()` is annotated `Any` (it returns a locally-defined class),
+        # so the tuple it unpacks is Any too -- named here to keep the
+        # declared return type honest under `strict`.
+        urls: list[str] = calls
         transport = http_transport(client)
         transport(
             TransportRequest(
@@ -134,7 +138,7 @@ class TestTheTransportFollowsOnlyWhatTheRuleAllows:
                 redirect=redirect,
             )
         )
-        return calls
+        return urls
 
     def test_it_follows_a_same_origin_307(self) -> None:
         calls = self.send([(307, "https://a.test/mcp/"), (200, None)], "same-origin")

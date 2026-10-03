@@ -216,7 +216,7 @@ class TestAStreamedStep:
                 isinstance(event, dict) and event.get("type") == "text"
             ):
                 seen.append(
-                    event.text if hasattr(event, "text") else str(event.get("text"))  # type: ignore[union-attr]
+                    event.text if hasattr(event, "text") else str(event.get("text"))
                 )
         return seen
 

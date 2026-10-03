@@ -72,7 +72,7 @@ FIXTURE = str(Path(__file__).resolve().parents[1] / "fixtures" / "mcp_server.py"
 # it. Importing it as `fixtures.mcp_ws_server` would be a second name for
 # one file, which mypy refuses.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "fixtures"))
-from mcp_ws_server import serve as serve_ws
+from mcp_ws_server import serve as serve_ws  # type: ignore[import-not-found]
 
 
 def connect(mode: str = "normal", **kwargs: Any) -> McpConnection:
@@ -1530,7 +1530,8 @@ def ws_server() -> Iterator[Callable[..., int]]:
     def start(mode: str = "normal", events: list[str] | None = None) -> int:
         port, stop = serve_ws(mode, events)
         stoppers.append(stop)
-        return port
+        # `serve_ws` is untyped (imported by path), so its port is Any.
+        return int(port)
 
     yield start
     for stop in stoppers:

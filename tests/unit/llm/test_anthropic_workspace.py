@@ -32,7 +32,7 @@ sys.path.insert(0, "src")
 
 
 from combycode_llm_sdk.batch.adapters import AnthropicBatchAdapter
-from combycode_llm_sdk.files.attachment import FileAttachment
+from combycode_llm_sdk.files.attachment import BytesContent, FileAttachment
 from combycode_llm_sdk.files.providers import AnthropicFileAdapter
 from combycode_llm_sdk.llm.providers.anthropic.messages import AnthropicAdapter
 
@@ -100,7 +100,9 @@ class TestTheSurfacesThatAreNotCompletions:
                 filename="x.bin",
                 mime_type="application/octet-stream",
                 size_bytes=3,
-                content=b"abc",
+                content=BytesContent(
+                    mime_type="application/octet-stream", data=b"abc"
+                ),
             ),
             b"\x01\x02\x03",
         )
