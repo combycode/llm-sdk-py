@@ -14,7 +14,7 @@ number was not reachable from there.
 
 from __future__ import annotations
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 #: The same value under the name the TypeScript library uses, so the two ports
 #: read alike at the call sites that report a version.

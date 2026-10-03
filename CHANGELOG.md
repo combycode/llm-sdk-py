@@ -4,7 +4,7 @@ All notable changes to `combycode-llm-sdk` are documented here. The format follo
 [Keep a Changelog](https://keepachangelog.com/) and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.2.0] - 2026-10-03
 
 ### Changed
 
